@@ -7,8 +7,8 @@ export type GenericGetUpdate<Type> = ChangedDataHook<Type> & {
   missingFieldsLength: number
   state: 'loading' | 'ready' | 'saving' | 'error' | 'saved'
   saveError: string | null
-  saveChange: VoidFunction
-  saveChanges: VoidFunction
+  saveChange: () => Promise<void>
+  saveChanges: () => Promise<void>
   hasChange: boolean
   objectType: string
 }
