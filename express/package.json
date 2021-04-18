@@ -2,7 +2,7 @@
   "name": "@vramework/express",
   "version": "0.0.0",
   "description": "The vramework express server (for local development)",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "author": "Vlandor LTD",
   "scripts": {

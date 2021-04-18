@@ -1,7 +1,7 @@
 {
   "name": "@vramework/backend-common",
   "version": "0.0.0",
-  "license": "UNLICENSED",
+  "author": "Vlandor LTD",
   "scripts": {
   },
   "dependencies": {

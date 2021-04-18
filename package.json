@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "The vramework monorepo",
   "repository": "git@github.com:vlandor/vramework.git",
-  "author": "vramework",
-  "license": "UNLICENSED",
+  "author": "Vlandor LTD",
+  "license": "MIT",
   "private": true,
   "workspaces": {
     "packages": [

@@ -1,7 +1,8 @@
 {
   "name": "@vramework/hooks",
   "version": "0.0.0",
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "author": "Vlandor LTD",
   "scripts": {
     "tsc": "tsc"
   },
