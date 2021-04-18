@@ -1,0 +1,14 @@
+{
+  "name": "@vramework/backend-common",
+  "version": "0.0.0",
+  "license": "UNLICENSED",
+  "scripts": {
+  },
+  "dependencies": {
+    "typescript-json-schema": "^0.47.0",
+    "ajv": "^7.0.3",
+    "ajv-formats": "^1.5.1"
+  },
+  "devDependencies": {
+  }
+}

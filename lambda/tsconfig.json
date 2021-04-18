@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "target": "ES2018",
+      "module": "commonjs",
+      "outDir": ".build",
+      "declaration": false,
+      "sourceMap": true,
+      "noEmit": false,
+      "noUnusedLocals": true,
+      "strict": true,
+      "lib": [
+        "es2018",
+        "dom"
+      ],
+      "types": [
+        "node",
+      ],
+      "allowJs": true,
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
+    }
+  }

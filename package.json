@@ -1,0 +1,20 @@
+{
+  "name": "@vramework/core",
+  "version": "0.0.0",
+  "description": "The vramework monorepo",
+  "repository": "git@github.com:vlandor/vramework.git",
+  "author": "vramework",
+  "license": "UNLICENSED",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "common/",
+      "express/",
+      "lambda/"
+    ]
+  },
+  "scripts": {
+  },
+  "devDependencies": {
+  }
+}
