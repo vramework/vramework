@@ -10,5 +10,6 @@
     "ajv-formats": "^1.5.1"
   },
   "devDependencies": {
+    "typescript": "^4.1.3"
   }
 }

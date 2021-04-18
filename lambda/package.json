@@ -5,12 +5,12 @@
   "scripts": {
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.3.0",
     "cookie": "^0.4.1",
     "path-to-regexp": "^6.2.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.70",
-    "aws-lambda": "^1.0.6"
+    "aws-lambda": "^1.0.6",
+    "typescript": "^4.1.3"
   }
 }
