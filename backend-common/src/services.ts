@@ -1,7 +1,9 @@
-import { APIRoute, Config, Services, UserSession } from "@vramework/functions/src/api";
-import { PinoLogger } from "@vramework/functions/src/services/pino";
+import { CoreConfig } from "./config";
+import { CoreAPIRoute } from "./routes";
+import { CoreUserSession } from "./user-session";
+import { Logger as PinoLogger } from 'pino'
 
-export type Logger = PinoLogger
+export type Logger = any
 
 export interface JWTService {
     getJWTSecret: Function
@@ -9,7 +11,7 @@ export interface JWTService {
 }
 
 export interface PermissionService {
-    validate: (config: Config, services: Services, route: APIRoute<unknown, unknown>, data: Record<string, any>, session: UserSession) => Promise<boolean>
+    validate: (config: CoreConfig, services: CoreServices, route: CoreAPIRoute<unknown, unknown>, data: Record<string, any>, session: CoreUserSession) => Promise<boolean>
 }
 
 export interface SecretService {
@@ -17,7 +19,7 @@ export interface SecretService {
 }
 
 export interface CoreServices {
-    logger: Logger
+    logger: PinoLogger
     jwt: JWTService
     permissions: PermissionService
 }

@@ -14,6 +14,7 @@
     ]
   },
   "scripts": {
+    "tsc": "echo Ignoring vramework tsc wrapper"
   },
   "devDependencies": {
   }

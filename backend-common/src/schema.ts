@@ -1,6 +1,6 @@
 import Ajv, { ValidateFunction } from 'ajv'
 import addFormats from 'ajv-formats'
-import { InvalidParametersError } from '@vramework/functions/src/errors'
+import { InvalidParametersError } from './errors'
 import { Logger } from './services'
 
 const ajv = new Ajv({ removeAdditional: false })

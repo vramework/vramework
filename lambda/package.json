@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "UNLICENSED",
   "scripts": {
+    "tsc": "tsc"
   },
   "dependencies": {
     "cookie": "^0.4.1",
