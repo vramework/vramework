@@ -88,11 +88,7 @@ export class ExpressServer {
               // Invalid Permissions
             }
 
-            result = result = await route.func(this.services!, {
-              config: this.config,
-              data,
-              session: (req as any).user,
-            })
+            result = result = await route.func(this.services!, data, (req as any).user)
             res.locals.result = result
             next()
           } catch (e) {

@@ -138,11 +138,7 @@ const generalHandler = async (
       validateJson(route.schema, data)
     }
 
-    const result = await route.func(services, {
-      session,
-      data,
-      config,
-    })
+    const result = await route.func(services, data, session)
     if (result && (result as any).jwt) {
       headers['Set-Cookie'] = serializeCookie(config.cookie.name, (result as any).jwt, {
         domain: config.domain,

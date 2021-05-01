@@ -19,6 +19,7 @@ export interface SecretService {
 }
 
 export interface CoreServices {
+    config: CoreConfig
     logger: PinoLogger
     jwt: JWTService
     permissions: PermissionService

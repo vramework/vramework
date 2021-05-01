@@ -10,12 +10,10 @@ export type GenericGetUpdate<Type> = ChangedDataHook<Type> & {
   saveChange: () => Promise<void>
   saveChanges: () => Promise<void>
   hasChange: boolean
-  objectType: string
 }
 
 export const useGenericGetUpdate = <Type extends Object>(
   id: string | undefined,
-  objectType: string,
   getRest: Function,
   updateRest: Function,
   defaultValues: Partial<Type> = {},
@@ -71,7 +69,6 @@ export const useGenericGetUpdate = <Type extends Object>(
 
   const totalFieldLength = Object.keys(original).length
   return {
-    objectType,
     totalFieldLength,
     missingFieldsLength: Object.values(changed.data).reduce((r: number, v) => (v === null ? ++r : r), 0),
     saveChanges,

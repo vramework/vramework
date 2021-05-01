@@ -1,10 +1,10 @@
-import { CoreConfig } from "./config"
 import { CoreServices } from "./services"
 import { CoreUserSession } from "./user-session"
 
 export type CoreAPIFunction<In, Out> = (
     services: CoreServices,
-    { config, data, session }: { config: CoreConfig; data: In; session?: CoreUserSession },
+    data: In,
+    session?: CoreUserSession
 ) => Promise<Out>
 
 export interface CoreAPIRoute<In, Out> {
