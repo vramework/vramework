@@ -1,10 +1,9 @@
 export interface CoreConfig {
-  domain: string,
+  domain: string
   server: {
     port: number
-  },
+  }
   cookie: {
     name: string
   }
 }
-

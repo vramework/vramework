@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import express from 'express'
 import { Server } from 'http'
 import { json } from 'body-parser'
@@ -34,7 +33,11 @@ export class ExpressServer {
   public app = express()
   private server: Server | undefined
 
-  constructor(private config: CoreConfig, private services: CoreServices, private routes: CoreAPIRoutes) {}
+  constructor(
+    private readonly config: CoreConfig,
+    private readonly services: CoreServices,
+    private readonly routes: CoreAPIRoutes,
+  ) {}
 
   public async init() {
     this.app.use(
@@ -68,7 +71,7 @@ export class ExpressServer {
       this.services.logger.info(`Adding ${route.type.toUpperCase()} with route ${path}`)
       this.app[route.type](
         path,
-        jwtMiddleware(false, this.services!.jwt, this.config.cookie.name),
+        jwtMiddleware(false, this.services.jwt, this.config.cookie.name),
         async (req, res, next) => {
           try {
             const session = (req as any).user as CoreUserSession | undefined
@@ -77,18 +80,24 @@ export class ExpressServer {
             res.locals.processed = true
             let result
 
-            const data = {...req.params, ...req.query, ...req.body }
-            
+            const data = { ...req.params, ...req.query, ...req.body }
+
             if (route.schema) {
               validateJson(route.schema, data)
             }
 
-            const permissionValid = this.services.permissions.validate(this.config, this.services as any, route, data, session as any)
+            const permissionValid = this.services.permissions.validate(
+              this.config,
+              this.services as any,
+              route,
+              data,
+              session as any,
+            )
             if (!permissionValid) {
               // Invalid Permissions
             }
 
-            result = result = await route.func(this.services!, data, (req as any).user)
+            result = result = await route.func(this.services, data, (req as any).user)
             res.locals.result = result
             next()
           } catch (e) {
@@ -110,7 +119,7 @@ export class ExpressServer {
       }
 
       const errorDetails = getErrorResponse(error.constructor)
-      if (errorDetails) {
+      if (errorDetails != null) {
         res.status(errorDetails.status).json({ message: errorDetails.message })
       } else {
         console.error(error)
@@ -138,7 +147,7 @@ export class ExpressServer {
   }
 
   public async start() {
-    return new Promise<void>((resolve) => {
+    return await new Promise<void>((resolve) => {
       this.server = this.app.listen(this.config.server.port, () => {
         this.services.logger.info(`listening on port ${this.config.server.port}`)
         resolve()
@@ -147,8 +156,8 @@ export class ExpressServer {
   }
 
   public async stop(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      if (!this.server) {
+    return await new Promise<void>((resolve) => {
+      if (this.server == null) {
         throw 'Unable to stop server as it hasn`t been correctly started'
       }
       this.server.close(() => {
@@ -157,4 +166,3 @@ export class ExpressServer {
     })
   }
 }
-

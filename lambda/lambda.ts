@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { match, Match } from 'path-to-regexp'
 
@@ -33,7 +32,7 @@ CORS Error
 const errorHandler = (e: Error, headers: Record<string, string | boolean>) => {
   const errorResponse = getErrorResponse(e.constructor)
   let statusCode: number
-  if (errorResponse) {
+  if (errorResponse != null) {
     statusCode = errorResponse.status
     logger.warn(e)
     return {
@@ -49,8 +48,13 @@ const errorHandler = (e: Error, headers: Record<string, string | boolean>) => {
   }
 }
 
-const getMatchingRoute = (services: CoreServices, requestType: string, requestPath: string, routes: CoreAPIRoute<unknown, unknown>[]) => {
-  let matchedPath: Match | undefined = undefined
+const getMatchingRoute = (
+  services: CoreServices,
+  requestType: string,
+  requestPath: string,
+  routes: Array<CoreAPIRoute<unknown, unknown>>,
+) => {
+  let matchedPath: Match | undefined
   for (const route of routes) {
     if (route.type !== requestType.toLowerCase()) {
       continue
@@ -73,14 +77,14 @@ const generalHandler = async (
   services: CoreServices,
   routes: CoreAPIRoutes,
   event: APIGatewayProxyEvent,
-  headers: Record<string, any>
+  headers: Record<string, any>,
 ): Promise<APIGatewayProxyResult> => {
   if (event.httpMethod.toLowerCase() === 'options') {
     return {
       headers: {
         ...headers,
         'Access-Control-Allow-Headers':
-        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+          'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
         'Access-Control-Allow-Methods': 'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT',
       },
       statusCode: 200,
@@ -117,7 +121,7 @@ const generalHandler = async (
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
     logger.info({ action: 'Executing route', path: matchedPath, route })
     const session = await services.jwt.getUserSession(
-      route.requiresSession === false ? false : true,
+      route.requiresSession !== false,
       config.cookie.name,
       event.headers.cookie,
     )
@@ -129,11 +133,11 @@ const generalHandler = async (
         body: JSON.stringify({ message: 'error.content_type_json_only' }),
       }
     } else {
-      data = { ...data, ...JSON.parse(event.body || '{}') }
+      data = { ...data, ...JSON.parse(event.body ?? '{}') }
     }
-  
-    services.permissions.validate(config, logger as any, route, data, session)
-    
+
+    await services.permissions.validate(config, logger as any, route, data, session)
+
     if (route.schema) {
       validateJson(route.schema, data)
     }
@@ -158,11 +162,21 @@ const generalHandler = async (
   }
 }
 
-export const processCorsless = async (event: APIGatewayProxyEvent, routes: CoreAPIRoutes, config: CoreConfig, services: CoreServices) => {
+export const processCorsless = async (
+  event: APIGatewayProxyEvent,
+  routes: CoreAPIRoutes,
+  config: CoreConfig,
+  services: CoreServices,
+) => {
   return await generalHandler(config, services, routes, event, {})
 }
 
-export const processCors = async (event: APIGatewayProxyEvent, routes: CoreAPIRoutes, config: CoreConfig, services: CoreServices) => {
+export const processCors = async (
+  event: APIGatewayProxyEvent,
+  routes: CoreAPIRoutes,
+  config: CoreConfig,
+  services: CoreServices,
+) => {
   let origin: string | false = false
   try {
     origin = validateOrigin(config, services, event)

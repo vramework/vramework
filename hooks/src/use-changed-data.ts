@@ -46,8 +46,9 @@ export const useChangedData = <T extends unknown>(original: T): ChangedDataHook<
     mergeChange()
   }, [original])
   const onChange = useCallback((value, field) => {
-    if ((cd.current as any)[field] !== value) {
-      (cd.current as any)[field] = value
+    const changed = cd.current as any
+    if (changed[field] !== value) {
+      changed[field] = value
       mergeChange()
     }
   }, [])

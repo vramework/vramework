@@ -1,3 +1,3 @@
-export type CoreUserSession = {
-    id: string
+export interface CoreUserSession {
+  id: string
 }

@@ -28,11 +28,11 @@ export const loadSchema = (schema: string, logger: Logger): void => {
 
 export const validateJson = (schema: string, json: unknown): void => {
   const validator = validators.get(schema)
-  if (!validator) {
+  if (validator == null) {
     throw `Missing validator for ${schema}`
   }
   const result = validator(json)
-  if (result === false) {
+  if (!result) {
     const errorText = ajv.errorsText(validator.errors)
     console.error('>', errorText, schema, json)
     throw new InvalidParametersError(ajv.errorsText(validator.errors))

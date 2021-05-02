@@ -19,7 +19,7 @@ export const useGenericGetUpdate = <Type extends Object>(
   defaultValues: Partial<Type> = {},
   options?: Partial<{
     minSaveDuration: number
-  }>
+  }>,
 ): GenericGetUpdate<Type> => {
   const [original, setOriginal] = useState<Type>(defaultValues as Type)
   const originalRef = useRef(original)
@@ -49,18 +49,18 @@ export const useGenericGetUpdate = <Type extends Object>(
       try {
         await Promise.all([
           updateRest(id, changedData),
-          new Promise(resolve => setTimeout(resolve, options?.minSaveDuration || 1000))
+          new Promise((resolve) => setTimeout(resolve, options?.minSaveDuration || 1000)),
         ])
         setOriginal({ ...originalRef.current, ...changedData })
         setState('saved')
-        await new Promise(resolve => setTimeout(resolve, options?.minSaveDuration || 1000))
+        await new Promise((resolve) => setTimeout(resolve, options?.minSaveDuration || 1000))
         setState('ready')
       } catch (e) {
-        await new Promise(resolve => setTimeout(resolve, options?.minSaveDuration || 1000))
+        await new Promise((resolve) => setTimeout(resolve, options?.minSaveDuration || 1000))
         setState('error')
         setSaveError(e.message)
         // Logger here to central API LOG
-        await new Promise(resolve => setTimeout(resolve, options?.minSaveDuration || 2000))
+        await new Promise((resolve) => setTimeout(resolve, options?.minSaveDuration || 2000))
         setState('ready')
         setSaveError(null)
       }
