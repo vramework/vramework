@@ -1,7 +1,7 @@
 export interface Filter {
   field: string
   operator: 'contains' | 'eq' | 'ne'
-  value: string
+  value: string | null
 }
 
 export interface BulkFilter {
