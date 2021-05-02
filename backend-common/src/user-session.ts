@@ -1,3 +1,3 @@
 export interface CoreUserSession {
-  id: string
+  userId: string
 }

@@ -71,7 +71,7 @@ export class ExpressServer {
       this.services.logger.info(`Adding ${route.type.toUpperCase()} with route ${path}`)
       this.app[route.type](
         path,
-        jwtMiddleware(false, this.services.jwt, this.config.cookie.name),
+        jwtMiddleware(route.requiresSession !== false, this.services.jwt, this.config.cookie.name),
         async (req, res, next) => {
           try {
             const session = (req as any).user as CoreUserSession | undefined
@@ -122,7 +122,7 @@ export class ExpressServer {
       if (errorDetails != null) {
         res.status(errorDetails.status).json({ message: errorDetails.message })
       } else {
-        console.error(error)
+        res.status(500).end()
       }
     })
 
