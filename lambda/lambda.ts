@@ -121,10 +121,13 @@ const generalHandler = async (
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
     logger.info({ action: 'Executing route', path: matchedPath, route })
     logger.info( JSON.stringify(event))
+
     const session = await services.jwt.getUserSession(
       route.requiresSession !== false,
+      event.headers['Authorization'],
       config.cookie.name,
       event.headers.cookie,
+      event
     )
 
     let data = { ...matchedPath.params, ...event.queryStringParameters }
