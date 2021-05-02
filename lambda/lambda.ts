@@ -120,6 +120,7 @@ const generalHandler = async (
   try {
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
     logger.info({ action: 'Executing route', path: matchedPath, route })
+    logger.info(config.cookie.name, JSON.stringify(event))
     const session = await services.jwt.getUserSession(
       route.requiresSession !== false,
       config.cookie.name,
