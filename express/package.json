@@ -10,6 +10,8 @@
     "start:dev": "tsnd --poll --respawn bin/express.ts start | pino-pretty -i time,hostname,pid",
     "tsc": "tsc"
   },
+  "peerDependencies": {
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "commander": "^6.2.1",

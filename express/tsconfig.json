@@ -8,10 +8,9 @@
       "noUnusedLocals": true,
       "strict": true,
       "lib": [
-        "es2020",
-        "dom"
+        "es2020"
       ],
-      "types": [],
+      "types": ["node"],
       "allowJs": false,
       "resolveJsonModule": true,
       "esModuleInterop": true,

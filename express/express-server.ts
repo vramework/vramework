@@ -4,8 +4,8 @@ import { json } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import jwt from 'express-jwt'
 import cors from 'cors'
-import * as getRawBody from 'raw-body'
-import * as contentType from 'content-type'
+import getRawBody from 'raw-body'
+import contentType from 'content-type'
 
 import { getErrorResponse } from '../backend-common/src/errors'
 import { CoreAPIRoutes } from '../backend-common/src/routes'
@@ -82,10 +82,10 @@ export class ExpressServer {
       },
     )
 
-    // this.app.get(`/${Routes.USER_LOGOUT}`, (req, res) => {
-    //   res.clearCookie(this.config.cookie.name)
-    //   res.end()
-    // })
+    this.app.get(`/v1/logout`, (req, res) => {
+      res.clearCookie(this.config.cookie.name)
+      res.end()
+    })
 
     this.routes.forEach((route) => {
       if (route.schema) {
@@ -111,18 +111,9 @@ export class ExpressServer {
               validateJson(route.schema, data)
             }
 
-            const permissionValid = this.services.permissions.validate(
-              this.config,
-              this.services as any,
-              route,
-              data,
-              session as any,
-            )
-            if (!permissionValid) {
-              // Invalid Permissions
-            }
+            // TODO: Permissions
 
-            result = result = await route.func(this.services, data, (req as any).user)
+            result = result = await route.func(this.services, data, session)
             res.locals.result = result
             next()
           } catch (e) {
@@ -161,7 +152,7 @@ export class ExpressServer {
           res.cookie(res.locals.cookiename, res.locals.result.jwt, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
-            // domain: this.config.cookie.domain,
+            domain: this.config.domain,
           })
         }
         res.json(res.locals.result).end()

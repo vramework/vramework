@@ -140,11 +140,11 @@ const generalHandler = async (
       data = { ...data, ...JSON.parse(event.body ?? '{}') }
     }
 
-    await services.permissions.validate(config, logger as any, route, data, session)
-
     if (route.schema) {
       validateJson(route.schema, data)
     }
+
+    // TODO: Add permissions
 
     const result = await route.func(services, data, session)
     if (result && (result as any).jwt) {

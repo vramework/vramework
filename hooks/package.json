@@ -11,5 +11,7 @@
     "react": "^17.0.2",
     "use-async-effect": "^2.2.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
 }

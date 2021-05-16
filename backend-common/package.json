@@ -2,10 +2,14 @@
   "name": "@vramework/backend-common",
   "version": "0.0.0",
   "author": "Vlandor LTD",
+  "license": "MIT",
   "scripts": {
+    "tsc": "tsc"
+  },
+  "peerDependencies": {
   },
   "dependencies": {
-    "typescript-json-schema": "^0.47.0",
+    "ts-json-schema-generator": "^0.92.0",
     "ajv": "^7.0.3",
     "ajv-formats": "^1.5.1"
   },

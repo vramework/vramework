@@ -9,9 +9,8 @@
       "strict": true,
       "lib": [
         "es2020",
-        "dom"
       ],
-      "types": [],
+      "types": ["node"],
       "allowJs": false,
       "resolveJsonModule": true,
       "esModuleInterop": true,
