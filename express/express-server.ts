@@ -4,13 +4,16 @@ import { json } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import jwt from 'express-jwt'
 import cors from 'cors'
+import * as getRawBody from 'raw-body'
+import * as contentType from 'content-type'
 
-import { getErrorResponse } from '@vramework/backend-common/src/errors'
-import { CoreAPIRoutes } from '@vramework/backend-common/src/routes'
-import { CoreConfig } from '@vramework/backend-common/src/config'
-import { CoreServices, JWTService } from '@vramework/backend-common/src/services'
-import { loadSchema, validateJson } from '@vramework/backend-common/src/schema'
-import { CoreUserSession } from '@vramework/backend-common/src/user-session'
+import { getErrorResponse } from '../backend-common/src/errors'
+import { CoreAPIRoutes } from '../backend-common/src/routes'
+import { CoreConfig } from '../backend-common/src/config'
+import { CoreServices, JWTService } from '../backend-common/src/services'
+import { loadSchema, validateJson } from '../backend-common/src/schema'
+import { CoreUserSession } from '../backend-common/src/user-session'
+import { mkdir, writeFile } from 'fs/promises'
 
 const jwtMiddleware = (credentialsRequired: boolean, jwtService: JWTService, cookieName: string) =>
   jwt({
@@ -37,7 +40,7 @@ export class ExpressServer {
     private readonly config: CoreConfig,
     private readonly services: CoreServices,
     private readonly routes: CoreAPIRoutes,
-  ) {}
+  ) { }
 
   public async init() {
     this.app.use(
@@ -53,9 +56,31 @@ export class ExpressServer {
       }),
     )
 
+    this.app.use('/assets/', express.static(this.config.files.directory))
+
     this.app.get('/api/health-check', function (req, res) {
       res.status(200).end()
     })
+
+    this.app.put(`/v1/reaper/*`,
+      jwtMiddleware(true, this.services.jwt, this.config.cookie.name),
+      async (req, res) => {
+        const file = await getRawBody(req, {
+          length: req.headers['content-length'],
+          limit: '10mb',
+          encoding: contentType.parse(req).parameters.charset,
+        })
+
+        const key = req.path.replace('/v1/reaper/', '')
+        const parts = key.split('/')
+        const fileName = parts.pop()
+        const dir = `${this.config.files.directory}/${parts.join('/')}`
+
+        await mkdir(dir, { recursive: true })
+        await writeFile(`${dir}/${fileName}`, file, 'binary')
+        res.end()
+      },
+    )
 
     // this.app.get(`/${Routes.USER_LOGOUT}`, (req, res) => {
     //   res.clearCookie(this.config.cookie.name)

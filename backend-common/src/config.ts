@@ -6,4 +6,7 @@ export interface CoreConfig {
   cookie: {
     name: string
   }
+  files: {
+    directory: string
+  }
 }
