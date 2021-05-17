@@ -4,7 +4,8 @@
   "author": "Vlandor LTD",
   "license": "MIT",
   "scripts": {
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "ncu": "ncu"
   },
   "peerDependencies": {
   },

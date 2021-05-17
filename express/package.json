@@ -8,7 +8,8 @@
   "scripts": {
     "start": "ts-node bin/express.ts start | pino-pretty -i time,hostname,pid",
     "start:dev": "tsnd --poll --respawn bin/express.ts start | pino-pretty -i time,hostname,pid",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "ncu": "ncu"
   },
   "peerDependencies": {
   },

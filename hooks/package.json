@@ -4,7 +4,8 @@
   "license": "MIT",
   "author": "Vlandor LTD",
   "scripts": {
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "ncu": "ncu"
   },
   "dependencies": {
     "eventemitter3": "^4.0.7",
