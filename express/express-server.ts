@@ -114,24 +114,21 @@ export class ExpressServer {
 
             const isXML = req.headers['content-type']?.includes('text/xml')
 
+            let data: any
             if (isXML) {
-              // We don't permission this for now
-              result = await route.func(this.services, req.body, session)
+              data = req.body
             } else {
-              const data = { ...req.params, ...req.query, ...req.body }
+              data ={ ...req.params, ...req.query, ...req.body }
               if (route.schema) {
                 validateJson(route.schema, data)
               }
-              if (route.permissions) {
-                const { valid } = await verifyPermissions(route.permissions, this.services, data, session)
-                if (!valid) {
-                  throw new NotPermissionedError()
-                }
-              }
-              result = await route.func(this.services, data, session)
             }
 
-            res.locals.result = result
+            if (route.permissions) {
+              await verifyPermissions(route.permissions, this.services, data, session)
+            }
+
+            res.locals.result = await route.func(this.services, data, session)
             next()
           } catch (e) {
             next(e)

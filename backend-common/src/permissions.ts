@@ -1,3 +1,4 @@
+import { NotPermissionedError } from "./errors";
 import { CoreAPIPermission } from "./routes";
 import { CoreServices } from "./services";
 import { CoreUserSession } from "./user-session";
@@ -19,5 +20,7 @@ export const verifyPermissions = async (permissions: Record<string, CoreAPIPermi
         }
     }
 
-    return { valid, details }
+    if (!valid) {
+        throw new NotPermissionedError()
+    }
 }

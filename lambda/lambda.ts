@@ -7,7 +7,7 @@ import { CoreConfig } from '@vramework/backend-common/src/config'
 import { verifyPermissions } from '@vramework/backend-common/src/permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/backend-common/src/routes'
 import { loadSchema, validateJson } from '@vramework/backend-common/src/schema'
-import { getErrorResponse, InvalidOriginError, NotFoundError, NotPermissionedError } from '@vramework/backend-common/src/errors'
+import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/backend-common/src/errors'
 
 const validateOrigin = (config: CoreConfig, services: CoreServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
@@ -118,7 +118,6 @@ const generalHandler = async (
   try {
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
     services.logger.info({ action: 'Executing route', path: matchedPath, route })
-    services.logger.info( JSON.stringify(event))
 
     const session = await services.jwt.getUserSession(
       route.requiresSession !== false,
@@ -138,15 +137,11 @@ const generalHandler = async (
       if (route.schema) {
         validateJson(route.schema, data)
       }
-      if (session && route.permissions) {
-        const { valid } = await verifyPermissions(route.permissions, services, data, session)
-        if (!valid) {
-          throw new NotPermissionedError()
-        }
-      }
     }
 
-    // TODO: Add permissions
+    if (route.permissions) {
+      await verifyPermissions(route.permissions, services, data, session)
+    }
 
     const result = await route.func(services, data, session)
     if (result && (result as any).jwt) {
