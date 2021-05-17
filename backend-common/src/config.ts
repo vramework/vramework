@@ -8,5 +8,12 @@ export interface CoreConfig {
   }
   files: {
     directory: string
+  },
+  sql: {
+    database: string
+    directory: string
+  },
+  logger: {
+    level: string
   }
 }

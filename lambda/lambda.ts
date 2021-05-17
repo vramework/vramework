@@ -1,15 +1,12 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { match, Match } from 'path-to-regexp'
 
-import pino from 'pino'
 import { serialize as serializeCookie } from 'cookie'
 import { CoreServices } from '@vramework/backend-common/src/services'
 import { CoreConfig } from '@vramework/backend-common/src/config'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/backend-common/src/routes'
 import { loadSchema, validateJson } from '@vramework/backend-common/src/schema'
 import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/backend-common/src/errors'
-
-const logger = pino()
 
 const validateOrigin = (config: CoreConfig, services: CoreServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
@@ -29,12 +26,12 @@ CORS Error
   return origin
 }
 
-const errorHandler = (e: Error, headers: Record<string, string | boolean>) => {
+const errorHandler = (services: CoreServices, e: Error, headers: Record<string, string | boolean>) => {
   const errorResponse = getErrorResponse(e.constructor)
   let statusCode: number
   if (errorResponse != null) {
     statusCode = errorResponse.status
-    logger.warn(e)
+    services.logger.warn(e)
     return {
       headers,
       statusCode,
@@ -68,7 +65,7 @@ const getMatchingRoute = (
       return { matchedPath, route }
     }
   }
-  logger.info({ message: 'Invalid route', requestPath, requestType })
+  services.logger.info({ message: 'Invalid route', requestPath, requestType })
   throw new NotFoundError()
 }
 
@@ -119,8 +116,8 @@ const generalHandler = async (
 
   try {
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
-    logger.info({ action: 'Executing route', path: matchedPath, route })
-    logger.info( JSON.stringify(event))
+    services.logger.info({ action: 'Executing route', path: matchedPath, route })
+    services.logger.info( JSON.stringify(event))
 
     const session = await services.jwt.getUserSession(
       route.requiresSession !== false,
@@ -162,7 +159,7 @@ const generalHandler = async (
       headers,
     }
   } catch (e) {
-    return errorHandler(e, headers)
+    return errorHandler(services, e, headers)
   }
 }
 

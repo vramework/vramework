@@ -58,7 +58,7 @@ export class ExpressServer {
 
     this.app.use('/assets/', express.static(this.config.files.directory))
 
-    this.app.get('/api/health-check', function (req, res) {
+    this.app.get('/v1/health-check', function (req, res) {
       res.status(200).end()
     })
 

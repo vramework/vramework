@@ -1,7 +1,7 @@
 import { CoreConfig } from './config'
 import { Logger as PinoLogger } from 'pino'
 
-export type Logger = any
+export type Logger = PinoLogger
 
 export interface JWTService {
   getJWTSecret: Function
