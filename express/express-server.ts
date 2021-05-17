@@ -7,7 +7,7 @@ import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
 
-import { getErrorResponse, NotPermissionedError } from '../backend-common/src/errors'
+import { getErrorResponse } from '../backend-common/src/errors'
 import { CoreAPIRoutes } from '../backend-common/src/routes'
 import { CoreConfig } from '../backend-common/src/config'
 import { CoreServices, JWTService } from '../backend-common/src/services'
@@ -110,7 +110,6 @@ export class ExpressServer {
 
             res.locals.cookiename = this.config.cookie.name
             res.locals.processed = true
-            let result
 
             const isXML = req.headers['content-type']?.includes('text/xml')
 

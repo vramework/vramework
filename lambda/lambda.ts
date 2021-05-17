@@ -39,6 +39,8 @@ const errorHandler = (services: CoreServices, e: Error, headers: Record<string, 
       body: JSON.stringify({ error: errorResponse.message }),
     }
   }
+
+  services.logger.error(e)
   return {
     headers,
     statusCode: 500,

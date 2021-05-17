@@ -3,7 +3,7 @@ import { CoreAPIPermission } from "./routes";
 import { CoreServices } from "./services";
 import { CoreUserSession } from "./user-session";
 
-export const verifyPermissions = async (permissions: Record<string, CoreAPIPermission<any>[]>, services: CoreServices, data: any, session?: CoreUserSession): Promise<{ valid: boolean, details: Record<string, boolean>}> => {
+export const verifyPermissions = async (permissions: Record<string, CoreAPIPermission<any>[]>, services: CoreServices, data: any, session?: CoreUserSession): Promise<void> => {
     const perms =  Object.entries(permissions)
 
     let valid = false
