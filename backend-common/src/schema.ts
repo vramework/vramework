@@ -20,7 +20,7 @@ export const loadSchema = (schema: string, logger: Logger): void => {
       const validator = ajv.compile(json)
       validators.set(schema, validator)
     } catch (e) {
-      console.error(e, schema, json)
+      console.error(e.name, schema, json)
       throw e
     }
   }
@@ -34,7 +34,6 @@ export const validateJson = (schema: string, json: unknown): void => {
   const result = validator(json)
   if (!result) {
     const errorText = ajv.errorsText(validator.errors)
-    console.error('>', errorText, schema, json)
-    throw new InvalidParametersError(ajv.errorsText(validator.errors))
+    throw new InvalidParametersError(errorText)
   }
 }
