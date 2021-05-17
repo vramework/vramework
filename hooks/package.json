@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "Vlandor LTD",
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "if [[ ${VRAMEWORK} = \"true\" ]]; then tsc; fi",
     "ncu": "ncu"
   },
   "peerDependency": {
@@ -13,7 +13,8 @@
   "dependencies": {
     "eventemitter3": "^4.0.7",
     "use-async-effect": "^2.2.3",
-    "react-inlinesvg": "^2.2.2"
+    "react-inlinesvg": "^2.2.2",
+    "fast-deep-equal": "^3.1.3"
   },
   "devDependencies": {
     "typescript": "^4.1.3"

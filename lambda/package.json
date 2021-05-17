@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "Vlandor LTD",
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "if [[ ${VRAMEWORK} = \"true\" ]]; then tsc; fi",
     "ncu": "ncu"
   },
   "dependencies": {

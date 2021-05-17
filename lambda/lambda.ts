@@ -40,7 +40,8 @@ const errorHandler = (services: CoreServices, e: Error, headers: Record<string, 
     }
   }
 
-  services.logger.error(e)
+  console.error(e)
+  services.logger.error('Error', e)
   return {
     headers,
     statusCode: 500,
