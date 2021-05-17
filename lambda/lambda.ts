@@ -36,7 +36,7 @@ const errorHandler = (services: CoreServices, e: Error, headers: Record<string, 
     return {
       headers,
       statusCode,
-      body: JSON.stringify({ error: errorResponse.message }),
+      body: JSON.stringify({ message: errorResponse.message, payload: (e as any).payload  }),
     }
   }
 
@@ -130,7 +130,7 @@ const generalHandler = async (
       event
     )
 
-    const isXML = event.headers['Content-Type']?.includes('text/xml') ?? event.body
+    const isXML = event.headers['Content-Type']?.includes('text/xml')
 
     let data: any
     if (isXML) {
@@ -147,6 +147,7 @@ const generalHandler = async (
     }
 
     const result = await route.func(services, data, session)
+
     if (result && (result as any).jwt) {
       headers['Set-Cookie'] = serializeCookie(config.cookie.name, (result as any).jwt, {
         domain: config.domain,
@@ -156,9 +157,10 @@ const generalHandler = async (
         maxAge: 60 * 60 * 24 * 1,
       })
     }
+
     return {
       statusCode: 200,
-      body: JSON.stringify(result),
+      body: route.returnsJSON === false ? (result as any) : JSON.stringify(result),
       headers,
     }
   } catch (e) {
