@@ -4,9 +4,10 @@ import { match, Match } from 'path-to-regexp'
 import { serialize as serializeCookie } from 'cookie'
 import { CoreServices } from '@vramework/backend-common/src/services'
 import { CoreConfig } from '@vramework/backend-common/src/config'
+import { verifyPermissions } from '@vramework/backend-common/src/permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/backend-common/src/routes'
 import { loadSchema, validateJson } from '@vramework/backend-common/src/schema'
-import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/backend-common/src/errors'
+import { getErrorResponse, InvalidOriginError, NotFoundError, NotPermissionedError } from '@vramework/backend-common/src/errors'
 
 const validateOrigin = (config: CoreConfig, services: CoreServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
@@ -136,6 +137,12 @@ const generalHandler = async (
       data = { ...matchedPath.params, ...event.queryStringParameters,  ...JSON.parse(event.body ?? '{}') }
       if (route.schema) {
         validateJson(route.schema, data)
+      }
+      if (session && route.permissions) {
+        const { valid } = await verifyPermissions(route.permissions, services, data, session)
+        if (!valid) {
+          throw new NotPermissionedError()
+        }
       }
     }
 

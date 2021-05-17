@@ -7,12 +7,13 @@ import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
 
-import { getErrorResponse } from '../backend-common/src/errors'
+import { getErrorResponse, NotPermissionedError } from '../backend-common/src/errors'
 import { CoreAPIRoutes } from '../backend-common/src/routes'
 import { CoreConfig } from '../backend-common/src/config'
 import { CoreServices, JWTService } from '../backend-common/src/services'
 import { loadSchema, validateJson } from '../backend-common/src/schema'
 import { CoreUserSession } from '../backend-common/src/user-session'
+import { verifyPermissions } from '../backend-common/src/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 
 const jwtMiddleware = (credentialsRequired: boolean, jwtService: JWTService, cookieName: string) =>
@@ -114,11 +115,18 @@ export class ExpressServer {
             const isXML = req.headers['content-type']?.includes('text/xml')
 
             if (isXML) {
+              // We don't permission this for now
               result = await route.func(this.services, req.body, session)
             } else {
               const data = { ...req.params, ...req.query, ...req.body }
               if (route.schema) {
                 validateJson(route.schema, data)
+              }
+              if (route.permissions) {
+                const { valid } = await verifyPermissions(route.permissions, this.services, data, session)
+                if (!valid) {
+                  throw new NotPermissionedError()
+                }
               }
               result = await route.func(this.services, data, session)
             }

@@ -14,6 +14,7 @@ export class NotFoundError extends EError {}
 export class InvalidOriginError extends EError {}
 export class AccessDeniedError extends EError {}
 export class MissingSession extends EError {}
+export class NotPermissionedError extends EError {}
 
 interface ErrorDetails {
   status: number
@@ -24,6 +25,7 @@ const apiErrors = new Map<any, ErrorDetails>([
   [NotFoundError, { status: 404, message: 'Not Found' }],
   [InvalidOriginError, { status: 400, message: 'Invalid Origin' }],
   [AccessDeniedError, { status: 401, message: 'Access Denied' }],
+  [NotPermissionedError, { status: 401, message: 'Not permissioned' }]
 ])
 
 export const addError = (error: any, { status, message }: ErrorDetails) => {
