@@ -13,7 +13,8 @@
     "ts-json-schema-generator": "^0.92.0",
     "ajv": "^7.0.3",
     "ajv-formats": "^1.5.1",
-    "pg": "^8.6.0"
+    "pg": "^8.6.0",
+    "pino": "^6.11.3"
   },
   "devDependencies": {
     "typescript": "^4.1.3",

@@ -28,7 +28,7 @@ ${results.map((path, i) => `import { routes as routes${i} } from '${path}'`).joi
 
 export const getRoutes = (): APIRoutes => {
     return [
-${results.map((path, i) => `\t...routes${i}`).join(',\n')}
+${results.map((path, i) => `\t\t...routes${i}`).join(',\n')}
     ]
 }
 `   
