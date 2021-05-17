@@ -10,7 +10,9 @@
   "dependencies": {
     "eventemitter3": "^4.0.7",
     "react": "^17.0.2",
-    "use-async-effect": "^2.2.3"
+    "use-async-effect": "^2.2.3",
+    "react-inlinesvg": "^2.2.2"
+
   },
   "devDependencies": {
     "typescript": "^4.1.3"
