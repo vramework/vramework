@@ -138,6 +138,7 @@ export class ExpressServer {
       if (errorDetails != null) {
         res.status(errorDetails.status).json({ message: errorDetails.message })
       } else {
+        console.error(error)
         res.status(500).end()
       }
     })
@@ -152,7 +153,7 @@ export class ExpressServer {
           res.cookie(res.locals.cookiename, res.locals.result.jwt, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
-            domain: this.config.domain,
+            // domain: this.config.domain,
           })
         }
         res.json(res.locals.result).end()
