@@ -113,7 +113,7 @@ const generalHandler = async (
       },
     }
   }
-
+  
   try {
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
     services.logger.info({ action: 'Executing route', path: matchedPath, route })
@@ -127,18 +127,16 @@ const generalHandler = async (
       event
     )
 
-    let data = { ...matchedPath.params, ...event.queryStringParameters }
-    if (event.headers['Content-Type']?.includes('application/json') && event.body) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'error.content_type_json_only' }),
-      }
-    } else {
-      data = { ...data, ...JSON.parse(event.body ?? '{}') }
-    }
+    const isXML = event.headers['Content-Type']?.includes('text/xml') ?? event.body
 
-    if (route.schema) {
-      validateJson(route.schema, data)
+    let data: any
+    if (isXML) {
+      data = event.body
+    } else {
+      data = { ...matchedPath.params, ...event.queryStringParameters,  ...JSON.parse(event.body ?? '{}') }
+      if (route.schema) {
+        validateJson(route.schema, data)
+      }
     }
 
     // TODO: Add permissions

@@ -1,6 +1,6 @@
 import { promises } from 'fs'
 import { createGenerator } from 'ts-json-schema-generator'
-import { getRoutes } from '@samarambi/functions/src/routes'
+import { getRoutes } from '@hallomarta/functions/src/routes'
 
 export async function generateSchemas(tsconfig: string, schemaParentDir: string) {
   const routes = getRoutes()

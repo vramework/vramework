@@ -1,13 +1,11 @@
 import React from 'react'
 import SVG from 'react-inlinesvg'
 
-import InfoCircleIcon from './svg/info-circle.svg'
-
 type DefaultIconKeys = 'info' | 'user' | 'generic'
-const defaultIcons: Record<DefaultIconKeys, React.ReactElement> = {
-    info: <InfoCircleIcon />,
-    user: <></>,
-    generic: <InfoCircleIcon />,
+const defaultIcons: Record<DefaultIconKeys, React.ReactElement | null> = {
+    info:  null,
+    user: null,
+    generic: null
 }
 
 export const useSVG = (svgName: string, color = 'currentColor', defaultIcon: DefaultIconKeys = 'generic', className: string = 'w-4 h-4') => {
@@ -15,7 +13,7 @@ export const useSVG = (svgName: string, color = 'currentColor', defaultIcon: Def
         className={className}
         src={`/svg/${svgName}`}
         cacheRequests={true}
-        loader={defaultIcons[defaultIcon] || <InfoCircleIcon />}
+        loader={defaultIcons[defaultIcon] || null}
         preProcessor={code => code.replace(/fill=".*?"/g, `fill="${color}"`).replace(/width=".*?"/g, '').replace(/height=".*?"/g, '')}
     />
 }

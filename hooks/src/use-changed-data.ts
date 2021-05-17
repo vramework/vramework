@@ -12,6 +12,7 @@ function mergeData<T>(original: T, data: Partial<T>): T {
   return result as T
 }
 
+export type OnDataError = (error: boolean, field: string) => void
 export type OnDataChange = (value: string | string[] | boolean | number | Date | null, field: string) => void
 export type OnDataChanges = (data: {
   [index: string]: string | string[] | boolean | number | Date | any | null
@@ -21,7 +22,10 @@ export interface ChangedDataHook<T> {
   changedData: Partial<T>
   changedDataRef: { current: Partial<T> }
   onChange: OnDataChange
+  revertChanges: () => Promise<void>,
   onChanges: OnDataChanges
+  onDataError: OnDataError
+  hasError: boolean
 }
 
 export const useChangedData = <T extends unknown>(original: T): ChangedDataHook<T> => {
@@ -46,9 +50,8 @@ export const useChangedData = <T extends unknown>(original: T): ChangedDataHook<
     mergeChange()
   }, [original])
   const onChange = useCallback((value, field) => {
-    const changed = cd.current as any
-    if (changed[field] !== value) {
-      changed[field] = value
+    if ((cd.current as any)[field] !== value) {
+      (cd.current as any)[field] = value
       mergeChange()
     }
   }, [])
@@ -56,5 +59,20 @@ export const useChangedData = <T extends unknown>(original: T): ChangedDataHook<
     cd.current = { ...cd.current, ...data }
     mergeChange()
   }, [])
-  return { data: data.current, changedData: cd.current, onChange, onChanges, changedDataRef: cd }
+  const revertChanges = useCallback(async () => {
+    // Async due to buttons progress indicator
+    cd.current = {}
+    mergeChange()
+  }, [])
+  const [fieldsWithErrors, setFieldsWithErrors] = useState<string[]>([])
+  const onDataError = useCallback((hasError, field) => {
+    const errors = new Set(fieldsWithErrors)
+    if (hasError) {
+      errors.add(field)
+    } else {
+      errors.delete(field)
+    }
+    setFieldsWithErrors(Array.from(errors))
+  }, [fieldsWithErrors])
+  return { data: data.current, changedData: cd.current, onDataError, onChange, onChanges, revertChanges, changedDataRef: cd, hasError: fieldsWithErrors.length > 0 }
 }

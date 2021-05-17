@@ -1,6 +1,6 @@
 import express from 'express'
 import { Server } from 'http'
-import { json } from 'body-parser'
+import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import jwt from 'express-jwt'
 import cors from 'cors'
@@ -48,6 +48,12 @@ export class ExpressServer {
         limit: '1mb',
       }),
     )
+    this.app.use(
+      text({
+        limit: '1mb',
+        type: 'text/xml'
+      }),
+    )
     this.app.use(cookieParser())
     this.app.use(
       cors({
@@ -93,7 +99,7 @@ export class ExpressServer {
       }
 
       const path = `/${route.route}`
-      this.services.logger.info(`Adding ${route.type.toUpperCase()} with route ${path}`)
+      this.services.logger.debug(`Adding ${route.type.toUpperCase()} with route ${path}`)
       this.app[route.type](
         path,
         jwtMiddleware(route.requiresSession !== false, this.services.jwt, this.config.cookie.name),
@@ -105,15 +111,18 @@ export class ExpressServer {
             res.locals.processed = true
             let result
 
-            const data = { ...req.params, ...req.query, ...req.body }
+            const isXML = req.headers['content-type']?.includes('text/xml')
 
-            if (route.schema) {
-              validateJson(route.schema, data)
+            if (isXML) {
+              result = await route.func(this.services, req.body, session)
+            } else {
+              const data = { ...req.params, ...req.query, ...req.body }
+              if (route.schema) {
+                validateJson(route.schema, data)
+              }
+              result = await route.func(this.services, data, session)
             }
 
-            // TODO: Permissions
-
-            result = result = await route.func(this.services, data, session)
             res.locals.result = result
             next()
           } catch (e) {
@@ -138,7 +147,6 @@ export class ExpressServer {
       if (errorDetails != null) {
         res.status(errorDetails.status).json({ message: errorDetails.message })
       } else {
-        console.error(error)
         res.status(500).end()
       }
     })
@@ -156,7 +164,12 @@ export class ExpressServer {
             // domain: this.config.domain,
           })
         }
-        res.json(res.locals.result).end()
+
+        if (res.locals.returnsJSON === false) {
+          res.send(res.locals.result).end()
+        } else {
+          res.json(res.locals.result).end()
+        }
       } else {
         res.status(200).end()
       }

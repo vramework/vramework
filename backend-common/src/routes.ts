@@ -9,6 +9,7 @@ export interface CoreAPIRoute<In, Out> {
   func: CoreAPIFunction<In, Out>
   schema: string | null
   requiresSession?: false
+  returnsJSON?: false
 }
 
 export type CoreAPIRoutes = Array<CoreAPIRoute<unknown, unknown>>

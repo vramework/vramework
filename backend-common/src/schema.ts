@@ -14,7 +14,7 @@ export const addSchema = (name: string, value: any) => schemas.set(name, value)
 
 export const loadSchema = (schema: string, logger: Logger): void => {
   if (!validators.has(schema)) {
-    logger.info(`Adding json schema for ${schema}`)
+    logger.debug(`Adding json schema for ${schema}`)
     const json = schemas.get(schema)
     try {
       const validator = ajv.compile(json)
@@ -36,4 +36,13 @@ export const validateJson = (schema: string, json: unknown): void => {
     const errorText = ajv.errorsText(validator.errors)
     throw new InvalidParametersError(errorText)
   }
+}
+
+export const getValidationErrors = (logger: Logger, schema: string, json: unknown) => {
+  const validator = validators.get(schema)
+  if (!validator) {
+    throw `Missing validator for ${schema}`
+  }
+  const result = validator(json);
+  return result ? undefined : validator.errors;
 }

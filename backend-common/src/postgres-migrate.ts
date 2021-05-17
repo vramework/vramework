@@ -1,7 +1,7 @@
 import { ConnectionParams, createDb, migrate } from 'postgres-migrations'
 import pg from 'pg'
 
-export async function postgresMigrate(sqlDirectory: string, dbConfig: ConnectionParams & { database: string; defaultDatabase: string }, dropSchemas: boolean = false) {
+export async function postgresMigrate(sqlDirectory: string, dbConfig: ConnectionParams & { database: string }, dropSchemas: boolean = false) {
   try {
     await createDb(dbConfig.database, dbConfig)
 

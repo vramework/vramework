@@ -11,6 +11,7 @@
         "es2020",
         "dom"
       ],
+      "jsx": "preserve",
       "types": [],
       "allowJs": false,
       "resolveJsonModule": true,
