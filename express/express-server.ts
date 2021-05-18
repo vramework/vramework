@@ -151,6 +151,7 @@ export class ExpressServer {
       if (errorDetails != null) {
         res.status(errorDetails.status).json({ message: errorDetails.message })
       } else {
+        console.error(error)
         res.status(500).end()
       }
     })
