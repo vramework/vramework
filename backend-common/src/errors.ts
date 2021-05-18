@@ -24,8 +24,8 @@ const apiErrors = new Map<any, ErrorDetails>([
   [InvalidParametersError, { status: 422, message: 'Invalid Parameters' }],
   [NotFoundError, { status: 404, message: 'Not Found' }],
   [InvalidOriginError, { status: 400, message: 'Invalid Origin' }],
-  [AccessDeniedError, { status: 401, message: 'Access Denied' }],
-  [NotPermissionedError, { status: 401, message: 'Not permissioned' }]
+  [AccessDeniedError, { status: 403, message: 'Access Denied' }],
+  [NotPermissionedError, { status: 403, message: 'Not permissioned' }]
 ])
 
 export const addError = (error: any, { status, message }: ErrorDetails) => {
