@@ -6,7 +6,8 @@
   "scripts": {
     "tsc": "if [[ ${VRAMEWORK} = \"true\" ]]; then tsc; fi",
     "ncu": "ncu",
-    "test": "echo 'No tests'"
+    "test": "echo 'No tests'",
+    "test:ci": "echo 'No tests'"
   },
   "dependencies": {
     "cookie": "^0.4.1",

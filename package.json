@@ -16,7 +16,8 @@
   "scripts": {
     "tsc": "echo Ignoring vramework tsc wrapper",
     "ncu": "ncu",
-    "test": "echo 'No tests'"
+    "test": "echo 'No tests'",
+    "test:ci": "echo 'No tests'"
   },
   "devDependencies": {
   }

@@ -6,7 +6,8 @@
   "scripts": {
     "tsc": "if [[ ${VRAMEWORK} = \"true\" ]]; then tsc; fi",
     "ncu": "ncu",
-    "test": "echo 'No tests'"
+    "test": "echo 'No tests'",
+    "test:ci": "echo 'No tests'"
   },
   "peerDependency": {
     "react": "^17.0.2"
