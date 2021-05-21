@@ -5,7 +5,8 @@
   "author": "Vlandor LTD",
   "scripts": {
     "tsc": "if [[ ${VRAMEWORK} = \"true\" ]]; then tsc; fi",
-    "ncu": "ncu"
+    "ncu": "ncu",
+    "test": "echo 'No tests'"
   },
   "dependencies": {
     "cookie": "^0.4.1",
