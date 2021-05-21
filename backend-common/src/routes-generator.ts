@@ -24,7 +24,7 @@ export const generateRoutesImports = async (routesDirPath: string, outputPath?: 
     const routesFile = `
 import { APIRoutes } from "./api"
 
-${results.map((path, i) => `import { routes as routes${i} } from '${path}'`).join('\n')}
+${results.sort().map((path, i) => `import { routes as routes${i} } from '${path}'`).join('\n')}
 
 export const getRoutes = (): APIRoutes => {
     return [
