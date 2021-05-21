@@ -1,9 +1,8 @@
-import { EntityType } from '@hallomarta/api/types/general'
 import { useState, useCallback, useRef } from 'react'
 import useAsyncEffect from 'use-async-effect'
 import { ChangedDataHook, useChangedData } from './use-changed-data'
 
-export type GenericGetUpdate<Type> = ChangedDataHook<Type> & {
+export type GenericGetUpdate<Data, EntityType = string> = ChangedDataHook<Data> & {
   totalFieldLength: number
   missingFieldsLength: number
   state: 'loading' | 'ready' | 'saving' | 'error' | 'saved'
@@ -15,18 +14,18 @@ export type GenericGetUpdate<Type> = ChangedDataHook<Type> & {
   entityType: EntityType
 }
 
-export type GenericGet<Type> = {
-  data: Type | null
+export type GenericGet<Data, EntityType = string> = {
+  data: Data | null
   state: 'loading' | 'error' | 'ready'
   entityType: EntityType | null
 }
 
-export const useGenericGet = <Type extends Object>(
+export const useGenericGet = <Data extends Object>(
   id: string | undefined | null,
-  entityType: EntityType | null,
+  entityType: string | null,
   getRest: Function,
-): GenericGet<Type> => {
-  const [data, setData] = useState<Type | null>(null)
+): GenericGet<Data> => {
+  const [data, setData] = useState<Data | null>(null)
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading')
   useAsyncEffect(
     async (isMounted) => {
@@ -53,7 +52,7 @@ export const useGenericGet = <Type extends Object>(
 
 export const useGenericGetUpdate = <Type extends Object>(
   id: string | undefined,
-  entityType: EntityType,
+  entityType: string,
   getRest: Function,
   updateRest: Function | null,
   defaultValues: Partial<Type> = {},
@@ -128,23 +127,4 @@ export const useGenericGetUpdate = <Type extends Object>(
     hasChange: Object.keys(changed.changedData).length !== 0,
     ...changed,
   }
-}
-
-export const useFamilyGenericGetUpdate = <Type extends Object>(
-  familyId: string,
-  entityType: EntityType,
-  id: string,
-  getRest: Function,
-  updateRest: Function,
-): GenericGetUpdate<Type> => {
-  const getFamilyRest = useCallback(async () => {
-    return await getRest(familyId, id)
-  }, [familyId, getRest])
-  const updateFamilyRest = useCallback(
-    async (id: string, data: any) => {
-      return await updateRest(familyId, id, data)
-    },
-    [familyId, updateRest],
-  )
-  return useGenericGetUpdate(id, entityType, getFamilyRest, updateFamilyRest)
 }
