@@ -7,6 +7,7 @@ export async function generateSchemas(tsconfig: string, schemaParentDir: string,
   const schemas = Array.from(schemasSet)
 
   await promises.mkdir(`${schemaParentDir}/schemas`, { recursive: true })
+  await promises.writeFile(`${schemaParentDir}/schemas.ts`,'export const empty = null;', 'utf-8')
 
   const generator = createGenerator({ tsconfig })
 
