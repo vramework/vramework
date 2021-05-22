@@ -1,10 +1,8 @@
 import { promises } from 'fs'
 import { createGenerator } from 'ts-json-schema-generator'
-import { getRoutes } from '@hallomarta/functions/src/routes'
+import { CoreAPIRoutes } from './routes'
 
-export async function generateSchemas(tsconfig: string, schemaParentDir: string) {
-  const routes = getRoutes()
-
+export async function generateSchemas(tsconfig: string, schemaParentDir: string, routes: CoreAPIRoutes) {
   const schemasSet = new Set(routes.map<string | null>(({ schema }) => schema).filter((s) => !!s) as string[])
   const schemas = Array.from(schemasSet)
 
