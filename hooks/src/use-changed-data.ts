@@ -22,7 +22,8 @@ export interface ChangedDataHook<T> {
   changedData: Partial<T>
   changedDataRef: { current: Partial<T> }
   onChange: OnDataChange
-  revertChanges: () => Promise<void>,
+  revertChanges: () => Promise<void>
+  clearBlobs: () => void
   onChanges: OnDataChanges
   onDataError: OnDataError
   hasError: boolean
@@ -74,5 +75,14 @@ export const useChangedData = <T extends unknown>(original: T): ChangedDataHook<
     }
     setFieldsWithErrors(Array.from(errors))
   }, [fieldsWithErrors])
-  return { data: data.current, changedData: cd.current, onDataError, onChange, onChanges, revertChanges, changedDataRef: cd, hasError: fieldsWithErrors.length > 0 }
+  const clearBlobs = useCallback(() => {
+    for (const k in cd.current) {
+        const c = cd.current[k] as any
+        if (c.startsWith && c.startsWith('blob:')) {
+            delete cd.current[k]
+        }
+    }
+    setChangedNotifier(Math.random())
+}, [])
+  return { data: data.current, changedData: cd.current, onDataError, onChange, onChanges, revertChanges, clearBlobs, changedDataRef: cd, hasError: fieldsWithErrors.length > 0 }
 }
