@@ -16,7 +16,9 @@
     "ajv": "^7.0.3",
     "ajv-formats": "^1.5.1",
     "pg": "^8.6.0",
-    "pino": "^6.11.3"
+    "pino": "^6.11.3",
+    "aws-sdk": "^2.907.0",
+    "@aws-sdk/client-secrets-manager": "3.16.0"
   },
   "devDependencies": {
     "typescript": "^4.1.3",

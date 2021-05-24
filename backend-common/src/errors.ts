@@ -13,7 +13,7 @@ export class InvalidParametersError extends EError {}
 export class NotFoundError extends EError {}
 export class InvalidOriginError extends EError {}
 export class AccessDeniedError extends EError {}
-export class MissingSession extends EError {}
+export class MissingSessionError extends EError {}
 export class NotPermissionedError extends EError {}
 
 interface ErrorDetails {

@@ -1,5 +1,12 @@
 export interface CoreConfig {
+  awsRegion: string
   domain: string
+  secrets: {
+    postgresCredentials: string
+  }
+  content: {
+    localFileUploadPath: string
+  }
   server: {
     port: number
   }
