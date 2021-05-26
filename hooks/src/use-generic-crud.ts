@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react'
 import useAsyncEffect from 'use-async-effect'
-import { ChangedDataHook, useChangedData } from './use-changed-data'
+import { ChangedDataHook, OnDataChange, useChangedData } from './use-changed-data'
 
 export type GenericGetUpdate<Data, EntityType = string> = ChangedDataHook<Data> & {
   totalFieldLength: number
@@ -8,6 +8,7 @@ export type GenericGetUpdate<Data, EntityType = string> = ChangedDataHook<Data> 
   state: 'loading' | 'ready' | 'saving' | 'error' | 'saved'
   saveError: string | null
   refresh: () => Promise<void>
+  changeAndSave: OnDataChange
   saveChange: () => Promise<void>
   saveChanges: () => Promise<void>
   hasChange: boolean
@@ -112,7 +113,12 @@ export const useGenericGetUpdate = <Type extends Object>(
         setSaveError(null)
       }
     }
-  }, [])
+  }, [id])
+
+  const changeAndSave = useCallback<OnDataChange>(async (value, field) => {
+    changed.onChange(value, field)
+    await saveChanges()
+  }, [changed.onChange, saveChanges])
 
   const totalFieldLength = Object.keys(original).length
   return {
@@ -120,6 +126,7 @@ export const useGenericGetUpdate = <Type extends Object>(
     totalFieldLength,
     missingFieldsLength: Object.values(changed.data).reduce((r: number, v) => (v === null ? ++r : r), 0),
     refresh,
+    changeAndSave,
     saveChanges,
     saveChange: saveChanges,
     state,
