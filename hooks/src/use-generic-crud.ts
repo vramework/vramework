@@ -84,7 +84,7 @@ export const useGenericGetUpdate = <Type extends Object>(
   const refresh = useCallback(async () => {
     const serverData = await getRest(id)
     setOriginal({ ...defaultValues, ...serverData })
-  }, [])
+  }, [id])
 
   const changed = useChangedData<Type>(original)
   const saveChanges = useCallback(async () => {
