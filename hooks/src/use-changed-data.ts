@@ -21,6 +21,7 @@ export interface ChangedDataHook<T> {
   data: T
   changedData: Partial<T>
   changedDataRef: { current: Partial<T> }
+  originalDataRef: { current: Partial<T> }
   onChange: OnDataChange
   revertChanges: () => Promise<void>,
   onChanges: OnDataChanges
@@ -74,5 +75,5 @@ export const useChangedData = <T extends unknown>(original: T): ChangedDataHook<
     }
     setFieldsWithErrors(Array.from(errors))
   }, [fieldsWithErrors])
-  return { data: data.current, changedData: cd.current, onDataError, onChange, onChanges, revertChanges, changedDataRef: cd, hasError: fieldsWithErrors.length > 0 }
+  return { originalDataRef: og, data: data.current, changedData: cd.current, onDataError, onChange, onChanges, revertChanges, changedDataRef: cd, hasError: fieldsWithErrors.length > 0 }
 }
