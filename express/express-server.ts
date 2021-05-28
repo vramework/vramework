@@ -149,7 +149,7 @@ export class ExpressServer {
 
       const errorDetails = getErrorResponse(error.constructor)
       if (errorDetails != null) {
-        res.status(errorDetails.status).json({ message: errorDetails.message })
+        res.status(errorDetails.status).json({ message: errorDetails.message, payload: (error as any).payload  })
       } else {
         console.error(error)
         res.status(500).end()
