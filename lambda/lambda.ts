@@ -109,7 +109,7 @@ const generalHandler = async (
         ...headers,
         'Set-Cookie': serializeCookie(config.cookie.name, 'invalid', {
           expires: new Date(0),
-          domain: config.domain,
+          domain: event.headers.origin,
           path: '/',
           httpOnly: true,
           secure: true,
@@ -150,7 +150,7 @@ const generalHandler = async (
 
     if (result && (result as any).jwt) {
       headers['Set-Cookie'] = serializeCookie(config.cookie.name, (result as any).jwt, {
-        domain: config.domain,
+        domain: event.headers.origin,
         path: '/',
         httpOnly: true,
         secure: true,

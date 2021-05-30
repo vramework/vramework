@@ -166,7 +166,7 @@ export class ExpressServer {
           res.cookie(res.locals.cookiename, res.locals.result.jwt, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
-            // domain: this.config.domain,
+            domain: req.headers.origin,
           })
         }
 
