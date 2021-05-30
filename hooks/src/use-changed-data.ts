@@ -21,6 +21,7 @@ export interface ChangedDataHook<T> {
   data: T
   changedData: Partial<T>
   changedDataRef: { current: Partial<T> }
+  originalDataRef: { current: Partial<T> }
   onChange: OnDataChange
   revertChanges: () => Promise<void>
   clearBlobs: () => void
@@ -84,5 +85,5 @@ export const useChangedData = <T extends unknown>(original: T): ChangedDataHook<
     }
     setChangedNotifier(Math.random())
 }, [])
-  return { data: data.current, changedData: cd.current, onDataError, onChange, onChanges, revertChanges, clearBlobs, changedDataRef: cd, hasError: fieldsWithErrors.length > 0 }
+  return { originalDataRef: og, data: data.current, changedData: cd.current, onDataError, onChange, onChanges, revertChanges, clearBlobs, changedDataRef: cd, hasError: fieldsWithErrors.length > 0 }
 }
