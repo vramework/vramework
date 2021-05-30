@@ -3,7 +3,7 @@ import { Logger } from 'pino'
 import { parse as parseCookie } from 'cookie'
 import { v4 as uuid } from 'uuid'
 import { DatabasePostgres } from '../database/database-postgres'
-import { MissingSessionError } from '../../errors'
+import { InvalidSessionError, MissingSessionError } from '../../errors'
 
 interface Secret {
   keyid: string
@@ -90,7 +90,8 @@ export class JWTManager<S> {
     return await new Promise((resolve, reject) => {
       jwt.verify(session, this.getJWTSecret.bind(this), (err, user) => {
         if (!user) {
-          return reject(new MissingSessionError())
+          console.error(err)
+          return reject(new InvalidSessionError())
         }
         resolve(user as never as S)
       })
