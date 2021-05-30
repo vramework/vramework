@@ -12,6 +12,10 @@ export class LocalContent implements ContentService {
     return `${url}?signed=true`
   }
 
+  public async signContentKey(assetKey: string): Promise<string> {
+    return `http://localhost:4002/assets/${assetKey}?signed=true`
+  }
+
   public async getUploadURL(assetKey: string) {
     this.logger.info(`going to upload with key: ${assetKey}`)
     return {
