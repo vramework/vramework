@@ -6,15 +6,17 @@ import { CoreConfig } from '../../config'
 export class LocalContent implements ContentService {
   constructor(private config: CoreConfig, private logger: Logger) {}
 
+  public async init () {}
+
   public async signURL(url: string): Promise<string> {
     return `${url}?signed=true`
   }
 
-  public async getUploadURL(assetKey: string): Promise<{ uploadUrl: string, assetUrl: string }> {
+  public async getUploadURL(assetKey: string) {
     this.logger.info(`going to upload with key: ${assetKey}`)
     return {
       uploadUrl: `http://localhost:4002/v1/reaper/${assetKey}`,
-      assetUrl: `http://localhost:4002/assets/${assetKey}`,
+      assetKey
     }
   }
 

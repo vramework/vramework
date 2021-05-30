@@ -1,11 +1,11 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager'
 import { CoreConfig } from '../../config'
-import { Logger } from '../../services'
+import { Logger as PinoLogger } from 'pino'
 
 export class AWSSecrets {
   private readonly client: SecretsManagerClient
 
-  constructor(private readonly config: CoreConfig, private readonly logger: Logger) {
+  constructor(private readonly config: CoreConfig, private readonly logger: PinoLogger) {
     this.client = new SecretsManagerClient({ region: config.awsRegion })
   }
 

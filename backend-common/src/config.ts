@@ -3,6 +3,8 @@ export interface CoreConfig {
   domain: string
   secrets: {
     postgresCredentials: string
+    cloudfrontContentId: string
+    cloudfrontContentPrivateKey: string
   }
   content: {
     localFileUploadPath: string

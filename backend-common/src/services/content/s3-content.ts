@@ -1,43 +1,70 @@
-import { Logger } from 'pino'
-import { Config } from '@samarambi/functions'
-import { S3, CloudFront } from 'aws-sdk'
+import {
+  S3Client,
+  DeleteObjectCommand,
+  PutObjectCommand,
+} from '@aws-sdk/client-s3'
+import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 import { ContentService } from './content'
+import { SecretService } from '../secrets/secrets'
+import { CoreConfig } from '../../config'
+import { Logger as PinoLogger } from 'pino'
+
+// @ts-ignore
+import { getSignedUrl as getCDNSignedUrl } from 'aws-cloudfront-sign'
 
 export class S3Content implements ContentService {
-  private s3 = new S3({ signatureVersion: 'v4' })
-  private cloudfront: CloudFront.Signer
+  private s3 = new S3Client({ region: 'eu-central-1' })
+  private signConfig!: { keypairId: string; privateKeyString: string }
 
-  constructor(private config: Config, credentials: { keyId: string; privateKey: string }, private logger: Logger) {
-    this.cloudfront = new CloudFront.Signer(credentials.keyId, credentials.privateKey)
-  }
+  constructor(private config: CoreConfig, private logger: PinoLogger) {}
 
-  public async signURL(url: string): Promise<string> {
-    return this.cloudfront.getSignedUrl({
-      url,
-      expires: Date.now() + 15 * 60 * 1000,
-    })
-  }
-
-  public async getUploadURL(Key: string, ContentType: string): Promise<{ uploadUrl: string, assetUrl: string }> {
-    this.logger.info({ action: 'Signing content object', key: Key })
-    return {
-      uploadUrl: await this.s3.getSignedUrlPromise('putObject', {
-        Bucket: `content.${this.config.domain}`,
-        Key,
-        ContentType,
-      }),
-      assetUrl: `https://content.${this.config.domain}/${Key}`,
+  public async init(secrets: SecretService) {
+    this.signConfig = {
+      keypairId:  await secrets.getSecret(this.config.secrets.cloudfrontContentId),
+      privateKeyString: await secrets.getSecret(this.config.secrets.cloudfrontContentPrivateKey)
     }
   }
 
-  public async delete(Key: string): Promise<boolean> {
-    this.logger.info({ action: 'Deleting content object', key: Key })
-    await this.s3
-      .deleteObject({
-        Bucket: `content.${this.config.domain}`,
-        Key: Key.replace(`https://content.${this.config.domain}/`, ''),
-      })
-      .promise()
-    return true
+  public async signURL(url: string) {
+    try {
+      return getCDNSignedUrl(url, this.signConfig)
+    } catch (e) {
+      this.logger.error(`Error signing url: ${url}`)
+      return url
+    }
+  }
+
+  public async signContentKey(key: string) {
+    return this.signURL(`https://content.${this.config.domain}/${key}`)
+  }
+
+  public async getUploadURL(Key: string, ContentType: string) {
+    const command = new PutObjectCommand({
+      Bucket: `content.${this.config.domain}`,
+      Key,
+      ContentType,
+    })
+    return {
+      uploadUrl: await getS3SignedUrl(this.s3, command, {
+        expiresIn: 3600,
+      }),
+      assetKey: Key
+    }
+  }
+
+  public async delete(Key: string) {
+    try {
+      this.logger.info(`Deleting file, key: ${Key}`)
+      await this.s3.send(
+        new DeleteObjectCommand({
+          Bucket: `content.${this.config.domain}`,
+          Key,
+        }),
+      )
+      return true
+    } catch (e) {
+      this.logger.error(`Error deleting file, key: ${Key}`, e)
+      return false
+    }
   }
 }

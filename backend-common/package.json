@@ -11,11 +11,13 @@
   },
   "peerDependencies": {},
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.17.0",
     "@aws-sdk/client-secrets-manager": "3.16.0",
     "@aws-sdk/client-ses": "^3.17.0",
+    "@aws-sdk/s3-request-presigner": "^3.17.0",
     "ajv": "^7.0.3",
     "ajv-formats": "^1.5.1",
-    "aws-sdk": "^2.907.0",
+    "aws-cloudfront-sign": "^2.2.0",
     "pg": "^8.6.0",
     "pino": "^6.11.3",
     "ts-json-schema-generator": "^0.92.0"
