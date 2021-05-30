@@ -11,18 +11,20 @@ export class LocalContent implements ContentService {
   }
 
   public async getUploadURL(assetKey: string): Promise<{ uploadUrl: string, assetUrl: string }> {
+    this.logger.info(`going to upload with key: ${assetKey}`)
     return {
-      uploadUrl: `http://localhost:4002/api/${this.config.content.localFileUploadPath.replace(':assetKey', assetKey)}`,
+      uploadUrl: `http://localhost:4002/v1/reaper/${assetKey}`,
       assetUrl: `http://localhost:4002/assets/${assetKey}`,
     }
   }
 
-  public async delete(key: string): Promise<boolean> {
-    this.logger.info(`deleting key: ${key}`)
+  public async delete(assetKey: string): Promise<boolean> {
+    console.trace()
+    this.logger.info(`deleting key: ${assetKey}`)
     try {
-      await promises.unlink(key.replace('http://localhost:4002/assets', `${__dirname}/../../../../../.uploads`))
+      await promises.unlink(assetKey.replace('http://localhost:4002/assets', this.config.content.localFileUploadPath))
     } catch (e) {
-      this.logger.error(`Error deleting content ${key}`, e)
+      this.logger.error(`Error deleting content ${assetKey}`, e)
     }
     return false
   }
