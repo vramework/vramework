@@ -1,5 +1,5 @@
+import { Logger } from 'pino'
 import { CoreConfig } from '../../config'
-import { Logger } from '../../services'
 
 export class LocalSecretService {
   constructor(_config: CoreConfig, private readonly logger: Logger) {}

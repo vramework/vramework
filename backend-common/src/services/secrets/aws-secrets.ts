@@ -10,9 +10,8 @@ export class AWSSecrets {
   }
 
   public async getPostgresCredentials(): Promise<{ password: string, user: string, host: string, port: number, database: string }> {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production' || process.env.PRODUCTION_SERVICES) {
       const { password, ...rest } = await this.getSecret<{ password: string, user: string, host: string, port: number, database: string }>(this.config.secrets.postgresCredentials)
-      console.log(rest)
       return { password, ...rest }
     } else {
       return {
