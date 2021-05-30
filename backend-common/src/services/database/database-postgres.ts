@@ -8,6 +8,7 @@ inject(pg)
 
 export class DatabasePostgres {
   public pool: Pool
+  public client!: pg.PoolClient
 
   constructor(private config: pg.PoolConfig, private logger: Logger) {
     this.logger.info(`Using db host: ${config.host}`)
@@ -15,7 +16,20 @@ export class DatabasePostgres {
   }
 
   public async init (): Promise<void> {
+    this.client = await  this.pool.connect()
     await this.checkConnection()
+  }
+
+  public async transaction<T> (callback: () => Promise<T>): Promise<T> {
+    try {
+      await this.query('BEGIN;')
+      const result = await callback()
+      await this.query('COMMIT;')
+      return result
+    } catch (e) {
+      await this.query('ROLLBACK;')
+      throw e
+    }
   }
 
   public async query<T = { rows: unknown[] }>(
