@@ -41,6 +41,7 @@ const errorHandler = (services: CoreServices, e: Error, headers: Record<string, 
   }
 
   services.logger.error(`Uncaught Error: ${e.message}`, e)
+  console.error(e)
   return {
     headers,
     statusCode: 500,
