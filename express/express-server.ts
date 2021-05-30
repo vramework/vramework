@@ -63,7 +63,7 @@ export class ExpressServer {
       }),
     )
 
-    this.app.use('/assets/', express.static(this.config.files.directory))
+    this.app.use('/assets/', express.static(this.config.content.localFileUploadPath))
 
     this.app.get('/v1/health-check', function (req, res) {
       res.status(200).end()
@@ -81,7 +81,7 @@ export class ExpressServer {
         const key = req.path.replace('/v1/reaper/', '')
         const parts = key.split('/')
         const fileName = parts.pop()
-        const dir = `${this.config.files.directory}/${parts.join('/')}`
+        const dir = `${this.config.content.localFileUploadPath}/${parts.join('/')}`
 
         await mkdir(dir, { recursive: true })
         await writeFile(`${dir}/${fileName}`, file, 'binary')
