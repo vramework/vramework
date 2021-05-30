@@ -9,19 +9,19 @@
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
   },
-  "peerDependencies": {
-  },
+  "peerDependencies": {},
   "dependencies": {
-    "ts-json-schema-generator": "^0.92.0",
+    "@aws-sdk/client-secrets-manager": "3.16.0",
+    "@aws-sdk/client-ses": "^3.17.0",
     "ajv": "^7.0.3",
     "ajv-formats": "^1.5.1",
+    "aws-sdk": "^2.907.0",
     "pg": "^8.6.0",
     "pino": "^6.11.3",
-    "aws-sdk": "^2.907.0",
-    "@aws-sdk/client-secrets-manager": "3.16.0"
+    "ts-json-schema-generator": "^0.92.0"
   },
   "devDependencies": {
-    "typescript": "^4.1.3",
-    "@types/pg": "^7.14.11"
+    "@types/pg": "^7.14.11",
+    "typescript": "^4.1.3"
   }
 }
