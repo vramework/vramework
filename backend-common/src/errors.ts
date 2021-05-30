@@ -16,11 +16,13 @@ export class AccessDeniedError extends EError {}
 export class MissingSessionError extends EError {}
 export class InvalidSessionError extends EError {}
 export class NotPermissionedError extends EError {}
+export class InvalidHashError extends EError {}
 
 interface ErrorDetails {
   status: number
   message: string
 }
+
 const apiErrors = new Map<any, ErrorDetails>([
   [InvalidParametersError, { status: 422, message: 'Invalid Parameters' }],
   [NotFoundError, { status: 404, message: 'Not Found' }],

@@ -1,28 +1,26 @@
-import jwt from 'jsonwebtoken'
-import { Logger } from 'pino'
-import { parse as parseCookie } from 'cookie'
+import * as jwt from 'jsonwebtoken'
 import { v4 as uuid } from 'uuid'
+import { parse as parseCookie } from 'cookie'
 import { DatabasePostgres } from '../database/database-postgres'
-import { InvalidSessionError, MissingSessionError } from '../../errors'
+import { Logger } from 'pino'
+import { InvalidHashError, InvalidSessionError, MissingSessionError } from '../../errors'
 
 interface Secret {
   keyid: string
   secret: string
 }
 
-export class JWTManager<S> {
+export class JWTManager<UserSession extends Object> {
   private currentSecret: Secret = { keyid: '1', secret: 'Monkey' }
   private secrets: Record<string, Secret> = {}
 
   constructor(private database: DatabasePostgres, private logger: Logger) {}
 
-  public async init(): Promise<void> {
-    await this.getSecrets()
-  }
-
-  private async getSecrets() {
+  public async init() {
     try {
-      const result = await this.database.query<{ secret: string; keyid: string }>('SELECT * FROM app."jwt_secret"')
+      const result = await this.database.query<{ secret: string; keyid: string }>(`
+        SELECT * FROM app."jwt_secret"
+      `)
       this.currentSecret = result.rows[result.rows.length - 1]
       this.secrets = result.rows.reduce((result, secret) => {
         result[secret.keyid] = secret
@@ -30,14 +28,15 @@ export class JWTManager<S> {
       }, {} as Record<string, Secret>)
       this.logger.info(`Retrieved JWT secrets: ${Object.keys(this.secrets).join(',')}`)
     } catch (e) {
+      console.error(e)
       this.logger.error('Error getting jwt secrets', e)
     }
   }
 
-  public async getJWTSecret(header: jwt.JwtHeader, callback: jwt.SigningKeyCallback): Promise<void> {
+  public async getJWTSecret(header: jwt.JwtHeader, callback: jwt.SigningKeyCallback) {
     if (header.kid) {
       if (!this.secrets[header.kid]) {
-        await this.getSecrets()
+        await this.init()
       }
       const key = this.secrets[header.kid]
       if (key) {
@@ -50,15 +49,30 @@ export class JWTManager<S> {
     }
   }
 
-  public async encodeJWTHash(validFor: number): Promise<{ hash: string; expiresAt: Date }> {
-    const expiresIn = 1 * 24 * 60 * 60
+  public async encodeJWTHash(expiresIn: number, payload?: Record<string, string>): Promise<{ hash: string; expiresAt: Date }> {
     return new Promise((resolve, reject) => {
       const { secret, keyid } = this.currentSecret
-      jwt.sign({ uuid: uuid() }, secret, { expiresIn, keyid }, (err, hash) => {
+      jwt.sign({ ...payload, uuid: uuid() }, secret, { expiresIn, keyid }, (err, hash) => {
         if (err || !hash) {
           return reject(err)
         }
-        return resolve({ hash, expiresAt: new Date(Date.now() + validFor) })
+        return resolve({ hash, expiresAt: new Date(Date.now() + expiresIn) })
+      })
+    })
+  }
+
+  public async decodeJWTHash<T = never>(hash: string, invalidHashError: any): Promise<{ uuid: string } & T> {
+    try {
+      await this.verifyJWTHash(hash, )
+    } catch (e) {
+      throw invalidHashError
+    }
+    return await new Promise((resolve, reject) => {
+      jwt.verify(hash, this.getJWTSecret.bind(this), (err, data) => {
+        if (!data) {
+          return reject(new InvalidHashError())
+        }
+        resolve(data as any)
       })
     })
   }
@@ -74,48 +88,62 @@ export class JWTManager<S> {
     })
   }
 
-  public async encodeSessionAsync(session: S): Promise<string> {
+  public async encodeSessionAsync(session: UserSession): Promise<string> {
     return new Promise((resolve, reject) => {
       const { secret, keyid } = this.currentSecret
-      jwt.sign(session as any, secret, { expiresIn: '7d', keyid }, (err, jwtToken) => {
-        err || !jwtToken ? reject(err) : resolve(jwtToken)
+      jwt.sign(session, secret, { expiresIn: '1d', keyid }, (err, jwt) => {
+        err ? reject(err) : resolve(jwt!)
       })
     })
   }
 
-  public async decodeSessionAsync(session?: string): Promise<S> {
+  public async decodeSessionAsync(session?: string): Promise<UserSession> {
     if (!session) {
       throw new MissingSessionError()
     }
     return await new Promise((resolve, reject) => {
       jwt.verify(session, this.getJWTSecret.bind(this), (err, user) => {
         if (!user) {
-          console.error(err)
           return reject(new InvalidSessionError())
         }
-        resolve(user as never as S)
+        resolve(user as UserSession)
       })
     })
   }
 
   public async getUserSession(
     requiresSession: boolean,
+    authorizationHeader: string | undefined,
     cookieName: string,
     cookieString: string | undefined,
-  ): Promise<S | null> {
+    debugString: string
+  ): Promise<UserSession | undefined> {
     try {
-      this.logger.info(`Has cookie: ${cookieString}`)
-      if (!cookieString) {
+      let jwt: string
+      if (authorizationHeader && authorizationHeader.split(' ')[0] === 'Bearer') {
+        jwt = authorizationHeader.split(' ')[1]
+      } else {
+        if (!cookieString) {
+          if (requiresSession) {
+            this.logger.error(`Missing cookie string ${debugString}`)
+            throw new MissingSessionError()
+          }
+          return
+        }
+        const cookie = parseCookie(cookieString)
+        jwt = cookie[cookieName]
+      }
+      if (requiresSession && !jwt) {
         throw new MissingSessionError()
       }
-      const cookie = parseCookie(cookieString)
-      return await this.decodeSessionAsync(cookie[cookieName])
-    } catch (e) {
-      if (requiresSession) {
-        throw e
+      if (jwt) {
+        return await this.decodeSessionAsync(jwt)
       }
-      console.error(e)
-      return null
+    } catch (e) {
+      if (e.constructor !== InvalidSessionError) {
+        this.logger.error('Error decoding user session', e)
+      }
     }
+    return
   }
 }
