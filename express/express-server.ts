@@ -15,6 +15,7 @@ import { loadSchema, validateJson } from '../backend-common/src/schema'
 import { CoreUserSession } from '../backend-common/src/user-session'
 import { verifyPermissions } from '../backend-common/src/permissions'
 import { mkdir, writeFile } from 'fs/promises'
+import { DatabasePostgres } from '../backend-common/src/services/database/database-postgres'
 
 const jwtMiddleware = (credentialsRequired: boolean, jwtService: JWTService, cookieName: string) =>
   jwt({
@@ -123,11 +124,20 @@ export class ExpressServer {
               }
             }
 
-            if (route.permissions) {
-              await verifyPermissions(route.permissions, this.services, data, session)
+            const routeServices: CoreServices = {
+              ...this.services,
+              database: new DatabasePostgres(this.services.databasePool, this.services.logger)
             }
-
-            res.locals.result = await route.func(this.services, data, session)
+            try {
+              if (route.permissions) {
+                await verifyPermissions(route.permissions, routeServices, data, session)
+              }
+              res.locals.result = await route.func(routeServices, data, session)
+            } catch (e) {
+              throw e
+            } finally {
+              await routeServices.database.close()
+            }
             next()
           } catch (e) {
             next(e)
@@ -166,7 +176,7 @@ export class ExpressServer {
           res.cookie(res.locals.cookiename, res.locals.result.jwt, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
-            domain: req.headers.origin,
+            // domain: req.headers.origin,
           })
         }
 

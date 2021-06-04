@@ -1,23 +1,22 @@
 import pg from 'pg'
-import { Pool, QueryResult } from 'pg'
+import { QueryResult } from 'pg'
 import { Logger } from 'pino'
 
 // @ts-ignore
 import { inject } from 'pg-camelcase'
+import { DatabasePostgresPool } from './database-postgres-pool'
 inject(pg)
 
 export class DatabasePostgres {
-  public pool: Pool
-  public client!: pg.PoolClient
+  private client!: pg.PoolClient
 
-  constructor(private config: pg.PoolConfig, private logger: Logger) {
-    this.logger.info(`Using db host: ${config.host}`)
-    this.pool = new Pool(config)
+  constructor(private pool: DatabasePostgresPool, private logger: Logger) {
   }
 
-  public async init (): Promise<void> {
-    this.client = await  this.pool.connect()
-    await this.checkConnection()
+  public async close () {
+    if (this.client) {
+      await this.client.release()
+    }
   }
 
   public async transaction<T> (callback: () => Promise<T>): Promise<T> {
@@ -37,13 +36,16 @@ export class DatabasePostgres {
     values: Array<string | number | null | Buffer | Date> = [],
     debug?: 'debug',
   ): Promise<QueryResult<T>> {
+    if (!this.client) {
+      this.client = await this.pool.getClient()
+    }
     statement = statement.replace(/^\s*[\r\n]/gm, '')
     if (debug) {
       this.logger.info(`\nExecuting:\n  Query: ${statement}\n  Values:\n ${values}\n'`)
     }
     const start = Date.now()
     return new Promise<QueryResult<T>>((resolve, reject) => {
-      this.pool.query<T>(statement, values, (err, res) => {
+      this.client.query<T>(statement, values, (err, res) => {
         if (err) {
           console.error(err, statement, values)
           reject(err)
@@ -64,16 +66,5 @@ export class DatabasePostgres {
         resolve(res)
       })
     })
-  }
-
-  private async checkConnection(): Promise<void> {
-    try {
-      const { rows } = await this.query<{ serverVersion: string }>('SHOW server_version;')
-      this.logger.info(`Postgres server version is: ${rows[0].serverVersion}`)
-    } catch (e) {
-      console.error(e)
-      this.logger.error(`Unable to connect to server with ${this.config.host}, exiting server`)
-      process.exit(1)
-    }
   }
 }

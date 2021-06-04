@@ -1,9 +1,9 @@
 import * as jwt from 'jsonwebtoken'
 import { v4 as uuid } from 'uuid'
 import { parse as parseCookie } from 'cookie'
-import { DatabasePostgres } from '../database/database-postgres'
 import { Logger } from 'pino'
 import { InvalidHashError, InvalidSessionError, MissingSessionError } from '../../errors'
+import { DatabasePostgresPool } from '../database/database-postgres-pool'
 
 interface Secret {
   keyid: string
@@ -14,7 +14,7 @@ export class JWTManager<UserSession extends Object> {
   private currentSecret: Secret = { keyid: '1', secret: 'Monkey' }
   private secrets: Record<string, Secret> = {}
 
-  constructor(private database: DatabasePostgres, private logger: Logger) {}
+  constructor(private database: DatabasePostgresPool, private logger: Logger) {}
 
   public async init() {
     try {

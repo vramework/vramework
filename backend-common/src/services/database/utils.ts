@@ -5,6 +5,23 @@ export interface Filters {
   [index: string]: string | number | string[]
 }
 
+export const createFields = <TABLE>(fields: Array<keyof TABLE>, table: string) => {
+  const r = fields.reduce((r, field) => {
+    r.push(`'${field}'`)
+    r.push(`"${table}".${snakeCase(field as string)}`)
+    return r
+  }, [] as string[])
+  return r.join(',')
+}
+
+export const selectFields = <TABLE>(fields: readonly (keyof TABLE)[], table: string) => {
+  const r = fields.reduce((r, field) => {
+    r.push(`"${table}".${snakeCase(field as string)}`)
+    return r
+  }, [] as string[])
+  return r.join(',')
+}
+
 export const getEscapedFilter = (
   table: string,
   filters: Filters,
@@ -85,7 +102,7 @@ export const createBulkInsert = (
 }
 
 export const createInsert = (
-  data: Record<string, number | string | null | string[] | undefined | Buffer>,
+  data: Record<string, number | string | null | string[] | undefined | Date>,
   offset = 0,
 ): [string, string, Array<string | number | null>] => {
   const keys = Object.keys(data).filter((k) => data[k] !== undefined)
@@ -107,13 +124,6 @@ export const transformValues = (from: any): Record<string, number | string | nul
     }
     return r
   }, {} as Record<string, number | string | null>)
-}
-
-export const resultToDictionary = <T extends { id: string }>(data: T[]): Record<string, T> => {
-  return data.reduce((r, k) => {
-    r[k.id] = k
-    return r
-  }, {} as Record<string, T>)
 }
 
 export const exactlyOneResult = <T>(result: T[], Err: Error): T => {

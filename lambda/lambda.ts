@@ -8,6 +8,7 @@ import { verifyPermissions } from '@vramework/backend-common/src/permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/backend-common/src/routes'
 import { loadSchema, validateJson } from '@vramework/backend-common/src/schema'
 import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/backend-common/src/errors'
+import { DatabasePostgres } from '@vramework/backend-common/src/services/database/database-postgres'
 
 const validateOrigin = (config: CoreConfig, services: CoreServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
@@ -142,26 +143,33 @@ const generalHandler = async (
       }
     }
 
-    if (route.permissions) {
-      await verifyPermissions(route.permissions, services, data, session)
+    const routeServices = {
+      ...services,
+      database: new DatabasePostgres(services.databasePool, services.logger)
     }
-
-    const result = await route.func(services, data, session)
-
-    if (result && (result as any).jwt) {
-      headers['Set-Cookie'] = serializeCookie(config.cookie.name, (result as any).jwt, {
-        domain: event.headers.origin,
-        path: '/',
-        httpOnly: true,
-        secure: true,
-        maxAge: 60 * 60 * 24 * 1,
-      })
-    }
-
-    return {
-      statusCode: 200,
-      body: route.returnsJSON === false ? (result as any) : JSON.stringify(result),
-      headers,
+    try {
+      if (route.permissions) {
+        await verifyPermissions(route.permissions, routeServices, data, session)
+      }
+      const result = await route.func(routeServices, data, session)
+      if (result && (result as any).jwt) {
+        headers['Set-Cookie'] = serializeCookie(config.cookie.name, (result as any).jwt, {
+          domain: event.headers.origin,
+          path: '/',
+          httpOnly: true,
+          secure: true,
+          maxAge: 60 * 60 * 24 * 1,
+        })
+      }
+      return {
+        statusCode: 200,
+        body: route.returnsJSON === false ? (result as any) : JSON.stringify(result),
+        headers,
+      }
+    } catch (e) {
+      throw e
+    } finally {
+      routeServices.database.close()
     }
   } catch (e) {
     return errorHandler(services, e, headers)
