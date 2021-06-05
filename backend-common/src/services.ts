@@ -13,5 +13,5 @@ export interface CoreServices {
   logger: PinoLogger
   jwt: JWTService
   databasePool: DatabasePostgresPool
-  database: DatabasePostgres
+  database: DatabasePostgres<string>
 }

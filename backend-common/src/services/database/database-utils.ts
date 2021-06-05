@@ -1,5 +1,6 @@
 /* eslint-disable quotes */
 import { snakeCase } from 'snake-case'
+import { FilterExpression, BulkFilter, FilterSubExpressions } from '../../filter'
 
 export interface Filters {
   [index: string]: string | number | string[]
@@ -15,6 +16,9 @@ export const createFields = <TABLE>(fields: Array<keyof TABLE>, table: string) =
 }
 
 export const selectFields = <TABLE>(fields: readonly (keyof TABLE)[], table: string) => {
+  if (fields.length === 0) {
+    return '*'
+  }
   const r = fields.reduce((r, field) => {
     r.push(`"${table}".${snakeCase(field as string)}`)
     return r
@@ -131,4 +135,119 @@ export const exactlyOneResult = <T>(result: T[], Err: Error): T => {
     throw Err
   }
   return result[0]
+}
+
+const operatorToPostgres: Record<string, string> = {
+  'gt': '>',
+  'gte': '>=',
+  'lt': '<',
+  'lte': '<=',
+  'eq': '=',
+  'ne': '!=',
+  'on': '=',
+  'after': '>',
+  'before': '<'
+}
+
+const manageFilters = (expressions: FilterExpression): Array<any> => {
+  return expressions.reduce((result, expression) => {
+    if (expression.conditionType) {
+      result.push({ conditionType: expression.conditionType })
+    }
+    if (expression.expressions) {
+      return [...result, { grouping: '(' }, ...manageFilters(expression.expressions), { grouping: ')' }]
+    } else {
+      const { field, value, operator } = expression
+      const parts = field!.split('.')
+      if (parts.length === 1) {
+        result.push({ operator, field, value })
+      } else {
+        let table = parts[0].replace(/s$/, '')
+        const actualField = parts.pop() as string
+        result.push({ table, operator, field: actualField, value })
+      }
+    }
+    return result
+  }, [] as any[])
+}
+
+export const createFilters = (data: BulkFilter, freeTextFields: string[] = [], includeWhere: boolean = true, valueOffset: number = 0) => {
+  const limit = data.limit || 1000
+  const offset = data.offset || 0
+
+  let sort: string = ''
+  if (data.sort) {
+    const parts = data.sort.key.split('.')
+    let table = ''
+    if (parts.length > 1) {
+      // TODO: This logic should be in client.
+      table = `"${parts[0]}".`
+    }
+    const field = parts.pop() as string
+    sort = `ORDER BY ${table}${snakeCase(field)} ${data.sort.order}`
+  }
+
+  let cleanFilters = manageFilters(data.filters || [])
+  if (data.freeText && data.freeText.trim()) {
+    const freeTextFilters = freeTextFields.map<FilterSubExpressions>((field, index) => ({ conditionType: index === 0 ? undefined : 'OR', field, operator: 'contains', value: data.freeText! }))
+    let filters: FilterExpression = []
+    if (data.filters && data.filters.length > 0) {
+      filters = data.filters
+    }
+    cleanFilters = manageFilters([...filters, { conditionType: data.filters?.length ? 'AND' : undefined, expressions: freeTextFilters }])
+  } else {
+    cleanFilters = manageFilters(data.filters || [])
+  }
+
+  const filterValues: any[] = []
+  let filter: string = ''
+  if (cleanFilters && cleanFilters.length > 0) {
+    const filters = cleanFilters.map(({ grouping, conditionType = '', operator, table, field, value }) => {
+      if (grouping) {
+        return grouping
+      }
+
+      if (conditionType && field === undefined) {
+        return conditionType
+      }
+
+      const t = table ? `"${table}".` : ''
+      const column = `${t}"${snakeCase(field)}"`
+
+      if (operator === 'contains') {
+        if ((value as string).trim()) {
+          filterValues.push((value as string).trim().split(' ').reduce((result, value) => {
+            if (value) {
+              result.push(`${value}:*`)
+            }
+            return result
+          }, [] as string[]).join(' | '))
+          return `${conditionType} ${column} @@ to_tsquery('simple', $${valueOffset + filterValues.length})`
+        }
+        return undefined
+      }
+
+      if (operator === 'includes' || operator === 'excludes') {
+        filterValues.push(value)
+        return `${conditionType} $${valueOffset + filterValues.length} ${operator === 'includes' ? '=' : '!='} ANY (${t}"${snakeCase(field)}")`
+      }
+
+      if (operatorToPostgres[operator]) {
+        filterValues.push(value)
+        return `${conditionType} ${column} ${operatorToPostgres[operator]} $${valueOffset + filterValues.length}`
+      }
+
+      if (conditionType) {
+        return conditionType
+      }
+
+      return undefined
+    }).filter(v => !!v)
+
+    if (filters.length > 0) {
+      filter = `${includeWhere ? 'WHERE ' : ''}${filters.join(' ')}`
+    }
+  }
+
+  return { limit, offset, sort, filter, filterValues }
 }

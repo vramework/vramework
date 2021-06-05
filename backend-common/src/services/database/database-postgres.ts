@@ -5,9 +5,10 @@ import { Logger } from 'pino'
 // @ts-ignore
 import { inject } from 'pg-camelcase'
 import { DatabasePostgresPool } from './database-postgres-pool'
+import { createFilters, exactlyOneResult, selectFields } from './database-utils'
 inject(pg)
 
-export class DatabasePostgres {
+export class DatabasePostgres<Tables extends string> {
   private client!: pg.PoolClient
 
   constructor(private pool: DatabasePostgresPool, private logger: Logger) {
@@ -17,6 +18,23 @@ export class DatabasePostgres {
     if (this.client) {
       await this.client.release()
     }
+  }
+
+  public async crudGet <T extends object>(table: Tables, fields: readonly (keyof T)[], filters: Record<string, any>): Promise<Pick<T, typeof fields[number]>[]> 
+  public async crudGet <T extends object>(table: Tables, fields: readonly (keyof T)[], filters: Record<string, any>, notSingleError: Error): Promise<Pick<T, typeof fields[number]>> 
+  public async crudGet <T extends object>(table: Tables, fields: readonly (keyof T)[], filters: Record<string, any>, notSingleError?: undefined | Error): Promise<Pick<T, typeof fields[number]> | Pick<T, typeof fields[number]>[]> {
+    const { filter, filterValues } = createFilters({
+      filters: Object.entries(filters).map(([field, value]) => ({ value, field, operator: 'eq' }))
+    })
+    const result = await this.query<Pick<T, typeof fields[number]>>(`
+      SELECT ${selectFields<T>(fields, 'samf')}
+      FROM "${table}"
+      ${filter}
+    `, filterValues)
+    if (notSingleError) {
+      return exactlyOneResult(result.rows, notSingleError)
+    }
+    return result.rows
   }
 
   public async transaction<T> (callback: () => Promise<T>): Promise<T> {
