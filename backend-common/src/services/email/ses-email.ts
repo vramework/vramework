@@ -1,11 +1,12 @@
 import { SESClient, SendTemplatedEmailCommand } from "@aws-sdk/client-ses"
+import { CoreConfig } from "../../config"
 import { EmailService } from "./email"
 
 export class AWSSES implements EmailService {
     private client: SESClient
 
-    constructor() {
-        this.client = new SESClient({ region: "eu-central-1" })
+    constructor(private config: CoreConfig) {
+        this.client = new SESClient({ region: config.awsRegion })
     }
 
     public async sendResetPasswordEmail(to: string, username: string, resetHash: string): Promise<boolean> {
@@ -15,7 +16,7 @@ export class AWSSES implements EmailService {
         }
         try {
             await this.client.send(new SendTemplatedEmailCommand({
-                Source: 'no-reply@samarambi.com',
+                Source: `no-reply@${this.config.domain}`,
                 Destination: {
                     ToAddresses: [to],
                     CcAddresses: []
