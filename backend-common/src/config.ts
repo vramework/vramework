@@ -1,6 +1,7 @@
 export interface CoreConfig {
   awsRegion: string
   domain: string
+  corsDomains?: string[]
   secrets: {
     postgresCredentials: string
     cloudfrontContentId: string

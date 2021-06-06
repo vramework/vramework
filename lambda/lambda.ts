@@ -12,8 +12,8 @@ import { DatabasePostgres } from '@vramework/backend-common/src/services/databas
 
 const validateOrigin = (config: CoreConfig, services: CoreServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
-
-  if (!origin || !origin.includes(config.domain)) {
+  const corsDomains = config.corsDomains || [config.domain]
+  if (!origin || corsDomains.every(domain => !origin.includes(domain))) {
     services.logger.error(`
 CORS Error
   - Recieved from origin: ${origin}
