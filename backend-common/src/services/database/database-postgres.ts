@@ -28,7 +28,7 @@ export class DatabasePostgres<Tables extends string> {
     filters: Object.entries(filters).map(([field, value]) => ({ value, field, operator: 'eq' }))
     })
     const result = await this.query<Pick<T, typeof fields[number]>>(`
-      SELECT ${selectFields<T>(fields, 'samf')}
+      SELECT ${selectFields<T>(fields, table)}
       FROM "app"."${table}"
       ${filter}
     `, filterValues)
@@ -75,6 +75,8 @@ export class DatabasePostgres<Tables extends string> {
     } catch (e) {
       await this.query('ROLLBACK;')
       throw e
+    } finally {
+      this.client.release()
     }
   }
 

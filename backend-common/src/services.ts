@@ -1,17 +1,19 @@
 import { CoreConfig } from './config'
 import { Logger as PinoLogger } from 'pino'
-import { DatabasePostgresPool } from './services/database/database-postgres-pool'
-import { DatabasePostgres } from './services/database/database-postgres'
+import { CoreUserSession } from './user-session'
 
 export interface JWTService {
   getJWTSecret: Function
   getUserSession: Function
 }
 
-export interface CoreServices {
+export interface CoreServices extends CoreSingletonServices {
+}
+
+
+export interface CoreSingletonServices {
   config: CoreConfig
   logger: PinoLogger
   jwt: JWTService
-  databasePool: DatabasePostgresPool
-  database: DatabasePostgres<string>
+  createSessionServices: (services: CoreSingletonServices, session?: CoreUserSession) => CoreServices
 }
