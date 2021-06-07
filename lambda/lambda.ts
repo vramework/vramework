@@ -142,6 +142,8 @@ const generalHandler = async (
       }
     }
 
+    console.log(session)
+
     const sessionServices = await services.createSessionServices(services, session)
     try {
       if (route.permissions) {
@@ -150,7 +152,7 @@ const generalHandler = async (
       const result = await route.func(sessionServices, data, session)
       if (result && (result as any).jwt) {
         headers['Set-Cookie'] = serializeCookie(config.cookie.name, (result as any).jwt, {
-          domain: event.headers.origin,
+          // domain: event.headers.origin,
           path: '/',
           httpOnly: true,
           secure: true,
