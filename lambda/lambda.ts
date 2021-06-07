@@ -144,6 +144,8 @@ const generalHandler = async (
       }
     }
 
+    console.log(session)
+
     const sessionServices = await services.createSessionServices(services, session)
     try {
       if (route.permissions) {
