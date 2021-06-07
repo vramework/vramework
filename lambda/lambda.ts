@@ -2,15 +2,14 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { match, Match } from 'path-to-regexp'
 
 import { serialize as serializeCookie } from 'cookie'
-import { CoreServices } from '@vramework/backend-common/src/services'
+import { CoreSingletonServices } from '@vramework/backend-common/src/services'
 import { CoreConfig } from '@vramework/backend-common/src/config'
 import { verifyPermissions } from '@vramework/backend-common/src/permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/backend-common/src/routes'
 import { loadSchema, validateJson } from '@vramework/backend-common/src/schema'
 import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/backend-common/src/errors'
-import { DatabasePostgres } from '@vramework/backend-common/src/services/database/database-postgres'
 
-const validateOrigin = (config: CoreConfig, services: CoreServices, event: APIGatewayProxyEvent): string => {
+const validateOrigin = (config: CoreConfig, services: CoreSingletonServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
   const corsDomains = config.corsDomains || [config.domain]
   if (!origin || corsDomains.every(domain => !origin.includes(domain))) {
@@ -28,7 +27,7 @@ CORS Error
   return origin
 }
 
-const errorHandler = (services: CoreServices, e: Error, headers: Record<string, string | boolean>) => {
+const errorHandler = (services: CoreSingletonServices, e: Error, headers: Record<string, string | boolean>) => {
   const errorResponse = getErrorResponse(e.constructor)
   let statusCode: number
   if (errorResponse != null) {
@@ -51,7 +50,7 @@ const errorHandler = (services: CoreServices, e: Error, headers: Record<string, 
 }
 
 const getMatchingRoute = (
-  services: CoreServices,
+  services: CoreSingletonServices,
   requestType: string,
   requestPath: string,
   routes: Array<CoreAPIRoute<unknown, unknown>>,
@@ -76,7 +75,7 @@ const getMatchingRoute = (
 
 const generalHandler = async (
   config: CoreConfig,
-  services: CoreServices,
+  services: CoreSingletonServices,
   routes: CoreAPIRoutes,
   event: APIGatewayProxyEvent,
   headers: Record<string, any>,
@@ -143,15 +142,12 @@ const generalHandler = async (
       }
     }
 
-    const routeServices = {
-      ...services,
-      database: new DatabasePostgres(services.databasePool, services.logger)
-    }
+    const sessionServices = await services.createSessionServices(services, session)
     try {
       if (route.permissions) {
-        await verifyPermissions(route.permissions, routeServices, data, session)
+        await verifyPermissions(route.permissions, sessionServices, data, session)
       }
-      const result = await route.func(routeServices, data, session)
+      const result = await route.func(sessionServices, data, session)
       if (result && (result as any).jwt) {
         headers['Set-Cookie'] = serializeCookie(config.cookie.name, (result as any).jwt, {
           domain: event.headers.origin,
@@ -169,7 +165,11 @@ const generalHandler = async (
     } catch (e) {
       throw e
     } finally {
-      routeServices.database.close()
+      for (const service of Object.values(sessionServices)) {
+        if (service.closeSession) {
+          await service.closeSession()
+        }
+      }
     }
   } catch (e) {
     return errorHandler(services, e, headers)
@@ -180,7 +180,7 @@ export const processCorsless = async (
   event: APIGatewayProxyEvent,
   routes: CoreAPIRoutes,
   config: CoreConfig,
-  services: CoreServices,
+  services: CoreSingletonServices,
 ) => {
   return await generalHandler(config, services, routes, event, {})
 }
@@ -189,7 +189,7 @@ export const processCors = async (
   event: APIGatewayProxyEvent,
   routes: CoreAPIRoutes,
   config: CoreConfig,
-  services: CoreServices,
+  services: CoreSingletonServices,
 ) => {
   let origin: string | false = false
   try {

@@ -10,12 +10,11 @@ import contentType from 'content-type'
 import { getErrorResponse } from '../backend-common/src/errors'
 import { CoreAPIRoutes } from '../backend-common/src/routes'
 import { CoreConfig } from '../backend-common/src/config'
-import { CoreServices, JWTService } from '../backend-common/src/services'
+import { CoreSingletonServices, JWTService } from '../backend-common/src/services'
 import { loadSchema, validateJson } from '../backend-common/src/schema'
 import { CoreUserSession } from '../backend-common/src/user-session'
 import { verifyPermissions } from '../backend-common/src/permissions'
 import { mkdir, writeFile } from 'fs/promises'
-import { DatabasePostgres } from '../backend-common/src/services/database/database-postgres'
 
 const jwtMiddleware = (credentialsRequired: boolean, jwtService: JWTService, cookieName: string) =>
   jwt({
@@ -40,7 +39,7 @@ export class ExpressServer {
 
   constructor(
     private readonly config: CoreConfig,
-    private readonly services: CoreServices,
+    private readonly services: CoreSingletonServices,
     private readonly routes: CoreAPIRoutes,
   ) { }
 
@@ -124,19 +123,20 @@ export class ExpressServer {
               }
             }
 
-            const routeServices: CoreServices = {
-              ...this.services,
-              database: new DatabasePostgres(this.services.databasePool, this.services.logger)
-            }
+            const sessionServices = await this.services.createSessionServices(this.services, session)
             try {
               if (route.permissions) {
-                await verifyPermissions(route.permissions, routeServices, data, session)
+                await verifyPermissions(route.permissions, sessionServices, data, session)
               }
-              res.locals.result = await route.func(routeServices, data, session)
+              res.locals.result = await route.func(sessionServices, data, session)
             } catch (e) {
               throw e
             } finally {
-              await routeServices.database.close()
+              for (const service of Object.values(sessionServices)) {
+                if (service.closeSession) {
+                  await service.closeSession()
+                }
+              }
             }
             next()
           } catch (e) {
