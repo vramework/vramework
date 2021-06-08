@@ -10,7 +10,7 @@ export interface CoreAPIRoute<In, Out> {
   func: CoreAPIFunction<In, Out>
   schema: string | null
   requiresSession?: false
-  permissions?: Record<string, Array<CoreAPIPermission<In>>>
+  permissions?: Record<string, CoreAPIPermission<In>[] | CoreAPIPermission<In>>
   returnsJSON?: false
 }
 

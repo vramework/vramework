@@ -53,7 +53,7 @@ export class DatabasePostgres<Tables extends string> {
 
   public async crudUpdate <T extends object>(table: Tables, update: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>, filters: Record<string, any>, error: Error): Promise<void> {
     const { filter, filterValues } = createFilters({
-      filters: Object.entries(filters).map(([field, value]) => ({ value, field, operator: 'eq' }))
+      filters: Object.entries(filters).map(([field, value]) => ({ value, field, operator: 'eq', conditionType: 'AND' }))
     })
     const [keys, values, realValues] = createInsert(update, filterValues.length)
     const result = await this.query(`
