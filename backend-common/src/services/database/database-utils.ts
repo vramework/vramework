@@ -6,10 +6,14 @@ export interface Filters {
   [index: string]: string | number | string[]
 }
 
-export const createFields = <TABLE>(fields: Array<keyof TABLE>, table: string) => {
+export const createFields = <TABLE>(fields: Array<keyof TABLE>, table?: string) => {
   const r = fields.reduce((r, field) => {
     r.push(`'${field}'`)
-    r.push(`"${table}".${snakeCase(field as string)}`)
+    if (table) {
+      r.push(`"${table}".${snakeCase(field as string)}`)
+    } else {
+      r.push(snakeCase(field as string))
+    }
     return r
   }, [] as string[])
   return r.join(',')
