@@ -6,13 +6,13 @@ export async function postgresMigrate(sqlDirectory: string, dbConfig: Connection
     await createDb(dbConfig.database, dbConfig)
 
     const client = new pg.Pool(dbConfig)
-
     if (dropSchemas) {
       if (process.env.NODE_ENV === 'production' || dbConfig.host !== 'localhost') {
         throw 'Cant drop schemas when in production mode or database host not local =)'
       }
       await client.query('SHOW server_version;')
       await client.query(`DROP TABLE IF EXISTS public.migrations;`)
+      await client.query(`DROP SCHEMA IF EXISTS audit;`)
       await client.query(`DROP SCHEMA IF EXISTS app CASCADE;`)
     }
 
