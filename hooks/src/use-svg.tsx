@@ -8,7 +8,7 @@ const defaultIcons: Record<DefaultIconKeys, React.ReactElement | null> = {
     generic: null
 }
 
-export const useSVG = (svgName: string, color = 'currentColor', defaultIcon: DefaultIconKeys = 'generic', className: string = 'w-full h-full') => {
+export const useSVG = (svgName: string, color = 'currentColor', defaultIcon: DefaultIconKeys = 'generic', className: string = 'w-4 h-4') => {
     return <SVG
         className={className}
         src={`/svg/${svgName}`}
