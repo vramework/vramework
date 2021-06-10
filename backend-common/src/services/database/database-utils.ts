@@ -110,7 +110,7 @@ export const createBulkInsert = (
 }
 
 export const createInsert = (
-  data: Record<string, number | string | null | string[] | undefined | Date>,
+  data: Record<string, number | string | null | string[] | undefined | boolean | Date>,
   offset = 0,
 ): [string, string, Array<string | number | null>] => {
   const keys = Object.keys(data).filter((k) => data[k] !== undefined)

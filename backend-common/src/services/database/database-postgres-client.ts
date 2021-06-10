@@ -55,7 +55,7 @@ export class DatabasePostgresClient<Table extends string> {
     }
   }
 
-  public async crudUpdate <T extends object>(table: Table, update: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>, filters: Partial<Record<keyof T, any>>, error?: Error): Promise<void> {
+  public async crudUpdate <T extends object>(table: Table, update: Partial<Record<keyof T, string | number | string[] | Date | null | boolean | undefined>>, filters: Partial<Record<keyof T, any>>, error?: Error): Promise<void> {
     if (Object.keys(update).length === 0) {
       return
     }
