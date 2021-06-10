@@ -13,3 +13,8 @@ export const injectIntoUrl = (route: string, keys: Record<string, string>) => {
     }
     return route
 }
+
+// Pick some fields to be mandatory, everything else is partial
+export type PickRequired<T, K extends keyof T> = Pick<T, K> & Partial<T>;
+// Pick some fields to be mandatory, everything else is partial
+export type PickOptional<T, K extends keyof T> = Omit<T, K> & Partial<T>;

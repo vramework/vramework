@@ -24,12 +24,12 @@ export class DatabasePostgresClient<Table extends string> {
     }
   }
 
-  public async crudGet <T extends object>(table: Table, fields: readonly (keyof T)[], filters: Record<string, any>): Promise<Pick<T, typeof fields[number]>[]> 
-  public async crudGet <T extends object>(table: Table, fields: readonly (keyof T)[], filters: Record<string, any>, notSingleError: Error): Promise<Pick<T, typeof fields[number]>> 
-  public async crudGet <T extends object>(table: Table, fields: readonly (keyof T)[], filters: Record<string, any>, notSingleError?: undefined | Error): Promise<Pick<T, typeof fields[number]> | Pick<T, typeof fields[number]>[]> {
+  public async crudGet <T extends object>(table: Table, fields: readonly (keyof T)[], filters: Partial<Record<keyof T, any>>): Promise<Pick<T, typeof fields[number]>[]> 
+  public async crudGet <T extends object>(table: Table, fields: readonly (keyof T)[], filters: Partial<Record<keyof T, any>>, notSingleError: Error): Promise<Pick<T, typeof fields[number]>> 
+  public async crudGet <T extends object>(table: Table, fields: readonly (keyof T)[], filters: Partial<Record<keyof T, any>>, notSingleError?: undefined | Error): Promise<Pick<T, typeof fields[number]> | Pick<T, typeof fields[number]>[]> {
     const { filter, filterValues } = createFilters({
       filters: Object.entries(filters).map(([field, value], index) => ({ value, field, operator: 'eq', conditionType: index !== 0 ? 'AND' : undefined }))
-    })
+    } as any)
     const result = await this.query<Pick<T, typeof fields[number]>>(`
       SELECT ${selectFields<T>(fields, table)}
       FROM "app"."${table}"
@@ -55,13 +55,13 @@ export class DatabasePostgresClient<Table extends string> {
     }
   }
 
-  public async crudUpdate <T extends object>(table: Table, update: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>, filters: Record<string, any>, error?: Error): Promise<void> {
+  public async crudUpdate <T extends object>(table: Table, update: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>, filters: Partial<Record<keyof T, any>>, error?: Error): Promise<void> {
     if (Object.keys(update).length === 0) {
       return
     }
     const { filter, filterValues } = createFilters({
       filters: Object.entries(filters).map(([field, value], index) => ({ value, field, operator: 'eq', conditionType: index !== 0 ? 'AND' : undefined }))
-    })
+    } as any)
     const [keys, values, realValues] = createInsert(update, filterValues.length)
     const result = await this.query(`
         UPDATE "app".${table}
@@ -73,6 +73,20 @@ export class DatabasePostgresClient<Table extends string> {
     }
   }
   
+  public async crudDelete  <T extends object>(table: Table, filters: Partial<Record<keyof T, any>>, notSingleError?: undefined | Error): Promise<boolean> {
+    const { filter, filterValues } = createFilters({
+      filters: Object.entries(filters).map(([field, value], index) => ({ value, field, operator: 'eq', conditionType: index !== 0 ? 'AND' : undefined }))
+    } as any)
+    const result = await this.query(`
+      DELETE FROM "app"."${table}" 
+      ${filter}
+    `, filterValues)
+    if (notSingleError && result.rowCount !== 1) {
+      exactlyOneResult(result.rows, notSingleError)
+    }
+    return result.rowCount !== 0
+  }
+
   public async debugQuery <T = { rows: unknown[] }>(
     statement: string,
     values: Array<string | number | null | Buffer | Date> = [],
