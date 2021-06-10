@@ -10,7 +10,9 @@
     "packages": [
       "common/",
       "express/",
-      "lambda/"
+      "lambda/",
+      "generic/",
+      "hooks/"
     ]
   },
   "scripts": {
