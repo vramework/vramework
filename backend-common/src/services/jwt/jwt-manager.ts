@@ -1,6 +1,5 @@
 import * as jwt from 'jsonwebtoken'
 import { v4 as uuid } from 'uuid'
-import { parse as parseCookie } from 'cookie'
 import { Logger } from 'pino'
 import { InvalidHashError, InvalidSessionError, MissingSessionError } from '../../errors'
 
@@ -102,41 +101,5 @@ export class JWTManager<UserSession extends Object> {
         resolve(user as UserSession)
       })
     })
-  }
-
-  public async getUserSession(
-    requiresSession: boolean,
-    authorizationHeader: string | undefined,
-    cookieName: string,
-    cookieString: string | undefined,
-    debugString: string
-  ): Promise<UserSession | undefined> {
-    try {
-      let jwt: string
-      if (authorizationHeader && authorizationHeader.split(' ')[0] === 'Bearer') {
-        jwt = authorizationHeader.split(' ')[1]
-      } else {
-        if (!cookieString) {
-          if (requiresSession) {
-            this.logger.error(`Missing cookie string ${debugString}`)
-            throw new MissingSessionError()
-          }
-          return
-        }
-        const cookie = parseCookie(cookieString)
-        jwt = cookie[cookieName]
-      }
-      if (requiresSession && !jwt) {
-        throw new MissingSessionError()
-      }
-      if (jwt) {
-        return await this.decodeSessionAsync(jwt)
-      }
-    } catch (e) {
-      if (e.constructor !== InvalidSessionError) {
-        this.logger.error('Error decoding user session', e)
-      }
-    }
-    return
   }
 }

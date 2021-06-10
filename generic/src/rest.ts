@@ -1,7 +1,30 @@
 let restFetch: (url: RequestInfo, init?: RequestInit) => Promise<Response>;
 
 let apiPrefix = ''
-let authorizationJwt: string | undefined = undefined
+
+let authHeaders: Record<'jwt' | 'apiKey', string | undefined> = {
+  jwt: undefined,
+  apiKey: undefined
+}
+
+const getHeaders = () => {
+  let headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (authHeaders.jwt) {
+    headers.Authorization = `Bearer ${authHeaders.jwt}`
+  } else if (authHeaders.apiKey) {
+    headers['X-API-KEY'] = authHeaders.apiKey
+  }
+  return headers
+}
+const initFetch = async () => {
+  if (!restFetch) {
+    if (typeof window === 'undefined') {
+      restFetch = (await import('node-fetch')).default as any
+    } else {
+      restFetch = fetch
+    }
+  }
+}
 
 export const transformResult = (data: any) : any => {
   if (data === null) {
@@ -27,40 +50,29 @@ export const transformResult = (data: any) : any => {
 }
 
 export const setAPIPrefix = async (prefix: string) => {
-  if (!restFetch) {
-    if (typeof window === 'undefined') {
-      restFetch = (await import('node-fetch')).default as any
-    } else {
-      restFetch = fetch
-    }
-  }
   apiPrefix = prefix
 }
 
 export const setAuthorizationJWT = (jwt: string) => {
-  authorizationJwt = jwt
+  authHeaders.jwt = jwt
+}
+
+export const setAPIKey = (apiKey?: string) => {
+  authHeaders.apiKey = apiKey
 }
 
 async function action<R>(method: string, url: string, body: any, hasResponseBody?: true): Promise<R>
 async function action(method: string, url: string, body: any, hasResponseBody?: false): Promise<void>
 async function action<R>(method: string, url: string, body: any, hasResponseBody = true): Promise<R | void> {
-  if (!restFetch) {
-    restFetch = (await import('node-fetch')).default as any
-  }
-
+  await initFetch()
   const data = JSON.stringify(body)
-
-  let headers: Record<string, string> = { 'Content-Type': 'application/json' }
-  if (authorizationJwt) {
-    headers.Authorization = `Bearer ${authorizationJwt}`
-  }
   try {
     const response = await restFetch(`${apiPrefix}/${url}`, {
       method,
       cache: 'no-cache',
       mode: 'cors',
       credentials: 'include',
-      headers,
+      headers: getHeaders(),
       body: data,
     })
     if (response.status >= 400) {
@@ -109,6 +121,8 @@ export async function get<T>(
   query: Record<string, string | number | undefined> = {},
   hasResponseBody = true,
 ): Promise<T | undefined> {
+  await initFetch()
+
   let uri = `${apiPrefix}/${url}`
   if (query) {
     // removes all the undefined
@@ -119,6 +133,7 @@ export async function get<T>(
     method: 'GET',
     mode: 'cors',
     credentials: 'include',
+    headers: getHeaders()
   })
   if (response.status > 400) {
     throw response
@@ -143,15 +158,18 @@ export async function head(url: string, query?: Record<string, string>): Promise
     method: 'HEAD',
     mode: 'cors',
     credentials: 'include',
+    headers: getHeaders()
   })
   return response.status
 }
 
 export async function del(url: string): Promise<void> {
+  await initFetch()
   const response = await restFetch(`${apiPrefix}/${url}`, {
     method: 'DELETE',
     mode: 'cors',
     credentials: 'include',
+    headers: getHeaders()
   })
   if (response.status > 400) {
     throw 'Didnt happen'

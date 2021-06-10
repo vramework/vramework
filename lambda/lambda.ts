@@ -122,11 +122,13 @@ const generalHandler = async (
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
     services.logger.info({ action: 'Executing route', path: matchedPath, route })
 
-    const session = await services.jwt.getUserSession(
+    const session = await services.sessionService.getUserSession(
       route.requiresSession !== false,
-      event.headers['Authorization'],
-      config.cookie.name,
-      event.headers.cookie,
+      {
+        apiKey: event.headers['x-api-key'],
+        authorization: event.headers['Authorization'],
+        cookie: event.headers.cookie
+      },
       event
     )
 
@@ -141,8 +143,6 @@ const generalHandler = async (
         validateJson(route.schema, data)
       }
     }
-
-    console.log(session)
 
     const sessionServices = await services.createSessionServices(services, session)
     try {

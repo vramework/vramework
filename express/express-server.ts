@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { Server } from 'http'
 import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -7,31 +7,31 @@ import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
 
-import { getErrorResponse } from '../backend-common/src/errors'
+import { getErrorResponse, MissingSessionError } from '../backend-common/src/errors'
 import { CoreAPIRoutes } from '../backend-common/src/routes'
 import { CoreConfig } from '../backend-common/src/config'
-import { CoreSingletonServices, JWTService } from '../backend-common/src/services'
+import { CoreSingletonServices, SessionService } from '../backend-common/src/services'
 import { loadSchema, validateJson } from '../backend-common/src/schema'
 import { CoreUserSession } from '../backend-common/src/user-session'
 import { verifyPermissions } from '../backend-common/src/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 
-const jwtMiddleware = (credentialsRequired: boolean, jwtService: JWTService, cookieName: string) =>
-  jwt({
-    credentialsRequired,
-    algorithms: ['HS256'],
-    secret: (req, header, payload, done) => {
-      jwtService.getJWTSecret(header, done as any)
-    },
-    getToken: (req) => {
-      if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-        return req.headers.authorization.split(' ')[1]
-      } else if (req.cookies[cookieName]) {
-        return req.cookies[cookieName]
-      }
-      return null
-    },
+const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
+  sessionService.getUserSession(credentialsRequired, {
+    authorization: req.headers['Authorization'] as string | undefined,
+    cookie: req.headers.cookie as string | undefined,
+    apiKey: req.headers['x-api-key'] as string | undefined
+  }).then((session) => {
+    req.user = session
+    next()
+  }).catch((e) => {
+    if (credentialsRequired) {
+      next(new MissingSessionError())
+    } else {
+      next()
+    }
   })
+}
 
 export class ExpressServer {
   public app = express()
@@ -70,7 +70,7 @@ export class ExpressServer {
     })
 
     this.app.put(`/v1/reaper/*`,
-      jwtMiddleware(true, this.services.jwt, this.config.cookie.name),
+    autMiddleware(true, this.services.sessionService),
       async (req, res) => {
         const file = await getRawBody(req, {
           length: req.headers['content-length'],
@@ -103,7 +103,7 @@ export class ExpressServer {
       this.services.logger.debug(`Adding ${route.type.toUpperCase()} with route ${path}`)
       this.app[route.type](
         path,
-        jwtMiddleware(route.requiresSession !== false, this.services.jwt, this.config.cookie.name),
+        autMiddleware(route.requiresSession !== false, this.services.sessionService),
         async (req, res, next) => {
           try {
             const session = (req as any).user as CoreUserSession | undefined

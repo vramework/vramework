@@ -30,8 +30,8 @@ export class DatabasePostgresPool {
     return this.pool.connect()
   }
 
-  public async query (statement: string, values?: any[]) {
-    return await this.pool.query(statement, values)
+  public async query <T>(statement: string, values?: any[]) {
+    return await this.pool.query<T>(statement, values)
   }
 
   public async close() {

@@ -33,6 +33,7 @@ export const validateJson = (schema: string, json: unknown): void => {
   }
   const result = validator(json)
   if (!result) {
+    console.log(json)
     const errorText = ajv.errorsText(validator.errors)
     throw new InvalidParametersError(errorText)
   }
