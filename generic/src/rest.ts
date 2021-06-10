@@ -44,6 +44,10 @@ export const setAuthorizationJWT = (jwt: string) => {
 async function action<R>(method: string, url: string, body: any, hasResponseBody?: true): Promise<R>
 async function action(method: string, url: string, body: any, hasResponseBody?: false): Promise<void>
 async function action<R>(method: string, url: string, body: any, hasResponseBody = true): Promise<R | void> {
+  if (!restFetch) {
+    restFetch = (await import('node-fetch')).default as any
+  }
+
   const data = JSON.stringify(body)
 
   let headers: Record<string, string> = { 'Content-Type': 'application/json' }

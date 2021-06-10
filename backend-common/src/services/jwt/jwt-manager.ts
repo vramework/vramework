@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid'
 import { parse as parseCookie } from 'cookie'
 import { Logger } from 'pino'
 import { InvalidHashError, InvalidSessionError, MissingSessionError } from '../../errors'
-import { DatabasePostgresPool } from '../database/database-postgres-pool'
 
 interface Secret {
   keyid: string
@@ -14,23 +13,17 @@ export class JWTManager<UserSession extends Object> {
   private currentSecret: Secret = { keyid: '1', secret: 'Monkey' }
   private secrets: Record<string, Secret> = {}
 
-  constructor(private database: DatabasePostgresPool, private logger: Logger) {}
+  constructor(private getSecrets: () => Promise<Secret[]>, private logger: Logger) {
+  }
 
-  public async init() {
-    try {
-      const result = await this.database.query<{ secret: string; keyid: string }>(`
-        SELECT * FROM app."jwt_secret"
-      `)
-      this.currentSecret = result.rows[result.rows.length - 1]
-      this.secrets = result.rows.reduce((result, secret) => {
-        result[secret.keyid] = secret
-        return result
-      }, {} as Record<string, Secret>)
-      this.logger.info(`Retrieved JWT secrets: ${Object.keys(this.secrets).join(',')}`)
-    } catch (e) {
-      console.error(e)
-      this.logger.error('Error getting jwt secrets', e)
-    }
+  public async init () {
+    const secrets = await this.getSecrets()
+    this.currentSecret = secrets[secrets.length - 1]
+    this.secrets = secrets.reduce((result, secret) => {
+      result[secret.keyid] = secret
+      return result
+    }, {} as Record<string, Secret>)
+    this.logger.info(`Retrieved JWT secrets: ${Object.keys(this.secrets).join(',')}`)
   }
 
   public async getJWTSecret(header: jwt.JwtHeader, callback: jwt.SigningKeyCallback) {

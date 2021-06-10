@@ -1,42 +1,52 @@
-import pg, { QueryResult } from 'pg'
+import * as pg from 'pg'
 import { Pool } from 'pg'
+
+// @ts-ignore
+import * as pgCamelCase from 'pg-camelcase'
 import { Logger } from 'pino'
-import { DatabasePostgres } from './database-postgres'
+pgCamelCase.inject(pg)
+
+const types = pg.types
+types.setTypeParser(1082, function (stringValue) {
+  return stringValue
+})
 
 export class DatabasePostgresPool {
   public pool: Pool
+  public client!: pg.PoolClient
 
-  constructor(private config: pg.PoolConfig, private logger: Logger) {
-    this.logger.info(`Using db host: ${config.host}`)
-    this.pool = new Pool(config)
+  constructor(private dbCredentials: any, private logger: Logger) {
+    this.logger.info(`Using db host: ${dbCredentials.host}`)
+    this.pool = new Pool(dbCredentials)
   }
 
-  public async init (): Promise<void> {
+  public async init() {
+    this.client = await this.pool.connect()
     await this.checkConnection()
+    await this.client.release()
   }
 
-  public async getClient (): Promise<pg.PoolClient> {
-    return await this.pool.connect()
+  public async getClient() {
+    return this.pool.connect()
   }
 
-  public async query<T = { rows: unknown[] }>(
-    statement: string,
-    values: Array<string | number | null | Buffer | Date> = [],
-  ): Promise<QueryResult<T>> {
-    const client = new DatabasePostgres(this, this.logger)
-    const result = await client.query<T>(statement, values)
-    await client.close()
-    return result
+  public async query (statement: string, values?: any[]) {
+    return await this.pool.query(statement, values)
+  }
+
+  public async close() {
+    this.pool.end()
   }
 
   private async checkConnection(): Promise<void> {
     try {
-      const { rows } = await this.query<{ serverVersion: string }>('SHOW server_version;')
+      const { rows } = await this.client.query<{ serverVersion: string }>('SHOW server_version;')
       this.logger.info(`Postgres server version is: ${rows[0].serverVersion}`)
     } catch (e) {
       console.error(e)
-      this.logger.error(`Unable to connect to server with ${this.config.host}, exiting server`)
+      this.logger.error(`Unable to connect to server with ${this.dbCredentials.host}, exiting server`)
       process.exit(1)
     }
   }
+
 }

@@ -255,3 +255,15 @@ export const createFilters = (data: BulkFilter, freeTextFields: string[] = [], i
 
   return { limit, offset, sort, filter, filterValues }
 }
+
+export const sanitizeResult = <T>(object: Record<string, any>): T => {
+  return Object.entries(object).reduce((result, [key, value]) => {
+    if (typeof value === 'string' && /^{.*}$/.test(value)) {
+      const entries = value.substring(1, value.length - 1)
+      result[key] = entries.split(',').filter(v => !!v && v !== 'NULL')
+    } else {
+      result[key] = value
+    }
+    return result
+  }, {} as any)
+}

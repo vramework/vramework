@@ -3,9 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "author": "Vlandor LTD",
-  "exports": {
-    "./": "./src/"
-  },
   "scripts": {
     "tsc": "if [[ ${VRAMEWORK} = \"true\" ]]; then tsc; fi",
     "ncu": "ncu",
