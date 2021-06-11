@@ -8,23 +8,35 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
     }
 
     public async getUserSession (credentialsRequired: boolean, headers: Partial<Record<"cookie" | "authorization" | "apiKey", string | undefined>>, debug?: any) {
+        let apiKeySession: UserSession | null = null
+        let authorizationSession: UserSession | null = null
+        let cookieSession: UserSession | null = null
+
         if (headers.apiKey) {
-            return await this.getSessionForAPIKey(headers.apiKey)
+            apiKeySession = await this.getSessionForAPIKey(headers.apiKey)
         }
 
         if (headers.authorization) {
             if (headers.authorization.split(' ')[0] !== 'Bearer') {
                 throw new InvalidSessionError()
             }
-            return await this.jwtService.decodeSessionAsync(headers.authorization.split(' ')[1], debug)
+            authorizationSession = await this.jwtService.decodeSessionAsync(headers.authorization.split(' ')[1], debug)
         }
 
         if (headers.cookie) {
             const cookie = parseCookie(headers.cookie)
             const jwt = cookie[this.config.cookie.name]
             if (jwt) {
-                return await this.jwtService.decodeSessionAsync(jwt, debug)
+                cookieSession = await this.jwtService.decodeSessionAsync(jwt, debug)
             }
+        }
+
+        if (apiKeySession || authorizationSession || cookieSession) {
+            return {
+                ...(apiKeySession || {}),
+                ...(authorizationSession || {}),
+                ...(cookieSession || {}),
+            } as UserSession
         }
 
         if (credentialsRequired) {
