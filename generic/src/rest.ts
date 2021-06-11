@@ -61,9 +61,9 @@ export const setAPIKey = (apiKey?: string) => {
   authHeaders.apiKey = apiKey
 }
 
-async function action<R>(method: string, url: string, body: any, hasResponseBody?: true): Promise<R>
-async function action(method: string, url: string, body: any, hasResponseBody?: false): Promise<void>
-async function action<R>(method: string, url: string, body: any, hasResponseBody = true): Promise<R | void> {
+async function action<O, I>(method: string, url: string, body: I, hasResponseBody?: true): Promise<O>
+async function action<I>(method: string, url: string, body: I, hasResponseBody?: false): Promise<void>
+async function action<O, I>(method: string, url: string, body: I, hasResponseBody = true): Promise<O | void> {
   await initFetch()
   const data = JSON.stringify(body)
   try {
@@ -88,39 +88,28 @@ async function action<R>(method: string, url: string, body: any, hasResponseBody
   }
 }
 
-export async function post<R>(url: string, data: any, hasResponseBody?: boolean): Promise<R>
-export async function post(url: string, data: any, hasResponseBody?: false): Promise<void>
-export async function post<R>(url: string, data: any, hasResponseBody = true): Promise<R | void> {
+export async function post<O, I>(url: string, data: I, hasResponseBody?: true): Promise<O>
+export async function post<I>(url: string, data: I, hasResponseBody?: false): Promise<void>
+export async function post<O, I>(url: string, data: I, hasResponseBody = true): Promise<O | void> {
   if (hasResponseBody) {
     return await action('POST', url, data, true)
   }
   await action('POST', url, data, false)
 }
 
-export async function patch<R>(url: string, data: any, hasResponseBody?: boolean): Promise<R>
-export async function patch(url: string, data: any, hasResponseBody?: false): Promise<void>
-export async function patch<R>(url: string, data: any, hasResponseBody = true): Promise<R | void> {
+export async function patch<O, I>(url: string, data: I, hasResponseBody?: boolean): Promise<O>
+export async function patch<I>(url: string, data: I, hasResponseBody?: false): Promise<void>
+export async function patch<O, I>(url: string, data: I, hasResponseBody = true): Promise<O | void> {
   if (hasResponseBody) {
     return await action('PATCH', url, data, true)
   }
   await action('PATCH', url, data, false)
 }
 
-export async function get<R>(
+export async function get<O, I = any>(
   url: string,
-  query?: Record<string, string | number | undefined>,
-  hasResponseBody?: boolean,
-): Promise<R>
-export async function get(
-  url: string,
-  query?: Record<string, string | number | undefined>,
-  hasResponseBody?: boolean,
-): Promise<void>
-export async function get<T>(
-  url: string,
-  query: Record<string, string | number | undefined> = {},
-  hasResponseBody = true,
-): Promise<T | undefined> {
+  query?: I,
+): Promise<O> {
   await initFetch()
 
   let uri = `${apiPrefix}/${url}`
@@ -138,14 +127,11 @@ export async function get<T>(
   if (response.status > 400) {
     throw response
   }
-  if (hasResponseBody) {
-    try {
-      return await response.json()
-    } catch (e) {
-      throw 'Unable to parse json response'
-    }
+  try {
+    return await response.json()
+  } catch (e) {
+    throw 'Unable to parse json response'
   }
-  return undefined
 }
 
 export async function head(url: string, query?: Record<string, string>): Promise<number> {
@@ -163,9 +149,15 @@ export async function head(url: string, query?: Record<string, string>): Promise
   return response.status
 }
 
-export async function del(url: string): Promise<void> {
+export async function del<I>(url: string, query?: I): Promise<void> {
   await initFetch()
-  const response = await restFetch(`${apiPrefix}/${url}`, {
+  let uri = `${apiPrefix}/${url}`
+  if (query) {
+    // removes all the undefined
+    const params = new URLSearchParams(JSON.parse(JSON.stringify(query)))
+    uri = `${apiPrefix}/${url}?${params}`
+  }
+  const response = await restFetch(uri, {
     method: 'DELETE',
     mode: 'cors',
     credentials: 'include',
