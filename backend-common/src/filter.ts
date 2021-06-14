@@ -3,8 +3,8 @@ export type FilterSubExpressions = {
   filter?: string
   expressions?: FilterSubExpressions[]
   field?: string
-  operator?: 'eq' | 'ne' | 'lt' | 'lte' | 'gt' | 'gte' | 'contains' | 'after' | 'on' | 'before' | 'includes' | 'excludes'
-  value?: string | number | Date
+  operator?: 'eq' | 'ne' | 'lt' | 'lte' | 'gt' | 'gte' | 'contains' | 'after' | 'on' | 'before' | 'includes' | 'excludes' | 'exists'
+  value?: string | number | Date | boolean
 }
 
 export type FilterExpression = FilterSubExpressions[]
