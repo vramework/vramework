@@ -7,8 +7,12 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
     }
 
     public getCookieName (headers: Record<string, string>): string {
-        const url = new URL(headers.origin)
-        return url.host
+        const origin = headers.origin
+        if (origin) {
+            const url = new URL(headers.origin)
+            return url.host
+        }
+        return 'localhost' // default cookie name
     }
 
     public async getUserSession (credentialsRequired: boolean, headers: Record<string, string>, debug?: any) {
