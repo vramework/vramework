@@ -9,6 +9,7 @@ export interface JWTService<UserSession = CoreUserSession> {
 
 export interface SessionService<UserSession = CoreUserSession> {
   getUserSession: (credentialsRequired: boolean, headers: Partial<Record<'cookie' | 'authorization' | 'apiKey', string | undefined>>, debug?: any) => Promise<UserSession | undefined>
+  getCookieName: (headers: Record<string, string>) => string
 }
 
 export interface CoreServices extends CoreSingletonServices {

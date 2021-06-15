@@ -107,7 +107,7 @@ const generalHandler = async (
       body: '{}',
       headers: {
         ...headers,
-        'Set-Cookie': serializeCookie(config.cookie.name, 'invalid', {
+        'Set-Cookie': serializeCookie(services.sessionService.getCookieName(event.headers as Record<string, string>), 'invalid', {
           expires: new Date(0),
           domain: event.headers.origin,
           path: '/',
@@ -124,11 +124,7 @@ const generalHandler = async (
 
     const session = await services.sessionService.getUserSession(
       route.requiresSession !== false,
-      {
-        apiKey: event.headers['x-api-key'],
-        authorization: event.headers['Authorization'] || event.headers['authorization'],
-        cookie: event.headers.cookie
-      },
+      event.headers,
       event
     )
 
@@ -151,7 +147,7 @@ const generalHandler = async (
       }
       const result = await route.func(sessionServices, data, session)
       if (result && (result as any).jwt) {
-        headers['Set-Cookie'] = serializeCookie(config.cookie.name, (result as any).jwt, {
+        headers['Set-Cookie'] = serializeCookie(services.sessionService.getCookieName(event.headers as Record<string, string>), (result as any).jwt, {
           // domain: event.headers.origin,
           path: '/',
           httpOnly: true,

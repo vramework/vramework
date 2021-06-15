@@ -1,31 +1,37 @@
 import { InvalidSessionError, MissingSessionError } from "../../errors"
 import { JWTService, SessionService } from "../../services"
 import { parse as parseCookie } from 'cookie'
-import { CoreConfig } from "../../config"
 
 export class VrameworkSessionService<UserSession> implements SessionService<UserSession> {
-    constructor (private config: CoreConfig, private jwtService: JWTService<UserSession>, private getSessionForAPIKey: (apiKey: string) => Promise<UserSession>) {
+    constructor (private jwtService: JWTService<UserSession>, private getSessionForAPIKey: (apiKey: string) => Promise<UserSession>) {
     }
 
-    public async getUserSession (credentialsRequired: boolean, headers: Partial<Record<"cookie" | "authorization" | "apiKey", string | undefined>>, debug?: any) {
+    public getCookieName (headers: Record<string, string>): string {
+        const url = new URL(headers.origin)
+        return url.host
+    }
+
+    public async getUserSession (credentialsRequired: boolean, headers: Record<string, string>, debug?: any) {
         let apiKeySession: UserSession | null = null
         let authorizationSession: UserSession | null = null
         let cookieSession: UserSession | null = null
 
-        if (headers.apiKey) {
-            apiKeySession = await this.getSessionForAPIKey(headers.apiKey)
+        const apiKey = headers['x-api-key']
+        if (apiKey) {
+            apiKeySession = await this.getSessionForAPIKey(apiKey)
         }
 
-        if (headers.authorization) {
-            if (headers.authorization.split(' ')[0] !== 'Bearer') {
+        const authorization = headers.authorization || headers.Authorization
+        if (authorization) {
+            if (authorization.split(' ')[0] !== 'Bearer') {
                 throw new InvalidSessionError()
             }
-            authorizationSession = await this.jwtService.decodeSessionAsync(headers.authorization.split(' ')[1], debug)
+            authorizationSession = await this.jwtService.decodeSessionAsync(authorization.split(' ')[1], debug)
         }
 
         if (headers.cookie) {
             const cookie = parseCookie(headers.cookie)
-            const jwt = cookie[this.config.cookie.name]
+            const jwt = cookie[this.getCookieName(headers)]
             if (jwt) {
                 cookieSession = await this.jwtService.decodeSessionAsync(jwt, debug)
             }

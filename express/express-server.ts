@@ -17,11 +17,7 @@ import { verifyPermissions } from '../backend-common/src/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
-  sessionService.getUserSession(credentialsRequired, {
-    authorization: req.headers['Authorization'] as string | undefined || req.headers['authorization'] as string | undefined,
-    cookie: req.headers.cookie as string | undefined,
-    apiKey: req.headers['x-api-key'] as string | undefined
-  }).then((session) => {
+  sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
     req.user = session
     next()
   }).catch((e) => {
@@ -90,7 +86,7 @@ export class ExpressServer {
     )
 
     this.app.get(`/v1/logout`, (req, res) => {
-      res.clearCookie(this.config.cookie.name)
+      res.clearCookie(this.services.sessionService.getCookieName(req.headers as Record<string, string>))
       res.end()
     })
 
@@ -108,7 +104,7 @@ export class ExpressServer {
           try {
             const session = (req as any).user as CoreUserSession | undefined
 
-            res.locals.cookiename = this.config.cookie.name
+            res.locals.cookiename = this.services.sessionService.getCookieName(req.headers as Record<string, string>)
             res.locals.processed = true
 
             const isXML = req.headers['content-type']?.includes('text/xml')
