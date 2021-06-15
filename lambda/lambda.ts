@@ -126,7 +126,7 @@ const generalHandler = async (
       route.requiresSession !== false,
       {
         apiKey: event.headers['x-api-key'],
-        authorization: event.headers['Authorization'],
+        authorization: event.headers['Authorization'] || event.headers['authorization'],
         cookie: event.headers.cookie
       },
       event
