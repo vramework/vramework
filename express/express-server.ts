@@ -18,7 +18,7 @@ import { mkdir, writeFile } from 'fs/promises'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   sessionService.getUserSession(credentialsRequired, {
-    authorization: req.headers['Authorization'] as string | undefined,
+    authorization: req.headers['Authorization'] as string | undefined || req.headers['authorization'] as string | undefined,
     cookie: req.headers.cookie as string | undefined,
     apiKey: req.headers['x-api-key'] as string | undefined
   }).then((session) => {
