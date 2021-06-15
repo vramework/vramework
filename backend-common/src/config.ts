@@ -13,9 +13,6 @@ export interface CoreConfig {
   server: {
     port: number
   }
-  cookie: {
-    name: string
-  }
   sql: {
     database: string
     directory: string
