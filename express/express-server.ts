@@ -15,6 +15,7 @@ import { loadSchema, validateJson } from '../backend-common/src/schema'
 import { CoreUserSession } from '../backend-common/src/user-session'
 import { verifyPermissions } from '../backend-common/src/permissions'
 import { mkdir, writeFile } from 'fs/promises'
+import { v4 as uuid } from 'uuid'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
@@ -156,11 +157,13 @@ export class ExpressServer {
       const errorDetails = getErrorResponse(error.constructor)
 
       if (errorDetails != null) {
+        const errorId = (error as any).errorId || uuid()
         console.error(error)
-        res.status(errorDetails.status).json({ message: errorDetails.message, payload: (error as any).payload  })
+        res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload})
       } else {
-        console.error(error)
-        res.status(500).end()
+        const errorId = uuid()
+        console.error(errorId, error)
+        res.status(500).json({ errorId })
       }
     })
 

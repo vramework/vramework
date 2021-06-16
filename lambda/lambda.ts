@@ -8,6 +8,7 @@ import { verifyPermissions } from '@vramework/backend-common/src/permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/backend-common/src/routes'
 import { loadSchema, validateJson } from '@vramework/backend-common/src/schema'
 import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/backend-common/src/errors'
+import { v4 as uuid } from 'uuid'
 
 const validateOrigin = (config: CoreConfig, services: CoreSingletonServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
@@ -30,22 +31,25 @@ CORS Error
 const errorHandler = (services: CoreSingletonServices, e: Error, headers: Record<string, string | boolean>) => {
   const errorResponse = getErrorResponse(e.constructor)
   let statusCode: number
+
   if (errorResponse != null) {
+    const errorId = (e as any).errorId || uuid()
     statusCode = errorResponse.status
+    services.logger.warn(`Warning id: ${errorId}`)
     services.logger.warn(e)
     return {
       headers,
       statusCode,
-      body: JSON.stringify({ message: errorResponse.message, payload: (e as any).payload  }),
+      body: JSON.stringify({ message: errorResponse.message, payload: (e as any).payload, errorId }),
     }
   }
 
-  services.logger.error(`Uncaught Error: ${e.message}`, e)
+  const errorId = services.logger.error(`Uncaught Error: ${e.message}`, e)
   console.error(e)
   return {
     headers,
     statusCode: 500,
-    body: JSON.stringify({}),
+    body: JSON.stringify({ errorId }),
   }
 }
 
