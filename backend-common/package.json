@@ -15,15 +15,15 @@
     "@aws-sdk/client-secrets-manager": "3.18.0",
     "@aws-sdk/client-ses": "^3.18.0",
     "@aws-sdk/s3-request-presigner": "^3.18.0",
-    "ajv": "^7.2.4",
-    "ajv-formats": "^1.6.1",
+    "ajv": "^8.6.0",
+    "ajv-formats": "^2.1.0",
     "aws-cloudfront-sign": "^2.2.0",
     "pg": "^8.6.0",
     "pino": "^6.11.3",
     "ts-json-schema-generator": "^0.93.0"
   },
   "devDependencies": {
-    "@types/pg": "^7.14.11",
+    "@types/pg": "^8.6.0",
     "typescript": "^4.3.4"
   }
 }
