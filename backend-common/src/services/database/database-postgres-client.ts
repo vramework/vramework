@@ -3,7 +3,7 @@ import { QueryResult } from 'pg'
 
 import { getValidationErrors } from '@vramework/backend-common/src/schema'
 import { snakeCase } from 'snake-case'
-import { createFilters, createInsert, exactlyOneResult, sanitizeResult, selectFields } from './database-utils'
+import { createBulkInsert, createFilters, createInsert, exactlyOneResult, sanitizeResult, selectFields } from './database-utils'
 import { Logger } from 'pino'
 import { DatabasePostgresPool } from './database-postgres-pool'
 
@@ -40,6 +40,19 @@ export class DatabasePostgresClient<Table extends string> {
       return sanitizeResult(single)
     }
     return result.rows
+  }
+
+  public async crudBulkInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>[]): Promise<void>
+  public async crudBulkInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>[], returns: readonly (keyof T)[]): Promise<Record<keyof T, any>[]>
+  public async crudBulkInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>[], returns?: readonly (keyof T)[]): Promise<void | Record<keyof T, any>[]> {
+    const [keys, values, realValues] = createBulkInsert(insert)
+    if (returns) {
+      const returnStatement = (returns || []).map(key => snakeCase(key.toString())).join(',')
+      const result = await this.query<Pick<T, typeof returns[number]>>(`INSERT INTO "app".${table}(${keys}) VALUES ${values} RETURNING ${returnStatement};`, realValues)
+      return result.rows
+    } else {
+      await this.query(`INSERT INTO "app".${table}(${keys}) VALUES ${values}`, realValues)
+    }
   }
 
   public async crudInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>): Promise<void>
