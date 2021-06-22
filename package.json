@@ -17,7 +17,7 @@
   },
   "scripts": {
     "tsc": "echo Ignoring vramework tsc wrapper",
-    "ncu": "ncu",
+    "ncu": "yarn workspaces run ncu",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
   },
