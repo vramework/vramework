@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import { Server } from 'http'
 import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
 import jwt from 'express-jwt'
 import cors from 'cors'
 import getRawBody from 'raw-body'
@@ -52,6 +53,7 @@ export class ExpressServer {
         type: 'text/xml'
       }),
     )
+    this.app.use(bodyParser.urlencoded({extended: true}))
     this.app.use(cookieParser())
     this.app.use(
       cors({

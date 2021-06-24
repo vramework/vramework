@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { match, Match } from 'path-to-regexp'
-
+import * as querystring from 'querystring'
 import { serialize as serializeCookie } from 'cookie'
 import { CoreSingletonServices } from '@vramework/backend-common/src/services'
 import { CoreConfig } from '@vramework/backend-common/src/config'
@@ -121,7 +121,7 @@ const generalHandler = async (
       },
     }
   }
-  
+
   try {
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
     services.logger.info({ action: 'Executing route', path: matchedPath, route })
@@ -137,6 +137,8 @@ const generalHandler = async (
     let data: any
     if (isXML) {
       data = event.body
+    } else if (event.body != null && event.headers['Content-Type']?.includes('application/x-www-form-urlencoded')) {
+      data = querystring.decode(event.body);
     } else {
       data = { ...matchedPath.params, ...event.queryStringParameters,  ...JSON.parse(event.body ?? '{}') }
       if (route.schema) {
