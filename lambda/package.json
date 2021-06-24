@@ -10,9 +10,10 @@
     "test:ci": "echo 'No tests'"
   },
   "dependencies": {
+    "aws-lambda": "^1.0.6",
     "cookie": "^0.4.1",
     "path-to-regexp": "^6.2.0",
-    "aws-lambda": "^1.0.6"
+    "querystring": "^0.2.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.77",
