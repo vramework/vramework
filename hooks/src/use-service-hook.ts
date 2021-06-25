@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 
 export const useServiceHook = (service: EventEmitter, event: string, callback: (...args: any[]) => void) => {
   useEffect(() => {
-    service.once(event, callback)
+    service.on(event, callback)
     return () => {
       service.off(event, callback)
     }
-  }, [event, callback])
+  }, [service, event, callback])
 }
