@@ -77,6 +77,8 @@ const getMatchingRoute = (
   throw new NotFoundError()
 }
 
+const getHeaderValue = (event:APIGatewayProxyEvent, headerName:string):string|undefined => event.headers?.[headerName] ?? event.headers?.[headerName.toLocaleLowerCase()]
+
 const generalHandler = async (
   config: CoreConfig,
   services: CoreSingletonServices,
@@ -132,18 +134,22 @@ const generalHandler = async (
       event
     )
 
-    const isXML = event.headers['Content-Type']?.includes('text/xml')
+    const contentType = getHeaderValue(event, 'Content-Type')
 
-    let data: any
-    if (isXML) {
-      data = event.body
-    } else if (event.body != null && event.headers['Content-Type']?.includes('application/x-www-form-urlencoded')) {
-      data = querystring.decode(event.body);
-    } else {
-      data = { ...matchedPath.params, ...event.queryStringParameters,  ...JSON.parse(event.body ?? '{}') }
-      if (route.schema) {
-        validateJson(route.schema, data)
+    let data: any = undefined
+    if (contentType !== undefined && event.body) {
+      if (contentType.includes('text/xml')) {
+        data = event.body
+      } else if (contentType.includes('application/x-www-form-urlencoded')) {
+        data = querystring.decode(event.body)
       }
+    }
+    if (data === undefined) {
+      data = { ...matchedPath.params, ...event.queryStringParameters,  ...JSON.parse(event.body ?? '{}') }
+    }
+
+    if (route.schema) {
+        validateJson(route.schema, data)
     }
 
     console.log(session)
