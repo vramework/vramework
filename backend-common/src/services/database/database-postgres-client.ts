@@ -55,9 +55,9 @@ export class DatabasePostgresClient<Table extends string> {
     }
   }
 
-  public async crudInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>): Promise<void>
-  public async crudInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>, returns: readonly (keyof T)[]): Promise<Record<keyof T, any>>
-  public async crudInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined>>, returns?: readonly (keyof T)[]): Promise<void | Record<keyof T, any>> {
+  public async crudInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined | boolean>>): Promise<void>
+  public async crudInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined | boolean>>, returns: readonly (keyof T)[]): Promise<Record<keyof T, any>>
+  public async crudInsert <T extends object>(table: Table, insert: Partial<Record<keyof T, string | number | string[] | Date | null | undefined | boolean>>, returns?: readonly (keyof T)[]): Promise<void | Record<keyof T, any>> {
     const [keys, values, realValues] = createInsert(insert)
     if (returns) {
       const returnStatement = (returns || []).map(key => snakeCase(key.toString())).join(',')
