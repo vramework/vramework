@@ -5,7 +5,7 @@ import { Logger as PinoLogger } from 'pino'
 export class AWSSecrets {
   private readonly client: SecretsManagerClient
 
-  constructor(private readonly config: CoreConfig, private readonly logger: PinoLogger) {
+  constructor(private readonly config: CoreConfig, _logger: PinoLogger) {
     this.client = new SecretsManagerClient({ region: config.awsRegion })
   }
 
@@ -35,8 +35,8 @@ export class AWSSecrets {
         }
       }
     } catch (e) {
-      this.logger.error(`FATAL: Error finding secret ${SecretId}`)
+      console.error(e)
     }
-    throw 'FATAL: Error finding secret!'
+    throw `FATAL: Error finding secret: ${SecretId}`
   }
 }
