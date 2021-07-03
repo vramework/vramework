@@ -13,10 +13,12 @@ import { Logger as PinoLogger } from 'pino'
 import { getSignedUrl as getCDNSignedUrl } from 'aws-cloudfront-sign'
 
 export class S3Content implements ContentService {
-  private s3 = new S3Client({ region: this.config.awsRegion })
   private signConfig!: { keypairId: string; privateKeyString: string }
+  private s3: S3Client
 
-  constructor(private config: CoreConfig, private logger: PinoLogger) {}
+  constructor(private config: CoreConfig, private logger: PinoLogger) {
+    this.s3 = new S3Client({ region: this.config.awsRegion })
+  }
 
   public async init(secrets: SecretService) {
     this.signConfig = {
