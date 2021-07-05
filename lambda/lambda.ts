@@ -119,6 +119,7 @@ const generalHandler = async (
           path: '/',
           httpOnly: true,
           secure: true,
+          sameSite: 'none'
         }),
       },
     }
