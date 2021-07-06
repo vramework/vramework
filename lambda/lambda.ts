@@ -153,8 +153,6 @@ const generalHandler = async (
         validateJson(route.schema, data)
     }
 
-    console.log(session)
-
     const sessionServices = await services.createSessionServices(services, session)
     try {
       if (route.permissions) {
@@ -168,6 +166,7 @@ const generalHandler = async (
           httpOnly: true,
           secure: true,
           maxAge: 60 * 60 * 24 * 1,
+          sameSite: 'none'
         })
       }
       return {
