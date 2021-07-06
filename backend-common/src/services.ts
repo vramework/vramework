@@ -21,5 +21,5 @@ export interface CoreSingletonServices {
   logger: PinoLogger
   jwt: JWTService
   sessionService: SessionService
-  createSessionServices: (services: CoreSingletonServices, session?: CoreUserSession) => CoreServices
+  createSessionServices: (services: CoreSingletonServices, headers: Record<string, any>, session?: CoreUserSession) => CoreServices
 }

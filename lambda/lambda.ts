@@ -153,7 +153,7 @@ const generalHandler = async (
         validateJson(route.schema, data)
     }
 
-    const sessionServices = await services.createSessionServices(services, session)
+    const sessionServices = await services.createSessionServices(services, event.headers, session)
     try {
       if (route.permissions) {
         await verifyPermissions(route.permissions, sessionServices, data, session)

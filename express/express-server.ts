@@ -122,7 +122,7 @@ export class ExpressServer {
               }
             }
 
-            const sessionServices = await this.services.createSessionServices(this.services, session)
+            const sessionServices = await this.services.createSessionServices(this.services, req.headers, session)
             try {
               if (route.permissions) {
                 await verifyPermissions(route.permissions, sessionServices, data, session)
