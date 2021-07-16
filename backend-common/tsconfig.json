@@ -8,8 +8,7 @@
       "noUnusedLocals": true,
       "strict": true,
       "lib": [
-        "es2020",
-        "dom"
+        "es2020"
       ],
       "types": ["node"],
       "allowJs": false,

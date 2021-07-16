@@ -1,12 +1,13 @@
 import { InvalidSessionError, MissingSessionError } from "../../errors"
 import { JWTService, SessionService } from "../../services"
 import { parse as parseCookie } from 'cookie'
+import { URL } from 'url'
 
 export class VrameworkSessionService<UserSession> implements SessionService<UserSession> {
-    constructor (private jwtService: JWTService<UserSession>, private getSessionForAPIKey: (apiKey: string) => Promise<UserSession>) {
+    constructor(private jwtService: JWTService<UserSession>, private getSessionForAPIKey: (apiKey: string) => Promise<UserSession>) {
     }
 
-    public getCookieName (headers: Record<string, string>): string {
+    public getCookieName(headers: Record<string, string>): string {
         const origin = headers.origin
         if (origin) {
             const url = new URL(headers.origin)
@@ -15,7 +16,7 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         return 'localhost' // default cookie name
     }
 
-    public async getUserSession (credentialsRequired: boolean, headers: Record<string, string>, debug?: any) {
+    public async getUserSession(credentialsRequired: boolean, headers: Record<string, string>, debug?: any) {
         let apiKeySession: UserSession | null = null
         let authorizationSession: UserSession | null = null
         let cookieSession: UserSession | null = null
