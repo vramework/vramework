@@ -16,7 +16,7 @@
     "querystring": "^0.2.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.79",
+    "@types/aws-lambda": "^8.10.80",
     "typescript": "^4.3.5"
   }
 }
