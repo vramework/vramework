@@ -20,7 +20,7 @@
     "aws-cloudfront-sign": "^2.2.0",
     "pg": "^8.6.0",
     "pino": "^6.13.0",
-    "ts-json-schema-generator": "^0.94.1"
+    "ts-json-schema-generator": "^0.95.0"
   },
   "devDependencies": {
     "@types/pg": "^8.6.1",
