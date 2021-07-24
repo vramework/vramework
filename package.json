@@ -1,5 +1,5 @@
 {
-  "name": "@vramework/core",
+  "name": "@vramework/mono",
   "version": "0.0.0",
   "description": "The vramework monorepo",
   "repository": "git@github.com:vlandor/vramework.git",
@@ -7,16 +7,11 @@
   "license": "MIT",
   "private": true,
   "workspaces": {
-    "packages": [
-      "common/",
-      "express/",
-      "lambda/",
-      "generic/",
-      "hooks/"
-    ]
+    "packages": ["packages/*"],
+    "nohoist": ["@vramework/*"]
   },
   "scripts": {
-    "tsc": "echo Ignoring vramework tsc wrapper",
+    "tsc": "yarn workspaces run tsc",
     "ncu": "yarn workspaces run ncu",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
