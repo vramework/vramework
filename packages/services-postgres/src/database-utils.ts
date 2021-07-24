@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { snakeCase } from 'snake-case'
-import { FilterExpression, BulkFilter, FilterSubExpressions, Operator } from '@vramework/generic/filter'
+import { FilterExpression, BulkFilter, FilterSubExpressions, Operator } from '@vramework/generic/dist/filter'
 
 export interface Filters {
   [index: string]: string | number | string[]

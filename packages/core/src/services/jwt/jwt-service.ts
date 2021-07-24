@@ -8,7 +8,7 @@ interface Secret {
   secret: string
 }
 
-export class JWTManager<UserSession extends Object> {
+export class JWTService<UserSession extends Object> {
   private currentSecret: Secret = { keyid: '1', secret: 'Monkey' }
   private secrets: Record<string, Secret> = {}
 

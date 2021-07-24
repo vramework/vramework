@@ -11,15 +11,11 @@
     "outDir": "dist",
     "noUnusedLocals": true,
     "strict": true,
-    "lib": [
-      "es2020"
-    ],
-    "types": [
-      "node"
-    ],
+    "lib": ["es2020"],
+    "types": ["node"],
     "allowJs": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
   },
-  "include": ["src/**/*"]
+  "include": ["src"]
 }

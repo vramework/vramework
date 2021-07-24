@@ -1,7 +1,7 @@
 import { SESClient, SendTemplatedEmailCommand } from "@aws-sdk/client-ses"
 
-import { CoreConfig } from "@vramework/core/config"
-import { EmailService } from "@vramework/core/services/email/email"
+import { CoreConfig } from "@vramework/core/dist/config"
+import { EmailService } from "@vramework/core/dist/services/email/email"
 
 export class AWSSES implements EmailService {
     private client: SESClient

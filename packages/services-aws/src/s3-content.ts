@@ -5,9 +5,9 @@ import {
 } from '@aws-sdk/client-s3'
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 
-import { ContentService } from '@vramework/core/services/content/content'
-import { SecretService } from '@vramework/core/services/secrets/secrets'
-import { CoreConfig } from '@vramework/core/config'
+import { ContentService } from '@vramework/core/dist/services/content/content'
+import { SecretService } from '@vramework/core/dist/services/secrets/secrets'
+import { CoreConfig } from '@vramework/core/dist/config'
 import { Logger as PinoLogger } from 'pino'
 
 // @ts-ignore

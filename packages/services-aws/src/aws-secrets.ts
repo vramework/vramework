@@ -1,5 +1,5 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager'
-import { CoreConfig } from '@vramework/core/config'
+import { CoreConfig } from '@vramework/core/dist/config'
 import { Logger as PinoLogger } from 'pino'
 
 export class AWSSecrets {
