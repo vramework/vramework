@@ -1,13 +1,9 @@
 {
-  "extends": "../tsconfig.packages.json",
   "name": "@vramework/hooks",
   "version": "0.0.0",
   "license": "MIT",
   "author": "Vlandor LTD",
-  "main": "build",
-  "exports": {
-    "./": "./src/"
-  },
+  "main": "dist",
   "scripts": {
     "tsc": "tsc",
     "ncu": "ncu",

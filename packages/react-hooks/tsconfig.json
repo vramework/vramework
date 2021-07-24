@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+    "composite": true,
     "module": "commonjs",
     "declaration": true,
     "sourceMap": true,
     "noEmit": false,
+    "rootDir": "src",
     "outDir": "dist",
     "noUnusedLocals": true,
     "strict": true,
@@ -12,7 +14,7 @@
       "es2020",
       "dom"
     ],
-    "jsx": "preserve",
+    "jsx": "react",
     "types": [],
     "allowJs": false,
     "resolveJsonModule": true,
