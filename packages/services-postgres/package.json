@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "pg": "^8.6.0",
-    "pino": "^6.13.0"
+    "pino": "^6.13.0",
+    "postgres-migrations": "^5.1.1"
   },
   "devDependencies": {
     "@types/pg": "^8.6.1",
