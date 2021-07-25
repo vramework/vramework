@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "author": "Vlandor LTD",
-  "main": "build",
+  "main": "dist",
   "scripts": {
     "tsc": "rm -rf dist && tsc",
     "ncu": "ncu",

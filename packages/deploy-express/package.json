@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "description": "The vramework express server (for local development)",
   "license": "MIT",
-  "private": true,
   "author": "Vlandor LTD",
-  "main": "build",
+  "main": "dist",
   "scripts": {
     "tsc": "rm -rf dist && tsc",
     "ncu": "ncu",
