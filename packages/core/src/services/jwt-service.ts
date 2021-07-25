@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 import { v4 as uuid } from 'uuid'
 import { Logger } from 'pino'
-import { InvalidHashError, InvalidSessionError, MissingSessionError } from '../../errors'
+import { InvalidHashError, InvalidSessionError, MissingSessionError } from '../errors'
 
 interface Secret {
   keyid: string

@@ -1,7 +1,7 @@
 import { Logger } from 'pino'
 import { promises } from 'fs'
-import { ContentService } from './content'
-import { CoreConfig } from '../../config'
+import { CoreConfig } from '../config'
+import { ContentService } from '../services'
 
 export class LocalContent implements ContentService {
   constructor(private config: CoreConfig, private logger: Logger) {}
@@ -28,7 +28,7 @@ export class LocalContent implements ContentService {
     console.trace()
     this.logger.info(`deleting key: ${assetKey}`)
     try {
-      await promises.unlink(assetKey.replace('http://localhost:4002/assets', this.config.content.localFileUploadPath))
+      await promises.unlink(`${assetKey}/${this.config.content.localFileUploadPath}`)
     } catch (e) {
       this.logger.error(`Error deleting content ${assetKey}`, e)
     }

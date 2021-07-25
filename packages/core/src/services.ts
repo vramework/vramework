@@ -2,6 +2,13 @@ import { CoreConfig } from './config'
 import { Logger as PinoLogger } from 'pino'
 import { CoreUserSession } from './user-session'
 
+export interface ContentService {
+  signContentKey: (contentKey: string) => Promise<string>
+  signURL: (url: string) => Promise<string>
+  getUploadURL: (fileKey: string, contentType: string) => Promise<{ uploadUrl: string; assetKey: string }>
+  delete: (fileName: string) => Promise<boolean>
+}
+
 export interface JWTService<UserSession = CoreUserSession> {
   getJWTSecret: Function
   decodeSessionAsync: (jwtToken: string, debug?: any) => Promise<UserSession>

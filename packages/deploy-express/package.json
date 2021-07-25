@@ -7,7 +7,7 @@
   "author": "Vlandor LTD",
   "main": "build",
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "rm -rf dist && tsc",
     "ncu": "ncu",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"

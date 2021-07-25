@@ -1,5 +1,5 @@
-import { InvalidSessionError, MissingSessionError } from "../../errors"
-import { JWTService, SessionService } from "../../services"
+import { InvalidSessionError, MissingSessionError } from "../errors"
+import { JWTService, SessionService } from "../services"
 import { parse as parseCookie } from 'cookie'
 import { URL } from 'url'
 

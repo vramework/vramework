@@ -5,8 +5,7 @@ import {
 } from '@aws-sdk/client-s3'
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 
-import { ContentService } from '@vramework/core/dist/services/content/content'
-import { SecretService } from '@vramework/core/dist/services/secrets/secrets'
+import { ContentService } from '@vramework/core/dist/services'
 import { CoreConfig } from '@vramework/core/dist/config'
 import { Logger as PinoLogger } from 'pino'
 
@@ -14,18 +13,10 @@ import { Logger as PinoLogger } from 'pino'
 import { getSignedUrl as getCDNSignedUrl } from 'aws-cloudfront-sign'
 
 export class S3Content implements ContentService {
-  private signConfig!: { keypairId: string; privateKeyString: string }
   private s3: S3Client
 
-  constructor(private config: CoreConfig, private logger: PinoLogger) {
+  constructor(private config: CoreConfig, private logger: PinoLogger, private signConfig: { keypairId: string; privateKeyString: string }) {
     this.s3 = new S3Client({ region: this.config.awsRegion })
-  }
-
-  public async init(secrets: SecretService) {
-    this.signConfig = {
-      keypairId:  await secrets.getSecret(this.config.secrets.cloudfrontContentId),
-      privateKeyString: await secrets.getSecret(this.config.secrets.cloudfrontContentPrivateKey)
-    }
   }
 
   public async signURL(url: string) {
