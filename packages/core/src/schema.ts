@@ -8,14 +8,24 @@ addFormats(ajv as any)
 
 const validators = new Map<string, ValidateFunction>()
 
-const schemas = new Map<string, any>()
+const getSchemas = () => {
+  // @ts-ignore
+  if (!global.schemas) {
+    // @ts-ignore
+    global.schemas = new Map<string, any>()
+  }
+  // @ts-ignore
+  return global.schemas
+}
 
-export const addSchema = (name: string, value: any) => schemas.set(name, value)
+export const addSchema = (name: string, value: any) => {
+  getSchemas().set(name, value)
+}
 
 export const loadSchema = (schema: string, logger: PinoLogger): void => {
   if (!validators.has(schema)) {
     logger.debug(`Adding json schema for ${schema}`)
-    const json = schemas.get(schema)
+    const json = getSchemas().get(schema)
     try {
       const validator = ajv.compile(json)
       validators.set(schema, validator)
