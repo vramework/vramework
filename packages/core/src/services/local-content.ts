@@ -25,10 +25,9 @@ export class LocalContent implements ContentService {
   }
 
   public async delete(assetKey: string): Promise<boolean> {
-    console.trace()
     this.logger.info(`deleting key: ${assetKey}`)
     try {
-      await promises.unlink(`${assetKey}/${this.config.content.localFileUploadPath}`)
+      await promises.unlink(`${this.config.content.localFileUploadPath}/${assetKey}`)
     } catch (e) {
       this.logger.error(`Error deleting content ${assetKey}`, e)
     }

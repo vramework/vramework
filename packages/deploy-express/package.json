@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-express",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "The vramework express server (for local development)",
   "license": "MIT",
   "author": "Vlandor LTD",
@@ -12,7 +12,7 @@
     "test:ci": "echo 'No tests'"
   },
   "dependencies": {
-    "@vramework/core": "^0.0.0",
+    "@vramework/core": "^0.0.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
