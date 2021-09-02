@@ -1,3 +1,11 @@
+## 0.0.3 - 02.09.2021
+
+chore: Updating dependencies
+
+## 0.0.2 - 27.07.2021
+
+Making vramework core a peer dependency
+
 ## 0.0.1 - 27.07.2021
 
 Chore: Bumping deps

@@ -127,13 +127,33 @@ const generalHandler = async (
 
   try {
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
-    services.logger.info({ action: 'Executing route', path: matchedPath, route })
 
-    const session = await services.sessionService.getUserSession(
-      route.requiresSession !== false,
-      event.headers,
-      event
-    )
+    let session
+    try {
+      session = await services.sessionService.getUserSession(
+        route.requiresSession !== false,
+        event.headers,
+        event
+      )
+    } catch (e) {
+      services.logger.info({ 
+        action: 'Rejecting route (invalid session)', 
+        path: matchedPath, 
+        route,
+        IP: event.headers['X-Forwarded-For'],
+        userId: session?.userId,
+        session: JSON.stringify(session)
+      })
+    }
+
+    services.logger.info({ 
+      action: 'Executing route', 
+      path: matchedPath, 
+      route,
+      IP: event.headers['X-Forwarded-For'],
+      userId: session?.userId,
+      session: JSON.stringify(session)
+    })
 
     const contentType = getHeaderValue(event, 'Content-Type')
 

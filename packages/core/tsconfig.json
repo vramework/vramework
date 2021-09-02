@@ -15,6 +15,7 @@
     "allowJs": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "composite": true
   },
   "include": ["src"]
 }

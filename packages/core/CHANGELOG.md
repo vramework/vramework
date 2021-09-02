@@ -1,3 +1,7 @@
+## 0.0.3 - 02.09.2021
+
+chore: Updating dependencies
+
 ## 0.0.2 - 02.08.2021
 
 Fix: deleting files with correct path in local files
