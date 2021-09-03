@@ -25,7 +25,7 @@ export class AWSSES {
                 TemplateData: '{}'
             }))
             return true
-        } catch (e) {
+        } catch (e: any) {
             console.error(e)
             return false
         }

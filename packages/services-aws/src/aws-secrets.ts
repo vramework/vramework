@@ -30,11 +30,11 @@ export class AWSSecrets {
       if (result.SecretString) {
         try {
           return JSON.parse(result.SecretString)
-        } catch (e) {
+        } catch (e: any) {
           return result.SecretString as any
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e)
     }
     throw `FATAL: Error finding secret: ${SecretId}`

@@ -22,7 +22,7 @@ export class S3Content implements ContentService {
   public async signURL(url: string) {
     try {
       return getCDNSignedUrl(url, this.signConfig)
-    } catch (e) {
+    } catch (e: any) {
       this.logger.error(`Error signing url: ${url}`)
       return url
     }
@@ -56,7 +56,7 @@ export class S3Content implements ContentService {
         }),
       )
       return true
-    } catch (e) {
+    } catch (e: any) {
       this.logger.error(`Error deleting file, key: ${Key}`, e)
       return false
     }
