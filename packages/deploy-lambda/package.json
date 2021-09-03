@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-lambda",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "author": "Vlandor LTD",
   "main": "dist",
@@ -19,6 +19,7 @@
     "querystring": "^0.2.1"
   },
   "devDependencies": {
+    "@types/path-to-regexp": "^1.7.0",
     "@types/aws-lambda": "^8.10.83",
     "typescript": "^4.4.2"
   }

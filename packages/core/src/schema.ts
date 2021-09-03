@@ -29,7 +29,7 @@ export const loadSchema = (schema: string, logger: PinoLogger): void => {
     try {
       const validator = ajv.compile(json)
       validators.set(schema, validator)
-    } catch (e) {
+    } catch (e: any) {
       console.error(e.name, schema, json)
       throw e
     }

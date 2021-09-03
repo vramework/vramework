@@ -27,7 +27,7 @@
     "bcryptjs": "^2.4.3",
     "cookie": "^0.4.1",
     "jsonwebtoken": "^8.5.1",
-    "node-fetch": "^3.0.0",
+    "node-fetch": "^2.6.1",
     "pg": "^8.7.1",
     "pg-camelcase": "0.0.3",
     "snake-case": "^3.0.4",

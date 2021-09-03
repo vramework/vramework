@@ -135,11 +135,12 @@ const generalHandler = async (
         event.headers,
         event
       )
-    } catch (e) {
+    } catch (e: any) {
       services.logger.info({ 
         action: 'Rejecting route (invalid session)', 
         path: matchedPath, 
         route,
+        headers: event.headers,
         IP: event.headers['X-Forwarded-For'],
         userId: session?.userId,
         session: JSON.stringify(session)
@@ -150,6 +151,7 @@ const generalHandler = async (
       action: 'Executing route', 
       path: matchedPath, 
       route,
+      headers: event.headers,
       IP: event.headers['X-Forwarded-For'],
       userId: session?.userId,
       session: JSON.stringify(session)
@@ -194,7 +196,7 @@ const generalHandler = async (
         body: route.returnsJSON === false ? (result as any) : JSON.stringify(result),
         headers,
       }
-    } catch (e) {
+    } catch (e: any) {
       throw e
     } finally {
       for (const service of Object.values(sessionServices)) {
@@ -203,7 +205,7 @@ const generalHandler = async (
         }
       }
     }
-  } catch (e) {
+  } catch (e: any) {
     return errorHandler(services, e, headers)
   }
 }
@@ -226,7 +228,7 @@ export const processCors = async (
   let origin: string | false = false
   try {
     origin = validateOrigin(config, services, event)
-  } catch (e) {
+  } catch (e: any) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'error.invalid_origin' }),

@@ -19,7 +19,8 @@ const getHeaders = () => {
 const initFetch = async () => {
   if (!restFetch) {
     if (typeof window === 'undefined') {
-      restFetch = (await import('node-fetch')).default as any
+      const fetch = await import('node-fetch')
+      restFetch = fetch.default as any
     } else {
       restFetch = fetch
     }
@@ -82,7 +83,7 @@ async function action<O, I>(method: string, url: string, body: I, hasResponseBod
       const data = await response.json()
       return transformResult(data)
     }
-  } catch (e) {
+  } catch (e: any) {
     // This is a 404
     throw e
   }
@@ -129,7 +130,7 @@ export async function get<O, I = any>(
   }
   try {
     return await response.json()
-  } catch (e) {
+  } catch (e: any) {
     throw 'Unable to parse json response'
   }
 }

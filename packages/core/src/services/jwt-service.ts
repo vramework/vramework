@@ -56,7 +56,7 @@ export class JWTService<UserSession extends Object> {
   public async decodeJWTHash<T = never>(hash: string, invalidHashError: any): Promise<{ uuid: string } & T> {
     try {
       await this.verifyJWTHash(hash, )
-    } catch (e) {
+    } catch (e: any) {
       throw invalidHashError
     }
     return await new Promise((resolve, reject) => {

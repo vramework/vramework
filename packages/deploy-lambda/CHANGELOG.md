@@ -1,3 +1,7 @@
+## 0.0.4 - 03.09.2021
+
+feat: Log headers and session
+
 ## 0.0.3 - 02.09.2021
 
 chore: Updating dependencies

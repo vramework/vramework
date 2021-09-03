@@ -128,7 +128,7 @@ export class ExpressServer {
                 await verifyPermissions(route.permissions, sessionServices, data, session)
               }
               res.locals.result = await route.func(sessionServices, data, session)
-            } catch (e) {
+            } catch (e: any) {
               throw e
             } finally {
               for (const service of Object.values(sessionServices)) {
@@ -138,7 +138,7 @@ export class ExpressServer {
               }
             }
             next()
-          } catch (e) {
+          } catch (e: any) {
             next(e)
           }
         },
