@@ -1,3 +1,7 @@
+## 0.0.4 - 04.09.2021
+
+revert: node-fetch to v2
+
 ## 0.0.3 - 02.09.2021
 
 chore: Updating dependencies
