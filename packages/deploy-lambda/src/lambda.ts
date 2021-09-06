@@ -45,7 +45,7 @@ const errorHandler = (services: CoreSingletonServices, e: Error, headers: Record
   }
 
   const errorId = services.logger.error(`Uncaught Error: ${e.message}`, e)
-  console.error(e)
+  console.trace(e)
   return {
     headers,
     statusCode: 500,
