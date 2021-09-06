@@ -145,6 +145,7 @@ const generalHandler = async (
         userId: session?.userId,
         session: JSON.stringify(session)
       })
+      throw e
     }
 
     services.logger.info({ 

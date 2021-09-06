@@ -1,4 +1,8 @@
-## 0.0.5 - 03.09.2021
+## 0.0.6 - 06.09.2021
+
+fix: throw error when invalid user session
+
+## 0.0.5 - 06.09.2021
 
 fix: Log stack trace when a 500 error occurs
 
