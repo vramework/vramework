@@ -1,3 +1,7 @@
+## 0.0.5 - 03.09.2021
+
+fix: Log stack trace when a 500 error occurs
+
 ## 0.0.4 - 03.09.2021
 
 feat: Log headers and session
