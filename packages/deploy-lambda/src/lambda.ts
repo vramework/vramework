@@ -220,6 +220,19 @@ export const processCorsless = async (
   return await generalHandler(config, services, routes, event, {})
 }
 
+export const processFromAnywhereCors = async (
+  event: APIGatewayProxyEvent,
+  routes: CoreAPIRoutes,
+  config: CoreConfig,
+  services: CoreSingletonServices,
+) => {
+  const headers: Record<string, string | boolean> = {
+    'Access-Control-Allow-Origin': event.headers.origin!,
+    'Access-Control-Allow-Credentials': true,
+  }
+  return await generalHandler(config, services, routes, event, headers)
+}
+
 export const processCors = async (
   event: APIGatewayProxyEvent,
   routes: CoreAPIRoutes,

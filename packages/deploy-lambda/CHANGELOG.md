@@ -1,3 +1,7 @@
+## 0.0.7 - 06.09.2021
+
+feat: another entry point that allows cors from anywhere
+
 ## 0.0.6 - 06.09.2021
 
 fix: throw error when invalid user session
