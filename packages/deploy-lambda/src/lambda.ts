@@ -9,6 +9,16 @@ import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/core/dist/routes'
 import { loadSchema, validateJson } from '@vramework/core/dist/schema'
 import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/core/dist/errors'
 import { v4 as uuid } from 'uuid'
+import { URL } from 'url'
+
+const getDomainFromHeaders = (headers: Record<string, string>): string | undefined => {
+  const origin = headers.origin
+  if (origin) {
+    const url = new URL(headers.origin)
+    return url.port !== '80' && url.port !== '443' ? url.host : `${url.host}:${url.port}`
+  }
+  return undefined
+}
 
 const validateOrigin = (config: CoreConfig, services: CoreSingletonServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
@@ -77,7 +87,7 @@ const getMatchingRoute = (
   throw new NotFoundError()
 }
 
-const getHeaderValue = (event:APIGatewayProxyEvent, headerName:string):string|undefined => event.headers?.[headerName] ?? event.headers?.[headerName.toLocaleLowerCase()]
+const getHeaderValue = (event: APIGatewayProxyEvent, headerName: string): string | undefined => event.headers?.[headerName] ?? event.headers?.[headerName.toLocaleLowerCase()]
 
 const generalHandler = async (
   config: CoreConfig,
@@ -115,7 +125,7 @@ const generalHandler = async (
         ...headers,
         'Set-Cookie': serializeCookie(services.sessionService.getCookieName(event.headers as Record<string, string>), 'invalid', {
           expires: new Date(0),
-          domain: event.headers.origin,
+          domain: getDomainFromHeaders(event.headers as Record<string, string>),
           path: '/',
           httpOnly: true,
           secure: true,
@@ -136,9 +146,9 @@ const generalHandler = async (
         event
       )
     } catch (e: any) {
-      services.logger.info({ 
-        action: 'Rejecting route (invalid session)', 
-        path: matchedPath, 
+      services.logger.info({
+        action: 'Rejecting route (invalid session)',
+        path: matchedPath,
         route,
         headers: event.headers,
         IP: event.headers['X-Forwarded-For'],
@@ -148,9 +158,9 @@ const generalHandler = async (
       throw e
     }
 
-    services.logger.info({ 
-      action: 'Executing route', 
-      path: matchedPath, 
+    services.logger.info({
+      action: 'Executing route',
+      path: matchedPath,
       route,
       headers: event.headers,
       IP: event.headers['X-Forwarded-For'],
@@ -169,11 +179,11 @@ const generalHandler = async (
       }
     }
     if (data === undefined) {
-      data = { ...matchedPath.params, ...event.queryStringParameters,  ...JSON.parse(event.body ?? '{}') }
+      data = { ...matchedPath.params, ...event.queryStringParameters, ...JSON.parse(event.body ?? '{}') }
     }
 
     if (route.schema) {
-        validateJson(route.schema, data)
+      validateJson(route.schema, data)
     }
 
     const sessionServices = await services.createSessionServices(services, event.headers, session)
@@ -184,7 +194,7 @@ const generalHandler = async (
       const result = await route.func(sessionServices, data, session)
       if (result && (result as any).jwt) {
         headers['Set-Cookie'] = serializeCookie(services.sessionService.getCookieName(event.headers as Record<string, string>), (result as any).jwt, {
-          // domain: event.headers.origin,
+          domain: getDomainFromHeaders(event.headers as Record<string, string>),
           path: '/',
           httpOnly: true,
           secure: true,
