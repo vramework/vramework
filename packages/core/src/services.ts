@@ -6,7 +6,9 @@ export interface ContentService {
   signContentKey: (contentKey: string) => Promise<string>
   signURL: (url: string) => Promise<string>
   getUploadURL: (fileKey: string, contentType: string) => Promise<{ uploadUrl: string; assetKey: string }>
-  delete: (fileName: string) => Promise<boolean>
+  deleteFile: (fileName: string) => Promise<boolean>
+  writeFile: (assetKey: string, buffer: Buffer) => Promise<boolean>
+  readFile: (assetKey: string) => Promise<Buffer>
 }
 
 export interface JWTService<UserSession = CoreUserSession> {

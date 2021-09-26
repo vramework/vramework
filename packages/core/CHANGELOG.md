@@ -1,3 +1,7 @@
+## 0.0.4 - 26.09.2021
+
+feat: Adding writeFile, readFile and deleteFile APIs
+
 ## 0.0.3 - 02.09.2021
 
 chore: Updating dependencies
