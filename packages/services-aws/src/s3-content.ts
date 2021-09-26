@@ -2,6 +2,7 @@ import {
   S3Client,
   DeleteObjectCommand,
   PutObjectCommand,
+  GetObjectCommand,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 
@@ -46,7 +47,45 @@ export class S3Content implements ContentService {
     }
   }
 
-  public async delete(Key: string) {
+  public async readFile(Key: string) {
+    return new Promise<Buffer>(async (resolve, reject) => {
+      try {
+        this.logger.info(`Getting file, key: ${Key}`)
+        const response = await this.s3.send(
+          new GetObjectCommand({
+            Bucket: `content.${this.config.domain}`,
+            Key,
+          }),
+        )
+        const body = response.Body as any
+        const responseDataChunks: any[] = []
+        body.on('data', (chunk: any) => responseDataChunks.push(chunk))
+        body.once('end', () => resolve(Buffer.concat(responseDataChunks)))
+      } catch (err) {
+        // Handle the error or throw
+        return reject(err)
+      }
+    })
+  }
+
+  public async writeFile(Key: string, buffer: Buffer) {
+    try {
+      this.logger.info(`Write file, key: ${Key}`)
+      await this.s3.send(
+        new PutObjectCommand({
+          Bucket: `content.${this.config.domain}`,
+          Key,
+          Body: buffer
+        }),
+      )
+      return true
+    } catch (e: any) {
+      this.logger.error(`Error writing file, key: ${Key}`, e)
+      return false
+    }
+  }
+
+  public async deleteFile(Key: string) {
     try {
       this.logger.info(`Deleting file, key: ${Key}`)
       await this.s3.send(

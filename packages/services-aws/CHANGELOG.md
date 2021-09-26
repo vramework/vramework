@@ -1,3 +1,7 @@
+## 0.0.3 - 26.10.2021
+
+feat: Adding writeFile, readFile and deleteFile API (beta)
+
 ## 0.0.2 - 02.10.2021
 
 revert: Updating dependencies
