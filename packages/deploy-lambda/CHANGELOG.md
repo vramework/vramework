@@ -1,3 +1,7 @@
+## 0.0.8 - 06.09.2021
+
+fix: set correct cookie domain
+
 ## 0.0.7 - 06.09.2021
 
 feat: another entry point that allows cors from anywhere

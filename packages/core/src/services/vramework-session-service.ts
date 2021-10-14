@@ -11,7 +11,7 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         const origin = headers.origin
         if (origin) {
             const url = new URL(headers.origin)
-            return url.host
+            return url.port !== '80' && url.port !== '443' ? url.host : `${url.host}:${url.port}`
         }
         return 'localhost' // default cookie name
     }
