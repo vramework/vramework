@@ -1,0 +1,1 @@
+cat doc/* > README.md
