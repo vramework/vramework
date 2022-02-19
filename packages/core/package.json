@@ -1,6 +1,6 @@
 {
   "name": "@vramework/core",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Vlandor LTD",
   "license": "MIT",
   "types": "dist/index.d.ts",
@@ -12,19 +12,19 @@
   },
   "peerDependencies": {},
   "dependencies": {
-    "ajv": "^8.6.2",
+    "ajv": "^8.10.0",
     "ajv-formats": "^2.1.1",
     "aws-cloudfront-sign": "^2.2.0",
-    "cookie": "^0.4.1",
+    "cookie": "^0.4.2",
     "jsonwebtoken": "^8.5.1",
-    "pino": "^6.13.1",
-    "ts-json-schema-generator": "^0.95.0",
+    "pino": "^7.8.0",
+    "ts-json-schema-generator": "^0.98.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/cookie": "^0.4.1",
-    "@types/jsonwebtoken": "^8.5.5",
-    "@types/uuid": "^8.3.1",
-    "typescript": "^4.4.2"
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/uuid": "^8.3.4",
+    "typescript": "^4.5.5"
   }
 }

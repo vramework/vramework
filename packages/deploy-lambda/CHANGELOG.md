@@ -1,3 +1,7 @@
+## 0.0.10 - 19.02.2022
+
+chore: Upgrading dependencies
+
 ## 0.0.8 - 06.09.2021
 
 fix: set correct cookie domain
