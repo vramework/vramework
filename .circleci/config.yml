@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  setup:
+  build:
     docker:
       - image: node:lts
     working_directory: ~/vramework
@@ -23,7 +23,7 @@ jobs:
   release:
     docker: 
       - image: node:lts
-    working_directory: ~/vramework
+    working_directory: ~/postgres-typed
     steps:
       - attach_workspace:
           at: ~/postgres-typed
@@ -32,24 +32,24 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
       - run:
           name: Publish package
-          command: npm publish
+          command: npm run publish
 
 workflows:
   version: 2
   
   build-and-deploy:
     jobs:
-      - setup:
+      - build:
           filters:
             tags:
               only: /.*/
       - release:
           requires:
-            - setup
-          filters:
-              tags:
-                only: /^v.*/
-              branches:
-                ignore: /.*/
+            - build
+          # filters:
+          #     tags:
+          #       only: /^v.*/
+          #     branches:
+          #       ignore: /.*/
 
             

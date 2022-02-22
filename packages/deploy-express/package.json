@@ -7,6 +7,7 @@
   "main": "dist",
   "scripts": {
     "tsc": "rm -rf dist && tsc",
+    "publish": "npm publish",
     "ncu": "ncu",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"

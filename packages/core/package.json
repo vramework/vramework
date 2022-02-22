@@ -7,6 +7,7 @@
   "module": "dist/index.js",
   "scripts": {
     "ncu": "ncu",
+    "publish": "npm publish",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
   },

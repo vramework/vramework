@@ -11,6 +11,7 @@
   },
   "scripts": {
     "tsc": "yarn workspaces run tsc",
+    "publish": "yarn workspaces run publish",
     "ncu": "yarn workspaces run ncu",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
