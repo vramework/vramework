@@ -1,0 +1,55 @@
+version: 2.1
+
+jobs:
+  setup:
+    docker:
+      - image: node:lts
+    working_directory: ~/vramework
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run: yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+      - run: yarn run tsc
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  release:
+    docker: 
+      - image: node:lts
+    working_directory: ~/vramework
+    steps:
+      - attach_workspace:
+          at: ~/postgres-typed
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+      - run:
+          name: Publish package
+          command: npm publish
+
+workflows:
+  version: 2
+  
+  build-and-deploy:
+    jobs:
+      - setup:
+          filters:
+            tags:
+              only: /.*/
+      - release:
+          requires:
+            - setup
+          filters:
+              tags:
+                only: /^v.*/
+              branches:
+                ignore: /.*/
+
+            
