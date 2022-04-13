@@ -1,6 +1,6 @@
 {
   "name": "@vramework/aws",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Vlandor LTD",
   "license": "MIT",
   "main": "dist",
@@ -12,7 +12,7 @@
     "test:ci": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.0.5"
+    "@vramework/core": "^0.0.6"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.67.0",
