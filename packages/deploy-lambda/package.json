@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-lambda",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "license": "MIT",
   "author": "Vlandor LTD",
   "main": "dist",
@@ -13,15 +13,15 @@
   },
   "private": false,
   "peerDependencies": {
-    "@vramework/core": "^0.0.5",
+    "@vramework/core": "^0.0.6",
     "aws-lambda": "^1.0.7",
-    "cookie": "^0.4.2",
+    "cookie": "^0.5.0",
     "path-to-regexp": "^6.2.0",
     "querystring": "^0.2.1"
   },
   "devDependencies": {
     "@types/path-to-regexp": "^1.7.0",
-    "@types/aws-lambda": "^8.10.92",
-    "typescript": "^4.5.5"
+    "@types/aws-lambda": "^8.10.93",
+    "typescript": "^4.6.3"
   }
 }
