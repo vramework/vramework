@@ -22,6 +22,6 @@
   "devDependencies": {
     "@types/path-to-regexp": "^1.7.0",
     "@types/aws-lambda": "^8.10.93",
-    "typescript": "^4.6.3"
+    "typescript": "^4.7.4"
   }
 }
