@@ -1,4 +1,4 @@
-## 0.0.7 - 26.06.2022
+## 0.0.9 - 26.06.2022
 
 chore: Upgrading dependencies
 
