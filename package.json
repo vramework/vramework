@@ -12,7 +12,7 @@
   "scripts": {
     "tsc": "yarn workspaces run tsc",
     "publish": "yarn workspaces run publish",
-    "ncu": "yarn workspaces run ncu",
+    "ncu": "yarn workspaces run ncu -x node-fetch",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
   },

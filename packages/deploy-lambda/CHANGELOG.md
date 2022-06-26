@@ -1,3 +1,7 @@
+## 0.0.12 - 26.06.2022
+
+chore: Upgrading dependencies
+
 ## 0.0.11 - 13.04.2022
 
 chore: Upgrading dependencies

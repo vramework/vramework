@@ -3,7 +3,7 @@ import { Server } from 'http'
 import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
-import jwt from 'express-jwt'
+import expressjwt from 'express-jwt'
 import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
@@ -20,7 +20,7 @@ import { v4 as uuid } from 'uuid'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
-    req.user = session
+    (req as any).auth = session
     next()
   }).catch((e) => {
     if (credentialsRequired) {
@@ -150,7 +150,7 @@ export class ExpressServer {
         return next()
       }
 
-      if (error instanceof jwt.UnauthorizedError) {
+      if (error instanceof expressjwt.UnauthorizedError) {
         this.services.logger.error('JWT AUTH ERROR', error)
         res.status(401).end()
         return
