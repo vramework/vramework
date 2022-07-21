@@ -4,7 +4,13 @@ import { parse as parseCookie } from 'cookie'
 import { URL } from 'url'
 
 export class VrameworkSessionService<UserSession> implements SessionService<UserSession> {
-    constructor(private jwtService: JWTService<UserSession>, private getSessionForAPIKey: (apiKey: string) => Promise<UserSession>) {
+    constructor(
+        private jwtService: JWTService<UserSession>, 
+        private options: {
+            getSessionForAPIKey?: (apiKey: string) => Promise<UserSession>,
+            transformSession?: (session: any) => Promise<UserSession>
+        }
+    ) {
     }
 
     public getCookieName(headers: Record<string, string>): string {
@@ -23,7 +29,10 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
 
         const apiKey = headers['x-api-key']
         if (apiKey) {
-            apiKeySession = await this.getSessionForAPIKey(apiKey)
+            if (!this.options.getSessionForAPIKey) {
+                throw new Error('Missing getSessionForAPIKey')
+            }
+            apiKeySession = await this.options.getSessionForAPIKey(apiKey)
         }
 
         const authorization = headers.authorization || headers.Authorization
@@ -43,6 +52,14 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         }
 
         if (apiKeySession || authorizationSession || cookieSession) {
+            if (this.options.transformSession) {
+                return await this.options.transformSession({
+                    ...(apiKeySession || {}),
+                    ...(authorizationSession || {}),
+                    ...(cookieSession || {}),
+                } as UserSession)
+            }
+
             return {
                 ...(apiKeySession || {}),
                 ...(authorizationSession || {}),

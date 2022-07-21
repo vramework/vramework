@@ -1,3 +1,7 @@
+## 0.0.10 - 21.07.2022
+
+feat: add a transform session call incase jwt provided belongs to a third-party like aws cognito
+
 ## 0.0.9 - 26.06.2022
 
 chore: Upgrading dependencies
