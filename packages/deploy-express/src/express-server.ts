@@ -3,7 +3,7 @@ import { Server } from 'http'
 import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
-import expressjwt from 'express-jwt'
+import { UnauthorizedError } from 'express-jwt'
 import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
@@ -105,7 +105,7 @@ export class ExpressServer {
         autMiddleware(route.requiresSession !== false, this.services.sessionService),
         async (req, res, next) => {
           try {
-            const session = (req as any).user as CoreUserSession | undefined
+            const session = (req as any).auth as CoreUserSession | undefined
 
             res.locals.cookiename = this.services.sessionService.getCookieName(req.headers as Record<string, string>)
             res.locals.processed = true
@@ -150,7 +150,7 @@ export class ExpressServer {
         return next()
       }
 
-      if (error instanceof expressjwt.UnauthorizedError) {
+      if (error instanceof UnauthorizedError) {
         this.services.logger.error('JWT AUTH ERROR', error)
         res.status(401).end()
         return

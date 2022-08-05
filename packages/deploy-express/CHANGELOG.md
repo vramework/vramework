@@ -1,3 +1,8 @@
+## 0.0.8 - 21.07.2022
+
+fix: user session bug due to express upgrade
+fix: express-jwt export due to upgrade
+
 ## 0.0.7 - 26.06.2022
 
 chore: Upgrading dependencies
