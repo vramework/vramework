@@ -1,3 +1,8 @@
+## 0.0.11 - 21.07.2022
+
+feat: moving authentication into a seperate service to ease integration with third party
+auth libraries
+
 ## 0.0.10 - 21.07.2022
 
 feat: add a transform session call incase jwt provided belongs to a third-party like aws cognito
