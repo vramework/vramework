@@ -1,4 +1,4 @@
-export class EError extends Error {
+class _EError extends Error {
   __proto__: Error
   constructor(public errorId?: string, message?: string) {
     super(message)
@@ -7,6 +7,12 @@ export class EError extends Error {
     this.__proto__ = trueProto
   }
 }
+
+if (!(globalThis as any).EError) {
+  (globalThis as any).EError = _EError
+}
+
+export const EError = (globalThis as any).EError as typeof _EError
 
 export class InvalidParametersError extends EError {}
 export class NotFoundError extends EError {}

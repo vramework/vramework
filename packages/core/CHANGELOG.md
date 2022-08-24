@@ -1,3 +1,7 @@
+## 0.0.12 - 24.08.2022
+
+fix: using a global EError object to try get around contructor issues
+
 ## 0.0.11 - 21.07.2022
 
 feat: moving authentication into a seperate service to ease integration with third party
