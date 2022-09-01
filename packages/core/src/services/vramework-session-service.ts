@@ -1,12 +1,13 @@
 import { InvalidSessionError, MissingSessionError } from "../errors"
-import { AuthenticationService, SessionService } from "../services"
+import { JWTService, SessionService } from "../services"
 import { parse as parseCookie } from 'cookie'
 import { URL } from 'url'
 
 export class VrameworkSessionService<UserSession> implements SessionService<UserSession> {
     constructor(
-        private authService: AuthenticationService<UserSession>, 
+        private jwtService: JWTService<UserSession>, 
         private options: {
+            getSessionForAPIKey?: (apiKey: string) => Promise<UserSession>,
             transformSession?: (session: any) => Promise<UserSession>
         }
     ) {
@@ -28,7 +29,10 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
 
         const apiKey = headers['x-api-key']
         if (apiKey) {
-            return await this.authService.getSessionForAPIKey(apiKey)
+            if (!this.options.getSessionForAPIKey) {
+                throw new Error('Missing getSessionForAPIKey')
+            }
+            apiKeySession = await this.options.getSessionForAPIKey(apiKey)
         }
 
         const authorization = headers.authorization || headers.Authorization
@@ -36,14 +40,14 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
             if (authorization.split(' ')[0] !== 'Bearer') {
                 throw new InvalidSessionError()
             }
-            authorizationSession = await this.authService.decodeSession(authorization.split(' ')[1])
+            authorizationSession = await this.jwtService.decodeSessionAsync(authorization.split(' ')[1], debug)
         }
 
         if (headers.cookie) {
             const cookie = parseCookie(headers.cookie)
             const jwt = cookie[this.getCookieName(headers)]
             if (jwt) {
-                cookieSession = await this.authService.decodeSession(authorization.split(' ')[1])
+                cookieSession = await this.jwtService.decodeSessionAsync(jwt, debug)
             }
         }
 

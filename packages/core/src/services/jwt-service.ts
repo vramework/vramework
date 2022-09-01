@@ -34,10 +34,10 @@ export class JWTService<UserSession extends Object> {
       if (key) {
         callback(null, key.secret)
       } else {
-        callback(`Missing secret keyid on db: ${header.kid}`)
+        callback(new Error(`Missing secret keyid on db: ${header.kid}`))
       }
     } else {
-      callback('Missing secret keyid on token')
+      callback(new Error('Missing secret keyid on token'))
     }
   }
 
