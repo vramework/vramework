@@ -1,4 +1,4 @@
-## 0.0.16 - 24.08.2022
+## 0.0.17 - 24.08.2022
 
 fix: use error name instead of constructor for better management of instanceof
 
