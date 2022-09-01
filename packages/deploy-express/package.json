@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-express",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "The vramework express server (for local development)",
   "license": "MIT",
   "author": "Vlandor LTD",

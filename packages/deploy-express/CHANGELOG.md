@@ -1,3 +1,7 @@
+## 0.0.9 - 01.09.2022
+
+fix: use error as a lookup via name
+
 ## 0.0.8 - 21.07.2022
 
 fix: user session bug due to express upgrade
