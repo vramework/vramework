@@ -156,7 +156,7 @@ export class ExpressServer {
         return
       }
 
-      const errorDetails = getErrorResponse(error.constructor)
+      const errorDetails = getErrorResponse(error)
 
       if (errorDetails != null) {
         const errorId = (error as any).errorId || uuid()
