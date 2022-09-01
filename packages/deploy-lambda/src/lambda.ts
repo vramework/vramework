@@ -39,7 +39,7 @@ CORS Error
 }
 
 const errorHandler = (services: CoreSingletonServices, e: Error, headers: Record<string, string | boolean>) => {
-  const errorResponse = getErrorResponse(e.constructor)
+  const errorResponse = getErrorResponse(e)
   let statusCode: number
 
   if (errorResponse != null) {
