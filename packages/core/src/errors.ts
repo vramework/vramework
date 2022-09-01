@@ -43,5 +43,9 @@ export const addErrors = (errors: Array<[error: any, details: ErrorDetails]>) =>
 }
 
 export const getErrorResponse = (error: any): { status: number; message: string } | undefined => {
+  const foundError = [...apiErrors.entries()].find(([e]) => e.name === error.constructor.name)
+  if (foundError) {
+    return foundError[1]
+  }
   return apiErrors.get(error)
 }
