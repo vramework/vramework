@@ -1,3 +1,7 @@
+## 0.0.13 - 01.09.2022
+
+fix: use error name instead of constructor for lookup
+
 ## 0.0.12 - 26.06.2022
 
 chore: Upgrading dependencies
