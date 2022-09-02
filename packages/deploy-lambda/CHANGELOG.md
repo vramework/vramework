@@ -1,3 +1,7 @@
+## 0.0.14 - 02.09.2022
+
+feat: log all routes, not just failed ones
+
 ## 0.0.13 - 01.09.2022
 
 fix: use error name instead of constructor for lookup

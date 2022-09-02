@@ -137,7 +137,7 @@ const generalHandler = async (
 
   try {
     const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
-
+    services.logger.info({ message: 'Executing route', matchedPath, route })
     let session
     try {
       session = await services.sessionService.getUserSession(
