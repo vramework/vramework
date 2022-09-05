@@ -1,6 +1,6 @@
 {
   "name": "@vramework/core",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "author": "Vlandor LTD",
   "license": "MIT",
   "types": "dist/index.d.ts",
