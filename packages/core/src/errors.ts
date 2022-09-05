@@ -16,6 +16,7 @@ export class MissingSessionError extends EError {}
 export class InvalidSessionError extends EError {}
 export class NotPermissionedError extends EError {}
 export class InvalidHashError extends EError {}
+export class MaxComputeTimeReachedError extends EError {}
 
 interface ErrorDetails {
   status: number
@@ -30,6 +31,7 @@ const apiErrors = new Map<any, ErrorDetails>([
   [NotPermissionedError, { status: 403, message: 'Not permissioned' }],
   [MissingSessionError, { status: 401, message: 'Missing Session' }],
   [InvalidSessionError, { status: 401, message: 'Invalid Session' }],
+  [MaxComputeTimeReachedError, { status: 408, message: 'Max compute time reached' }]
 ])
 
 export const addError = (error: any, { status, message }: ErrorDetails) => {
@@ -42,7 +44,7 @@ export const addErrors = (errors: Array<[error: any, details: ErrorDetails]>) =>
   })
 }
 
-export const getErrorResponse = (error: any): { status: number; message: string } | undefined => {
+export const getErrorResponse = (error: Error): { status: number; message: string } | undefined => {
   const foundError = [...apiErrors.entries()].find(([e]) => e.name === error.constructor.name)
   if (foundError) {
     return foundError[1]

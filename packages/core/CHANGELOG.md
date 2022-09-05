@@ -1,3 +1,7 @@
+## 0.0.18 - 05.09.2022
+
+feat: adding a maximum compute time for better error handling on lambda timeouts
+
 ## 0.0.17 - 24.08.2022
 
 fix: use error name instead of constructor for better management of instanceof

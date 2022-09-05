@@ -12,6 +12,7 @@ export interface CoreAPIRoute<In, Out> {
   requiresSession?: false
   permissions?: Record<string, CoreAPIPermission<In>[] | CoreAPIPermission<In>>
   returnsJSON?: false
+  timeout?: number
 }
 
 export type CoreAPIRoutes = Array<CoreAPIRoute<unknown, unknown>>
