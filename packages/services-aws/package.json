@@ -22,6 +22,6 @@
     "aws-cloudfront-sign": "^2.2.0"
   },
   "devDependencies": {
-    "typescript": "^4.8.2"
+    "typescript": "^5.4.2"
   }
 }

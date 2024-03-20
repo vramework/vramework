@@ -18,5 +18,8 @@
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.1.1",
+  "devDependencies": {
+    "@types/node": "^20.11.30"
+  }
 }

@@ -1448,6 +1448,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^20.11.30":
+  version: 20.11.30
+  resolution: "@types/node@npm:20.11.30"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10/78515bc768d2b878e2e06a1c20eb4f5840072b79b8d28ff3dd0a7feaaf48fd3a2ac03cfa5bc7564da82db5906b43e9ba0e5df9f43d870b7aae2942306e208815
+  languageName: node
+  linkType: hard
+
 "@types/pino-http@npm:*":
   version: 5.7.0
   resolution: "@types/pino-http@npm:5.7.0"
@@ -1553,7 +1562,7 @@ __metadata:
     "@aws-sdk/client-ses": "npm:3.67.0"
     "@aws-sdk/s3-request-presigner": "npm:3.67.0"
     aws-cloudfront-sign: "npm:^2.2.0"
-    typescript: "npm:^4.8.2"
+    typescript: "npm:^5.4.2"
   peerDependencies:
     "@vramework/core": ^0.0.6
   languageName: unknown
@@ -1573,7 +1582,7 @@ __metadata:
     jsonwebtoken: "npm:^8.5.1"
     pino: "npm:^8.4.2"
     ts-json-schema-generator: "npm:^1.0.0"
-    typescript: "npm:^4.8.2"
+    typescript: "npm:^5.4.2"
     uuid: "npm:^8.3.2"
   languageName: unknown
   linkType: soft
@@ -1602,7 +1611,7 @@ __metadata:
     snake-case: "npm:^3.0.4"
     ts-node: "npm:^10.9.1"
     ts-node-dev: "npm:^2.0.0"
-    typescript: "npm:^4.8.2"
+    typescript: "npm:^5.4.2"
     uuid: "npm:^8.3.2"
   peerDependencies:
     "@vramework/core": ^0.0.7
@@ -1614,7 +1623,7 @@ __metadata:
   resolution: "@vramework/deploy-lambda@workspace:packages/deploy-lambda"
   dependencies:
     "@types/aws-lambda": "npm:^8.10.102"
-    typescript: "npm:^4.8.2"
+    typescript: "npm:^5.4.2"
   peerDependencies:
     "@vramework/core": ^0.0.6
     aws-lambda: ^1.0.7
@@ -1630,13 +1639,15 @@ __metadata:
   dependencies:
     "@types/node-fetch": "npm:^2.6.2"
     node-fetch: "npm:^2.6.1"
-    typescript: "npm:^4.8.2"
+    typescript: "npm:^5.4.2"
   languageName: unknown
   linkType: soft
 
 "@vramework/mono@workspace:.":
   version: 0.0.0-use.local
   resolution: "@vramework/mono@workspace:."
+  dependencies:
+    "@types/node": "npm:^20.11.30"
   languageName: unknown
   linkType: soft
 
@@ -4188,13 +4199,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.8.2":
-  version: 4.8.2
-  resolution: "typescript@npm:4.8.2"
+"typescript@npm:^5.4.2":
+  version: 5.4.2
+  resolution: "typescript@npm:5.4.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/1fbdc1e5f73de0c0c5a41210ed8679b86c55f54a4c6411a3f23071dc9ae54d0ab74ad4d41dbd7cb9e931d24b0bcfd1abb5444ecd03cb9075997b185dcc2d1df1
+  checksum: 10/f8cfdc630ab1672f004e9561eb2916935b2d267792d07ce93e97fc601c7a65191af32033d5e9c0169b7dc37da7db9bf320f7432bc84527cb7697effaa4e4559d
   languageName: node
   linkType: hard
 
@@ -4208,13 +4219,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^4.8.2#optional!builtin<compat/typescript>":
-  version: 4.8.2
-  resolution: "typescript@patch:typescript@npm%3A4.8.2#optional!builtin<compat/typescript>::version=4.8.2&hash=3b564f"
+"typescript@patch:typescript@npm%3A^5.4.2#optional!builtin<compat/typescript>":
+  version: 5.4.2
+  resolution: "typescript@patch:typescript@npm%3A5.4.2#optional!builtin<compat/typescript>::version=5.4.2&hash=5adc0c"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/27090d5391b31e9d4c5409bcc7034b7d1b32bf0f4aa622b12342a76207fe2350b221419dd61533a90e1dff989eaff35bae040454afb4fb418170cb28d69e2e4c
+  checksum: 10/f5f9a4133c2670761f0166eae5b3bafbc4a3fc24f0f42a93c9c893d9e9d6e66ea066969c5e7483fa66b4ae0e99125592553f3b92fd3599484de8be13b0615176
   languageName: node
   linkType: hard
 
@@ -4225,6 +4236,13 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10/55d092009e2fd0586d86fba9f64e70799bd25fdad81eb252d1270d60dc1f1db1dfa43cf536fe86b4fad2540032ae649d3520b448bed92edf2f4624ca7104b892
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 10/0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
   languageName: node
   linkType: hard
 
