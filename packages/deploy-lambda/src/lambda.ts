@@ -1,5 +1,4 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { match, Match } from 'path-to-regexp'
 import * as querystring from 'querystring'
 import { serialize as serializeCookie } from 'cookie'
 import { CoreSingletonServices } from '@vramework/core/dist/services'
@@ -10,6 +9,9 @@ import { loadSchema, validateJson } from '@vramework/core/dist/schema'
 import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/core/dist/errors'
 import { v4 as uuid } from 'uuid'
 import { URL } from 'url'
+
+// @ts-ignore
+import { match } from "path-to-regexp"
 
 const getDomainFromHeaders = (headers: Record<string, string>): string | undefined => {
   const origin = headers.origin
@@ -69,7 +71,7 @@ const getMatchingRoute = (
   requestPath: string,
   routes: Array<CoreAPIRoute<unknown, unknown>>,
 ) => {
-  let matchedPath: Match | undefined
+  let matchedPath: any | undefined
   for (const route of routes) {
     if (route.type !== requestType.toLowerCase()) {
       continue
