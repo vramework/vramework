@@ -1,0 +1,50 @@
+# serverless.yml
+service: api-${env:ENVIRONMENT}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage}
+  region: eu-central-1
+  lambdaHashingVersion: 20201221
+  timeout: 10
+  apiGateway:
+    shouldStartNameWithService: true
+    binaryMediaTypes:
+      - "application/pdf"
+  environment:
+    DOMAIN: "${env:DOMAIN}"
+  iamManagedPolicies:
+    - { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:policy/tf-api-policy-secrets" }
+    - { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:policy/tf-api-policy-s3" }
+
+custom:
+  customDomain:
+    domainName: "api.${env:DOMAIN}"
+    certificateName: "${env:DOMAIN}"
+    endpointType: regional
+    securityPolicy: tls_1_2
+    apiType: rest
+
+functions:
+  app:
+    handler: index.appHandler
+    events:
+      - http:
+          path: /v1/{proxy+}
+          method: options
+      - http:
+          path: /v1/{proxy+}
+          method: any
+
+plugins:
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
+
+package:
+  exclude:
+    - serverless.ts
+    - tsconfig.json
+    - webpack.config.js
+    - node_modules/@vramework-example/**
+    - node_modules/@types/**

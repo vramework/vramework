@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ES2018",
+    "module": "commonjs",
+    "declaration": false,
+    "sourceMap": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "strict": true,
+    "lib": [
+      "es2018"
+    ],
+    "types": [
+      "node"
+    ],
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@vramework-example/express",
+  "version": "0.0.0",
+  "description": "The vramework express server",
+  "license": "MIT",
+  "private": true,
+  "author": "Vlandor LTD",
+  "scripts": {
+    "start": "ts-node bin/express.ts start | pino-pretty -i time,hostname,pid",
+    "start:dev": "tsnd --poll --respawn bin/express.ts start | pino-pretty -i time,hostname,pid",
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "@vramework-example/functions": "^0.0.0",
+    "@vramework/deploy-express": "^0.0.0",
+    "commander": "^6.2.1",
+    "pino-pretty": "^11.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.0.0",
+    "typescript": "^5.4.2"
+  }
+}

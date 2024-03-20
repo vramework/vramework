@@ -1,0 +1,43 @@
+{
+  "name": "@vramework-example/postgres",
+  "version": "0.0.0",
+  "description": "The vramework example repo",
+  "repository": "git@github.com:vramework/vramework-example.git",
+  "author": "Vlandor LTD",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/**",
+      "backends/**"
+    ],
+    "nohoist": [
+      "**/serverless",
+      "**/serverless/**"
+    ]
+  },
+  "scripts": {
+    "vramework:routes": "ts-node --transpile-only scripts/generate-routes.ts",
+    "vramework:schema": "ts-node --transpile-only scripts/generate-json-schema.ts",
+    "tsc": "yarn workspaces foreach -A run tsc",
+    "ncu": "yarn workspaces foreach -A run ncu",
+    "db:kysely-codegen": "kysely-codegen",
+    "db:migrate": "ts-node --transpile-only scripts/db-migrate.ts",
+    "db:create": "yarn run db:migrate && yarn run db:kysely-codegen && yarn run vramework:routes && yarn run vramework:schema",
+    "dev:server": "cd backends/express && yarn run start:dev"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@vramework/schemats": "^0.0.0",
+    "kysely": "^0.27.3",
+    "kysely-codegen": "^0.14.1",
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.0.0",
+    "typescript": "^5.4.2"
+  },
+  "packageManager": "yarn@4.1.1",
+  "dependencies": {
+    "@libsql/kysely-libsql": "^0.3.0",
+    "postgres-migrations": "^5.3.0"
+  }
+}
