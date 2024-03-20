@@ -16,6 +16,7 @@ const getHeaders = () => {
   }
   return headers
 }
+
 const initFetch = async () => {
   if (!restFetch) {
     if (typeof window === 'undefined') {

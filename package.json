@@ -7,7 +7,9 @@
   "license": "MIT",
   "private": true,
   "workspaces": {
-    "packages": ["packages/*"]
+    "packages": [
+      "packages/*"
+    ]
   },
   "scripts": {
     "tsc": "yarn workspaces run tsc",
@@ -15,7 +17,5 @@
     "ncu": "yarn workspaces run ncu -x node-fetch",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
-  },
-  "devDependencies": {
   }
 }

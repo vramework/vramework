@@ -11,8 +11,7 @@
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
   },
-  "peerDependency": {
-  },
+  "peerDependency": {},
   "dependencies": {
     "node-fetch": "^2.6.1"
   },
