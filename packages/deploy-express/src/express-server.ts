@@ -17,8 +17,9 @@ import { CoreUserSession } from '@vramework/core/dist/user-session'
 import { verifyPermissions } from '@vramework/core/dist/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 import { v4 as uuid } from 'uuid'
+import { LocalContent } from '@vramework/core/dist/services/local-content'
 
-const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
+const authMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
     (req as any).auth = session
     next()
@@ -32,7 +33,7 @@ const autMiddleware = (credentialsRequired: boolean, sessionService: SessionServ
 }
 
 export class ExpressServer {
-  public app = express()
+  public app: express.Application = express()
   private server: Server | undefined
 
   constructor(
@@ -53,8 +54,8 @@ export class ExpressServer {
         type: 'text/xml'
       }),
     )
-    this.app.use(bodyParser.urlencoded({extended: true}))
-    this.app.use(cookieParser())
+    this.app.use(bodyParser.urlencoded({ extended: true }))
+    this.app.use(cookieParser() as express.RequestHandler)
     this.app.use(
       cors({
         origin: /http:\/\/localhost:\d\d\d\d/,
@@ -62,31 +63,39 @@ export class ExpressServer {
       }),
     )
 
-    this.app.use('/assets/', express.static(this.config.content.localFileUploadPath))
+    if (this.services.content instanceof LocalContent) {
+      const contentConfig = this.config.content
+      if (!contentConfig) {
+        this.services.logger.error('No content config found')
+        process.exit(1)
+      }
+
+      this.app.use('/assets/', express.static(contentConfig.fileUploadPath))
+      this.app.put(`/v1/reaper/*`,
+        authMiddleware(true, this.services.sessionService),
+        async (req, res) => {
+          const file = await getRawBody(req, {
+            length: req.headers['content-length'],
+            limit: contentConfig.fileSizeLimit,
+            encoding: contentType.parse(req).parameters.charset,
+          })
+
+          const key = req.path.replace('/v1/reaper/', '')
+          const parts = key.split('/')
+          const fileName = parts.pop()
+
+          const dir = `${contentConfig.fileUploadPath}/${parts.join('/')}`
+          await mkdir(dir, { recursive: true })
+          await writeFile(`${dir}/${fileName}`, file, 'binary')
+          res.end()
+        },
+      )
+    }
+
 
     this.app.get('/v1/health-check', function (req, res) {
       res.status(200).end()
     })
-
-    this.app.put(`/v1/reaper/*`,
-    autMiddleware(true, this.services.sessionService),
-      async (req, res) => {
-        const file = await getRawBody(req, {
-          length: req.headers['content-length'],
-          limit: '10mb',
-          encoding: contentType.parse(req).parameters.charset,
-        })
-
-        const key = req.path.replace('/v1/reaper/', '')
-        const parts = key.split('/')
-        const fileName = parts.pop()
-        const dir = `${this.config.content.localFileUploadPath}/${parts.join('/')}`
-
-        await mkdir(dir, { recursive: true })
-        await writeFile(`${dir}/${fileName}`, file, 'binary')
-        res.end()
-      },
-    )
 
     this.app.get(`/v1/logout`, (req, res) => {
       res.clearCookie(this.services.sessionService.getCookieName(req.headers as Record<string, string>))
@@ -102,7 +111,7 @@ export class ExpressServer {
       this.services.logger.debug(`Adding ${route.type.toUpperCase()} with route ${path}`)
       this.app[route.type](
         path,
-        autMiddleware(route.requiresSession !== false, this.services.sessionService),
+        authMiddleware(route.requiresSession !== false, this.services.sessionService),
         async (req, res, next) => {
           try {
             const session = (req as any).auth as CoreUserSession | undefined
@@ -116,7 +125,7 @@ export class ExpressServer {
             if (isXML) {
               data = req.body
             } else {
-              data ={ ...req.params, ...req.query, ...req.body }
+              data = { ...req.params, ...req.query, ...req.body }
               if (route.schema) {
                 validateJson(route.schema, data)
               }
@@ -161,7 +170,7 @@ export class ExpressServer {
       if (errorDetails != null) {
         const errorId = (error as any).errorId || uuid()
         console.error(errorId, error)
-        res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload})
+        res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload })
       } else {
         const errorId = uuid()
         console.error(errorId, error)

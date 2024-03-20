@@ -31,4 +31,5 @@ export interface CoreSingletonServices {
   jwt: JWTService
   sessionService: SessionService
   createSessionServices: (services: CoreSingletonServices, headers: Record<string, any>, session?: CoreUserSession) => CoreServices
+  content: ContentService
 }

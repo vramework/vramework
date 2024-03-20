@@ -7,7 +7,6 @@ import {
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 
 import { ContentService } from '@vramework/core/dist/services'
-import { CoreConfig } from '@vramework/core/dist/config'
 import { Logger as PinoLogger } from 'pino'
 
 // @ts-ignore
@@ -16,8 +15,8 @@ import { getSignedUrl as getCDNSignedUrl } from 'aws-cloudfront-sign'
 export class S3Content implements ContentService {
   private s3: S3Client
 
-  constructor(private config: CoreConfig, private logger: PinoLogger, private signConfig: { keypairId: string; privateKeyString: string }) {
-    this.s3 = new S3Client({ region: this.config.awsRegion })
+  constructor(awsRegion: string, private bucketName: string, private logger: PinoLogger, private signConfig: { keypairId: string; privateKeyString: string }) {
+    this.s3 = new S3Client({ region: awsRegion })
   }
 
   public async signURL(url: string) {
@@ -30,12 +29,12 @@ export class S3Content implements ContentService {
   }
 
   public async signContentKey(key: string) {
-    return this.signURL(`https://content.${this.config.domain}/${key}`)
+    return this.signURL(`https://content.${this.bucketName}/${key}`)
   }
 
   public async getUploadURL(Key: string, ContentType: string) {
     const command = new PutObjectCommand({
-      Bucket: `content.${this.config.domain}`,
+      Bucket: `content.${this.bucketName}`,
       Key,
       ContentType,
     })
@@ -53,7 +52,7 @@ export class S3Content implements ContentService {
         this.logger.info(`Getting file, key: ${Key}`)
         const response = await this.s3.send(
           new GetObjectCommand({
-            Bucket: `content.${this.config.domain}`,
+            Bucket: `content.${this.bucketName}`,
             Key,
           }),
         )
@@ -73,7 +72,7 @@ export class S3Content implements ContentService {
       this.logger.info(`Write file, key: ${Key}`)
       await this.s3.send(
         new PutObjectCommand({
-          Bucket: `content.${this.config.domain}`,
+          Bucket: `content.${this.bucketName}`,
           Key,
           Body: buffer
         }),
@@ -90,7 +89,7 @@ export class S3Content implements ContentService {
       this.logger.info(`Deleting file, key: ${Key}`)
       await this.s3.send(
         new DeleteObjectCommand({
-          Bucket: `content.${this.config.domain}`,
+          Bucket: `content.${this.bucketName}`,
           Key,
         }),
       )

@@ -1,10 +1,13 @@
 import { Logger } from 'pino'
 import { promises } from 'fs'
-import { CoreConfig } from '../config'
 import { ContentService } from '../services'
 
+export interface ContentConfig {
+  localFileUploadPath: string
+}
+
 export class LocalContent implements ContentService {
-  constructor(private config: CoreConfig, private logger: Logger) { }
+  constructor(private config: ContentConfig, private logger: Logger) { }
 
   public async init() { }
 
@@ -27,7 +30,7 @@ export class LocalContent implements ContentService {
   public async writeFile(assetKey: string, buffer: Buffer): Promise<boolean> {
     this.logger.info(`Writing file: ${assetKey}`)
     try {
-      await promises.writeFile(`${this.config.content.localFileUploadPath}/${assetKey}`, buffer)
+      await promises.writeFile(`${this.config.localFileUploadPath}/${assetKey}`, buffer)
     } catch (e) {
       this.logger.error(`Error inserting content ${assetKey}`, e)
     }
@@ -37,7 +40,7 @@ export class LocalContent implements ContentService {
   public async readFile(assetKey: string): Promise<Buffer> {
     this.logger.info(`getting key: ${assetKey}`)
     try {
-      return await promises.readFile(`${this.config.content.localFileUploadPath}/${assetKey}`)
+      return await promises.readFile(`${this.config.localFileUploadPath}/${assetKey}`)
     } catch (e) {
       this.logger.error(`Error get content ${assetKey}`)
       throw e
@@ -47,7 +50,7 @@ export class LocalContent implements ContentService {
   public async deleteFile(assetKey: string): Promise<boolean> {
     this.logger.info(`deleting key: ${assetKey}`)
     try {
-      await promises.unlink(`${this.config.content.localFileUploadPath}/${assetKey}`)
+      await promises.unlink(`${this.config.localFileUploadPath}/${assetKey}`)
     } catch (e: any) {
       this.logger.error(`Error deleting content ${assetKey}`, e)
     }

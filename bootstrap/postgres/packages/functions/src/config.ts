@@ -22,10 +22,5 @@ export const config: Config = {
   domain: process.env.DOMAIN || 'vramework.io',
   server: {
     port: 4002,
-  },
-  secrets: {
-    postgresCredentials: '',
-    cloudfrontContentId: '',
-    cloudfrontContentPrivateKey: ''
   }
 }

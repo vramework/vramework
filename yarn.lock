@@ -1641,15 +1641,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/generic@workspace:packages/generic":
-  version: 0.0.0-use.local
-  resolution: "@vramework/generic@workspace:packages/generic"
-  dependencies:
-    node-fetch: "npm:^3"
-    typescript: "npm:^5.4.2"
-  languageName: unknown
-  linkType: soft
-
 "@vramework/mono@workspace:.":
   version: 0.0.0-use.local
   resolution: "@vramework/mono@workspace:."

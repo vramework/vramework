@@ -5,8 +5,8 @@ import { CoreConfig } from "@vramework/core/dist/config"
 export class AWSSES {
     private client: SESClient
 
-    constructor(private config: CoreConfig) {
-        this.client = new SESClient({ region: config.awsRegion })
+    constructor(awsRegion: string, private config: CoreConfig) {
+        this.client = new SESClient({ region: awsRegion })
     }
 
     public async sendResetPasswordEmail(to: string, username: string, resetHash: string): Promise<boolean> {

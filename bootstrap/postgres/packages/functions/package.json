@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@vramework/core": "^0.0.0",
-    "@vramework/generic": "^0.0.0",
     "@vramework/postgres": "^0.0.0",
     "kysely": "^0.27.3",
     "pg": "^8.11.3",
