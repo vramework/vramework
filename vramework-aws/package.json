@@ -14,10 +14,10 @@
     "@vramework/core": "workspace:0.0.0"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.67.0",
-    "@aws-sdk/client-secrets-manager": "3.67.0",
-    "@aws-sdk/s3-request-presigner": "3.67.0",
-    "aws-cloudfront-sign": "^2.2.0"
+    "@aws-sdk/client-s3": "3.624.0",
+    "@aws-sdk/client-secrets-manager": "3.624.0",
+    "@aws-sdk/s3-request-presigner": "3.624.0",
+    "aws-cloudfront-sign": "^2.2.1"
   },
   "devDependencies": {
     "typescript": "^5.5"
