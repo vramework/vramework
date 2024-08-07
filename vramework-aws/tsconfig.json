@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "commonjs",
+    "declaration": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "outDir": "dist",
+    "noUnusedLocals": true,
+    "strict": true,
+    "lib": [
+      "es2020",
+      "DOM"
+    ],
+    "types": [],
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+  }
+}

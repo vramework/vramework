@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "downlevelIteration": true,
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "noUnusedLocals": true,
+    "strict": true,
+    "lib": ["es2020"],
+    "types": ["node"],
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "include": ["src", "../../packages/functions/src/services/stream-service.ts"]
+}

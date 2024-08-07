@@ -1,0 +1,16 @@
+{
+  "name": "@vramework/generic",
+  "version": "0.0.0",
+  "license": "UNLICENSED",
+  "author": "Vlandor LTD",
+  "main": "src",
+  "scripts": {
+    "ncu": "ncu",
+    "test": "echo 'No tests'",
+    "test:ci": "echo 'No tests'"
+  },
+  "peerDependency": {},
+  "devDependencies": {
+    "typescript": "^4.8.2"
+  }
+}

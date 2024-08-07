@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "rootDir": "src",
+    "noUnusedLocals": true,
+    "strict": true,
+    "lib": ["ES2020", "DOM"],
+    "types": ["node"],
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+  },
+  "include": ["src"]
+}
