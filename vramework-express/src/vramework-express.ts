@@ -233,6 +233,7 @@ export class VrameworkExpress {
 
       if (errorDetails != null) {
         const errorId = (error as any).errorId || uuid()
+        console.error(error)
         this.services.logger.error({ errorId, error })
         res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload })
         return
