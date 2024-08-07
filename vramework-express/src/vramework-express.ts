@@ -1,5 +1,3 @@
-import * as Sentry from "@sentry/node"
-import { ProfilingIntegration } from '@sentry/profiling-node'
 import express, { NextFunction, Request, Response } from 'express'
 import { Server } from 'http'
 import { json, text } from 'body-parser'
@@ -43,25 +41,22 @@ export class VrameworkExpress {
     private readonly services: CoreSingletonServices,
     private readonly routes: CoreAPIRoutes,
   ) {
-    if (process.env.NODE_ENV === 'production') {
-      Sentry.init({
-        dsn: 'https://c37538eaef80134982f69f41e5a5cbcf@o4505800221523968.ingest.sentry.io/4505807211397120',
-        integrations: [
-          new Sentry.Integrations.Http({
-            tracing: true
-          }),
-          new Sentry.Integrations.Express({
-            app: this.app
-          }),
-          new ProfilingIntegration(),
-        ],
-        tracesSampleRate: 0.25,
-        profilesSampleRate: 0.25,
-      });
+    // if (process.env.NODE_ENV === 'production') {
+    //   Sentry.init({
+    //     dsn: 'https://c37538eaef80134982f69f41e5a5cbcf@o4505800221523968.ingest.sentry.io/4505807211397120',
+    //     integrations: [
+    //       Sentry.httpIntegration({
+    //       }),
+    //       Sentry.expressIntegration({
 
-      this.app.use(Sentry.Handlers.requestHandler())
-      this.app.use(Sentry.Handlers.tracingHandler())
-    }
+    //       }),
+    //       new ProfilingIntegration(),
+    //     ],
+    //     tracesSampleRate: 0.25,
+    //     profilesSampleRate: 0.25,
+    //   });
+    //   Sentry.setupExpressErrorHandler(this.app)
+    // }
   }
 
   public async init() {
@@ -240,11 +235,12 @@ export class VrameworkExpress {
         const errorId = (error as any).errorId || uuid()
         this.services.logger.error({ errorId, error })
         res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload })
-      } else {
-        const errorId = uuid()
-        this.services.logger.error({ errorId, error })
-        res.status(500).json({ errorId })
+        return
       }
+
+      const errorId = uuid()
+      this.services.logger.error({ errorId, error })
+      res.status(500).json({ errorId })
     })
 
     this.app.use((req, res) => {
