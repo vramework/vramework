@@ -182,9 +182,9 @@ export class VrameworkExpress {
               }
             }
 
-            if (!req.headers['enjamon-org-id'] && !data.orgId) {
-              throw new Error('Missing orgId in header and body')
-            }
+            // if (!req.headers['enjamon-org-id'] && !data.orgId) {
+            //   throw new Error('Missing orgId in header and body')
+            // }
 
             const sessionServices = await this.services.createSessionServices(this.services, { headers: req.headers, body: req.body, params: req.params }, session)
             try {
@@ -219,6 +219,8 @@ export class VrameworkExpress {
     })
 
     this.app.use((error: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+      console.log(error)
+
       if (!error) {
         return next()
       }
