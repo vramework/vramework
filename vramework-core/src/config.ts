@@ -21,7 +21,11 @@ export interface CoreConfig {
   }
   sql: {
     database: string
-    directory: string
+    directory: string,
+    ssl?: {
+      rejectUnauthorized: false,
+      ca: string,
+    }
   },
   logger: {
     level: string
