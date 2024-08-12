@@ -8,7 +8,7 @@ import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
 
-import { getErrorResponse, MissingSessionError } from '@vramework/core/src/errors'
+import { AccessDeniedError, getErrorResponse, MissingSessionError } from '@vramework/core/src/errors'
 import { CoreAPIRoutes } from '@vramework/core/src/routes'
 import { CoreConfig } from '@vramework/core/src/config'
 import { CoreSingletonServices, SessionService } from '@vramework/core/src/services'
@@ -17,7 +17,6 @@ import { CoreUserSession } from '@vramework/core/src/user-session'
 import { verifyPermissions } from '@vramework/core/src/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 import { v4 as uuid } from 'uuid'
-import { AccessDeniedError } from '@enjamon/functions/src/errors'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
