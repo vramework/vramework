@@ -15,7 +15,7 @@ const getHeaders = () => {
   }
 
   if (authHeaders.orgId) {
-    headers['enjamon-org-id'] = authHeaders.orgId
+    headers['org-id'] = authHeaders.orgId
   }
 
   return headers

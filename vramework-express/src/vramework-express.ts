@@ -67,11 +67,6 @@ export class VrameworkExpress {
     )
 
     this.app.use(
-      "/api/v1/studio/organization/*/stripe/webhook",
-      bodyParser.raw({ type: "application/json" })
-    )
-
-    this.app.use(
       json({
         limit: '1mb',
         type: 'application/json'
@@ -108,10 +103,6 @@ export class VrameworkExpress {
       autMiddleware(true, this.services.sessionService),
       async (req, res) => {
         const session = (req as any).auth as CoreUserSession | undefined
-        if (!req.headers['enjamon-org-id'] && !session) {
-          throw new Error('Missing orgId in header, session and body')
-        }
-
         const sessionServices = await this.services.createSessionServices(this.services, { headers: req.headers, body: req.body, params: req.params }, session)
         req.on('close', async () => {
           for (const service of Object.values(sessionServices)) {
@@ -180,10 +171,6 @@ export class VrameworkExpress {
                 validateJson(route.schema, data)
               }
             }
-
-            // if (!req.headers['enjamon-org-id'] && !data.orgId) {
-            //   throw new Error('Missing orgId in header and body')
-            // }
 
             const sessionServices = await this.services.createSessionServices(this.services, { headers: req.headers, body: req.body, params: req.params }, session)
             try {
