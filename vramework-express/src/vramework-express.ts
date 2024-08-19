@@ -7,29 +7,18 @@ import { UnauthorizedError } from 'express-jwt'
 import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
+const { ExpressAuth }  = require("@auth/express")
+import { getSession } from "@auth/express"
 
-import { AccessDeniedError, getErrorResponse, MissingSessionError } from '@vramework/core/src/errors'
+import { getErrorResponse, MissingSessionError } from '@vramework/core/src/errors'
 import { CoreAPIRoutes } from '@vramework/core/src/routes'
 import { CoreConfig } from '@vramework/core/src/config'
-import { CoreSingletonServices, SessionService } from '@vramework/core/src/services'
+import { CoreSingletonServices } from '@vramework/core/src/services'
 import { loadSchema, validateJson } from '@vramework/core/src/schema'
 import { CoreUserSession } from '@vramework/core/src/user-session'
 import { verifyPermissions } from '@vramework/core/src/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 import { v4 as uuid } from 'uuid'
-
-const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
-  sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
-    (req as any).auth = session
-    next()
-  }).catch((e) => {
-    if (credentialsRequired) {
-      next(new MissingSessionError())
-    } else {
-      next()
-    }
-  })
-}
 
 export class VrameworkExpress {
   public app = express()
@@ -39,6 +28,7 @@ export class VrameworkExpress {
     private readonly config: CoreConfig,
     private readonly services: CoreSingletonServices,
     private readonly routes: CoreAPIRoutes,
+    private readonly expressAuthConfig: any
   ) {
     // if (process.env.NODE_ENV === 'production') {
     //   Sentry.init({
@@ -89,18 +79,28 @@ export class VrameworkExpress {
       res.status(200).end()
     })
 
-    this.app.post(`/api/v1/logout`, (req, res) => {
-      res.clearCookie(this.services.sessionService.getCookieName(req.headers as Record<string, string>), {
-        path: '/',
-        // domain: 'localhost',
-        httpOnly: true,
-      })
-      res.json({}).end()
+    const expressAuthConfig = this.expressAuthConfig
+    this.app.use("/api/v1/auth/*", ExpressAuth(expressAuthConfig))
+    this.app.use(async (req, res, next) => {
+      const session: any = await getSession(req, expressAuthConfig)
+      session.userId = session?.user?.id
+      res.locals.session = session
+      next()
     })
+
+
+    const authMiddleware = (credentialsRequired: boolean) => async (req: Request, res: Response, next: NextFunction) => {
+      const session = res.locals.session ?? (await getSession(req, this.expressAuthConfig))
+      if (!session?.user && credentialsRequired) {
+        next(new MissingSessionError())
+      } else {
+        next()
+      }
+    }
 
     this.app.get(
       '/api/v1/stream/:topic',
-      autMiddleware(true, this.services.sessionService),
+      authMiddleware(true),
       async (req, res) => {
         const session = (req as any).auth as CoreUserSession | undefined
         const sessionServices = await this.services.createSessionServices(this.services, { headers: req.headers, body: req.body, params: req.params }, session)
@@ -123,7 +123,7 @@ export class VrameworkExpress {
       })
 
     this.app.put(`/api/v1/reaper/*`,
-      autMiddleware(true, this.services.sessionService),
+      authMiddleware(true),
       async (req, res) => {
         const file = await getRawBody(req, {
           length: req.headers['content-length'],
@@ -152,12 +152,9 @@ export class VrameworkExpress {
 
       this.app[route.type](
         path,
-        autMiddleware(route.requiresSession !== false, this.services.sessionService),
+        authMiddleware(route.requiresSession !== false),
         async (req, res, next) => {
           try {
-            const session = (req as any).auth as CoreUserSession | undefined
-
-            res.locals.cookiename = this.services.sessionService.getCookieName(req.headers as Record<string, string>)
             res.locals.processed = true
 
             const isXML = req.headers['content-type']?.includes('text/xml')
@@ -172,19 +169,12 @@ export class VrameworkExpress {
               }
             }
 
+            const session: CoreUserSession = res.locals.session
             const sessionServices = await this.services.createSessionServices(this.services, { headers: req.headers, body: req.body, params: req.params }, session)
             try {
-              if (path.includes('/studio')) {
-                if (session && (session as any).canAccessStudio !== true) {
-                  if (process.env.NODE_ENV === 'production') {
-                    throw new AccessDeniedError('Not Permissioned for studio access')
-                  }
-                }
-              }
               if (route.permissions) {
                 await verifyPermissions(route.permissions, sessionServices, data, session)
               }
-
               res.locals.result = await route.func(sessionServices, data, session)
             } catch (e: any) {
               console.error(e)
@@ -237,18 +227,8 @@ export class VrameworkExpress {
         res.status(404).end()
         return
       }
-      if (res.locals.result) {
-        if (res.locals.result.jwt) {
-          res.cookie(res.locals.cookiename, res.locals.result.jwt, {
-            // One year session!
-            maxAge: 24 * 60 * 60 * 1000 * 365,
-            httpOnly: true,
-            path: '/',
-            secure: this.config.domain.includes('localhost') ? false : true,
-            // sameSite: 'none'
-          })
-        }
 
+      if (res.locals.result) {
         if (res.locals.returnsJSON === false) {
           res.send(res.locals.result).end()
         } else {
