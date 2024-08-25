@@ -2,6 +2,7 @@ import { CoreConfig } from './config'
 import { Logger as PinoLogger } from 'pino'
 import { CoreUserSession } from './user-session'
 import { StreamService } from './services/stream-service'
+import { PermissionService } from './services/permission-service'
 
 export interface ContentService {
   signContentKey: (contentKey: string) => Promise<string>
@@ -28,6 +29,7 @@ export interface CoreServices extends CoreSingletonServices {
 
 
 export interface CoreSingletonServices {
+  permissionService?: PermissionService
   streamService: StreamService
   config: CoreConfig
   logger: PinoLogger

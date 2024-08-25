@@ -8,7 +8,7 @@ import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
 
-import { AccessDeniedError, getErrorResponse, MissingSessionError } from '@vramework/core/src/errors'
+import { getErrorResponse, MissingSessionError } from '@vramework/core/src/errors'
 import { CoreAPIRoutes } from '@vramework/core/src/routes'
 import { CoreConfig } from '@vramework/core/src/config'
 import { CoreSingletonServices, SessionService } from '@vramework/core/src/services'
@@ -90,7 +90,8 @@ export class VrameworkExpress {
     })
 
     this.app.post(`/api/v1/logout`, (req, res) => {
-      res.clearCookie(this.services.sessionService.getCookieName(req.headers as Record<string, string>), {
+      const cookieName = this.services.sessionService.getCookieName(req.headers as Record<string, string>)
+      res.clearCookie(cookieName, {
         path: '/',
         // domain: 'localhost',
         httpOnly: true,
@@ -111,14 +112,12 @@ export class VrameworkExpress {
             }
           }
         })
-
         const headers = {
           'Content-Type': 'text/event-stream',
           'Connection': 'keep-alive',
           'Cache-Control': 'no-cache'
         }
         res.writeHead(200, headers)
-
         this.services.streamService.addClient(res, req.params.topic)
       })
 
@@ -157,6 +156,8 @@ export class VrameworkExpress {
           try {
             const session = (req as any).auth as CoreUserSession | undefined
 
+            await this.services.permissionService?.verifyRouteAccess(route, session)
+
             res.locals.cookiename = this.services.sessionService.getCookieName(req.headers as Record<string, string>)
             res.locals.processed = true
 
@@ -174,13 +175,7 @@ export class VrameworkExpress {
 
             const sessionServices = await this.services.createSessionServices(this.services, { headers: req.headers, body: req.body, params: req.params }, session)
             try {
-              if (path.includes('/studio')) {
-                if (session && (session as any).canAccessStudio !== true) {
-                  if (process.env.NODE_ENV === 'production') {
-                    throw new AccessDeniedError('Not Permissioned for studio access')
-                  }
-                }
-              }
+              
               if (route.permissions) {
                 await verifyPermissions(route.permissions, sessionServices, data, session)
               }
