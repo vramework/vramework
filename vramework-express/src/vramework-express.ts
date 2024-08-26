@@ -182,7 +182,6 @@ export class VrameworkExpress {
 
               res.locals.result = await route.func(sessionServices, data, session)
             } catch (e: any) {
-              console.error(e)
               throw e
             } finally {
               for (const service of Object.values(sessionServices)) {
@@ -200,14 +199,12 @@ export class VrameworkExpress {
     })
 
     this.app.use((error: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-      console.log(error)
-
       if (!error) {
         return next()
       }
 
       if (error instanceof UnauthorizedError) {
-        this.services.logger.error('JWT AUTH ERROR', error)
+        this.services.logger.error({ errorId: 'JWT AUTH ERROR', error })
         res.status(401).end()
         return
       }
@@ -216,7 +213,6 @@ export class VrameworkExpress {
 
       if (errorDetails != null) {
         const errorId = (error as any).errorId || uuid()
-        console.error(error)
         this.services.logger.error({ errorId, error })
         res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload })
         return
