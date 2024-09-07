@@ -24,7 +24,6 @@ export interface SessionService<UserSession = CoreUserSession> {
 export interface CoreServices extends CoreSingletonServices {
 }
 
-
 export interface CoreSingletonServices {
   config: CoreConfig
   logger: PinoLogger
