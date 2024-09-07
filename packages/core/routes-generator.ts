@@ -1,6 +1,6 @@
 import { promises } from 'fs'
 
-const loadAPIFiles = async (routesDirPath: string, dir: string, filesWithRoutes: string[]): Promise<string[]> => {
+export const loadAPIFiles = async (routesDirPath: string, dir: string, filesWithRoutes: string[]): Promise<string[]> => {
     const entries = await promises.readdir(dir)
     await Promise.all(entries.map(async (entry) => {
         const lstat = await promises.lstat(`${dir}/${entry}`)

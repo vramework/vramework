@@ -5,11 +5,12 @@
   "author": "Vlandor LTD",
   "main": "dist",
   "scripts": {
-    "tsc": "rm -rf dist && tsc",
+    "tsc": "tsc",
+    "build": "rm -rf dist && tsc",
     "publish": "npm publish",
+    "release": "npm run build && npm run test &&npm publish",
     "ncu": "ncu",
-    "test": "echo 'No tests'",
-    "test:ci": "echo 'No tests'"
+    "test": "echo 'No tests'"
   },
   "peerDependencies": {
     "@vramework/core": "^0.0.6",

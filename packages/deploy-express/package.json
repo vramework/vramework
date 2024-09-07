@@ -6,11 +6,12 @@
   "author": "Vlandor LTD",
   "main": "dist",
   "scripts": {
-    "tsc": "rm -rf dist && tsc",
+    "tsc": "tsc",
+    "build": "rm -rf dist && tsc",
     "publish": "npm publish",
+    "release": "npm run build && npm run test &&npm publish",
     "ncu": "ncu",
-    "test": "echo 'No tests'",
-    "test:ci": "echo 'No tests'"
+    "test": "echo 'No tests'"
   },
   "peerDependencies": {
     "@vramework/core": "^0.0.7"
@@ -25,10 +26,7 @@
     "express-jwt": "8.4.1",
     "jsonwebtoken": "^9.0.2",
     "node-fetch": "^3",
-    "pg": "^8.11.3",
-    "pg-camelcase": "0.0.3",
     "pino": "^8.19.0",
-    "snake-case": "^3.0.4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
