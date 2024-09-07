@@ -1,20 +1,20 @@
 {
   "name": "@vramework/deploy-express",
-  "version": "0.1.0",
+  "version": "0.1.6",
   "description": "The vramework express server (for local development)",
   "license": "MIT",
   "author": "Vlandor LTD",
-  "main": "dist",
+  "main": "express-server.js",
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf dist && tsc",
+    "build": "rm -rf dist && tsc -b",
     "publish": "npm publish",
     "release": "npm run build && npm run test && npm publish",
     "ncu": "ncu",
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.1.0"
+    "@vramework/core": "^0.1.6"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

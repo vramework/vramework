@@ -1,25 +1,24 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager'
-import { CoreConfig } from '@vramework/core/src/config'
-import { Logger as PinoLogger } from 'pino'
+import { AWSConfig } from './aws-config'
 
 export class AWSSecrets {
   private readonly client: SecretsManagerClient
 
-  constructor(private readonly config: CoreConfig, _logger: PinoLogger) {
+  constructor(readonly config: AWSConfig) {
     this.client = new SecretsManagerClient({ region: config.awsRegion })
   }
 
-  public async getPostgresCredentials(): Promise<{ password: string, user: string, host: string, port: number, database: string }> {
+  public async getPostgresCredentials(postgresSecretName: string, database: string): Promise<{ password: string, user: string, host: string, port: number, database: string }> {
     if (process.env.NODE_ENV === 'production' || process.env.PRODUCTION_SERVICES) {
-      const { password, ...rest } = await this.getSecret<{ password: string, user: string, host: string, port: number, database: string }>(this.config.secrets.postgresCredentials)
-      return { password, ...rest, database: this.config.sql.database }
+      const { password, ...rest } = await this.getSecret<{ password: string, user: string, host: string, port: number, database: string }>(postgresSecretName)
+      return { password, ...rest, database }
     } else {
       return {
         host: 'localhost',
         port: 5432,
         user: 'postgres',
         password: 'password',
-        database: this.config.sql.database
+        database
       }
     }
   }

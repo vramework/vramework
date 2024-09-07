@@ -6,8 +6,7 @@ import {
 } from '@aws-sdk/client-s3'
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 
-import { ContentService } from '@vramework/core/src/services'
-import { ContentConfig } from '@vramework/core/src/config'
+import { ContentConfig, ContentService } from '@vramework/core/services'
 import { Logger as PinoLogger } from 'pino'
 
 // @ts-ignore

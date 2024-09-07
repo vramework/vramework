@@ -3,9 +3,8 @@
     "compilerOptions": {
       "outDir": ".",
       "rootDir": ".",
+      "esModuleInterop": true,
       "paths": {
-        "@nestjs/core": ["../core"],
-        "@nestjs/common/*": ["../core/*"],
       }
     },
     "exclude": ["node_modules", "dist", "test/**/*", "*.spec.ts"],

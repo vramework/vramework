@@ -4,8 +4,7 @@
       "outDir": ".",
       "rootDir": ".",
       "paths": {
-        "@nestjs/core": ["../core"],
-        "@nestjs/common/*": ["../core/*"],
+        "@vramework/core": ["../core"]
       }
     },
     "exclude": ["node_modules", "dist", "test/**/*", "*.spec.ts"],

@@ -8,13 +8,13 @@ import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
 
-import { getErrorResponse, MissingSessionError } from '@vramework/core/dist/errors'
-import { CoreAPIRoutes } from '@vramework/core/dist/routes'
-import { CoreConfig } from '@vramework/core/dist/config'
-import { CoreSingletonServices, SessionService } from '@vramework/core/dist/services'
-import { loadSchema, validateJson } from '@vramework/core/dist/schema'
-import { CoreUserSession } from '@vramework/core/dist/user-session'
-import { verifyPermissions } from '@vramework/core/dist/permissions'
+import { getErrorResponse, MissingSessionError } from '@vramework/core/errors'
+import { CoreAPIRoutes } from '@vramework/core/routes'
+import { CoreConfig } from '@vramework/core/config'
+import { CoreSingletonServices, SessionService } from '@vramework/core/services'
+import { loadSchema, validateJson } from '@vramework/core/schema'
+import { CoreUserSession } from '@vramework/core/user-session'
+import { verifyPermissions } from '@vramework/core/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 import { v4 as uuid } from 'uuid'
 
@@ -42,6 +42,8 @@ export class ExpressServer {
   ) { }
 
   public async init() {
+    const uploadFilePath = (this.config as any).content?.localFileUploadPath
+
     this.app.use(
       json({
         limit: '1mb',
@@ -53,7 +55,7 @@ export class ExpressServer {
         type: 'text/xml'
       }),
     )
-    this.app.use(bodyParser.urlencoded({extended: true}))
+    this.app.use(bodyParser.urlencoded({ extended: true }))
     this.app.use(cookieParser())
     this.app.use(
       cors({
@@ -62,36 +64,38 @@ export class ExpressServer {
       }),
     )
 
-    this.app.use('/assets/', express.static(this.config.content.localFileUploadPath))
-
     this.app.get('/v1/health-check', function (req, res) {
       res.status(200).end()
     })
-
-    this.app.put(`/v1/reaper/*`,
-    autMiddleware(true, this.services.sessionService),
-      async (req, res) => {
-        const file = await getRawBody(req, {
-          length: req.headers['content-length'],
-          limit: '10mb',
-          encoding: contentType.parse(req).parameters.charset,
-        })
-
-        const key = req.path.replace('/v1/reaper/', '')
-        const parts = key.split('/')
-        const fileName = parts.pop()
-        const dir = `${this.config.content.localFileUploadPath}/${parts.join('/')}`
-
-        await mkdir(dir, { recursive: true })
-        await writeFile(`${dir}/${fileName}`, file, 'binary')
-        res.end()
-      },
-    )
 
     this.app.get(`/v1/logout`, (req, res) => {
       res.clearCookie(this.services.sessionService.getCookieName(req.headers as Record<string, string>))
       res.end()
     })
+
+    if (uploadFilePath) {
+      this.app.use('/assets/', express.static(uploadFilePath.localFileUploadPath))
+
+      this.app.put(`/v1/reaper/*`,
+        autMiddleware(true, this.services.sessionService),
+        async (req, res) => {
+          const file = await getRawBody(req, {
+            length: req.headers['content-length'],
+            limit: '10mb',
+            encoding: contentType.parse(req).parameters.charset,
+          })
+
+          const key = req.path.replace('/v1/reaper/', '')
+          const parts = key.split('/')
+          const fileName = parts.pop()
+          const dir = `${uploadFilePath}/${parts.join('/')}`
+
+          await mkdir(dir, { recursive: true })
+          await writeFile(`${dir}/${fileName}`, file, 'binary')
+          res.end()
+        },
+      )
+    }
 
     this.routes.forEach((route) => {
       if (route.schema) {
@@ -116,7 +120,7 @@ export class ExpressServer {
             if (isXML) {
               data = req.body
             } else {
-              data ={ ...req.params, ...req.query, ...req.body }
+              data = { ...req.params, ...req.query, ...req.body }
               if (route.schema) {
                 validateJson(route.schema, data)
               }
@@ -161,7 +165,7 @@ export class ExpressServer {
       if (errorDetails != null) {
         const errorId = (error as any).errorId || uuid()
         console.error(errorId, error)
-        res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload})
+        res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload })
       } else {
         const errorId = uuid()
         console.error(errorId, error)

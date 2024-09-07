@@ -1,16 +1,16 @@
 {
   "name": "@vramework/core",
-  "version": "0.1.0",
+  "version": "0.1.6",
   "author": "Vlandor LTD",
   "license": "MIT",
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
   "scripts": {
     "tsc": "tsc",
-    "build": "tsc -b",
+    "build": "rm -rf dist && tsc -b",
     "ncu": "ncu",
     "publish": "npm publish",
-    "release": "npm run build && npm run test &&npm publish",
+    "release": "npm run build && npm run test && npm publish",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
   },
