@@ -1,3 +1,6 @@
+*.js
+*.d.ts
+
 .yarn
 .dist
 dist
