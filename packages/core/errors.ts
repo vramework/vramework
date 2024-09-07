@@ -1,10 +1,7 @@
 export class EError extends Error {
-  __proto__: Error
   constructor(public errorId?: string, message?: string) {
     super(message)
-    const trueProto = new.target.prototype
-    // Alternatively use Object.setPrototypeOf if you have an ES6 environment.
-    this.__proto__ = trueProto
+    Object.setPrototypeOf(this, new.target.prototype)
   }
 }
 
@@ -45,7 +42,7 @@ export const addErrors = (errors: Array<[error: any, details: ErrorDetails]>) =>
 }
 
 export const getErrorResponse = (error: Error): { status: number; message: string } | undefined => {
-  const foundError = [...apiErrors.entries()].find(([e]) => e.name === error.constructor.name)
+  const foundError = Array.from(apiErrors.entries()).find(([e]) => e.name === error.constructor.name)
   if (foundError) {
     return foundError[1]
   }

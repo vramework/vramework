@@ -6,23 +6,30 @@ import {
 } from '@aws-sdk/client-s3'
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 
-import { ContentService } from '@vramework/core/dist/services'
-import { CoreConfig } from '@vramework/core/dist/config'
+import { ContentService } from '@vramework/core/src/services'
+import { ContentConfig } from '@vramework/core/src/config'
 import { Logger as PinoLogger } from 'pino'
 
 // @ts-ignore
 import { getSignedUrl as getCDNSignedUrl } from 'aws-cloudfront-sign'
+import { readFile } from 'fs/promises'
 
 export class S3Content implements ContentService {
   private s3: S3Client
 
-  constructor(private config: CoreConfig, private logger: PinoLogger, private signConfig: { keypairId: string; privateKeyString: string }) {
-    this.s3 = new S3Client({ region: this.config.awsRegion })
+  constructor(private config: ContentConfig, private logger: PinoLogger, private signConfig: { keypairId: string; privateKeyString: string }) {
+    this.s3 = new S3Client({ 
+      endpoint: this.config.endpoint,
+      region: this.config.region 
+    })
   }
 
   public async signURL(url: string) {
     try {
-      return getCDNSignedUrl(url, this.signConfig)
+      return getCDNSignedUrl(url, {
+        ...this.signConfig,
+        expireTime: Math.round(Date.now() + 3600000)
+      })
     } catch (e: any) {
       this.logger.error(`Error signing url: ${url}`)
       return url
@@ -30,12 +37,12 @@ export class S3Content implements ContentService {
   }
 
   public async signContentKey(key: string) {
-    return this.signURL(`https://content.${this.config.domain}/${key}`)
+    return this.signURL(`https://${this.config.bucketName}/${key}`)
   }
 
   public async getUploadURL(Key: string, ContentType: string) {
     const command = new PutObjectCommand({
-      Bucket: `content.${this.config.domain}`,
+      Bucket: this.config.bucketName,
       Key,
       ContentType,
     })
@@ -50,10 +57,10 @@ export class S3Content implements ContentService {
   public async readFile(Key: string) {
     return new Promise<Buffer>(async (resolve, reject) => {
       try {
-        this.logger.info(`Getting file, key: ${Key}`)
+        this.logger.debug(`Getting file, key: ${Key}`)
         const response = await this.s3.send(
           new GetObjectCommand({
-            Bucket: `content.${this.config.domain}`,
+            Bucket: this.config.bucketName,
             Key,
           }),
         )
@@ -70,10 +77,10 @@ export class S3Content implements ContentService {
 
   public async writeFile(Key: string, buffer: Buffer) {
     try {
-      this.logger.info(`Write file, key: ${Key}`)
+      this.logger.debug(`Write file, key: ${Key}`)
       await this.s3.send(
         new PutObjectCommand({
-          Bucket: `content.${this.config.domain}`,
+          Bucket: this.config.bucketName,
           Key,
           Body: buffer
         }),
@@ -85,12 +92,30 @@ export class S3Content implements ContentService {
     }
   }
 
+  public async copyFile(Key: string, fromAbsolutePath: string) {
+    try {
+      this.logger.debug(`Uploading file, key: ${Key} from: ${fromAbsolutePath}`)
+
+      await this.s3.send(
+        new PutObjectCommand({
+          Bucket: this.config.bucketName,
+          Key,
+          Body: await readFile(fromAbsolutePath)
+        }),
+      )
+      return true
+    } catch (e: any) {
+      this.logger.error(`Error writing file, key: ${Key}`, e)
+      return false
+    }
+  }
+
   public async deleteFile(Key: string) {
     try {
-      this.logger.info(`Deleting file, key: ${Key}`)
+      this.logger.debug(`Deleting file, key: ${Key}`)
       await this.s3.send(
         new DeleteObjectCommand({
-          Bucket: `content.${this.config.domain}`,
+          Bucket: this.config.bucketName,
           Key,
         }),
       )

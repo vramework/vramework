@@ -1,27 +1,25 @@
 {
   "name": "@vramework/aws",
-  "version": "0.0.7",
+  "version": "0.0.0",
   "author": "Vlandor LTD",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "main": "dist",
   "scripts": {
     "tsc": "rm -rf dist && tsc",
-    "publish": "npm publish",
     "ncu": "ncu",
     "test": "echo 'No tests'",
     "test:ci": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.0.6"
+    "@vramework/core": "workspace:0.0.0"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.67.0",
-    "@aws-sdk/client-secrets-manager": "3.67.0",
-    "@aws-sdk/client-ses": "3.67.0",
-    "@aws-sdk/s3-request-presigner": "3.67.0",
-    "aws-cloudfront-sign": "^2.2.0"
+    "@aws-sdk/client-s3": "3.624.0",
+    "@aws-sdk/client-secrets-manager": "3.624.0",
+    "@aws-sdk/s3-request-presigner": "3.624.0",
+    "aws-cloudfront-sign": "^3.0.2"
   },
   "devDependencies": {
-    "typescript": "^5.4.2"
+    "typescript": "^5.5"
   }
 }

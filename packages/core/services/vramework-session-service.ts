@@ -5,7 +5,7 @@ import { URL } from 'url'
 
 export class VrameworkSessionService<UserSession> implements SessionService<UserSession> {
     constructor(
-        private jwtService: JWTService<UserSession>, 
+        private jwtService: JWTService<UserSession>,
         private options: {
             getSessionForAPIKey?: (apiKey: string) => Promise<UserSession>,
             transformSession?: (session: any) => Promise<UserSession>
@@ -18,6 +18,9 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         if (origin) {
             const url = new URL(headers.origin)
             return url.port !== '80' && url.port !== '443' ? url.host : `${url.host}:${url.port}`
+        }
+        else if (headers.host) {
+            return headers.host
         }
         return 'localhost' // default cookie name
     }

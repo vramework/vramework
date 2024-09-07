@@ -4,15 +4,16 @@ import { CoreUserSession } from './user-session'
 export type CoreAPIFunction<In, Out> = (services: CoreServices, data: In, session?: CoreUserSession) => Promise<Out>
 export type CoreAPIPermission<In = any> = (services: CoreServices, data: In, session?: CoreUserSession) => Promise<boolean>
 
-export interface CoreAPIRoute<In, Out> {
+export type CoreAPIRoute<In, Out> = {
   type: 'post' | 'get' | 'delete' | 'patch' | 'head'
   route: string
-  func: CoreAPIFunction<In, Out>
   schema: string | null
   requiresSession?: false
+  eventStream?: false
   permissions?: Record<string, CoreAPIPermission<In>[] | CoreAPIPermission<In>>
   returnsJSON?: false
   timeout?: number
+  func: CoreAPIFunction<In, Out> 
 }
 
 export type CoreAPIRoutes = Array<CoreAPIRoute<unknown, unknown>>

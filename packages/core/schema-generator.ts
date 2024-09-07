@@ -24,7 +24,7 @@ export async function generateSchemas(tsconfig: string, schemaParentDir: string,
   await promises.writeFile(
     `${schemaParentDir}/schemas.ts`,
     `
-import { addSchema } from '@vramework/core/dist/schema'
+import { addSchema } from '@vramework/core/src/schema'
 ` +
       schemas
         .map(

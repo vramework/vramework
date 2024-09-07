@@ -1,21 +1,15 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "noEmit": false,
-    "rootDir": "src",
-    "outDir": "dist",
-    "noUnusedLocals": true,
-    "strict": true,
-    "lib": ["es2020"],
-    "types": ["node"],
-    "allowJs": false,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "composite": true
-  },
-  "include": ["src"]
+    "extends": "../tsconfig.build.json",
+    "compilerOptions": {
+        "types": [
+            "node"
+        ]
+    },
+    "files": [],
+    "include": [],
+    "references": [
+        {
+            "path": "./tsconfig.build.json"
+        }
+    ]
 }
