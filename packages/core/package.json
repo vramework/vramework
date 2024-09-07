@@ -1,6 +1,6 @@
 {
   "name": "@vramework/core",
-  "version": "0.0.18",
+  "version": "0.1.0",
   "author": "Vlandor LTD",
   "license": "MIT",
   "types": "dist/index.d.ts",
@@ -15,7 +15,6 @@
     "test:ci": "echo 'No tests'"
   },
   "dependencies": {
-    "@nestjs/core": "^10.4.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "aws-cloudfront-sign": "^3.0.2",
