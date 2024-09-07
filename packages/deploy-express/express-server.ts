@@ -42,7 +42,7 @@ export class ExpressServer {
   ) { }
 
   public async init() {
-    const uploadFilePath = (this.config as any).content?.localFileUploadPath
+    const uploadFilePath: string | undefined = (this.config as any).content?.localFileUploadPath
 
     this.app.use(
       json({
@@ -74,7 +74,7 @@ export class ExpressServer {
     })
 
     if (uploadFilePath) {
-      this.app.use('/assets/', express.static(uploadFilePath.localFileUploadPath))
+      this.app.use('/assets/', express.static(uploadFilePath))
 
       this.app.put(`/v1/reaper/*`,
         autMiddleware(true, this.services.sessionService),

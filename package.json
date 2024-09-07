@@ -1,6 +1,6 @@
 {
   "name": "@vramework/mono",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "The vramework monorepo",
   "repository": "git@github.com:vlandor/vramework.git",
   "author": "Vlandor LTD",

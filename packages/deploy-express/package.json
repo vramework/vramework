@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-express",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "The vramework express server (for local development)",
   "license": "MIT",
   "author": "Vlandor LTD",
@@ -14,7 +14,7 @@
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.1.6"
+    "@vramework/core": "^0.1.8"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
