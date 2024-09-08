@@ -1,0 +1,23 @@
+{
+  "name": "@vramework/cli",
+  "version": "0.1.10",
+  "author": "Vlandor LTD",
+  "license": "MIT",
+  "types": "index.d.ts",
+  "module": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "rm -rf dist && tsc -b",
+    "ncu": "ncu",
+    "publish": "npm publish --access=public",
+    "release": "npm run build && npm run test && npm publish  --access=public",
+    "test": "echo 'No tests'"
+  },
+  "dependencies": {
+    "commander": "^12",
+    "ts-json-schema-generator": "^2.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

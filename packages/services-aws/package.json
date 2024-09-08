@@ -1,6 +1,6 @@
 {
   "name": "@vramework/aws",
-  "version": "0.1.8",
+  "version": "0.1.10",
   "author": "Vlandor LTD",
   "license": "UNLICENSED",
   "main": "dist",
@@ -8,12 +8,12 @@
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
     "publish": "npm publish",
-    "release": "npm run build && npm run test &&npm publish",
+    "release": "npm run build && npm run test && npm publish",
     "ncu": "ncu",
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.1.8"
+    "@vramework/core": "^0.1.10"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.624.0",

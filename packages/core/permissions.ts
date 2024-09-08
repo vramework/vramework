@@ -1,7 +1,6 @@
 import { NotPermissionedError } from "./errors";
 import { CoreAPIPermission } from "./routes";
-import { CoreServices } from "./services";
-import { CoreUserSession } from "./user-session";
+import { CoreServices, CoreUserSession } from "./types";
 
 export const verifyPermissions = async (permissions: Record<string, CoreAPIPermission<any>[] | CoreAPIPermission<any>>, services: CoreServices, data: any, session?: CoreUserSession): Promise<void> => {
     let valid = false

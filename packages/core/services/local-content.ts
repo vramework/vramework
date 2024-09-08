@@ -1,6 +1,6 @@
 import { Logger } from 'pino'
 import { promises } from 'fs'
-import { ContentConfig, ContentService } from '../services'
+import { ContentConfig, ContentService } from '../types'
 import { mkdir } from 'fs/promises'
 
 export class LocalContent implements ContentService {

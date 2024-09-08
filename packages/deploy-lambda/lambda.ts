@@ -1,8 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as querystring from 'querystring'
 import { serialize as serializeCookie } from 'cookie'
-import { CoreSingletonServices } from '@vramework/core/services'
-import { CoreConfig } from '@vramework/core/config'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types'
 import { verifyPermissions } from '@vramework/core/permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/core/routes'
 import { loadSchema, validateJson } from '@vramework/core/schema'
@@ -66,7 +65,7 @@ const errorHandler = (services: CoreSingletonServices, e: Error, headers: Record
 }
 
 const getMatchingRoute = (
-  services: CoreSingletonServices,
+  logger: CoreSingletonServices['logger'],
   requestType: string,
   requestPath: string,
   routes: Array<CoreAPIRoute<unknown, unknown>>,
@@ -80,12 +79,12 @@ const getMatchingRoute = (
     matchedPath = matchFunc(requestPath)
     if (matchedPath) {
       if (route.schema) {
-        loadSchema(route.schema, services.logger)
+        loadSchema(route.schema, logger)
       }
       return { matchedPath, route }
     }
   }
-  services.logger.info({ message: 'Invalid route', requestPath, requestType })
+  logger.info({ message: 'Invalid route', requestPath, requestType })
   throw new NotFoundError()
 }
 
@@ -94,6 +93,7 @@ const getHeaderValue = (event: APIGatewayProxyEvent, headerName: string): string
 const generalHandler = async (
   config: CoreConfig,
   services: CoreSingletonServices,
+  createSessionServices: CreateSessionServices,
   routes: CoreAPIRoutes,
   event: APIGatewayProxyEvent,
   headers: Record<string, any>,
@@ -138,7 +138,7 @@ const generalHandler = async (
   }
 
   try {
-    const { matchedPath, route } = getMatchingRoute(services, event.httpMethod, event.path, routes)
+    const { matchedPath, route } = getMatchingRoute(services.logger, event.httpMethod, event.path, routes)
     services.logger.info({ message: 'Executing route', matchedPath, route })
     let session
     try {
@@ -188,7 +188,7 @@ const generalHandler = async (
       validateJson(route.schema, data)
     }
 
-    const sessionServices = await services.createSessionServices(services, event.headers, session)
+    const sessionServices = await createSessionServices(services, event.headers, session)
     try {
       if (route.permissions) {
         await verifyPermissions(route.permissions, sessionServices, data, session)
@@ -227,22 +227,24 @@ export const processCorsless = async (
   event: APIGatewayProxyEvent,
   routes: CoreAPIRoutes,
   config: CoreConfig,
-  services: CoreSingletonServices,
+  singletonServices: CoreSingletonServices,
+  createSessionServices: CreateSessionServices
 ) => {
-  return await generalHandler(config, services, routes, event, {})
+  return await generalHandler(config, singletonServices, createSessionServices, routes, event, {})
 }
 
 export const processFromAnywhereCors = async (
   event: APIGatewayProxyEvent,
   routes: CoreAPIRoutes,
   config: CoreConfig,
-  services: CoreSingletonServices,
+  singletonServices: CoreSingletonServices,
+  createSessionServices: CreateSessionServices
 ) => {
   const headers: Record<string, string | boolean> = {
     'Access-Control-Allow-Origin': event.headers.origin!,
     'Access-Control-Allow-Credentials': true,
   }
-  return await generalHandler(config, services, routes, event, headers)
+  return await generalHandler(config, singletonServices, createSessionServices, routes, event, headers)
 }
 
 export const processCors = async (
@@ -250,6 +252,7 @@ export const processCors = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   services: CoreSingletonServices,
+  createSessionServices: CreateSessionServices
 ) => {
   let origin: string | false = false
   try {
@@ -264,5 +267,5 @@ export const processCors = async (
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Credentials': true,
   }
-  return await generalHandler(config, services, routes, event, headers)
+  return await generalHandler(config, services, createSessionServices, routes, event, headers)
 }

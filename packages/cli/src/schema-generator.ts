@@ -1,6 +1,6 @@
 import { promises } from 'fs'
 import { createGenerator } from 'ts-json-schema-generator'
-import { CoreAPIRoutes } from './routes'
+import { CoreAPIRoutes } from '@vramework/core/routes'
 
 export async function generateSchemas(tsconfig: string, schemaParentDir: string, routes: CoreAPIRoutes) {
   const schemasSet = new Set(routes.map<string | null>(({ schema }) => schema).filter((s) => !!s) as string[])
@@ -12,12 +12,13 @@ export async function generateSchemas(tsconfig: string, schemaParentDir: string,
   const generator = createGenerator({ tsconfig })
   await Promise.all(
     schemas.map(
-      async (schema) =>
+      async (schema) => {
         await promises.writeFile(
           `${schemaParentDir}/schemas/${schema}.json`,
           JSON.stringify(generator.createSchema(schema)),
           'utf-8',
-        ),
+        )
+      }
     ),
   )
 

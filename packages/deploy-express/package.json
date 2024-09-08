@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-express",
-  "version": "0.1.8",
+  "version": "0.1.10",
   "description": "The vramework express server (for local development)",
   "license": "MIT",
   "author": "Vlandor LTD",
@@ -14,7 +14,7 @@
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.1.8"
+    "@vramework/core": "^0.1.10"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -35,8 +35,6 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/express-pino-logger": "^4.0.5",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.2"
   }
 }

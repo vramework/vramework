@@ -1,5 +1,4 @@
-import { CoreServices } from './services'
-import { CoreUserSession } from './user-session'
+import { CoreUserSession, CoreServices } from './types'
 
 export type CoreAPIFunction<In, Out> = (services: CoreServices, data: In, session?: CoreUserSession) => Promise<Out>
 export type CoreAPIPermission<In = any> = (services: CoreServices, data: In, session?: CoreUserSession) => Promise<boolean>

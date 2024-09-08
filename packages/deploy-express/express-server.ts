@@ -10,10 +10,8 @@ import contentType from 'content-type'
 
 import { getErrorResponse, MissingSessionError } from '@vramework/core/errors'
 import { CoreAPIRoutes } from '@vramework/core/routes'
-import { CoreConfig } from '@vramework/core/config'
-import { CoreSingletonServices, SessionService } from '@vramework/core/services'
+import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateSessionServices, SessionService } from '@vramework/core/types'
 import { loadSchema, validateJson } from '@vramework/core/schema'
-import { CoreUserSession } from '@vramework/core/user-session'
 import { verifyPermissions } from '@vramework/core/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 import { v4 as uuid } from 'uuid'
@@ -37,9 +35,10 @@ export class ExpressServer {
 
   constructor(
     private readonly config: CoreConfig,
-    private readonly services: CoreSingletonServices,
-    private readonly routes: CoreAPIRoutes,
-  ) { }
+    private readonly singletonServices: CoreSingletonServices,
+    private readonly createSessionServices: CreateSessionServices,
+    private readonly routes: CoreAPIRoutes
+  ) {}
 
   public async init() {
     const uploadFilePath: string | undefined = (this.config as any).content?.localFileUploadPath
@@ -69,7 +68,7 @@ export class ExpressServer {
     })
 
     this.app.get(`/v1/logout`, (req, res) => {
-      res.clearCookie(this.services.sessionService.getCookieName(req.headers as Record<string, string>))
+      res.clearCookie(this.singletonServices.sessionService.getCookieName(req.headers as Record<string, string>))
       res.end()
     })
 
@@ -77,7 +76,7 @@ export class ExpressServer {
       this.app.use('/assets/', express.static(uploadFilePath))
 
       this.app.put(`/v1/reaper/*`,
-        autMiddleware(true, this.services.sessionService),
+        autMiddleware(true, this.singletonServices.sessionService),
         async (req, res) => {
           const file = await getRawBody(req, {
             length: req.headers['content-length'],
@@ -99,19 +98,19 @@ export class ExpressServer {
 
     this.routes.forEach((route) => {
       if (route.schema) {
-        loadSchema(route.schema, this.services.logger)
+        loadSchema(route.schema, this.singletonServices.logger)
       }
 
       const path = `/${route.route}`
-      this.services.logger.debug(`Adding ${route.type.toUpperCase()} with route ${path}`)
+      this.singletonServices.logger.debug(`Adding ${route.type.toUpperCase()} with route ${path}`)
       this.app[route.type](
         path,
-        autMiddleware(route.requiresSession !== false, this.services.sessionService),
+        autMiddleware(route.requiresSession !== false, this.singletonServices.sessionService),
         async (req, res, next) => {
           try {
             const session = (req as any).auth as CoreUserSession | undefined
 
-            res.locals.cookiename = this.services.sessionService.getCookieName(req.headers as Record<string, string>)
+            res.locals.cookiename = this.singletonServices.sessionService.getCookieName(req.headers as Record<string, string>)
             res.locals.processed = true
 
             const isXML = req.headers['content-type']?.includes('text/xml')
@@ -126,7 +125,7 @@ export class ExpressServer {
               }
             }
 
-            const sessionServices = await this.services.createSessionServices(this.services, req.headers, session)
+            const sessionServices = await this.createSessionServices(this.singletonServices, req.headers, session)
             try {
               if (route.permissions) {
                 await verifyPermissions(route.permissions, sessionServices, data, session)
@@ -155,7 +154,7 @@ export class ExpressServer {
       }
 
       if (error instanceof UnauthorizedError) {
-        this.services.logger.error('JWT AUTH ERROR', error)
+        this.singletonServices.logger.error('JWT AUTH ERROR', error)
         res.status(401).end()
         return
       }
@@ -203,7 +202,7 @@ export class ExpressServer {
   public async start() {
     return await new Promise<void>((resolve) => {
       this.server = this.app.listen(this.config.server.port, () => {
-        this.services.logger.info(`listening on port ${this.config.server.port}`)
+        this.singletonServices.logger.info(`listening on port ${this.config.server.port}`)
         resolve()
       })
     })
