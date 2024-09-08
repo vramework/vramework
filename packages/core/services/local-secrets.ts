@@ -1,4 +1,4 @@
-import { Logger } from 'pino'
+import { Logger } from './logger'
 import { CoreConfig } from '../types'
 
 export class LocalSecretService {

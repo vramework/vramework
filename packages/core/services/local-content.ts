@@ -1,4 +1,4 @@
-import { Logger } from 'pino'
+import { Logger } from './logger'
 import { promises } from 'fs'
 import { ContentConfig, ContentService } from '../types'
 import { mkdir } from 'fs/promises'

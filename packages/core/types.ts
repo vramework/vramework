@@ -1,4 +1,4 @@
-import { Logger as PinoLogger } from 'pino'
+import { Logger } from './services/logger'
 import { StreamService } from './services/stream-service'
 import { PermissionService } from './services/permission-service'
 
@@ -55,7 +55,7 @@ export interface CoreSingletonServices {
     permissionService?: PermissionService
     streamService?: StreamService
     config: CoreConfig
-    logger: PinoLogger
+    logger: Logger
     jwt: JWTService
     sessionService: SessionService
 }
