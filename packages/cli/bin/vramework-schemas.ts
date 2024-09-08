@@ -2,21 +2,20 @@ import { Command } from 'commander'
 import { generateSchemas } from '../src/schema-generator'
 import { loadAPIFiles } from '@vramework/core/api-routes'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
+import path = require('path')
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const { routeDirectories, schemaOutputDirectory, tsconfig } = await getVrameworkConfig(configFile)
+  const { routeDirectories, schemaOutputDirectory, tsconfig, rootDir } = await getVrameworkConfig(configFile)
 
   if (!routeDirectories || !schemaOutputDirectory || !tsconfig) { 
     console.error('routeDirectories, tsconfig file and schema directory are required')
     process.exit(1)
   }
   
-  const apiRoutes = await loadAPIFiles(routeDirectories)
-
   await generateSchemas(
-    tsconfig,
-    schemaOutputDirectory,
-    apiRoutes
+    path.join(rootDir, tsconfig),
+    path.join(rootDir, schemaOutputDirectory),
+    await loadAPIFiles(rootDir, routeDirectories)
   )
 }
 

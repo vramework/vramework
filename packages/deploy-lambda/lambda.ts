@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as querystring from 'querystring'
 import { serialize as serializeCookie } from 'cookie'
-import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types'
+import { CoreConfig, CoreSingletonServices, CreateHTTPSessionServices } from '@vramework/core/types'
 import { verifyPermissions } from '@vramework/core/permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/core/routes'
 import { loadSchema, validateJson } from '@vramework/core/schema'
@@ -91,9 +91,9 @@ const getMatchingRoute = (
 const getHeaderValue = (event: APIGatewayProxyEvent, headerName: string): string | undefined => event.headers?.[headerName] ?? event.headers?.[headerName.toLocaleLowerCase()]
 
 const generalHandler = async (
-  config: CoreConfig,
+  _config: CoreConfig,
   services: CoreSingletonServices,
-  createSessionServices: CreateSessionServices,
+  createHTTPSessionServices: CreateHTTPSessionServices,
   routes: CoreAPIRoutes,
   event: APIGatewayProxyEvent,
   headers: Record<string, any>,
@@ -188,7 +188,7 @@ const generalHandler = async (
       validateJson(route.schema, data)
     }
 
-    const sessionServices = await createSessionServices(services, event.headers, session)
+    const sessionServices = await createHTTPSessionServices(services, session, event)
     try {
       if (route.permissions) {
         await verifyPermissions(route.permissions, sessionServices, data, session)
@@ -228,9 +228,9 @@ export const processCorsless = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
-  createSessionServices: CreateSessionServices
+  createHTTPSessionServices: CreateHTTPSessionServices
 ) => {
-  return await generalHandler(config, singletonServices, createSessionServices, routes, event, {})
+  return await generalHandler(config, singletonServices, createHTTPSessionServices, routes, event, {})
 }
 
 export const processFromAnywhereCors = async (
@@ -238,13 +238,13 @@ export const processFromAnywhereCors = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
-  createSessionServices: CreateSessionServices
+  createHTTPSessionServices: CreateHTTPSessionServices
 ) => {
   const headers: Record<string, string | boolean> = {
     'Access-Control-Allow-Origin': event.headers.origin!,
     'Access-Control-Allow-Credentials': true,
   }
-  return await generalHandler(config, singletonServices, createSessionServices, routes, event, headers)
+  return await generalHandler(config, singletonServices, createHTTPSessionServices, routes, event, headers)
 }
 
 export const processCors = async (
@@ -252,7 +252,7 @@ export const processCors = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   services: CoreSingletonServices,
-  createSessionServices: CreateSessionServices
+  createHTTPSessionServices: CreateHTTPSessionServices
 ) => {
   let origin: string | false = false
   try {
@@ -267,5 +267,5 @@ export const processCors = async (
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Credentials': true,
   }
-  return await generalHandler(config, services, createSessionServices, routes, event, headers)
+  return await generalHandler(config, services, createHTTPSessionServices, routes, event, headers)
 }

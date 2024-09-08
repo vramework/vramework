@@ -1,8 +1,9 @@
-import { Logger } from './services/logger'
+import { Logger, LogLevel } from './services/logger'
 import { StreamService } from './services/stream-service'
 import { PermissionService } from './services/permission-service'
 
 export interface VrameworkConfig {
+    rootDir?: string,
     routeDirectories: string[],
     schemaOutputDirectory: string,
     tsconfig: string
@@ -17,7 +18,7 @@ export interface CoreConfig {
       port: number
     }
     logger: {
-      level: string
+      level: LogLevel
     }
   }
 
@@ -63,4 +64,10 @@ export interface CoreSingletonServices {
 export interface CoreServices extends CoreSingletonServices {
 }
 
-export type CreateSessionServices = (services: CoreSingletonServices, headers: Record<string, any>, session?: CoreUserSession) => Promise<CoreServices>
+export interface HTTPRequestService {
+    getRawBody(): string
+    getHeader(name: string): string | null
+}
+
+export type CreateSingletonServices = (config: CoreConfig) => Promise<CoreSingletonServices>
+export type CreateHTTPSessionServices = (services: CoreSingletonServices, session: CoreUserSession, data: any) => Promise<CoreServices>

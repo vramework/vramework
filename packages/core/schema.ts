@@ -18,6 +18,14 @@ const getSchemas = () => {
   return global.schemas
 }
 
+export const loadSchemas = async (schemaDir: string) => {
+  try {
+    await import(`${schemaDir}/schemas.ts`)
+  } catch (e) {
+    console.error('Failed to load schemas', e)
+  }
+}
+
 export const addSchema = (name: string, value: any) => {
   getSchemas().set(name, value)
 }

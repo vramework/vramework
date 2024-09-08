@@ -1,5 +1,6 @@
 import { promises } from "fs"
 import { CoreAPIRoutes } from "./routes"
+import path = require("path")
 
 export const loadAPIFilePaths = async (routesDirPath: string, dir: string, filesWithRoutes: string[]): Promise<string[]> => {
     const entries = await promises.readdir(dir)
@@ -24,10 +25,11 @@ export const loadAPIFilePaths = async (routesDirPath: string, dir: string, files
     return filesWithRoutes
 }
 
-export const loadAPIFiles = async (routesDirPaths: string[]) => {
+export const loadAPIFiles = async (relativeDirectory: string, routesDirPaths: string[]) => {
     let apiRoutes: CoreAPIRoutes = []
 
-    for (const routesDirPath of routesDirPaths) {
+    for (let routesDirPath of routesDirPaths) {
+        routesDirPath = path.join(`${relativeDirectory}/${routesDirPath}`)
         const filePaths = await loadAPIFilePaths(routesDirPath, routesDirPath, [])
 
         for (const path of filePaths) {

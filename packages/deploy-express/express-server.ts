@@ -7,14 +7,14 @@ import { UnauthorizedError } from 'express-jwt'
 import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
-
-import { getErrorResponse, MissingSessionError } from '@vramework/core/errors'
-import { CoreAPIRoutes } from '@vramework/core/routes'
-import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateSessionServices, SessionService } from '@vramework/core/types'
-import { loadSchema, validateJson } from '@vramework/core/schema'
-import { verifyPermissions } from '@vramework/core/permissions'
 import { mkdir, writeFile } from 'fs/promises'
 import { v4 as uuid } from 'uuid'
+
+import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateHTTPSessionServices, SessionService, VrameworkConfig } from '@vramework/core/types'
+import { getErrorResponse, MissingSessionError } from '@vramework/core/errors'
+import { loadSchema, validateJson } from '@vramework/core/schema'
+import { initializeVrameworkCore } from '@vramework/core/initialize'
+import { verifyPermissions } from '@vramework/core/permissions'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
@@ -34,13 +34,14 @@ export class ExpressServer {
   private server: Server | undefined
 
   constructor(
+    private readonly vrameworkConfig: VrameworkConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
-    private readonly createSessionServices: CreateSessionServices,
-    private readonly routes: CoreAPIRoutes
+    private readonly createHTTPSessionServices: CreateHTTPSessionServices,
   ) {}
 
   public async init() {
+    const { routes } = await initializeVrameworkCore(this.vrameworkConfig)
     const uploadFilePath: string | undefined = (this.config as any).content?.localFileUploadPath
 
     this.app.use(
@@ -96,7 +97,7 @@ export class ExpressServer {
       )
     }
 
-    this.routes.forEach((route) => {
+    routes.forEach((route) => {
       if (route.schema) {
         loadSchema(route.schema, this.singletonServices.logger)
       }
@@ -125,7 +126,7 @@ export class ExpressServer {
               }
             }
 
-            const sessionServices = await this.createSessionServices(this.singletonServices, req.headers, session)
+            const sessionServices = await this.createHTTPSessionServices(this.singletonServices, session, { req, res })
             try {
               if (route.permissions) {
                 await verifyPermissions(route.permissions, sessionServices, data, session)
@@ -219,5 +220,3 @@ export class ExpressServer {
     })
   }
 }
-
-export default ExpressServer

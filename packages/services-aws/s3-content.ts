@@ -7,7 +7,7 @@ import {
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 
 import { ContentConfig, ContentService } from '@vramework/core/types'
-import { Logger as PinoLogger } from 'pino'
+import { Logger } from '@vramework/core/services/logger'
 
 // @ts-ignore
 import { getSignedUrl as getCDNSignedUrl } from 'aws-cloudfront-sign'
@@ -16,7 +16,7 @@ import { readFile } from 'fs/promises'
 export class S3Content implements ContentService {
   private s3: S3Client
 
-  constructor(private config: ContentConfig, private logger: PinoLogger, private signConfig: { keypairId: string; privateKeyString: string }) {
+  constructor(private config: ContentConfig, private logger: Logger, private signConfig: { keypairId: string; privateKeyString: string }) {
     this.s3 = new S3Client({ 
       endpoint: this.config.endpoint,
       region: this.config.region 
