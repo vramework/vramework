@@ -10,13 +10,21 @@ import contentType from 'content-type'
 import { mkdir, writeFile } from 'fs/promises'
 import { v4 as uuid } from 'uuid'
 
-import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateHTTPSessionServices, SessionService, VrameworkConfig } from '@vramework/core/types'
+import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateSessionServices, SessionService, VrameworkConfig } from '@vramework/core/types'
 import { getErrorResponse, MissingSessionError } from '@vramework/core/errors'
 import { loadSchema, validateJson } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { verifyPermissions } from '@vramework/core/permissions'
 
-const autMiddleware = (credentialsRequired: boolean, sessionService: SessionService) => (req: Request, res: Response, next: NextFunction) => {
+const autMiddleware = (credentialsRequired: boolean, sessionService?: SessionService) => (req: Request, res: Response, next: NextFunction) => {
+  if (!sessionService) {
+    if (credentialsRequired) {
+      throw new Error('Session service required for authentication')
+    }
+    next()
+    return
+  }
+
   sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
     (req as any).auth = session
     next()
@@ -37,7 +45,7 @@ export class ExpressServer {
     private readonly vrameworkConfig: VrameworkConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
-    private readonly createHTTPSessionServices: CreateHTTPSessionServices,
+    private readonly createSessionServices: CreateSessionServices,
   ) {}
 
   public async init() {
@@ -66,11 +74,6 @@ export class ExpressServer {
 
     this.app.get('/v1/health-check', function (req, res) {
       res.status(200).end()
-    })
-
-    this.app.get(`/v1/logout`, (req, res) => {
-      res.clearCookie(this.singletonServices.sessionService.getCookieName(req.headers as Record<string, string>))
-      res.end()
     })
 
     if (uploadFilePath) {
@@ -109,24 +112,23 @@ export class ExpressServer {
         autMiddleware(route.requiresSession !== false, this.singletonServices.sessionService),
         async (req, res, next) => {
           try {
-            const session = (req as any).auth as CoreUserSession | undefined
-
-            res.locals.cookiename = this.singletonServices.sessionService.getCookieName(req.headers as Record<string, string>)
             res.locals.processed = true
-
+            const session = (req as any).auth as CoreUserSession | undefined
             const isXML = req.headers['content-type']?.includes('text/xml')
-
+            
             let data: any
             if (isXML) {
-              data = req.body
+              if (route.contentType === 'xml') {
+                data = req.body
+              }
+              throw new Error('Unsupported content type')
             } else {
               data = { ...req.params, ...req.query, ...req.body }
               if (route.schema) {
                 validateJson(route.schema, data)
               }
             }
-
-            const sessionServices = await this.createHTTPSessionServices(this.singletonServices, session, { req, res })
+            const sessionServices = await this.createSessionServices(this.singletonServices, session, { req, res })
             try {
               if (route.permissions) {
                 await verifyPermissions(route.permissions, sessionServices, data, session)
@@ -178,17 +180,8 @@ export class ExpressServer {
         res.status(404).end()
         return
       }
+      
       if (res.locals.result) {
-        if (res.locals.result.jwt) {
-          res.cookie(res.locals.cookiename, res.locals.result.jwt, {
-            maxAge: 24 * 60 * 60 * 1000,
-            httpOnly: true,
-            // secure: true,
-            // sameSite: 'none'
-            // domain: req.headers.origin,
-          })
-        }
-
         if (res.locals.returnsJSON === false) {
           res.send(res.locals.result).end()
         } else {
@@ -202,8 +195,8 @@ export class ExpressServer {
 
   public async start() {
     return await new Promise<void>((resolve) => {
-      this.server = this.app.listen(this.config.server.port, () => {
-        this.singletonServices.logger.info(`listening on port ${this.config.server.port}`)
+      this.server = this.app.listen(this.config.port, () => {
+        this.singletonServices.logger.info(`listening on port ${this.config.port}`)
         resolve()
       })
     })

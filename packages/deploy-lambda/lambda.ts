@@ -1,7 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as querystring from 'querystring'
-import { serialize as serializeCookie } from 'cookie'
-import { CoreConfig, CoreSingletonServices, CreateHTTPSessionServices } from '@vramework/core/types'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types'
 import { verifyPermissions } from '@vramework/core/permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/core/routes'
 import { loadSchema, validateJson } from '@vramework/core/schema'
@@ -93,7 +92,7 @@ const getHeaderValue = (event: APIGatewayProxyEvent, headerName: string): string
 const generalHandler = async (
   _config: CoreConfig,
   services: CoreSingletonServices,
-  createHTTPSessionServices: CreateHTTPSessionServices,
+  CreateSessionServices: CreateSessionServices,
   routes: CoreAPIRoutes,
   event: APIGatewayProxyEvent,
   headers: Record<string, any>,
@@ -125,14 +124,14 @@ const generalHandler = async (
       body: '{}',
       headers: {
         ...headers,
-        'Set-Cookie': serializeCookie(services.sessionService.getCookieName(event.headers as Record<string, string>), 'invalid', {
-          expires: new Date(0),
-          domain: getDomainFromHeaders(event.headers as Record<string, string>),
-          path: '/',
-          httpOnly: true,
-          secure: true,
-          sameSite: 'none'
-        }),
+        // 'Set-Cookie': serializeCookie(services.sessionService.getCookieName(event.headers as Record<string, string>), 'invalid', {
+        //   expires: new Date(0),
+        //   domain: getDomainFromHeaders(event.headers as Record<string, string>),
+        //   path: '/',
+        //   httpOnly: true,
+        //   secure: true,
+        //   sameSite: 'none'
+        // }),
       },
     }
   }
@@ -188,22 +187,22 @@ const generalHandler = async (
       validateJson(route.schema, data)
     }
 
-    const sessionServices = await createHTTPSessionServices(services, session, event)
+    const sessionServices = await CreateSessionServices(services, session, event)
     try {
       if (route.permissions) {
         await verifyPermissions(route.permissions, sessionServices, data, session)
       }
       const result = await route.func(sessionServices, data, session)
-      if (result && (result as any).jwt) {
-        headers['Set-Cookie'] = serializeCookie(services.sessionService.getCookieName(event.headers as Record<string, string>), (result as any).jwt, {
-          domain: getDomainFromHeaders(event.headers as Record<string, string>),
-          path: '/',
-          httpOnly: true,
-          secure: true,
-          maxAge: 60 * 60 * 24 * 1,
-          sameSite: 'none'
-        })
-      }
+      // if (result && (result as any).jwt) {
+      //   headers['Set-Cookie'] = serializeCookie(services.sessionService.getCookieName(event.headers as Record<string, string>), (result as any).jwt, {
+      //     domain: getDomainFromHeaders(event.headers as Record<string, string>),
+      //     path: '/',
+      //     httpOnly: true,
+      //     secure: true,
+      //     maxAge: 60 * 60 * 24 * 1,
+      //     sameSite: 'none'
+      //   })
+      // }
       return {
         statusCode: 200,
         body: route.returnsJSON === false ? (result as any) : JSON.stringify(result),
@@ -228,9 +227,9 @@ export const processCorsless = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
-  createHTTPSessionServices: CreateHTTPSessionServices
+  CreateSessionServices: CreateSessionServices
 ) => {
-  return await generalHandler(config, singletonServices, createHTTPSessionServices, routes, event, {})
+  return await generalHandler(config, singletonServices, CreateSessionServices, routes, event, {})
 }
 
 export const processFromAnywhereCors = async (
@@ -238,13 +237,13 @@ export const processFromAnywhereCors = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
-  createHTTPSessionServices: CreateHTTPSessionServices
+  CreateSessionServices: CreateSessionServices
 ) => {
   const headers: Record<string, string | boolean> = {
     'Access-Control-Allow-Origin': event.headers.origin!,
     'Access-Control-Allow-Credentials': true,
   }
-  return await generalHandler(config, singletonServices, createHTTPSessionServices, routes, event, headers)
+  return await generalHandler(config, singletonServices, CreateSessionServices, routes, event, headers)
 }
 
 export const processCors = async (
@@ -252,7 +251,7 @@ export const processCors = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   services: CoreSingletonServices,
-  createHTTPSessionServices: CreateHTTPSessionServices
+  CreateSessionServices: CreateSessionServices
 ) => {
   let origin: string | false = false
   try {
@@ -267,5 +266,5 @@ export const processCors = async (
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Credentials': true,
   }
-  return await generalHandler(config, services, createHTTPSessionServices, routes, event, headers)
+  return await generalHandler(config, services, CreateSessionServices, routes, event, headers)
 }

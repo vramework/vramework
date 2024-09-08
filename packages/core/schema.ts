@@ -3,7 +3,10 @@ import addFormats from 'ajv-formats'
 import { InvalidParametersError } from './errors'
 import { Logger } from './services/logger'
 
-const ajv = new Ajv({ removeAdditional: false })
+const ajv = new Ajv({ 
+  removeAdditional: false,
+  coerceTypes: false 
+})
 addFormats(ajv as any)
 
 const validators = new Map<string, ValidateFunction>()

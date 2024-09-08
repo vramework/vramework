@@ -1,6 +1,6 @@
 {
   "name": "@vramework/cli",
-  "version": "0.1.11",
+  "version": "0.1.13",
   "author": "Vlandor LTD",
   "license": "MIT",
   "types": "index.d.ts",

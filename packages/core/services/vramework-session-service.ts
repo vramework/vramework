@@ -13,7 +13,7 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
     ) {
     }
 
-    public getCookieName(headers: Record<string, string>): string {
+    private getCookieName(headers: Record<string, string>): string {
         const origin = headers.origin
         if (origin) {
             const url = new URL(headers.origin)

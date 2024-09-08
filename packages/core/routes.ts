@@ -5,6 +5,7 @@ export type CoreAPIPermission<In = any> = (services: CoreServices, data: In, ses
 
 export type CoreAPIRoute<In, Out> = {
   type: 'post' | 'get' | 'delete' | 'patch' | 'head'
+  contentType: 'xml' | 'json',
   route: string
   schema: string | null
   requiresSession?: false
