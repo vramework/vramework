@@ -1,26 +1,12 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager'
 import { AWSConfig } from './aws-config'
+import { SecretService } from '@vramework/core/types'
 
-export class AWSSecrets {
+export class AWSSecrets implements SecretService {
   private readonly client: SecretsManagerClient
 
   constructor(readonly config: AWSConfig) {
     this.client = new SecretsManagerClient({ region: config.awsRegion })
-  }
-
-  public async getPostgresCredentials(postgresSecretName: string, database: string): Promise<{ password: string, user: string, host: string, port: number, database: string }> {
-    if (process.env.NODE_ENV === 'production' || process.env.PRODUCTION_SERVICES) {
-      const { password, ...rest } = await this.getSecret<{ password: string, user: string, host: string, port: number, database: string }>(postgresSecretName)
-      return { password, ...rest, database }
-    } else {
-      return {
-        host: 'localhost',
-        port: 5432,
-        user: 'postgres',
-        password: 'password',
-        database
-      }
-    }
   }
 
   public async getSecret<Result = string>(SecretId: string): Promise<Result> {

@@ -1,6 +1,5 @@
 import { Logger, LogLevel } from './services/logger'
-import { StreamService } from './services/stream-service'
-import { PermissionService } from './services/permission-service'
+import { CoreAPIRoute } from './routes';
 
 export type PickRequired<T, K extends keyof T> = Pick<T, K> & Partial<T>;
 export type PickOptional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
@@ -9,29 +8,39 @@ export type RequireAtLeastOne<T> = {
 }[keyof T]
 
 export interface VrameworkConfig {
-    rootDir?: string,
+    rootDir: string,
     routeDirectories: string[],
+    routesOutputFile?: string,
     schemaOutputDirectory: string,
     tsconfig: string
+}
+
+export interface SecretService {
+    getSecret(key: string): Promise<string>
 }
 
 export interface CoreConfig {
     logLevel: LogLevel
     port: number
     maximumComputeTime?: number
-    domain?: string
-    corsDomains?: string[]
+    healthCheckPath?: string
     secrets?: {}
+    content?: CoreContentConfig
+    limits?: Partial<Record<string, string>>
 }
 
 export interface CoreUserSession {
 }
 
-export interface ContentConfig {
-    localFileUploadPath: string
-    bucketName: string
-    endpoint?: string
-    region?: string
+export interface LocalContentConfig {
+    contentDirectory: string
+    fileUploadLimit?: number
+    assetsUrl?: string
+    uploadUrl?: string
+}
+
+export interface CoreContentConfig {
+  local?: LocalContentConfig
 }
 
 export interface ContentService {
@@ -45,24 +54,33 @@ export interface ContentService {
 }
 
 export interface JWTService<UserSession = CoreUserSession> {
-    getJWTSecret: Function
     decodeSessionAsync: (jwtToken: string, debug?: any) => Promise<UserSession>
 }
 
+export type RequestHeaders = Record<string, string | string[] | undefined> | ((headerName: string) => string | string[] | undefined)
+
 export interface SessionService<UserSession = CoreUserSession> {
-    getUserSession: (credentialsRequired: boolean, headers: Partial<Record<'cookie' | 'authorization' | 'apiKey', string | undefined>>, debug?: any) => Promise<UserSession | undefined>
+    getUserSession: (credentialsRequired: boolean, headers: RequestHeaders) => Promise<UserSession | undefined>
+}
+
+export interface PermissionService {
+    verifyRouteAccess (route: CoreAPIRoute<unknown, unknown>, session?: CoreUserSession): Promise<void>;
 }
 
 export interface CoreSingletonServices {
     jwt?: JWTService
     sessionService?: SessionService
     permissionService?: PermissionService
-    streamService?: StreamService
     config: CoreConfig
     logger: Logger
 }
 
 export interface CoreServices extends CoreSingletonServices {
+}
+
+export interface CoreHTTPServices extends CoreServices {
+    httpRequest: HTTPRequestService
+    httpResponse: HTTPResponseService
 }
 
 export interface HTTPRequestService {
@@ -71,8 +89,8 @@ export interface HTTPRequestService {
 }
 
 export interface HTTPResponseService {
-    setCookie(name: string, value: string, options: any): void
+    setCookie(name: string, value: string, options: unknown): void
 }
 
 export type CreateSingletonServices = (config: CoreConfig) => Promise<CoreSingletonServices>
-export type CreateSessionServices = (services: CoreSingletonServices, session: CoreUserSession, data: any) => Promise<CoreServices>
+export type CreateSessionServices = (services: CoreSingletonServices, session: CoreUserSession | undefined, data: any) => Promise<CoreServices>

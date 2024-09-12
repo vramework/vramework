@@ -1,3 +1,5 @@
 export * from './express-http-request.service'
+export * from './express-http-response.service'
 export * from './types'
 export * from './express-server'
+export { getVrameworkConfig } from '@vramework/core/vramework-config'

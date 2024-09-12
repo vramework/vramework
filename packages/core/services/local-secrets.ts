@@ -1,8 +1,8 @@
 import { Logger } from './logger'
-import { CoreConfig } from '../types'
+import { CoreConfig, SecretService } from '../types'
 
-export class LocalSecretService {
-  constructor(_config: CoreConfig, private readonly logger: Logger) {}
+export class LocalSecretService implements SecretService {
+  constructor(private readonly logger: Logger) {}
 
   public async getSecret(key: string): Promise<string> {
     const value = process.env[key]

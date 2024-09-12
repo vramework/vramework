@@ -1,8 +1,7 @@
 import { HTTPRequestService } from '@vramework/core/types'
-import { Request } from 'express-serve-static-core'
 
-export class ExpressHTTPRequestService implements HTTPRequestService {
-    constructor (private request: Request) {
+export class NextHTTPRequestService implements HTTPRequestService {
+    constructor (private request: any) {
 
     }
 
@@ -14,5 +13,4 @@ export class ExpressHTTPRequestService implements HTTPRequestService {
         const headers = this.request.headers;
         return headers[name.toLowerCase()] as string || null;
     }
-
 }

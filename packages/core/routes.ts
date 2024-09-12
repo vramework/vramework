@@ -5,10 +5,10 @@ export type CoreAPIPermission<In = any> = (services: CoreServices, data: In, ses
 
 export type CoreAPIRoute<In, Out> = {
   type: 'post' | 'get' | 'delete' | 'patch' | 'head'
-  contentType: 'xml' | 'json',
+  contentType?: 'xml' | 'json',
   route: string
   schema: string | null
-  requiresSession?: false
+  requiresSession?: false | true
   eventStream?: false
   permissions?: Record<string, CoreAPIPermission<In>[] | CoreAPIPermission<In>>
   returnsJSON?: false

@@ -24,8 +24,10 @@ const getSchemas = () => {
 export const loadSchemas = async (schemaDir: string) => {
   try {
     await import(`${schemaDir}/schemas.ts`)
-  } catch (e) {
-    console.error('Failed to load schemas', e)
+  } catch (e: any) {
+    console.error('Error: Failed to load schemas.')
+    console.error('\tHave you run the schema generation?')
+    console.error('\tnpx @vramework/cli schemas')
   }
 }
 

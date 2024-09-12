@@ -2,32 +2,19 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as querystring from 'querystring'
 import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types'
 import { verifyPermissions } from '@vramework/core/permissions'
-import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/core/routes'
-import { loadSchema, validateJson } from '@vramework/core/schema'
+import { CoreAPIRoutes } from '@vramework/core/routes'
+import { validateJson } from '@vramework/core/schema'
 import { getErrorResponse, InvalidOriginError, NotFoundError } from '@vramework/core/errors'
 import { v4 as uuid } from 'uuid'
-import { URL } from 'url'
+import { getMatchingRoute } from '@vramework/core/matching-routes'
 
-// @ts-ignore
-import { match } from "path-to-regexp"
-
-const getDomainFromHeaders = (headers: Record<string, string>): string | undefined => {
-  const origin = headers.origin
-  if (origin) {
-    const url = new URL(headers.origin)
-    return url.port !== '80' && url.port !== '443' ? url.host : `${url.host}:${url.port}`
-  }
-  return undefined
-}
-
-const validateOrigin = (config: CoreConfig, services: CoreSingletonServices, event: APIGatewayProxyEvent): string => {
+const validateOrigin = (allowsOrigins: string[], services: CoreSingletonServices, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
-  const corsDomains = config.corsDomains || [config.domain]
-  if (!origin || corsDomains.every(domain => !origin.includes(domain))) {
+  if (!origin || allowsOrigins.every(domain => !origin.includes(domain))) {
     services.logger.error(`
 CORS Error
   - Recieved from origin: ${origin}
-  - Expected domain: ${config.domain}
+  - Expected domain(s): ${allowsOrigins.join(', ')}
   - Host: ${event.headers.host}
   - Path: ${event.path}
   - Headers: ${JSON.stringify(event.headers, null, '\t')}
@@ -63,36 +50,12 @@ const errorHandler = (services: CoreSingletonServices, e: Error, headers: Record
   }
 }
 
-const getMatchingRoute = (
-  logger: CoreSingletonServices['logger'],
-  requestType: string,
-  requestPath: string,
-  routes: Array<CoreAPIRoute<unknown, unknown>>,
-) => {
-  let matchedPath: any | undefined
-  for (const route of routes) {
-    if (route.type !== requestType.toLowerCase()) {
-      continue
-    }
-    const matchFunc = match(`/${route.route}`, { decode: decodeURIComponent })
-    matchedPath = matchFunc(requestPath)
-    if (matchedPath) {
-      if (route.schema) {
-        loadSchema(route.schema, logger)
-      }
-      return { matchedPath, route }
-    }
-  }
-  logger.info({ message: 'Invalid route', requestPath, requestType })
-  throw new NotFoundError()
-}
-
 const getHeaderValue = (event: APIGatewayProxyEvent, headerName: string): string | undefined => event.headers?.[headerName] ?? event.headers?.[headerName.toLocaleLowerCase()]
 
 const generalHandler = async (
   _config: CoreConfig,
   services: CoreSingletonServices,
-  CreateSessionServices: CreateSessionServices,
+  createSessionServices: CreateSessionServices,
   routes: CoreAPIRoutes,
   event: APIGatewayProxyEvent,
   headers: Record<string, any>,
@@ -141,10 +104,9 @@ const generalHandler = async (
     services.logger.info({ message: 'Executing route', matchedPath, route })
     let session
     try {
-      session = await services.sessionService.getUserSession(
+      session = await services.sessionService?.getUserSession(
         route.requiresSession !== false,
         event.headers,
-        event
       )
     } catch (e: any) {
       services.logger.info({
@@ -187,7 +149,7 @@ const generalHandler = async (
       validateJson(route.schema, data)
     }
 
-    const sessionServices = await CreateSessionServices(services, session, event)
+    const sessionServices = await createSessionServices(services, session, event)
     try {
       if (route.permissions) {
         await verifyPermissions(route.permissions, sessionServices, data, session)
@@ -227,9 +189,9 @@ export const processCorsless = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
-  CreateSessionServices: CreateSessionServices
+  createSessionServices: CreateSessionServices
 ) => {
-  return await generalHandler(config, singletonServices, CreateSessionServices, routes, event, {})
+  return await generalHandler(config, singletonServices, createSessionServices, routes, event, {})
 }
 
 export const processFromAnywhereCors = async (
@@ -237,25 +199,26 @@ export const processFromAnywhereCors = async (
   routes: CoreAPIRoutes,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
-  CreateSessionServices: CreateSessionServices
+  createSessionServices: CreateSessionServices
 ) => {
   const headers: Record<string, string | boolean> = {
     'Access-Control-Allow-Origin': event.headers.origin!,
     'Access-Control-Allow-Credentials': true,
   }
-  return await generalHandler(config, singletonServices, CreateSessionServices, routes, event, headers)
+  return await generalHandler(config, singletonServices, createSessionServices, routes, event, headers)
 }
 
 export const processCors = async (
   event: APIGatewayProxyEvent,
+  allowedOrigins: string[],
   routes: CoreAPIRoutes,
   config: CoreConfig,
   services: CoreSingletonServices,
-  CreateSessionServices: CreateSessionServices
+  createSessionServices: CreateSessionServices
 ) => {
   let origin: string | false = false
   try {
-    origin = validateOrigin(config, services, event)
+    origin = validateOrigin(allowedOrigins, services, event)
   } catch (e: any) {
     return {
       statusCode: 400,
@@ -266,5 +229,5 @@ export const processCors = async (
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Credentials': true,
   }
-  return await generalHandler(config, services, CreateSessionServices, routes, event, headers)
+  return await generalHandler(config, services, createSessionServices, routes, event, headers)
 }

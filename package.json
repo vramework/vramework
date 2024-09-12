@@ -3,7 +3,7 @@
   "version": "0.1.13",
   "description": "The vramework monorepo",
   "repository": "git@github.com:vlandor/vramework.git",
-  "author": "Vlandor LTD",
+  "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "private": true,
   "workspaces": {

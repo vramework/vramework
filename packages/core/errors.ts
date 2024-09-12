@@ -6,6 +6,7 @@ export class EError extends Error {
 }
 
 export class InvalidParametersError extends EError {}
+export class NotImplementedError extends EError {}
 export class NotFoundError extends EError {}
 export class InvalidOriginError extends EError {}
 export class AccessDeniedError extends EError {}
@@ -23,6 +24,7 @@ interface ErrorDetails {
 const apiErrors = new Map<any, ErrorDetails>([
   [InvalidParametersError, { status: 422, message: 'Invalid Parameters' }],
   [NotFoundError, { status: 404, message: 'Not Found' }],
+  [NotImplementedError, { status: 501, message: 'Not Found' }],
   [InvalidOriginError, { status: 400, message: 'Invalid Origin' }],
   [AccessDeniedError, { status: 403, message: 'Access Denied' }],
   [NotPermissionedError, { status: 403, message: 'Not permissioned' }],

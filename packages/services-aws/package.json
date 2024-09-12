@@ -1,7 +1,7 @@
 {
   "name": "@vramework/aws",
   "version": "0.1.13",
-  "author": "Vlandor LTD",
+  "author": "yasser.fadl@gmail.com",
   "license": "UNLICENSED",
   "main": "dist",
   "scripts": {

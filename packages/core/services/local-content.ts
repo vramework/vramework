@@ -1,10 +1,10 @@
 import { Logger } from './logger'
 import { promises } from 'fs'
-import { ContentConfig, ContentService } from '../types'
+import { ContentService } from '../types'
 import { mkdir } from 'fs/promises'
 
 export class LocalContent implements ContentService {
-  constructor(private config: ContentConfig, private logger: Logger) { }
+  constructor(private localFileDirectory: string, private logger: Logger) { }
 
   public async init() { }
 
@@ -27,7 +27,7 @@ export class LocalContent implements ContentService {
   public async writeFile(assetKey: string, buffer: Buffer): Promise<boolean> {
     this.logger.debug(`Writing file: ${assetKey}`)
     try {
-      const path = `${this.config.localFileUploadPath}/${assetKey}`
+      const path = `${this.localFileDirectory}/${assetKey}`
       await this.createDirectoryForFile(path)
       await promises.writeFile(path, buffer)
     } catch (e) {
@@ -40,7 +40,7 @@ export class LocalContent implements ContentService {
   public async copyFile(assetKey: string, fromAbsolutePath: string): Promise<boolean> {
     this.logger.debug(`Writing file: ${assetKey}`)
     try {
-      const path = `${this.config.localFileUploadPath}/${assetKey}`
+      const path = `${this.localFileDirectory}/${assetKey}`
       await this.createDirectoryForFile(path)
       await promises.copyFile(fromAbsolutePath, path)
     } catch (e) {
@@ -53,7 +53,7 @@ export class LocalContent implements ContentService {
   public async readFile(assetKey: string): Promise<Buffer> {
     this.logger.debug(`getting key: ${assetKey}`)
     try {
-      return await promises.readFile(`${this.config.localFileUploadPath}/${assetKey}`)
+      return await promises.readFile(`${this.localFileDirectory}/${assetKey}`)
     } catch (e) {
       this.logger.error(`Error get content ${assetKey}`)
       throw e
@@ -63,7 +63,7 @@ export class LocalContent implements ContentService {
   public async deleteFile(assetKey: string): Promise<boolean> {
     this.logger.debug(`deleting key: ${assetKey}`)
     try {
-      await promises.unlink(`${this.config.localFileUploadPath}/${assetKey}`)
+      await promises.unlink(`${this.localFileDirectory}/${assetKey}`)
     } catch (e: any) {
       this.logger.error(`Error deleting content ${assetKey}`, e)
     }

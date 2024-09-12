@@ -1,0 +1,27 @@
+{
+    "name": "@vramework/deploy-next",
+    "version": "0.1.13",
+    "license": "MIT",
+    "author": "yasser.fadl@gmail.com",
+    "main": "index.ts",
+    "scripts": {
+        "tsc": "tsc",
+        "build": "rm -rf dist && tsc -b",
+        "release": "npm run build && npm run test && npm publish",
+        "ncu": "ncu",
+        "test": "echo 'No tests'"
+    },
+    "peerDependencies": {
+        "next": "^14.2.9"
+    },
+    "dependencies": {
+        "@vramework/core": "^0.1.13",
+        "cookie": "^0.6.0",
+        "path-to-regexp": "^8.1.0",
+        "querystring": "^0.2.1"
+    },
+    "devDependencies": {
+        "@types/next": "^9.0.0",
+        "typescript": "^5.4.2"
+    }
+}

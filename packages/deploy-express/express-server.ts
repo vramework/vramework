@@ -4,13 +4,14 @@ import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import { UnauthorizedError } from 'express-jwt'
-import cors from 'cors'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
+import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
+
 import { mkdir, writeFile } from 'fs/promises'
 import { v4 as uuid } from 'uuid'
 
-import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateSessionServices, SessionService, VrameworkConfig } from '@vramework/core/types'
+import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateSessionServices, LocalContentConfig, SessionService, VrameworkConfig } from '@vramework/core/types'
 import { getErrorResponse, MissingSessionError } from '@vramework/core/errors'
 import { loadSchema, validateJson } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
@@ -37,6 +38,29 @@ const autMiddleware = (credentialsRequired: boolean, sessionService?: SessionSer
   })
 }
 
+const contentHandler = (app: ExpressServer["app"], config: LocalContentConfig, sessionService?: SessionService) => {
+  const reaperUrl = config.uploadUrl || `/v1/reaper/*`
+
+  app.use(config.assetsUrl || '/assets/', express.static(config.contentDirectory))
+  app.put(reaperUrl,
+    autMiddleware(true, sessionService),
+    async (req, res) => {
+      const file = await getRawBody(req, {
+        length: req.headers['content-length'],
+        limit: config.fileUploadLimit || '1mb',
+        encoding: contentType.parse(req).parameters.charset,
+      })
+      const key = req.path.replace(reaperUrl, '')
+      const parts = key.split('/')
+      const fileName = parts.pop()
+      const dir = `${config.contentDirectory}/${parts.join('/')}`
+      await mkdir(dir, { recursive: true })
+      await writeFile(`${dir}/${fileName}`, file, 'binary')
+      res.end()
+    },
+  )
+}
+
 export class ExpressServer {
   public app = express()
   private server: Server | undefined
@@ -48,56 +72,39 @@ export class ExpressServer {
     private readonly createSessionServices: CreateSessionServices,
   ) {}
 
+  public enableCors (options: CorsOptions | CorsOptionsDelegate) {
+    this.app.use(cors(options))
+  }
+
   public async init() {
     const { routes } = await initializeVrameworkCore(this.vrameworkConfig)
-    const uploadFilePath: string | undefined = (this.config as any).content?.localFileUploadPath
 
     this.app.use(
       json({
-        limit: '1mb',
+        limit: this.config.limits?.json || '1mb',
       }),
     )
+
     this.app.use(
       text({
-        limit: '1mb',
+        limit: this.config.limits?.xml || '1mb',
         type: 'text/xml'
       }),
     )
-    this.app.use(bodyParser.urlencoded({ extended: true }))
-    this.app.use(cookieParser())
     this.app.use(
-      cors({
-        origin: /http:\/\/localhost:\d\d\d\d/,
-        credentials: true,
-      }),
-    )
+      bodyParser.urlencoded({ 
+        extended: true,
+        limit: this.config.limits?.urlencoded || '1mb' 
+    }))
 
-    this.app.get('/v1/health-check', function (req, res) {
+    this.app.use(cookieParser())
+
+    this.app.get(this.config.healthCheckPath || 'health-check', function (req, res) {
       res.status(200).end()
     })
 
-    if (uploadFilePath) {
-      this.app.use('/assets/', express.static(uploadFilePath))
-
-      this.app.put(`/v1/reaper/*`,
-        autMiddleware(true, this.singletonServices.sessionService),
-        async (req, res) => {
-          const file = await getRawBody(req, {
-            length: req.headers['content-length'],
-            limit: '10mb',
-            encoding: contentType.parse(req).parameters.charset,
-          })
-
-          const key = req.path.replace('/v1/reaper/', '')
-          const parts = key.split('/')
-          const fileName = parts.pop()
-          const dir = `${uploadFilePath}/${parts.join('/')}`
-
-          await mkdir(dir, { recursive: true })
-          await writeFile(`${dir}/${fileName}`, file, 'binary')
-          res.end()
-        },
-      )
+    if (this.config.content?.local) {
+      contentHandler(this.app, this.config.content.local, this.singletonServices.sessionService)
     }
 
     routes.forEach((route) => {
@@ -210,6 +217,15 @@ export class ExpressServer {
       this.server.close(() => {
         resolve()
       })
+    })
+  }
+
+  public async enableExitOnSigInt () {
+    process.removeAllListeners('SIGINT').on('SIGINT', async () => {
+      this.singletonServices.logger.info('Stopping server...')
+      await this.stop()
+      this.singletonServices.logger.info('Server stopped')
+      process.exit(0)
     })
   }
 }

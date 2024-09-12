@@ -2,17 +2,21 @@ import * as jwt from 'jsonwebtoken'
 import { v4 as uuid } from 'uuid'
 import { Logger } from './logger'
 import { InvalidHashError, InvalidSessionError, MissingSessionError } from '../errors'
+import { JWTService } from '../types'
 
 interface Secret {
   keyid: string
   secret: string
 }
 
-export class JWTService<UserSession extends Object> {
+export class VrameworkJWTService<UserSession extends Object> implements JWTService {
   private currentSecret: Secret = { keyid: '1', secret: 'Monkey' }
   private secrets: Record<string, Secret> = {}
 
-  constructor(private getSecrets: () => Promise<Secret[]>, private logger: Logger) {
+  constructor(
+    private logger: Logger,
+    private getSecrets: () => Promise<Secret[]>, 
+  ) {
   }
 
   public async init () {

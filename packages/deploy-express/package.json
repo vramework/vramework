@@ -3,7 +3,7 @@
   "version": "0.1.13",
   "description": "The vramework express server (for local development)",
   "license": "MIT",
-  "author": "Vlandor LTD",
+  "author": "yasser.fadl@gmail.com",
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",

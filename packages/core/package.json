@@ -1,7 +1,7 @@
 {
   "name": "@vramework/core",
   "version": "0.1.13",
-  "author": "Vlandor LTD",
+  "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
@@ -19,6 +19,7 @@
     "cookie": "^0.6.0",
     "eventemitter3": "^5.0.1",
     "jsonwebtoken": "^9.0.2",
+    "path-to-regexp": "^8.1.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
