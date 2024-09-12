@@ -1,6 +1,6 @@
 {
   "name": "@vramework/cli",
-  "version": "0.1.13",
+  "version": "0.1.15",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
@@ -10,7 +10,7 @@
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
     "ncu": "ncu",
-    "release": "npm run build && npm run test && npm publish",
+    "release": "npm run build && npm run test && npm publish --access public",
     "test": "echo 'No tests'"
   },
   "dependencies": {

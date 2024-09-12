@@ -1,5 +1,7 @@
 #!/usr/bin/env ts-node
-require('ts-node').register()
+require('ts-node').register({
+    transpileOnly: true
+})
 
 import { Command } from 'commander'
 import { schemas } from './vramework-schemas'

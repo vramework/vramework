@@ -1,13 +1,12 @@
 import { Command } from 'commander'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
-import path = require('path')
 import { generateRoutesImports } from '../src/routes-generator'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const { routeDirectories, routesOutputFile, rootDir } = await getVrameworkConfig(configFile)
+  const { vrameworkTypesModule, routeDirectories, routesOutputFile, rootDir } = await getVrameworkConfig(configFile)
 
-  if (!rootDir || !routeDirectories || !routesOutputFile) { 
-    console.error('rootDir, routeDirectories and routesOutputFile are required in vramework.config.json')
+  if (!vrameworkTypesModule || !rootDir || !routeDirectories || !routesOutputFile) {
+    console.error('vrameworkTypesModule, rootDir, routeDirectories and routesOutputFile are required in vramework.config.json')
     process.exit(1)
   }
 
@@ -22,6 +21,7 @@ Generating Route File:
   await generateRoutesImports(
     rootDir,
     routeDirectories,
+    vrameworkTypesModule,
     routesOutputFile,
   )
 

@@ -10,7 +10,9 @@ export type RequireAtLeastOne<T> = {
 export interface VrameworkConfig {
     rootDir: string,
     routeDirectories: string[],
+    vrameworkTypesModule: string,
     routesOutputFile?: string,
+
     schemaOutputDirectory: string,
     tsconfig: string
 }

@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-express",
-  "version": "0.1.13",
+  "version": "0.1.15",
   "description": "The vramework express server (for local development)",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -8,12 +8,12 @@
   "scripts": {
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
-    "release": "npm run build && npm run test && npm publish",
+    "release": "npm run build && npm run test && npm publish --access public",
     "ncu": "ncu",
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.1.13"
+    "@vramework/core": "^0.1.15"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
