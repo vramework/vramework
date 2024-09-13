@@ -15,7 +15,7 @@ import { loadSchema } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
-import { runRoute } from '@vramework/core/matching-routes'
+import { runRoute } from '@vramework/core/router-runner'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService?: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   if (!sessionService) {

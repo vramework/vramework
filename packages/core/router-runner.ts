@@ -43,9 +43,15 @@ export const runRoute = async <In, Out>(
   { route: apiRoute, type: apiType }: Pick<CoreAPIRoute<unknown, unknown>, 'route' | 'type'>,
 ): Promise<Out> => {
   try {
-    const { matchedPath, route } = getMatchingRoute(services.logger, apiType, apiRoute, routes)
-    services.logger.info({ message: 'Executing route', matchedPath, route })
     let session
+
+    const { matchedPath, route } = getMatchingRoute(services.logger, apiType, apiRoute, routes)
+    
+    services.logger.info({ 
+      message: 'Matched route', 
+      matchedPath, 
+      route 
+    })
 
     try {
       if (services.sessionService) {
@@ -65,13 +71,7 @@ export const runRoute = async <In, Out>(
       throw e
     }
 
-    services.logger.info({
-      action: 'Executing route',
-      path: matchedPath,
-      route,
-    })
-
-    const data = await request.getData(request.getHeader('Content-Type') || 'application/json',)
+    const data = await request.getData(request.getHeader('Content-Type') || 'application/json')
     if (route.schema) {
       validateJson(route.schema, data)
     }

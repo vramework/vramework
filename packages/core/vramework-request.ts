@@ -26,9 +26,9 @@ export abstract class VrameworkRequest<In = any> {
     public getData (_contentType: string | undefined = 'application/json'): In {
         return {
             ...this.getParams(),
+            ...this.getQuery(),
             // TODO: If body isn't an object, we should insert it as the word...
             ...this.getBody(),
-            ...this.getQuery(),
         }
     }
 }

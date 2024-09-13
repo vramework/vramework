@@ -12,6 +12,6 @@ export class VrameworkSSRNextResponse extends VrameworkResponse {
     public setJson() {
     }
 
-    public setResponse() {
+    public setResponse () {
     }
 }

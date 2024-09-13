@@ -3,10 +3,10 @@ import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vrame
 import { CoreAPIRoutes } from '@vramework/core/routes'
 import { getErrorResponse, InvalidOriginError } from '@vramework/core/errors'
 import { v4 as uuid } from 'uuid'
-import { runRoute } from '@vramework/core/matching-routes'
 import { VrameworkLambdaRequest } from './vramework-lambda-request'
 import { VrameworkLambdaResponse } from './vramework-lambda-response'
 import { Logger } from '@vramework/core/services/logger'
+import { runRoute } from '@vramework/core/router-runner'
 
 const validateOrigin = (allowsOrigins: string[], logger: Logger, event: APIGatewayProxyEvent): string => {
   const origin = event.headers.origin
