@@ -1,7 +1,7 @@
 import { runRoute } from "@vramework/core/matching-routes";
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/core/routes';
 import { CoreSingletonServices, CreateSessionServices } from "@vramework/core/types";
-import { mergeData } from "@vramework/core/utils";
+import { injectIntoUrl, mergeData } from "@vramework/core/utils";
 import { IncomingMessage, ServerResponse } from 'http';
 import { NextApiRequest, NextApiResponse } from "next";
 import { VrameworkSSRNextRequest } from "./vramework-ssr-next-request";
@@ -38,14 +38,20 @@ export class VrameworkNextJS<APIRoutes> {
         response: NextApiResponse,
         route: R
     ): Promise<void> {
+        const vrameworkRequest = new VrameworkAPINextRequest(request)
         const vrameworkResponse = new VrameworkAPINextResponse(response)
+        const injectedRoute = { 
+            route: injectIntoUrl(route.route, vrameworkRequest.getData()),
+            type: route.type,
+        }
+        console.log(injectedRoute)
         await runRoute<In, Out>(
-            new VrameworkAPINextRequest(request),
+            vrameworkRequest,
             vrameworkResponse,
             this.singletonServices, 
             this.createSessionServices, 
             this.routes as unknown as CoreAPIRoutes,
-            route,
+            injectedRoute,
         )
     }
 }

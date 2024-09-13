@@ -23,7 +23,7 @@ export abstract class VrameworkRequest<In = any> {
         return {}
     }
 
-    public async getData (_contentType: string): Promise<In> {
+    public getData (_contentType: string | undefined = 'application/json'): In {
         return {
             ...this.getParams(),
             // TODO: If body isn't an object, we should insert it as the word...
