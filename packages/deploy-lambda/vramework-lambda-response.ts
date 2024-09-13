@@ -1,3 +1,4 @@
+import { JSONValue } from '@vramework/core/types'
 import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { APIGatewayProxyResult } from 'aws-lambda'
 
@@ -26,7 +27,7 @@ export class VrameworkLambdaResponse extends VrameworkResponse {
         this.headers[name] = value
     }
 
-    public setJSON(value): void {
+    public setJson(value): void {
         this.body = JSON.stringify(value)
     }
 

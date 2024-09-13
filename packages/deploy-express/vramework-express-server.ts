@@ -3,21 +3,19 @@ import { Server } from 'http'
 import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
-import { UnauthorizedError } from 'express-jwt'
 import getRawBody from 'raw-body'
 import contentType from 'content-type'
 import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
 
 import { mkdir, writeFile } from 'fs/promises'
-import { v4 as uuid } from 'uuid'
 
-import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateSessionServices, LocalContentConfig, SessionService, VrameworkConfig } from '@vramework/core/types'
-import { getErrorResponse, MissingSessionError } from '@vramework/core/errors'
-import { loadSchema, validateJson } from '@vramework/core/schema'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices, LocalContentConfig, SessionService, VrameworkConfig } from '@vramework/core/types'
+import { MissingSessionError } from '@vramework/core/errors'
+import { loadSchema } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
-import { verifyPermissions } from '@vramework/core/permissions'
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
+import { runRoute } from '@vramework/core/matching-routes'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService?: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   if (!sessionService) {
@@ -83,6 +81,13 @@ export class VrameworkExpressServer {
 
   public async init() {
     const { routes } = await initializeVrameworkCore(this.vrameworkConfig)
+    
+    // Verify all schemas are loaded
+    routes.forEach((route) => {
+      if (route.schema) {
+        loadSchema(route.schema, this.singletonServices.logger)
+      }
+    })
 
     this.app.use(
       json({
@@ -96,6 +101,7 @@ export class VrameworkExpressServer {
         type: 'text/xml'
       }),
     )
+
     this.app.use(
       bodyParser.urlencoded({ 
         extended: true,
@@ -112,100 +118,26 @@ export class VrameworkExpressServer {
       contentHandler(this.app, this.config.content.local, this.singletonServices.sessionService)
     }
 
-    routes.forEach((route) => {
-      if (route.schema) {
-        loadSchema(route.schema, this.singletonServices.logger)
-      }
-
-      const path = `/${route.route}`
-      this.singletonServices.logger.debug(`Adding ${route.type.toUpperCase()} with route ${path}`)
-      this.app[route.type](
-        path,
-        autMiddleware(route.requiresSession !== false, this.singletonServices.sessionService),
-        async (req, res, next) => {
-          try {
-            res.locals.processed = true
-            const session = (req as any).auth as CoreUserSession | undefined
-            const isXML = req.headers['content-type']?.includes('text/xml')
-            
-            let data: any
-            if (isXML) {
-              if (route.contentType === 'xml') {
-                data = req.body
-              }
-              throw new Error('Unsupported content type')
-            } else {
-              data = { ...req.params, ...req.query, ...req.body }
-              if (route.schema) {
-                validateJson(route.schema, data)
-              }
-            }
-
-            const sessionServices = await this.createSessionServices(
-              this.singletonServices, 
-              session, 
-              new VrameworkExpressRequest(req), 
-              new VrameworkExpressResponse(res)
-            )
-            try {
-              if (route.permissions) {
-                await verifyPermissions(route.permissions, sessionServices, data, session)
-              }
-              res.locals.result = await route.func(sessionServices, data, session)
-            } catch (e: any) {
-              throw e
-            } finally {
-              for (const service of Object.values(sessionServices)) {
-                if (service.closeSession) {
-                  await service.closeSession()
-                }
-              }
-            }
-            next()
-          } catch (e: any) {
-            next(e)
+    this.app.use(async (req, res) => {
+      try {
+        await runRoute(
+          new VrameworkExpressRequest(req),
+          new VrameworkExpressResponse(res),
+          this.singletonServices,
+          this.createSessionServices,
+          routes,
+          {
+            type: req.method.toLowerCase() as any,
+            route: req.path,
           }
-        },
-      )
-    })
-
-    this.app.use((error: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-      if (!error) {
-        return next()
+        )
+      } catch (e) {
+        // Error should have already been handled by runRoute
       }
 
-      if (error instanceof UnauthorizedError) {
-        this.singletonServices.logger.error('JWT AUTH ERROR', error)
-        res.status(401).end()
-        return
-      }
-
-      const errorDetails = getErrorResponse(error)
-      if (errorDetails != null) {
-        const errorId = (error as any).errorId || uuid()
-        console.error(errorId, error)
-        res.status(errorDetails.status).json({ message: errorDetails.message, errorId, payload: (error as any).payload })
-      } else {
-        const errorId = uuid()
-        console.error(errorId, error)
-        res.status(500).json({ errorId })
-      }
-    })
-
-    this.app.use((req, res) => {
-      if (res.locals.processed !== true) {
-        res.status(404).end()
-        return
-      }
-      
-      if (res.locals.result) {
-        if (res.locals.returnsJSON === false) {
-          res.send(res.locals.result).end()
-        } else {
-          res.json(res.locals.result).end()
-        }
-      } else {
-        res.status(200).end()
+      if (!res.writableEnded) {
+        this.singletonServices.logger.error('Route did not send a response')
+        res.status(500).end()
       }
     })
   }

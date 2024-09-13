@@ -5,4 +5,13 @@ export class VrameworkSSRNextResponse extends VrameworkResponse {
     constructor(protected response: ServerResponse<IncomingMessage>) {
         super()
     }
+
+    public setStatus() {
+    }
+
+    public setJson() {
+    }
+
+    public setResponse() {
+    }
 }

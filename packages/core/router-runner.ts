@@ -9,7 +9,7 @@ import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from "./vramework-request"
 import { VrameworkResponse } from "./vramework-response"
 
-export const getMatchingRoute = (
+const getMatchingRoute = (
   logger: CoreSingletonServices['logger'],
   requestType: string,
   requestPath: string,
@@ -21,7 +21,8 @@ export const getMatchingRoute = (
       continue
     }
     const matchFunc = match(`/${route.route}`.replace(/^\/\//, '/'), { decode: decodeURIComponent })
-    matchedPath = matchFunc(requestPath)
+    matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
+
     if (matchedPath) {
       if (route.schema) {
         loadSchema(route.schema, logger)
@@ -71,7 +72,6 @@ export const runRoute = async <In, Out>(
     })
 
     const data = await request.getData(request.getHeader('Content-Type') || 'application/json',)
-
     if (route.schema) {
       validateJson(route.schema, data)
     }

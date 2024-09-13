@@ -73,7 +73,7 @@ const generalHandler = async (
       const errorId = services.logger.error(`Uncaught Error: ${e.message}`, e)
       console.trace(e)
       response.setStatus(500)
-      response.setJSON({ errorId })
+      response.setJson({ errorId })
     }
 
     throw e

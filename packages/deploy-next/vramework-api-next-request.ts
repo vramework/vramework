@@ -7,7 +7,11 @@ export class VrameworkAPINextRequest extends VrameworkRequest {
     }
 
     public getBody() {
-        return this.request.body
+        try {
+            return JSON.parse(this.request.body)
+        } catch (e) {
+            return this.request.body
+        }
     }
 
     public getHeader(headerName: string): string | undefined {

@@ -1,9 +1,9 @@
 import { JSONValue } from "./types";
 
 export abstract class VrameworkResponse {
-    public setStatus(status: number): void {
-        throw new Error('Method not implemented.');
-    }
+    public abstract setStatus(status: number): void 
+    public abstract setJson(body: JSONValue): void
+    public abstract setResponse(response: JSONValue | string | Buffer): void
 
     public setHeader(name: string, value: string | boolean | string[]) {
         throw new Error('Method not implemented.');
@@ -20,14 +20,6 @@ export abstract class VrameworkResponse {
     }
     
     public setRedirect(path: string, status: number) {
-        throw new Error('Method not implemented.');
-    }
-    
-    public setJson(body: JSONValue): void {
-        throw new Error('Method not implemented.');
-    }
-
-    public setResponse(response: JSONValue | string | Buffer): void {
         throw new Error('Method not implemented.');
     }
 }
