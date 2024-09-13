@@ -16,6 +16,8 @@ import { getErrorResponse, MissingSessionError } from '@vramework/core/errors'
 import { loadSchema, validateJson } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { verifyPermissions } from '@vramework/core/permissions'
+import { VrameworkExpressRequest } from './vramework-express-request'
+import { VrameworkExpressResponse } from './vramework-express-response'
 
 const autMiddleware = (credentialsRequired: boolean, sessionService?: SessionService) => (req: Request, res: Response, next: NextFunction) => {
   if (!sessionService) {
@@ -26,7 +28,10 @@ const autMiddleware = (credentialsRequired: boolean, sessionService?: SessionSer
     return
   }
 
-  sessionService.getUserSession(credentialsRequired, req.headers).then((session) => {
+  sessionService.getUserSession(
+    credentialsRequired, 
+    new VrameworkExpressRequest(req)
+  ).then((session) => {
     (req as any).auth = session
     next()
   }).catch((e) => {
@@ -38,7 +43,7 @@ const autMiddleware = (credentialsRequired: boolean, sessionService?: SessionSer
   })
 }
 
-const contentHandler = (app: ExpressServer["app"], config: LocalContentConfig, sessionService?: SessionService) => {
+const contentHandler = (app: VrameworkExpressServer["app"], config: LocalContentConfig, sessionService?: SessionService) => {
   const reaperUrl = config.uploadUrl || `/v1/reaper/*`
 
   app.use(config.assetsUrl || '/assets/', express.static(config.contentDirectory))
@@ -61,7 +66,7 @@ const contentHandler = (app: ExpressServer["app"], config: LocalContentConfig, s
   )
 }
 
-export class ExpressServer {
+export class VrameworkExpressServer {
   public app = express()
   private server: Server | undefined
 
@@ -135,7 +140,13 @@ export class ExpressServer {
                 validateJson(route.schema, data)
               }
             }
-            const sessionServices = await this.createSessionServices(this.singletonServices, session, { req, res })
+
+            const sessionServices = await this.createSessionServices(
+              this.singletonServices, 
+              session, 
+              new VrameworkExpressRequest(req), 
+              new VrameworkExpressResponse(res)
+            )
             try {
               if (route.permissions) {
                 await verifyPermissions(route.permissions, sessionServices, data, session)
@@ -170,7 +181,6 @@ export class ExpressServer {
       }
 
       const errorDetails = getErrorResponse(error)
-
       if (errorDetails != null) {
         const errorId = (error as any).errorId || uuid()
         console.error(errorId, error)

@@ -1,5 +1,13 @@
 import { Logger, LogLevel } from './services/logger'
 import { CoreAPIRoute } from './routes';
+import { VrameworkRequest } from './vramework-request';
+import { VrameworkResponse } from './vramework-response';
+
+export type JSONPrimitive = string | number | boolean | null | undefined;
+
+export type JSONValue = JSONPrimitive | JSONValue[] | {
+    [key: string]: JSONValue;
+};
 
 export type PickRequired<T, K extends keyof T> = Pick<T, K> & Partial<T>;
 export type PickOptional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
@@ -62,7 +70,7 @@ export interface JWTService<UserSession = CoreUserSession> {
 export type RequestHeaders = Record<string, string | string[] | undefined> | ((headerName: string) => string | string[] | undefined)
 
 export interface SessionService<UserSession = CoreUserSession> {
-    getUserSession: (credentialsRequired: boolean, headers: RequestHeaders) => Promise<UserSession | undefined>
+    getUserSession: (credentialsRequired: boolean, vrameworkRequest: VrameworkRequest) => Promise<UserSession | undefined>
 }
 
 export interface PermissionService {
@@ -81,18 +89,15 @@ export interface CoreServices extends CoreSingletonServices {
 }
 
 export interface CoreHTTPServices extends CoreServices {
-    httpRequest: HTTPRequestService
-    httpResponse: HTTPResponseService
-}
-
-export interface HTTPRequestService {
-    getRawBody(): string
-    getHeader(name: string): string | null
-}
-
-export interface HTTPResponseService {
-    setCookie(name: string, value: string, options: unknown): void
+    request: VrameworkRequest
+    response: VrameworkResponse
 }
 
 export type CreateSingletonServices = (config: CoreConfig) => Promise<CoreSingletonServices>
-export type CreateSessionServices = (services: CoreSingletonServices, session: CoreUserSession | undefined, data: any) => Promise<CoreServices>
+
+export type CreateSessionServices = (
+    services: CoreSingletonServices, 
+    session: CoreUserSession | undefined, 
+    request: VrameworkRequest, 
+    response: VrameworkResponse
+) => Promise<CoreServices>

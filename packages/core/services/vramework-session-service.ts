@@ -2,6 +2,8 @@ import { InvalidSessionError, MissingSessionError } from "../errors"
 import { JWTService, RequestHeaders, SessionService } from "../types"
 import { parse as parseCookie } from 'cookie'
 import { URL } from 'url'
+import { getHeader } from "../utils"
+import { VrameworkRequest } from "../vramework-request"
 
 export class VrameworkSessionService<UserSession> implements SessionService<UserSession> {
     constructor(
@@ -16,26 +18,24 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
     ) {
     }
 
-    private async getCookieSession(headers: RequestHeaders): Promise<UserSession | null> {
-        const cookieHeader = this.getHeader(headers, 'cookie')
-        if (!cookieHeader) {
+    private async getCookieSession(request: VrameworkRequest): Promise<UserSession | null> {
+        const cookies = request.getCookies()
+        if (!cookies) {
             return null
         }
 
-        const cookie = parseCookie(cookieHeader)
         let cookieName: string | undefined
-
         if (this.options.cookieNames) {
             for (const name of this.options.cookieNames) {
-                if (cookie[name]) {
+                if (cookies[name]) {
                     cookieName = name
                 }
             }
         }
 
         if (!cookieName && this.options.cookieNameIsOrigin) {
-            const origin = this.getHeader(headers, 'origin')
-            const host = this.getHeader(headers, 'host')
+            const origin = request.getHeader('origin')
+            const host = request.getHeader('host')
             if (origin) {
                 const url = new URL(origin)
                 cookieName = url.port !== '80' && url.port !== '443' ? url.host : `${url.host}:${url.port}`
@@ -48,7 +48,12 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
             cookieName = 'localhost'
         }
 
-        if (!cookieName || !cookie[cookieName]) {
+        if (!cookieName) {
+            return null
+        }
+        
+        const cookieValue = cookies[cookieName]
+        if (!cookieValue) {
             return null
         }
 
@@ -56,13 +61,13 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
             return null
         }
 
-        return await this.options.getSessionForCookieValue(cookie[cookieName], cookieName)
+        return await this.options.getSessionForCookieValue(cookieValue, cookieName)
     }
 
-    public async getUserSession(credentialsRequired: boolean, headers: RequestHeaders, debugJWTDecode?: boolean): Promise<UserSession | undefined> {
+    public async getUserSession(credentialsRequired: boolean, request: VrameworkRequest, debugJWTDecode?: boolean): Promise<UserSession | undefined> {
         let userSession: UserSession | null = null
 
-        const authorization = this.getHeader(headers, 'authorization') || this.getHeader(headers, 'Authorization')
+        const authorization = request.getHeader('authorization') || request.getHeader('Authorization')
         if (authorization) {
             if (authorization.split(' ')[0] !== 'Bearer') {
                 throw new InvalidSessionError()
@@ -71,16 +76,16 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         }
 
         if (this.options.getSessionForAPIKey) {
-            const apiKey = this.getHeader(headers, 'x-api-key')
+            const apiKey = request.getHeader('x-api-key')
             if (apiKey) {
                 userSession = await this.options.getSessionForAPIKey(apiKey)
             }
         }
 
         if (this.options.getSessionForCookieValue) {
-            const cookie = this.getHeader(headers, 'cookie')
+            const cookie = request.getHeader('cookie')
             if (cookie) {
-                userSession = await this.getCookieSession(headers)
+                userSession = await this.getCookieSession(request)
             }
         }
 
@@ -96,18 +101,5 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         }
 
         return undefined
-    }
-
-    private getHeader(headers: RequestHeaders, name: string): string | undefined {
-        let value: string | string[] | undefined
-        if (typeof headers === 'function') {
-            value = headers(name)
-        } else {
-            value = headers[name]
-        }
-        if (value instanceof Array) {
-            throw new Error('API key must be a string')
-        }
-        return value
     }
 }
