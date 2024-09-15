@@ -1,8 +1,6 @@
 import { InvalidSessionError, MissingSessionError } from "../errors"
-import { JWTService, RequestHeaders, SessionService } from "../types"
-import { parse as parseCookie } from 'cookie'
+import { JWTService, SessionService } from "../types"
 import { URL } from 'url'
-import { getHeader } from "../utils"
 import { VrameworkRequest } from "../vramework-request"
 
 export class VrameworkSessionService<UserSession> implements SessionService<UserSession> {

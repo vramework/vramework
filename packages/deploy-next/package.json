@@ -16,10 +16,7 @@
     },
     "dependencies": {
         "@vramework/core": "^0.1.15",
-        "cookie": "^0.6.0",
-        "eventemitter3": "^5.0.1",
-        "path-to-regexp": "^8.1.0",
-        "querystring": "^0.2.1"
+        "eventemitter3": "^5.0.1"
     },
     "devDependencies": {
         "@types/next": "^9.0.0",

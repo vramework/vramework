@@ -70,6 +70,7 @@ export class VrameworkNextJS<APIRoutes> {
         const singletonServices = await this.getSingletonServices()
         const vrameworkRequest = new VrameworkAPINextRequest(request)
         const vrameworkResponse = new VrameworkAPINextResponse(response)
+        const data = await vrameworkRequest.getData()
         await runRoute<In, Out>(
             vrameworkRequest,
             vrameworkResponse,
@@ -77,7 +78,7 @@ export class VrameworkNextJS<APIRoutes> {
             this.createSessionServices,
             this.routes as unknown as CoreAPIRoutes,
             {
-                route: injectIntoUrl(route.route, vrameworkRequest.getData()),
+                route: injectIntoUrl(route.route, data),
                 type: route.type,
             }
         )

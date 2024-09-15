@@ -19,7 +19,7 @@ export class VrameworkAPINextRequest extends VrameworkRequest {
     }
     
     public getQuery () {
-        return this.request.query as Record<string, string | string[]>
+        return this.request.query
     }
     
     public getHeaders () {

@@ -44,9 +44,7 @@ export interface CoreUserSession {
 
 export interface LocalContentConfig {
     contentDirectory: string
-    fileUploadLimit?: number
-    assetsUrl?: string
-    uploadUrl?: string
+    assetsUrl: string
 }
 
 export interface CoreContentConfig {
@@ -101,3 +99,5 @@ export type CreateSessionServices = (
     request: VrameworkRequest, 
     response: VrameworkResponse
 ) => Promise<CoreServices>
+
+export type VrameworkQuery<T = unknown> = Record<string, string | T | null | Array<T | null>>

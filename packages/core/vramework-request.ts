@@ -1,7 +1,14 @@
 import { parse as parseCookie } from 'cookie'
+import { VrameworkQuery } from './types'
 
 export abstract class VrameworkRequest<In = any> {
-    public getBody (): In {
+    private params: Record<string, string> = {}
+
+    public getBody (): Promise<In> {
+        throw new Error('Method not implemented.')
+    }
+
+    public getRawBody (): Promise<Buffer> {
         throw new Error('Method not implemented.')
     }
 
@@ -16,19 +23,23 @@ export abstract class VrameworkRequest<In = any> {
     }
 
     public getParams () {
+        return this.params
+    }
+
+    public setParams (params) {
+        this.params = params
+    }
+
+    public getQuery (): VrameworkQuery {
         return {}
     }
 
-    public getQuery (): Record<string, string | string[]> {
-        return {}
-    }
-
-    public getData (_contentType: string | undefined = 'application/json'): In {
+    public async getData (_contentType: string | undefined = 'application/json'): Promise<In> {
         return {
             ...this.getParams(),
             ...this.getQuery(),
             // TODO: If body isn't an object, we should insert it as the word...
-            ...this.getBody(),
+            ...(await this.getBody()),
         }
     }
 }

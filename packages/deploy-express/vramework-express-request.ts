@@ -1,5 +1,6 @@
 import { VrameworkRequest } from '@vramework/core/vramework-request';
 import { Request } from 'express-serve-static-core'
+import getRawBody from 'raw-body'
 
 export class VrameworkExpressRequest extends VrameworkRequest {
     constructor (private request: Request) {
@@ -12,6 +13,10 @@ export class VrameworkExpressRequest extends VrameworkRequest {
 
     public getBody () {
        return this.request.body
+    }
+
+    public async getRawBody () {
+        return await getRawBody(this.request)
     }
 
     public getQuery () {

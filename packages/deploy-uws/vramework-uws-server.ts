@@ -1,24 +1,15 @@
-import express, { NextFunction, Request, Response } from 'express'
-import { Server } from 'http'
-import { json, text } from 'body-parser'
-import cookieParser from 'cookie-parser'
-import bodyParser from 'body-parser'
-import contentType from 'content-type'
-import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
-
-import { mkdir, writeFile } from 'fs/promises'
+import uWS from 'uWebSockets.js'
 
 import { CoreConfig, CoreSingletonServices, CreateSessionServices, LocalContentConfig, SessionService, VrameworkConfig } from '@vramework/core/types'
-import { MissingSessionError } from '@vramework/core/errors'
 import { loadSchema } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
-import { VrameworkExpressRequest } from './vramework-express-request'
-import { VrameworkExpressResponse } from './vramework-express-response'
 import { runRoute } from '@vramework/core/router-runner'
+import { VrameworkUWSRequest } from './vramework-uws-request'
+import { VrameworkUWSResponse } from './vramework-uws-response'
 
-export class VrameworkExpressServer {
-  public app = express()
-  private server: Server | undefined
+export class VrameworkUWSServer {
+  public app = uWS.App()
+  private listenSocket: boolean | uWS.us_listen_socket | null = null
 
   constructor(
     private readonly vrameworkConfig: VrameworkConfig,
@@ -27,8 +18,11 @@ export class VrameworkExpressServer {
     private readonly createSessionServices: CreateSessionServices,
   ) {}
 
-  public enableCors (options: CorsOptions | CorsOptionsDelegate) {
-    this.app.use(cors(options))
+  /**
+   * Placeholder for enabling CORS
+   */
+  public enableCors (options: any) {
+    throw new Error('Method not implemented.')
   }
 
   public async init() {
@@ -41,47 +35,17 @@ export class VrameworkExpressServer {
       }
     })
 
-    this.app.use(
-      json({
-        limit: this.config.limits?.json || '1mb',
-      }),
-    )
-
-    this.app.use(
-      text({
-        limit: this.config.limits?.xml || '1mb',
-        type: 'text/xml'
-      }),
-    )
-
-    this.app.use(
-      bodyParser.urlencoded({ 
-        extended: true,
-        limit: this.config.limits?.urlencoded || '1mb' 
-    }))
-
-    this.app.use(cookieParser())
-
-    this.app.get(this.config.healthCheckPath || 'health-check', function (req, res) {
-      res.status(200).end()
-    })
-
-    const contentConfig = this.config.content as LocalContentConfig
-    if (contentConfig) {
-      this.app.use(contentConfig.assetsUrl || '/assets/', express.static(contentConfig.contentDirectory))
-    }
-
-    this.app.use(async (req, res) => {
+    this.app.any('/*', async (res, req) => {
       try {
         await runRoute(
-          new VrameworkExpressRequest(req),
-          new VrameworkExpressResponse(res),
+          new VrameworkUWSRequest(req, res),
+          new VrameworkUWSResponse(res),
           this.singletonServices,
           this.createSessionServices,
           routes,
           {
-            type: req.method.toLowerCase() as any,
-            route: req.path,
+            type: req.getMethod() as any,
+            route: req.getUrl() as string,
           }
         )
       } catch (e) {
@@ -97,7 +61,8 @@ export class VrameworkExpressServer {
 
   public async start() {
     return await new Promise<void>((resolve) => {
-      this.server = this.app.listen(this.config.port, () => {
+      this.app.listen(this.config.port, (token) => {
+        this.listenSocket = token
         this.singletonServices.logger.info(`listening on port ${this.config.port}`)
         resolve()
       })
@@ -106,12 +71,14 @@ export class VrameworkExpressServer {
 
   public async stop(): Promise<void> {
     return await new Promise<void>((resolve) => {
-      if (this.server == null) {
+      if (this.listenSocket == null) {
         throw 'Unable to stop server as it hasn`t been correctly started'
       }
-      this.server.close(() => {
-        resolve()
-      })
+      uWS.us_listen_socket_close(this.listenSocket)
+      this.listenSocket = null
+
+      // Wait for 2 seconds to allow all connections to close
+      setTimeout(resolve, 2000)
     })
   }
 

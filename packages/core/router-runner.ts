@@ -3,7 +3,6 @@ import { verifyPermissions } from "./permissions"
 import { CoreAPIRoute, CoreAPIRoutes } from "./routes"
 import { loadSchema, validateJson } from "./schema"
 import { CoreSingletonServices, CreateSessionServices, RequestHeaders } from "./types"
-// @ts-ignore
 import { match } from "path-to-regexp"
 import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from "./vramework-request"
@@ -15,19 +14,18 @@ const getMatchingRoute = (
   requestPath: string,
   routes: Array<CoreAPIRoute<unknown, unknown>>,
 ) => {
-  let matchedPath: any | undefined
   for (const route of routes) {
     if (route.type !== requestType.toLowerCase()) {
       continue
     }
     const matchFunc = match(`/${route.route}`.replace(/^\/\//, '/'), { decode: decodeURIComponent })
-    matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
+    const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
 
     if (matchedPath) {
       if (route.schema) {
         loadSchema(route.schema, logger)
       }
-      return { matchedPath, route }
+      return { matchedPath, params: matchedPath.params, route }
     }
   }
   logger.info({ message: 'Invalid route', requestPath, requestType })
@@ -45,7 +43,8 @@ export const runRoute = async <In, Out>(
   try {
     let session
 
-    const { matchedPath, route } = getMatchingRoute(services.logger, apiType, apiRoute, routes)
+    const { matchedPath, params, route } = getMatchingRoute(services.logger, apiType, apiRoute, routes)
+    request.setParams(params)
     
     services.logger.info({ 
       message: 'Matched route', 

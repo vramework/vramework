@@ -1,9 +1,10 @@
+import { CookieSerializeOptions } from "cookie";
 import { JSONValue } from "./types";
 
 export abstract class VrameworkResponse {
     public abstract setStatus(status: number): void 
     public abstract setJson(body: JSONValue): void
-    public abstract setResponse(response: JSONValue | string | Buffer): void
+    public abstract setResponse(response: string | Buffer): void
 
     public setHeader(name: string, value: string | boolean | string[]) {
         throw new Error('Method not implemented.');
@@ -15,7 +16,7 @@ export abstract class VrameworkResponse {
         }
     }
 
-    public setCookie(name: string, value: string, options: unknown) {
+    public setCookie(name: string, value: string, options: CookieSerializeOptions) {
         throw new Error('Method not implemented.');
     }
     

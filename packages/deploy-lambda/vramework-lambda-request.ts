@@ -14,7 +14,7 @@ export class VrameworkLambdaRequest extends VrameworkRequest {
         return this.event.httpMethod.toLowerCase() as "post" | "get" | "delete" | "patch" | "head" | "options"
     }
 
-    public getBody() {
+    public async getBody() {
         throw new Error('Method not implemented.')
     }
 
