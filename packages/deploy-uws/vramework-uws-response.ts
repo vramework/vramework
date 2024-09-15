@@ -29,6 +29,6 @@ export class VrameworkUWSResponse extends VrameworkResponse {
     }
 
     public setCookie (name: string, value: string, options: any): void {
-        this.response.writeHeader(name, cookie.serialize(name, value, options))
+        this.response.writeHeader('set-cookie', cookie.serialize(name, value, options))
     }
 }

@@ -34,6 +34,10 @@ export abstract class VrameworkRequest<In = any> {
         return {}
     }
 
+    public getIP (): string {
+        throw new Error('Method not implemented.')
+    }
+
     public async getData (_contentType: string | undefined = 'application/json'): Promise<In> {
         return {
             ...this.getParams(),

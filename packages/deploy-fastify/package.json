@@ -1,0 +1,28 @@
+{
+  "name": "@vramework/deploy-fastify",
+  "version": "0.1.15",
+  "description": "The vramework fastify server",
+  "license": "MIT",
+  "author": "yasser.fadl@gmail.com",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "rm -rf dist && tsc -b",
+    "release": "npm run build && npm run test && npm publish --access public",
+    "ncu": "ncu",
+    "test": "echo 'No tests'"
+  },
+  "peerDependencies": {
+    "@vramework/core": "^0.1.15"
+  },
+  "dependencies": {
+    "fastify": "^4.28.1",
+    "qs": "^6.13.0",
+    "query-string": "^9.1.0",
+    "uWebSockets.js": "uNetworking/uWebSockets.js#v20.48.0"
+  },
+  "devDependencies": {
+    "@types/qs": "^6",
+    "typescript": "^5.4.2"
+  }
+}
