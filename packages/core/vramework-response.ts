@@ -19,6 +19,10 @@ export abstract class VrameworkResponse {
     public setCookie(name: string, value: string, options: CookieSerializeOptions) {
         throw new Error('Method not implemented.');
     }
+
+    public clearCookie(name: string) {
+        throw new Error('Method not implemented.');
+    }
     
     public setRedirect(path: string, status: number) {
         throw new Error('Method not implemented.');

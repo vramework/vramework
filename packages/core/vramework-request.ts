@@ -2,7 +2,7 @@ import { parse as parseCookie } from 'cookie'
 import { VrameworkQuery } from './types'
 
 export abstract class VrameworkRequest<In = any> {
-    private params: Record<string, string> = {}
+    private params: Partial<Record<string, string | string[]>> = {}
 
     public getBody (): Promise<In> {
         throw new Error('Method not implemented.')
@@ -26,7 +26,7 @@ export abstract class VrameworkRequest<In = any> {
         return this.params
     }
 
-    public setParams (params) {
+    public setParams (params: Record<string, string | string[] | undefined>) {
         this.params = params
     }
 

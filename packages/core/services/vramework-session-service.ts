@@ -1,13 +1,11 @@
 import { InvalidSessionError, MissingSessionError } from "../errors"
 import { JWTService, SessionService } from "../types"
-import { URL } from 'url'
 import { VrameworkRequest } from "../vramework-request"
 
 export class VrameworkSessionService<UserSession> implements SessionService<UserSession> {
     constructor(
         private jwtService: JWTService<UserSession>,
         private options: {
-            cookieNameIsOrigin?: boolean,
             cookieNames?: string[],
             getSessionForCookieValue?: (cookieValue: string, cookieName: string) => Promise<UserSession>,
             getSessionForAPIKey?: (apiKey: string) => Promise<UserSession>,
@@ -25,25 +23,11 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         let cookieName: string | undefined
         if (this.options.cookieNames) {
             for (const name of this.options.cookieNames) {
+                console.log(name, cookies[name])
                 if (cookies[name]) {
                     cookieName = name
                 }
             }
-        }
-
-        if (!cookieName && this.options.cookieNameIsOrigin) {
-            const origin = request.getHeader('origin')
-            const host = request.getHeader('host')
-            if (origin) {
-                const url = new URL(origin)
-                cookieName = url.port !== '80' && url.port !== '443' ? url.host : `${url.host}:${url.port}`
-            }
-            else if (host) {
-                cookieName = host
-            }
-
-            // default cookie name
-            cookieName = 'localhost'
         }
 
         if (!cookieName) {
@@ -70,7 +54,7 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
             if (authorization.split(' ')[0] !== 'Bearer') {
                 throw new InvalidSessionError()
             }
-            userSession = await this.jwtService.decodeSessionAsync(authorization.split(' ')[1], debugJWTDecode)
+            userSession = await this.jwtService.decode(authorization.split(' ')[1], undefined, debugJWTDecode)
         }
 
         if (this.options.getSessionForAPIKey) {
@@ -81,10 +65,7 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         }
 
         if (this.options.getSessionForCookieValue) {
-            const cookie = request.getHeader('cookie')
-            if (cookie) {
-                userSession = await this.getCookieSession(request)
-            }
+            userSession = await this.getCookieSession(request)
         }
 
         if (userSession) {

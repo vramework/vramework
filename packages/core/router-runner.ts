@@ -2,7 +2,7 @@ import { getErrorResponse, NotFoundError, NotImplementedError } from "./errors"
 import { verifyPermissions } from "./permissions"
 import { CoreAPIRoute, CoreAPIRoutes } from "./routes"
 import { loadSchema, validateJson } from "./schema"
-import { CoreSingletonServices, CreateSessionServices, RequestHeaders } from "./types"
+import { CoreSingletonServices, CoreUserSession, CreateSessionServices, RequestHeaders, SessionService } from "./types"
 import { match } from "path-to-regexp"
 import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from "./vramework-request"
@@ -32,6 +32,17 @@ const getMatchingRoute = (
   throw new NotFoundError()
 }
 
+export const getUserSession = async <UserSession extends CoreUserSession>(sessionService: SessionService<UserSession> | undefined, requiresSession: boolean, request: VrameworkRequest): Promise<CoreUserSession | undefined> => {
+  if (sessionService) {
+    return await sessionService.getUserSession(
+      requiresSession,
+      request
+    ) as UserSession
+  } else if (requiresSession) {
+    throw new NotImplementedError('Session service not implemented')
+  }
+}
+
 export const runRoute = async <In, Out>(
   request: VrameworkRequest<In>,
   response: VrameworkResponse,
@@ -53,14 +64,7 @@ export const runRoute = async <In, Out>(
     })
 
     try {
-      if (services.sessionService) {
-        session = await services.sessionService?.getUserSession(
-          route.requiresSession !== false,
-          request
-        )
-      } else if (route.requiresSession) {
-        throw new NotImplementedError('Session service not implemented')
-      }
+      session = await getUserSession(services.sessionService, route.requiresSession !== false, request)
     } catch (e: any) {
       services.logger.info({
         action: 'Rejecting route (invalid session)',
@@ -75,7 +79,11 @@ export const runRoute = async <In, Out>(
       validateJson(route.schema, data)
     }
 
-    const sessionServices = await createSessionServices(services, session, request, response)
+    const sessionServices = await createSessionServices({
+      ...services,
+      request,
+      response
+    }, session)
     if (route.permissions) {
       await verifyPermissions(route.permissions, sessionServices, data, session)
     }
@@ -88,8 +96,8 @@ export const runRoute = async <In, Out>(
       response.setResponse(result)
     }
     return result
-  } catch (e) {
-    const errorId = (e as any).errorId || uuid()
+  } catch (e: any) {
+    const errorId = e.errorId || uuid()
     const errorResponse = getErrorResponse(e)
 
     if (errorResponse != null) {

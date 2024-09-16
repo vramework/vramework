@@ -62,7 +62,9 @@ export interface ContentService {
 }
 
 export interface JWTService<UserSession = CoreUserSession> {
-    decodeSessionAsync: (jwtToken: string, debug?: any) => Promise<UserSession>
+    encode: <T extends any>(expiresIn: string, payload: T) => Promise<string>
+    decode: <T>(hash: string, invalidHashError?: Error, debug?: boolean) => Promise<T>
+    decodeSession: (jwtToken: string, debug?: any) => Promise<UserSession>
 }
 
 export type RequestHeaders = Record<string, string | string[] | undefined> | ((headerName: string) => string | string[] | undefined)
@@ -94,10 +96,8 @@ export interface CoreHTTPServices extends CoreServices {
 export type CreateSingletonServices = (config: CoreConfig) => Promise<CoreSingletonServices>
 
 export type CreateSessionServices = (
-    services: CoreSingletonServices, 
+    services: CoreSingletonServices & { request: VrameworkRequest, response: VrameworkResponse }, 
     session: CoreUserSession | undefined, 
-    request: VrameworkRequest, 
-    response: VrameworkResponse
 ) => Promise<CoreServices>
 
 export type VrameworkQuery<T = unknown> = Record<string, string | T | null | Array<T | null>>

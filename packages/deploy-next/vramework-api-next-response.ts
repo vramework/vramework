@@ -19,6 +19,10 @@ export class VrameworkAPINextResponse extends VrameworkResponse {
         throw new Error('Setting cookie not supported in NextJS API');
     }
 
+    public clearCookie(name: string) {
+        throw new Error('Clearing cookie not supported in NextJS API');
+    }
+
     public setRedirect(path: string, status: number | undefined = 307) {
         this.response.redirect(status, path)
     }

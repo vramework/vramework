@@ -25,4 +25,8 @@ export class VrameworkExpressResponse extends VrameworkResponse {
     public setCookie (name: string, value: string, options: CookieOptions): void {
         this.response.cookie(name, value, options)
     }
+
+    public clearCookie (name: string): void {
+        this.response.clearCookie(name)
+    }
 }

@@ -1667,7 +1667,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:^9, @types/jsonwebtoken@npm:^9.0.6":
+"@types/jsonwebtoken@npm:^9":
   version: 9.0.6
   resolution: "@types/jsonwebtoken@npm:9.0.6"
   dependencies:
@@ -1831,13 +1831,12 @@ __metadata:
   resolution: "@vramework/core@workspace:packages/core"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
-    "@types/jsonwebtoken": "npm:^9.0.6"
     "@types/uuid": "npm:^10.0.0"
     ajv: "npm:^8.17.1"
     ajv-formats: "npm:^3.0.1"
     cookie: "npm:^0.6.0"
     eventemitter3: "npm:^5.0.1"
-    jsonwebtoken: "npm:^9.0.2"
+    jose: "npm:^5.9.2"
     path-to-regexp: "npm:^8.1.0"
     typescript: "npm:^5.5.4"
     uuid: "npm:^10.0.0"
@@ -1860,7 +1859,6 @@ __metadata:
     cors: "npm:^2.8.5"
     express: "npm:^4.19.0"
     express-jwt: "npm:8.4.1"
-    jsonwebtoken: "npm:^9.0.2"
     typescript: "npm:^5.4.2"
     uuid: "npm:^10.0.0"
   peerDependencies:
@@ -2820,6 +2818,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jose@npm:^5.9.2":
+  version: 5.9.2
+  resolution: "jose@npm:5.9.2"
+  checksum: 10/bbcad3bb2681424ee257f3eb561d70b69a082ceef628926ac20f8c1d3471fccfc039bc8d7b7507fa818f695fdafa2cfaab53c46dfd8e56d9b89262f7c83b8a25
+  languageName: node
+  linkType: hard
+
 "json-schema-ref-resolver@npm:^1.0.1":
   version: 1.0.1
   resolution: "json-schema-ref-resolver@npm:1.0.1"
@@ -2845,7 +2850,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonwebtoken@npm:^9.0.0, jsonwebtoken@npm:^9.0.2":
+"jsonwebtoken@npm:^9.0.0":
   version: 9.0.2
   resolution: "jsonwebtoken@npm:9.0.2"
   dependencies:

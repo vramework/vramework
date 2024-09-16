@@ -30,4 +30,8 @@ export class VrameworkFastifyResponse extends VrameworkResponse {
     public setCookie (name: string, value: string, options: any): void {
         this.response.header('set-cookie', cookie.serialize(name, value, options))
     }
+
+    public clearCookie (name: string): void {
+        this.response.header('set-cookie', cookie.serialize(name, '', { expires: new Date(0) }))
+    }
 }
