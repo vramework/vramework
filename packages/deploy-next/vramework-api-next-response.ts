@@ -1,6 +1,7 @@
 import { JSONValue } from '@vramework/core/types';
 import { VrameworkResponse } from '@vramework/core/vramework-response';
 import { NextApiResponse } from 'next';
+import * as cookie from 'cookie'
 
 export class VrameworkAPINextResponse extends VrameworkResponse {
     constructor(protected response: NextApiResponse) {
@@ -15,12 +16,12 @@ export class VrameworkAPINextResponse extends VrameworkResponse {
         this.response.setHeader(name, value)
     }
 
-    public setCookie(name: string, value: string, options: unknown) {
-        throw new Error('Setting cookie not supported in NextJS API');
+    public setCookie (name: string, value: string, options: any): void {
+        this.setHeader('set-cookie', cookie.serialize(name, value, options))
     }
 
-    public clearCookie(name: string) {
-        throw new Error('Clearing cookie not supported in NextJS API');
+    public clearCookie (name: string): void {
+        this.setHeader('set-cookie', cookie.serialize(name, '', { expires: new Date(0) }))
     }
 
     public setRedirect(path: string, status: number | undefined = 307) {

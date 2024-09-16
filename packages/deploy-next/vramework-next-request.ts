@@ -11,7 +11,7 @@ export class VrameworkNextRequest extends VrameworkRequest {
         return this.request.cookies.getAll().reduce((acc, cookie) => {
             acc[cookie.name] = cookie.value
             return acc
-        }, {})
+        }, {} as Record<string, string>)
     }
 
     public getHeader(headerName: string): string | undefined {

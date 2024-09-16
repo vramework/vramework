@@ -16,9 +16,11 @@
     },
     "dependencies": {
         "@vramework/core": "^0.1.15",
+        "cookie": "^0.6.0",
         "eventemitter3": "^5.0.1"
     },
     "devDependencies": {
+        "@types/cookie": "^0.6.0",
         "@types/next": "^9.0.0",
         "typescript": "^5.4.2"
     }

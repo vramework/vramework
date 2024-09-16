@@ -1899,8 +1899,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/deploy-next@workspace:packages/deploy-next"
   dependencies:
+    "@types/cookie": "npm:^0.6.0"
     "@types/next": "npm:^9.0.0"
     "@vramework/core": "npm:^0.1.15"
+    cookie: "npm:^0.6.0"
     eventemitter3: "npm:^5.0.1"
     typescript: "npm:^5.4.2"
   peerDependencies:

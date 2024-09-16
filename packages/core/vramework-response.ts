@@ -11,7 +11,7 @@ export abstract class VrameworkResponse {
     }
 
     public setHeaders(headers: Record<string, string>) {
-        for (const [name, value] of Object.keys(headers)) {
+        for (const [name, value] of Object.entries(headers)) {
             this.setHeader(name, value)
         }
     }

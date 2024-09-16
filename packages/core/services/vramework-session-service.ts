@@ -23,7 +23,6 @@ export class VrameworkSessionService<UserSession> implements SessionService<User
         let cookieName: string | undefined
         if (this.options.cookieNames) {
             for (const name of this.options.cookieNames) {
-                console.log(name, cookies[name])
                 if (cookies[name]) {
                     cookieName = name
                 }
