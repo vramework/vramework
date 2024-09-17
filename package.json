@@ -25,5 +25,8 @@
     "chai": "^4",
     "mocha": "^10.7.3",
     "sinon": "^19.0.2"
+  },
+  "dependencies": {
+    "typedoc": "^0.26.7"
   }
 }

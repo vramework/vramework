@@ -13,6 +13,7 @@
       "target": "ES2021",
       "sourceMap": true,
       "allowJs": false,
+      "skipLibCheck": false,
       "paths": {
         "@vramework/cli": ["./packages/cli"],
         "@vramework/cli/*": ["./packages/cli/*"],
