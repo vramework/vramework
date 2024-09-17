@@ -3,8 +3,7 @@ import { InvalidSessionError, MissingSessionError } from '../core/errors'
 import { VrameworkRequest } from '../core/vramework-request'
 
 export class VrameworkSessionService<UserSession>
-  implements SessionService<UserSession>
-{
+  implements SessionService<UserSession> {
   constructor(
     private jwtService: JWTService<UserSession>,
     private options: {
@@ -16,14 +15,14 @@ export class VrameworkSessionService<UserSession>
       getSessionForAPIKey?: (apiKey: string) => Promise<UserSession>
       transformSession?: (session: any) => Promise<UserSession>
     }
-  ) {}
+  ) { }
 
   private async getCookieSession(
     request: VrameworkRequest
-  ): Promise<UserSession | null> {
+  ): Promise<UserSession | undefined> {
     const cookies = request.getCookies()
     if (!cookies) {
-      return null
+      return
     }
 
     let cookieName: string | undefined
@@ -36,16 +35,16 @@ export class VrameworkSessionService<UserSession>
     }
 
     if (!cookieName) {
-      return null
+      return
     }
 
     const cookieValue = cookies[cookieName]
     if (!cookieValue) {
-      return null
+      return
     }
 
     if (!this.options.getSessionForCookieValue) {
-      return null
+      return
     }
 
     return await this.options.getSessionForCookieValue(cookieValue, cookieName)
@@ -56,7 +55,7 @@ export class VrameworkSessionService<UserSession>
     request: VrameworkRequest,
     debugJWTDecode?: boolean
   ): Promise<UserSession | undefined> {
-    let userSession: UserSession | null = null
+    let userSession: UserSession | undefined
 
     const authorization =
       request.getHeader('authorization') || request.getHeader('Authorization')
@@ -71,28 +70,25 @@ export class VrameworkSessionService<UserSession>
       )
     }
 
-    if (this.options.getSessionForAPIKey) {
+    if (!userSession && this.options.getSessionForAPIKey) {
       const apiKey = request.getHeader('x-api-key')
       if (apiKey) {
         userSession = await this.options.getSessionForAPIKey(apiKey)
       }
     }
 
-    if (this.options.getSessionForCookieValue) {
+    if (!userSession && this.options.getSessionForCookieValue) {
       userSession = await this.getCookieSession(request)
     }
 
-    if (userSession) {
-      if (this.options.transformSession) {
-        return await this.options.transformSession(userSession)
-      }
-      return userSession
-    }
-
-    if (credentialsRequired) {
+    if (!userSession && credentialsRequired) {
       throw new MissingSessionError()
     }
 
-    return undefined
+    if (userSession && this.options.transformSession) {
+      return await this.options.transformSession(userSession)  
+    }
+
+    return userSession
   }
 }

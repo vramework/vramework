@@ -10,7 +10,7 @@
     "build": "rm -rf dist && tsc -b",
     "ncu": "ncu",
     "release": "npm run build && npm run test && npm publish --access public",
-    "test": "mocha --require ts-node/register"
+    "test": "mocha"
   },
   "peerDependencies": {
     "@vramework/core": "^0.1.15"

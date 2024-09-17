@@ -2,6 +2,10 @@ import { promises } from 'fs';
 import { CoreAPIRoutes } from './routes';
 import { join } from 'path';
 
+export const importFile = async (path: string) => {
+  return await import(path);
+}
+
 /**
  * Recursively loads all API file paths from the specified directory.
  * @param dir - The directory to load API file paths from.
@@ -33,13 +37,12 @@ export const loadRoutes = async (
 
 export const loadRoutesFromDirectory = async (
   relativeRootDir: string,
+  apiRoutes: CoreAPIRoutes = [],
   filesWithRoutes: string[] = []
 ): Promise<{
   filesWithRoutes: string[],
   apiRoutes: CoreAPIRoutes
 }> => {
-  let apiRoutes: CoreAPIRoutes = [];
-
   const entries = await promises.readdir(relativeRootDir);
 
   await Promise.all(
@@ -49,17 +52,19 @@ export const loadRoutesFromDirectory = async (
       }
       const lstat = await promises.lstat(`${relativeRootDir}/${entry}`);
       if (lstat.isDirectory()) {
-        await loadRoutesFromDirectory(`${relativeRootDir}/${entry}`, filesWithRoutes);
+        await loadRoutesFromDirectory(`${relativeRootDir}/${entry}`, apiRoutes, filesWithRoutes);
       } else {
         if (
           entry.endsWith('.ts') &&
           !entry.endsWith('.d.ts') &&
           !entry.endsWith('.test.ts')
         ) {
-          const routes = await import(`${relativeRootDir}/${entry}`)
+          const routes = await importFile(`${relativeRootDir}/${entry}`)
           if (routes.routes) {
             filesWithRoutes.push(`${relativeRootDir}/${entry}`);
-            apiRoutes = [...apiRoutes, ...routes.routes];
+            for (const route of routes.routes) {
+              apiRoutes.push(route);
+            }
           }
         }
       }
