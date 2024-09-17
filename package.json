@@ -16,11 +16,14 @@
     "build": "yarn workspaces foreach -A run build",
     "release": "yarn workspaces foreach -A run release",
     "ncu": "yarn workspaces foreach -A run ncu -x",
-    "test": "echo 'No tests'",
-    "test:ci": "echo 'No tests'"
+    "test": "yarn workspaces foreach -A run test"
   },
   "packageManager": "yarn@4.5.0",
   "devDependencies": {
-    "@types/node": "^20.11.30"
+    "@types/mocha": "^10",
+    "@types/node": "^20.11.30",
+    "chai": "^4",
+    "mocha": "^10.7.3",
+    "sinon": "^19.0.2"
   }
 }

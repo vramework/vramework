@@ -1,5 +1,5 @@
 export class EError extends Error {
-  constructor(public errorId?: string, message?: string) {
+  constructor(message?: string, public errorId?: string) {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
   }

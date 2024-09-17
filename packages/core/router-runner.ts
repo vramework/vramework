@@ -108,8 +108,7 @@ export const runRoute = async <In, Out>(
       services.logger.warn(e)
 
     } else {
-      services.logger.error(`Uncaught Error: ${e.message}`, e)
-      console.trace(e)
+      services.logger.error(e)
       response.setStatus(500)
       response.setJson({ errorId })
     }

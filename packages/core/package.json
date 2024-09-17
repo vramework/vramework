@@ -10,8 +10,7 @@
     "build": "rm -rf dist && tsc -b",
     "ncu": "ncu",
     "release": "npm run build && npm run test && npm publish --access public",
-    "test": "echo 'No tests'",
-    "test:ci": "echo 'No tests'"
+    "test": "mocha --require ts-node/register"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -23,8 +22,16 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@types/chai-as-promised": "^7",
     "@types/cookie": "^0.6.0",
+    "@types/mocha": "^10.0.8",
+    "@types/node": "^22.5.5",
     "@types/uuid": "^10.0.0",
+    "chai": "^4",
+    "chai-as-promised": "^7.1.2",
+    "mocha": "^10.7.3",
+    "sinon": "^19.0.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   }
 }
