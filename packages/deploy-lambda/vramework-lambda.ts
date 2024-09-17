@@ -1,12 +1,11 @@
-import { APIGatewayProxyEvent } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import {
   CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types'
 import { CoreAPIRoutes } from '@vramework/core/routes'
-import { getErrorResponse, InvalidOriginError } from '@vramework/core/errors'
-import { v4 as uuid } from 'uuid'
+import { InvalidOriginError } from '@vramework/core/errors'
 import { VrameworkLambdaRequest } from './vramework-lambda-request'
 import { VrameworkLambdaResponse } from './vramework-lambda-response'
 import { Logger } from '@vramework/core/services'
@@ -39,7 +38,7 @@ const generalHandler = async (
   routes: CoreAPIRoutes,
   request: VrameworkLambdaRequest,
   response: VrameworkLambdaResponse
-): Promise<void> => {
+): Promise<APIGatewayProxyResult> => {
   if (request.getMethod() === 'options') {
     response.setHeaders({
       'Access-Control-Allow-Headers':
@@ -48,12 +47,12 @@ const generalHandler = async (
     })
     response.setStatus(200)
     response.setJson({})
-    return
+    return response.getLambdaResponse()
   }
 
   if (request.getPath().includes('health-check')) {
     response.setStatus(200)
-    return
+    return response.getLambdaResponse()
   }
 
   try {
@@ -61,24 +60,11 @@ const generalHandler = async (
       route: request.getPath(),
       type: request.getMethod() as any,
     })
-  } catch (e: any) {
-    const errorResponse = getErrorResponse(e)
-    let _statusCode: number
-
-    if (errorResponse != null) {
-      const errorId = (e as any).errorId || uuid()
-      _statusCode = errorResponse.status
-      services.logger.warn(`Warning id: ${errorId}`)
-      services.logger.warn(e)
-    } else {
-      const errorId = services.logger.error(`Uncaught Error: ${e.message}`, e)
-      console.trace(e)
-      response.setStatus(500)
-      response.setJson({ errorId })
-    }
-
-    throw e
+  } catch {
+    // Error should have already been handled by runRoute
   }
+
+  return response.getLambdaResponse()
 }
 
 export const processCorsless = async (
@@ -140,13 +126,11 @@ export const processCors = async (
   response.setHeader('Access-Control-Allow-Origin', origin)
   response.setHeader('Access-Control-Allow-Credentials', true)
 
-  await generalHandler(
+  return await generalHandler(
     singletonServices,
     createSessionServices,
     routes,
     request,
     response
   )
-
-  return response.getLambdaResponse()
 }
