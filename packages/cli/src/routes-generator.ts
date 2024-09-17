@@ -1,5 +1,5 @@
 import { promises } from 'fs'
-import { loadAPIFilePaths } from '@vramework/core/api-routes'
+import { loadRoutes } from '@vramework/core/api-routes'
 import { join, relative } from 'path'
 
 export const generateRoutesImports = async (
@@ -11,16 +11,12 @@ export const generateRoutesImports = async (
   const outputPath = join(rootPath, outputPathFilePath)
 
   let routes: string[] = []
-  for (const dir of routesDirPath) {
-    const absPath = join(rootPath, dir)
-    const results = await loadAPIFilePaths(absPath, [])
-    routes = [...routes, ...results]
-  }
+  const { filesWithRoutes } = await loadRoutes(rootPath, routesDirPath)
 
   const routesFile = `
 import { APIRoutes } from "${vrameworkTypesModule}"
 
-${routes
+${filesWithRoutes
   .sort()
   .map((path, i) => {
     const filePath = relative(outputPath, path)

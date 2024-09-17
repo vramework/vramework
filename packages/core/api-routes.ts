@@ -1,54 +1,70 @@
-import { promises } from 'fs'
-import { join } from 'path'
-import { CoreAPIRoutes } from './routes'
+import { promises } from 'fs';
+import { CoreAPIRoutes } from './routes';
+import { join } from 'path';
 
-export const loadAPIFilePaths = async (
-  dir: string,
-  filesWithRoutes: string[]
-): Promise<string[]> => {
-  const entries = await promises.readdir(dir)
+/**
+ * Recursively loads all API file paths from the specified directory.
+ * @param dir - The directory to load API file paths from.
+ * @param filesWithRoutes - An array to store the file paths.
+ * @returns A promise that resolves to an array of file paths containing API routes.
+ * @description This function recursively traverses the specified directory, loading all TypeScript file paths that contain API routes.
+ */
+export const loadRoutes = async (
+  relativeRootDir: string,
+  routeDirectories: string[] = []
+): Promise<{
+  filesWithRoutes: string[],
+  apiRoutes: CoreAPIRoutes
+}> => {
+  let filesWithRoutes: string[] = [];
+  let apiRoutes: CoreAPIRoutes = [];
+
+  for (const routeDirectory of routeDirectories) {
+    const { apiRoutes: routes, filesWithRoutes: files } = await loadRoutesFromDirectory(
+      join(`${relativeRootDir}/${routeDirectory}`)
+    );
+    filesWithRoutes = [...filesWithRoutes, ...files]
+    apiRoutes = [...apiRoutes, ...routes];
+  }
+
+  return { apiRoutes, filesWithRoutes }
+};
+
+
+export const loadRoutesFromDirectory = async (
+  relativeRootDir: string,
+  filesWithRoutes: string[] = []
+): Promise<{
+  filesWithRoutes: string[],
+  apiRoutes: CoreAPIRoutes
+}> => {
+  let apiRoutes: CoreAPIRoutes = [];
+
+  const entries = await promises.readdir(relativeRootDir);
 
   await Promise.all(
     entries.map(async (entry) => {
-      if (dir.includes('node_modules')) {
-        return
+      if (relativeRootDir.includes('node_modules')) {
+        return;
       }
-      const lstat = await promises.lstat(`${dir}/${entry}`)
+      const lstat = await promises.lstat(`${relativeRootDir}/${entry}`);
       if (lstat.isDirectory()) {
-        await loadAPIFilePaths(`${dir}/${entry}`, filesWithRoutes)
+        await loadRoutesFromDirectory(`${relativeRootDir}/${entry}`, filesWithRoutes);
       } else {
         if (
           entry.endsWith('.ts') &&
           !entry.endsWith('.d.ts') &&
-          !entry.includes('.spec.')
+          !entry.endsWith('.test.ts')
         ) {
-          const file = await import(`${dir}/${entry}`)
-          if (file.routes) {
-            filesWithRoutes.push(`${dir}/${entry}`.replace('.ts', ''))
+          const routes = await import(`${relativeRootDir}/${entry}`)
+          if (routes.routes) {
+            filesWithRoutes.push(`${relativeRootDir}/${entry}`);
+            apiRoutes = [...apiRoutes, ...routes.routes];
           }
         }
       }
-      return
     })
-  )
-  return filesWithRoutes
-}
+  );
 
-export const loadAPIFiles = async (
-  relativeDirectory: string,
-  routesDirPaths: string[]
-) => {
-  let apiRoutes: CoreAPIRoutes = []
-
-  for (let routesDirPath of routesDirPaths) {
-    routesDirPath = join(`${relativeDirectory}/${routesDirPath}`)
-    const filePaths = await loadAPIFilePaths(routesDirPath, [])
-
-    for (const path of filePaths) {
-      const routes = await import(path)
-      apiRoutes = [...apiRoutes, ...routes.routes]
-    }
-  }
-
-  return apiRoutes
-}
+  return { apiRoutes, filesWithRoutes }
+};

@@ -30,7 +30,7 @@ export class VrameworkFastifyServer {
   }
 
   public async init() {
-    const { routes } = await initializeVrameworkCore(this.vrameworkConfig)
+    const { routes } = await initializeVrameworkCore(this.singletonServices.logger, this.vrameworkConfig)
 
     // Verify all schemas are loaded
     routes.forEach((route) => {

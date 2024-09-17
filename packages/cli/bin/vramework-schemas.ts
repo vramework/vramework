@@ -1,8 +1,8 @@
 import { Command } from 'commander'
 import { generateSchemas } from '../src/schema-generator'
-import { loadAPIFiles } from '@vramework/core/api-routes'
+import { loadRoutes } from '@vramework/core/api-routes'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
-import path = require('path')
+import { join } from 'path'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
   const { routeDirectories, schemaOutputDirectory, tsconfig, rootDir } =
@@ -23,10 +23,12 @@ Generating schemas:
     - Route Directories:${['', ...routeDirectories].join('\n\t- ')}
 `)
 
+  const routes = await loadRoutes(rootDir, routeDirectories)
+
   await generateSchemas(
-    path.join(rootDir, tsconfig),
-    path.join(rootDir, schemaOutputDirectory),
-    await loadAPIFiles(rootDir, routeDirectories)
+    join(rootDir, tsconfig),
+    join(rootDir, schemaOutputDirectory),
+    routes.apiRoutes
   )
 
   console.log(`Schemas generated in ${Date.now() - startedAt}ms.`)
