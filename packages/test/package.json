@@ -1,5 +1,5 @@
 {
-  "name": "@vramework/services-local",
+  "name": "@vramework/test",
   "version": "0.1.16",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
@@ -14,10 +14,6 @@
   },
   "peerDependencies": {
     "@vramework/core": "^0.1.16"
-  },
-  "dependencies": {
-    "eventemitter3": "^5.0.1",
-    "jose": "^5.9.2"
   },
   "devDependencies": {
     "@types/chai-as-promised": "^7",
