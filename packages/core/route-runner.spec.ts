@@ -11,19 +11,19 @@ import { VrameworkResponse } from './vramework-response';
 import { JSONValue } from './types';
 
 class VrameworkTestRequest extends VrameworkRequest {
-    public getHeader(headerName: string): string | undefined {
+    public getHeader(_headerName: string): string | undefined {
         throw new Error('Method not implemented.');
     }
 }
 
 class VrameworkTestResponse extends VrameworkResponse {
-    public setStatus(status: number): void {
+    public setStatus(_status: number): void {
         throw new Error('Method not implemented.');
     }
-    public setJson(body: JSONValue): void {
+    public setJson(_body: JSONValue): void {
         throw new Error('Method not implemented.');
     }
-    public setResponse(response: string | Buffer): void {
+    public setResponse(_response: string | Buffer): void {
         throw new Error('Method not implemented.');
     }
 }

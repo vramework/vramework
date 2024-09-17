@@ -6,7 +6,7 @@ export abstract class VrameworkResponse {
     public abstract setJson(body: JSONValue): void
     public abstract setResponse(response: string | Buffer): void
 
-    public setHeader(name: string, value: string | boolean | string[]) {
+    public setHeader(_name: string, _value: string | boolean | string[]) {
         throw new Error('Method not implemented.');
     }
 
@@ -16,15 +16,15 @@ export abstract class VrameworkResponse {
         }
     }
 
-    public setCookie(name: string, value: string, options: CookieSerializeOptions) {
+    public setCookie(_name: string, _value: string, _options: CookieSerializeOptions) {
         throw new Error('Method not implemented.');
     }
 
-    public clearCookie(name: string) {
+    public clearCookie(_name: string) {
         throw new Error('Method not implemented.');
     }
     
-    public setRedirect(path: string, status: number) {
+    public setRedirect(_path: string, _status: number) {
         throw new Error('Method not implemented.');
     }
 }

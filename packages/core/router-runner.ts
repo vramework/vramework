@@ -2,7 +2,7 @@ import { getErrorResponse, NotFoundError, NotImplementedError } from "./errors"
 import { verifyPermissions } from "./permissions"
 import { CoreAPIRoute, CoreAPIRoutes } from "./routes"
 import { loadSchema, validateJson } from "./schema"
-import { CoreSingletonServices, CoreUserSession, CreateSessionServices, RequestHeaders, SessionService } from "./types"
+import { CoreSingletonServices, CoreUserSession, CreateSessionServices, SessionService } from "./types"
 import { match } from "path-to-regexp"
 import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from "./vramework-request"

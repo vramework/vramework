@@ -18,7 +18,7 @@ export class VrameworkLambdaRequest extends VrameworkRequest {
         throw new Error('Method not implemented.')
     }
 
-    public getHeader(headerName: string): string | undefined {
+    public getHeader(_headerName: string): string | undefined {
         throw new Error('Method not implemented.')
     }
 

@@ -1,6 +1,6 @@
 import uWS from 'uWebSockets.js'
 
-import { CoreConfig, CoreSingletonServices, CreateSessionServices, LocalContentConfig, SessionService, VrameworkConfig } from '@vramework/core/types'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices, VrameworkConfig } from '@vramework/core/types'
 import { loadSchema } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { runRoute } from '@vramework/core/router-runner'
@@ -21,7 +21,7 @@ export class VrameworkUWSServer {
   /**
    * Placeholder for enabling CORS
    */
-  public enableCors (options: any) {
+  public enableCors (_options: any) {
     throw new Error('Method not implemented.')
   }
 
@@ -48,7 +48,7 @@ export class VrameworkUWSServer {
             route: req.getUrl() as string,
           }
         )
-      } catch (e) {
+      } catch {
         // Error should have already been handled by runRoute
       }
 

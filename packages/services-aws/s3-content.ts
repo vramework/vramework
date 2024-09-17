@@ -23,9 +23,9 @@ export class S3Content implements ContentService {
   private s3: S3Client
 
   constructor(private config: S3ContentConfig, private logger: Logger, private signConfig: { keypairId: string; privateKeyString: string }) {
-    this.s3 = new S3Client({ 
+    this.s3 = new S3Client({
       endpoint: this.config.endpoint,
-      region: this.config.region 
+      region: this.config.region
     })
   }
 
@@ -35,7 +35,7 @@ export class S3Content implements ContentService {
         ...this.signConfig,
         expireTime: Math.round(Date.now() + 3600000)
       })
-    } catch (e: any) {
+    } catch {
       this.logger.error(`Error signing url: ${url}`)
       return url
     }
@@ -60,23 +60,20 @@ export class S3Content implements ContentService {
   }
 
   public async readFile(Key: string) {
-    return new Promise<Buffer>(async (resolve, reject) => {
-      try {
-        this.logger.debug(`Getting file, key: ${Key}`)
-        const response = await this.s3.send(
-          new GetObjectCommand({
-            Bucket: this.config.bucketName,
-            Key,
-          }),
-        )
-        const body = response.Body as any
-        const responseDataChunks: any[] = []
-        body.on('data', (chunk: any) => responseDataChunks.push(chunk))
-        body.once('end', () => resolve(Buffer.concat(responseDataChunks)))
-      } catch (err) {
-        // Handle the error or throw
-        return reject(err)
-      }
+    this.logger.debug(`Getting file, key: ${Key}`)
+    const response = await this.s3.send(
+      new GetObjectCommand({
+        Bucket: this.config.bucketName,
+        Key,
+      }),
+    )
+    const body = response.Body as any
+    const responseDataChunks: any[] = []
+    body.on('data', (chunk: any) => responseDataChunks.push(chunk))
+
+    return new Promise<Buffer>((resolve, reject) => {
+      body.once('end', () => resolve(Buffer.concat(responseDataChunks)))
+      body.on('error', reject)
     })
   }
 

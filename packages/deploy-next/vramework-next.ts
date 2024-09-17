@@ -1,5 +1,5 @@
 import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/core/routes';
-import { CoreConfig, CoreSingletonServices, CoreUserSession, CreateSessionServices } from "@vramework/core/types";
+import { CoreConfig, CoreSingletonServices, CreateSessionServices } from "@vramework/core/types";
 import { injectIntoUrl } from "@vramework/core/utils";
 import { IncomingMessage, ServerResponse } from 'http';
 import { NextApiRequest, NextApiResponse } from "next";

@@ -1,4 +1,3 @@
-import { JSONValue } from '@vramework/core/types'
 import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { APIGatewayProxyResult } from 'aws-lambda'
 

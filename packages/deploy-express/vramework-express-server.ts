@@ -1,15 +1,11 @@
-import express, { NextFunction, Request, Response } from 'express'
+import express from 'express'
 import { Server } from 'http'
 import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
-import contentType from 'content-type'
 import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
 
-import { mkdir, writeFile } from 'fs/promises'
-
-import { CoreConfig, CoreSingletonServices, CreateSessionServices, LocalContentConfig, SessionService, VrameworkConfig } from '@vramework/core/types'
-import { MissingSessionError } from '@vramework/core/errors'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices, LocalContentConfig, VrameworkConfig } from '@vramework/core/types'
 import { loadSchema } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { VrameworkExpressRequest } from './vramework-express-request'
@@ -84,7 +80,7 @@ export class VrameworkExpressServer {
             route: req.path,
           }
         )
-      } catch (e) {
+      } catch {
         // Error should have already been handled by runRoute
       }
 

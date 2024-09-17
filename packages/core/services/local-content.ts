@@ -30,7 +30,7 @@ export class LocalContent implements ContentService {
       const path = `${this.localFileDirectory}/${assetKey}`
       await this.createDirectoryForFile(path)
       await promises.writeFile(path, buffer)
-    } catch (e) {
+    } catch (e: any) {
       console.error(e)
       this.logger.error(`Error inserting content ${assetKey}`, e)
     }
@@ -43,7 +43,7 @@ export class LocalContent implements ContentService {
       const path = `${this.localFileDirectory}/${assetKey}`
       await this.createDirectoryForFile(path)
       await promises.copyFile(fromAbsolutePath, path)
-    } catch (e) {
+    } catch (e: any) {
       console.error(e)
       this.logger.error(`Error inserting content ${assetKey}`, e)
     }
@@ -54,7 +54,7 @@ export class LocalContent implements ContentService {
     this.logger.debug(`getting key: ${assetKey}`)
     try {
       return await promises.readFile(`${this.localFileDirectory}/${assetKey}`)
-    } catch (e) {
+    } catch (e: any) {
       this.logger.error(`Error get content ${assetKey}`)
       throw e
     }

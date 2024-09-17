@@ -21,7 +21,7 @@ export const getVrameworkConfig = async (configFile?: string): Promise<Vramework
             ...config,
             rootDir: config.rootDir ? resolve(configDir, config.rootDir) : configDir
         }
-    } catch (e) {
+    } catch (e: any) {
         console.error(e)
         console.error(`Config file not found: ${configFile}`)
         process.exit(1)

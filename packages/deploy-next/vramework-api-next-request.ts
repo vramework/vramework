@@ -9,7 +9,7 @@ export class VrameworkAPINextRequest extends VrameworkRequest {
     public getBody() {
         try {
             return JSON.parse(this.request.body)
-        } catch (e) {
+        } catch {
             return this.request.body
         }
     }

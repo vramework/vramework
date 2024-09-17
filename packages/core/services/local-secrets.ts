@@ -1,5 +1,5 @@
 import { Logger } from './logger'
-import { CoreConfig, SecretService } from '../types'
+import { SecretService } from '../types'
 
 export class LocalSecretService implements SecretService {
   constructor(private readonly logger: Logger) {}

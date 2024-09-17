@@ -15,7 +15,7 @@ export class AWSSecrets implements SecretService {
       if (result.SecretString) {
         try {
           return JSON.parse(result.SecretString)
-        } catch (e: any) {
+        } catch {
           return result.SecretString as any
         }
       }

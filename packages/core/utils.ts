@@ -19,15 +19,3 @@ export const getHeader = (headers: RequestHeaders, name: string): string | undef
     }
     return value
 }
-
-export const mergeData = (
-    params: Record<string, any>, 
-    query: Record<string, any>, 
-    body: Record<string, any>
-) => {
-    return {
-        ...(params || {}),
-        ...(query || {}),
-        ...(body || {}),
-    }
-}

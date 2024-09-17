@@ -62,11 +62,11 @@ const generalHandler = async (
     )
   } catch (e: any) {
     const errorResponse = getErrorResponse(e)
-    let statusCode: number
+    let _statusCode: number
 
     if (errorResponse != null) {
       const errorId = (e as any).errorId || uuid()
-      statusCode = errorResponse.status
+      _statusCode = errorResponse.status
       services.logger.warn(`Warning id: ${errorId}`)
       services.logger.warn(e)
     } else {
@@ -119,7 +119,7 @@ export const processCors = async (
   let origin: string | false = false
   try {
     origin = validateOrigin(allowedOrigins, singletonServices.logger, event)
-  } catch (e: any) {
+  } catch {
     response.setStatus(400)
     response.setJson({ error: 'error.invalid_origin' })
   }

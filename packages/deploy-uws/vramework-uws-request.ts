@@ -11,7 +11,7 @@ export class VrameworkUWSRequest extends VrameworkRequest {
     public async getBody() {
         try {
             return await this.readJson()
-        } catch (e) {
+        } catch {
             throw new Error('Failed to parse JSON')
         }
     }
@@ -41,7 +41,7 @@ export class VrameworkUWSRequest extends VrameworkRequest {
                     if (buffer) {
                         try {
                             json = JSON.parse(Buffer.concat([buffer, chunk]).toString())
-                        } catch (e) {
+                        } catch {
                             /* res.close calls onAborted */
                             this.response.close()
                             return;
@@ -50,7 +50,7 @@ export class VrameworkUWSRequest extends VrameworkRequest {
                     } else {
                         try {
                             json = JSON.parse(chunk.toString());
-                        } catch (e) {
+                        } catch {
                             /* res.close calls onAborted */
                             this.response.close();
                             return;
