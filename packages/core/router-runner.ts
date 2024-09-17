@@ -1,4 +1,4 @@
-import { getErrorResponse, NotFoundError, NotImplementedError } from './errors'
+import { getErrorResponse } from './error-handler'
 import { verifyPermissions } from './permissions'
 import { CoreAPIRoute, CoreAPIRoutes } from './routes'
 import { loadSchema, validateJson } from './schema'
@@ -12,6 +12,7 @@ import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from './vramework-request'
 import { VrameworkResponse } from './vramework-response'
 import { SessionService } from './services'
+import { NotFoundError, NotImplementedError } from './errors'
 
 const getMatchingRoute = (
   logger: CoreSingletonServices['logger'],

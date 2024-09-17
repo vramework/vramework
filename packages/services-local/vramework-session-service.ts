@@ -1,9 +1,10 @@
 import { JWTService, SessionService } from '@vramework/core/services'
-import { InvalidSessionError, MissingSessionError } from '../core/errors'
 import { VrameworkRequest } from '../core/vramework-request'
+import { InvalidSessionError, MissingSessionError } from '@vramework/core'
 
 export class VrameworkSessionService<UserSession>
-  implements SessionService<UserSession> {
+  implements SessionService<UserSession>
+{
   constructor(
     private jwtService: JWTService<UserSession>,
     private options: {
@@ -15,7 +16,7 @@ export class VrameworkSessionService<UserSession>
       getSessionForAPIKey?: (apiKey: string) => Promise<UserSession>
       transformSession?: (session: any) => Promise<UserSession>
     }
-  ) { }
+  ) {}
 
   private async getCookieSession(
     request: VrameworkRequest
@@ -86,7 +87,7 @@ export class VrameworkSessionService<UserSession>
     }
 
     if (userSession && this.options.transformSession) {
-      return await this.options.transformSession(userSession)  
+      return await this.options.transformSession(userSession)
     }
 
     return userSession
