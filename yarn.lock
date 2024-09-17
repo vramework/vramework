@@ -1973,20 +1973,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vramework/aws@workspace:packages/services-aws":
-  version: 0.0.0-use.local
-  resolution: "@vramework/aws@workspace:packages/services-aws"
-  dependencies:
-    "@aws-sdk/client-s3": "npm:3.624.0"
-    "@aws-sdk/client-secrets-manager": "npm:3.624.0"
-    "@aws-sdk/s3-request-presigner": "npm:3.624.0"
-    aws-cloudfront-sign: "npm:^3.0.2"
-    typescript: "npm:^5.5"
-  peerDependencies:
-    "@vramework/core": ^0.1.15
-  languageName: unknown
-  linkType: soft
-
 "@vramework/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@vramework/cli@workspace:packages/cli"
@@ -2114,6 +2100,40 @@ __metadata:
     prettier: "npm:3.3.3"
     typedoc: "npm:^0.26.7"
     typescript: "npm:^5.6.2"
+  languageName: unknown
+  linkType: soft
+
+"@vramework/services-aws@workspace:packages/services-aws":
+  version: 0.0.0-use.local
+  resolution: "@vramework/services-aws@workspace:packages/services-aws"
+  dependencies:
+    "@aws-sdk/client-s3": "npm:3.624.0"
+    "@aws-sdk/client-secrets-manager": "npm:3.624.0"
+    "@aws-sdk/s3-request-presigner": "npm:3.624.0"
+    aws-cloudfront-sign: "npm:^3.0.2"
+    typescript: "npm:^5.5"
+  peerDependencies:
+    "@vramework/core": ^0.1.15
+  languageName: unknown
+  linkType: soft
+
+"@vramework/services-local@workspace:packages/services-local":
+  version: 0.0.0-use.local
+  resolution: "@vramework/services-local@workspace:packages/services-local"
+  dependencies:
+    "@types/chai-as-promised": "npm:^7"
+    "@types/mocha": "npm:^10.0.8"
+    "@types/node": "npm:^22.5.5"
+    chai: "npm:^4"
+    chai-as-promised: "npm:^7.1.2"
+    eventemitter3: "npm:^5.0.1"
+    jose: "npm:^5.9.2"
+    mocha: "npm:^10.7.3"
+    sinon: "npm:^19.0.2"
+    ts-node: "npm:^10.9.2"
+    typescript: "npm:^5.5.4"
+  peerDependencies:
+    "@vramework/core": ^0.1.15
   languageName: unknown
   linkType: soft
 

@@ -12,6 +12,9 @@
     },
     {
       "path": "./services-aws/tsconfig.build.json"
+    },
+    {
+      "path": "./services-local/tsconfig.build.json"
     }
   ]
 }

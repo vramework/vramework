@@ -1,0 +1,33 @@
+{
+  "name": "@vramework/services-local",
+  "version": "0.1.15",
+  "author": "yasser.fadl@gmail.com",
+  "license": "MIT",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "rm -rf dist && tsc -b",
+    "ncu": "ncu",
+    "release": "npm run build && npm run test && npm publish --access public",
+    "test": "mocha --require ts-node/register"
+  },
+  "peerDependencies": {
+    "@vramework/core": "^0.1.15"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.1",
+    "jose": "^5.9.2"
+  },
+  "devDependencies": {
+    "@types/chai-as-promised": "^7",
+    "@types/mocha": "^10.0.8",
+    "@types/node": "^22.5.5",
+    "chai": "^4",
+    "chai-as-promised": "^7.1.2",
+    "mocha": "^10.7.3",
+    "sinon": "^19.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}

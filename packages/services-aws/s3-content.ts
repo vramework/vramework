@@ -5,9 +5,9 @@ import {
   GetObjectCommand,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
+import { ContentService } from '@vramework/core/services'
 
-import { ContentService } from '@vramework/core/types'
-import { Logger } from '@vramework/core/services/logger'
+import { Logger } from '@vramework/core/services'
 
 // @ts-ignore
 import { getSignedUrl as getCDNSignedUrl } from 'aws-cloudfront-sign'

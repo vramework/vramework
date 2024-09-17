@@ -1,5 +1,4 @@
-import { Logger } from './logger'
-import { SecretService } from '../types'
+import { SecretService, Logger } from '@vramework/core/services'
 
 export class LocalSecretService implements SecretService {
   constructor(private readonly logger: Logger) {}

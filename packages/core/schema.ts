@@ -1,7 +1,7 @@
+import { Logger } from './services'
 import Ajv, { ValidateFunction } from 'ajv'
 import addFormats from 'ajv-formats'
 import { InvalidParametersError } from './errors'
-import { Logger } from './services/logger'
 
 const ajv = new Ajv({
   removeAdditional: false,

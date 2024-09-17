@@ -18,7 +18,7 @@
     "ncu": "yarn workspaces foreach -A run ncu -x",
     "test": "yarn workspaces foreach -A run test",
     "lint": "npx oxlint@latest",
-    "prettier": " yarn prettier . --write"
+    "prettier": "npx prettier . --write"
   },
   "packageManager": "yarn@4.5.0",
   "devDependencies": {

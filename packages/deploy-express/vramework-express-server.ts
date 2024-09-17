@@ -9,7 +9,6 @@ import {
   CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
-  LocalContentConfig,
   VrameworkConfig,
 } from '@vramework/core/types'
 import { loadSchema } from '@vramework/core/schema'
@@ -27,22 +26,7 @@ export class VrameworkExpressServer {
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices
-  ) {}
-
-  public enableCors(options: CorsOptions | CorsOptionsDelegate) {
-    this.app.use(cors(options))
-  }
-
-  public async init() {
-    const { routes } = await initializeVrameworkCore(this.vrameworkConfig)
-
-    // Verify all schemas are loaded
-    routes.forEach((route) => {
-      if (route.schema) {
-        loadSchema(route.schema, this.singletonServices.logger)
-      }
-    })
-
+  ) {
     this.app.use(
       json({
         limit: this.config.limits?.json || '1mb',
@@ -71,14 +55,25 @@ export class VrameworkExpressServer {
         res.status(200).end()
       }
     )
+  }
 
-    const contentConfig = this.config.content as LocalContentConfig
-    if (contentConfig) {
-      this.app.use(
-        contentConfig.assetsUrl || '/assets/',
-        express.static(contentConfig.contentDirectory)
-      )
-    }
+  public enableCors(options: CorsOptions | CorsOptionsDelegate) {
+    this.app.use(cors(options))
+  }
+
+  public enableStaticAssets(assetsUrl: string, contentDirectory: string) {
+    this.app.use(assetsUrl || '/assets/', express.static(contentDirectory))
+  }
+
+  public async init() {
+    const { routes } = await initializeVrameworkCore(this.vrameworkConfig)
+
+    // Verify all schemas are loaded
+    routes.forEach((route) => {
+      if (route.schema) {
+        loadSchema(route.schema, this.singletonServices.logger)
+      }
+    })
 
     this.app.use(async (req, res) => {
       try {

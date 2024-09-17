@@ -6,12 +6,12 @@ import {
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
-  SessionService,
 } from './types'
 import { match } from 'path-to-regexp'
 import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from './vramework-request'
 import { VrameworkResponse } from './vramework-response'
+import { SessionService } from './services'
 
 const getMatchingRoute = (
   logger: CoreSingletonServices['logger'],

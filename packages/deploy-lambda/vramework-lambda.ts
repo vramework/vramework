@@ -9,7 +9,7 @@ import { getErrorResponse, InvalidOriginError } from '@vramework/core/errors'
 import { v4 as uuid } from 'uuid'
 import { VrameworkLambdaRequest } from './vramework-lambda-request'
 import { VrameworkLambdaResponse } from './vramework-lambda-response'
-import { Logger } from '@vramework/core/services/logger'
+import { Logger } from '@vramework/core/services'
 import { runRoute } from '@vramework/core/router-runner'
 
 const validateOrigin = (

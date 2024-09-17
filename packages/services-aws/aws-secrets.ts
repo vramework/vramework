@@ -3,7 +3,7 @@ import {
   GetSecretValueCommand,
 } from '@aws-sdk/client-secrets-manager'
 import { AWSConfig } from './aws-config'
-import { SecretService } from '@vramework/core/types'
+import { SecretService } from '@vramework/core/services'
 
 export class AWSSecrets implements SecretService {
   private readonly client: SecretsManagerClient

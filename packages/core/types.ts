@@ -1,5 +1,5 @@
 import { Logger, LogLevel } from './services/logger'
-import { CoreAPIRoute } from './routes'
+import { PermissionService, SessionService } from './services'
 import { VrameworkRequest } from './vramework-request'
 import { VrameworkResponse } from './vramework-response'
 
@@ -28,74 +28,22 @@ export interface VrameworkConfig {
   tsconfig: string
 }
 
-export interface SecretService {
-  getSecret(key: string): Promise<string>
-}
-
 export interface CoreConfig {
   logLevel: LogLevel
   port: number
   maximumComputeTime?: number
   healthCheckPath?: string
   secrets?: {}
-  content?: CoreContentConfig
   limits?: Partial<Record<string, string>>
 }
 
 export interface CoreUserSession {}
 
-export interface LocalContentConfig {
-  contentDirectory: string
-  assetsUrl: string
-}
-
-export interface CoreContentConfig {
-  local?: LocalContentConfig
-}
-
-export interface ContentService {
-  signContentKey: (contentKey: string) => Promise<string>
-  signURL: (url: string) => Promise<string>
-  getUploadURL: (
-    fileKey: string,
-    contentType: string
-  ) => Promise<{ uploadUrl: string; assetKey: string }>
-  deleteFile: (fileName: string) => Promise<boolean>
-  writeFile: (assetKey: string, buffer: Buffer) => Promise<boolean>
-  copyFile: (assetKey: string, fromAbsolutePath: string) => Promise<boolean>
-  readFile: (assetKey: string) => Promise<Buffer>
-}
-
-export interface JWTService<UserSession = CoreUserSession> {
-  encode: <T extends any>(expiresIn: string, payload: T) => Promise<string>
-  decode: <T>(
-    hash: string,
-    invalidHashError?: Error,
-    debug?: boolean
-  ) => Promise<T>
-  decodeSession: (jwtToken: string, debug?: any) => Promise<UserSession>
-}
-
 export type RequestHeaders =
   | Record<string, string | string[] | undefined>
   | ((headerName: string) => string | string[] | undefined)
 
-export interface SessionService<UserSession = CoreUserSession> {
-  getUserSession: (
-    credentialsRequired: boolean,
-    vrameworkRequest: VrameworkRequest
-  ) => Promise<UserSession | undefined>
-}
-
-export interface PermissionService {
-  verifyRouteAccess(
-    route: CoreAPIRoute<unknown, unknown>,
-    session?: CoreUserSession
-  ): Promise<void>
-}
-
 export interface CoreSingletonServices {
-  jwt?: JWTService
   sessionService?: SessionService
   permissionService?: PermissionService
   config: CoreConfig

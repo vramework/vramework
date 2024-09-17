@@ -13,7 +13,7 @@ export const generateRoutesImports = async (
   let routes: string[] = []
   for (const dir of routesDirPath) {
     const absPath = join(rootPath, dir)
-    const results = await loadAPIFilePaths(absPath, absPath, [])
+    const results = await loadAPIFilePaths(absPath, [])
     routes = [...routes, ...results]
   }
 
