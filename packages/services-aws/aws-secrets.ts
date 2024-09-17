@@ -1,4 +1,7 @@
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager'
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+} from '@aws-sdk/client-secrets-manager'
 import { AWSConfig } from './aws-config'
 import { SecretService } from '@vramework/core/types'
 
@@ -11,7 +14,9 @@ export class AWSSecrets implements SecretService {
 
   public async getSecret<Result = string>(SecretId: string): Promise<Result> {
     try {
-      const result = await this.client.send(new GetSecretValueCommand({ SecretId }))
+      const result = await this.client.send(
+        new GetSecretValueCommand({ SecretId })
+      )
       if (result.SecretString) {
         try {
           return JSON.parse(result.SecretString)

@@ -1,17 +1,17 @@
 {
-    "files": [],
-    "references": [
-      {
-        "path": "./core/tsconfig.build.json"
-      },
-      {
-        "path": "./deploy-express/tsconfig.build.json"
-      },
-      {
-        "path": "./deploy-lambda/tsconfig.build.json"
-      },
-      {
-        "path": "./services-aws/tsconfig.build.json"
-      }
-    ]
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "./core/tsconfig.build.json"
+    },
+    {
+      "path": "./deploy-express/tsconfig.build.json"
+    },
+    {
+      "path": "./deploy-lambda/tsconfig.build.json"
+    },
+    {
+      "path": "./services-aws/tsconfig.build.json"
+    }
+  ]
+}

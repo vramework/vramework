@@ -1,6 +1,5 @@
-import { describe, it } from "mocha"
+import { describe, it } from 'mocha'
 
 describe('API routes', () => {
-    it('should have a route for getting all todos', () => {
-    })
+  it('should have a route for getting all todos', () => {})
 })

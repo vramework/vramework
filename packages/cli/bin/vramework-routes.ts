@@ -3,13 +3,20 @@ import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import { generateRoutesImports } from '../src/routes-generator'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const { vrameworkTypesModule, routeDirectories, routesOutputFile, rootDir } = await getVrameworkConfig(configFile)
+  const { vrameworkTypesModule, routeDirectories, routesOutputFile, rootDir } =
+    await getVrameworkConfig(configFile)
 
-  if (!vrameworkTypesModule || !rootDir || !routeDirectories || !routesOutputFile) {
-    console.error('vrameworkTypesModule, rootDir, routeDirectories and routesOutputFile are required in vramework.config.json')
+  if (
+    !vrameworkTypesModule ||
+    !rootDir ||
+    !routeDirectories ||
+    !routesOutputFile
+  ) {
+    console.error(
+      'vrameworkTypesModule, rootDir, routeDirectories and routesOutputFile are required in vramework.config.json'
+    )
     process.exit(1)
   }
-
 
   const startedAt = Date.now()
   console.log(`
@@ -22,7 +29,7 @@ Generating Route File:
     rootDir,
     routeDirectories,
     vrameworkTypesModule,
-    routesOutputFile,
+    routesOutputFile
   )
 
   console.log(`Routes generated in ${Date.now() - startedAt}ms.`)

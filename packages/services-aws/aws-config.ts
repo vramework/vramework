@@ -1,3 +1,3 @@
 export interface AWSConfig {
-    awsRegion: string
+  awsRegion: string
 }

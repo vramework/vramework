@@ -3,9 +3,9 @@ import addFormats from 'ajv-formats'
 import { InvalidParametersError } from './errors'
 import { Logger } from './services/logger'
 
-const ajv = new Ajv({ 
+const ajv = new Ajv({
   removeAdditional: false,
-  coerceTypes: false 
+  coerceTypes: false,
 })
 addFormats(ajv as any)
 
@@ -56,17 +56,25 @@ export const validateJson = (schema: string, json: unknown): void => {
   }
   const result = validator(json)
   if (!result) {
-    console.log(`failed to validate request data against schema '${schema}'`, json, validator.errors)
+    console.log(
+      `failed to validate request data against schema '${schema}'`,
+      json,
+      validator.errors
+    )
     const errorText = ajv.errorsText(validator.errors)
     throw new InvalidParametersError(errorText)
   }
 }
 
-export const getValidationErrors = (logger: Logger, schema: string, json: unknown) => {
+export const getValidationErrors = (
+  logger: Logger,
+  schema: string,
+  json: unknown
+) => {
   const validator = validators.get(schema)
   if (!validator) {
     throw `Missing validator for ${schema}`
   }
-  const result = validator(json);
-  return result ? undefined : validator.errors;
+  const result = validator(json)
+  return result ? undefined : validator.errors
 }

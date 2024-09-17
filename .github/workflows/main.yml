@@ -10,5 +10,6 @@ jobs:
       - run: corepack enable
       - run: yarn install
       - run: yarn run tsc
-      - run: 
+      - run: yarn run prettier
+      - run: yarn run lint
       - run: npx typedocs

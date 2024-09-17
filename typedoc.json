@@ -1,16 +1,16 @@
 {
-    "entryPoints": [
-        "packages/core/*.ts", 
-        "packages/deploy-express/*.ts",
-        "packages/deploy-fastify/*.ts",
-        "packages/deploy-next/*.ts",
-        "packages/deploy-uws/*.ts",
-        "packages/deploy-next/*.ts",
-        "packages/services-aws/*.ts"
-    ],
-    "out": ".typedocs",
-    "compilerOptions": {
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-    }
+  "entryPoints": [
+    "packages/core/*.ts",
+    "packages/deploy-express/*.ts",
+    "packages/deploy-fastify/*.ts",
+    "packages/deploy-next/*.ts",
+    "packages/deploy-uws/*.ts",
+    "packages/deploy-next/*.ts",
+    "packages/services-aws/*.ts"
+  ],
+  "out": ".typedocs",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  }
 }

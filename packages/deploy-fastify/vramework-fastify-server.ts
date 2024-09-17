@@ -1,6 +1,11 @@
 import Fastify from 'fastify'
 
-import { CoreConfig, CoreSingletonServices, CreateSessionServices, VrameworkConfig } from '@vramework/core/types'
+import {
+  CoreConfig,
+  CoreSingletonServices,
+  CreateSessionServices,
+  VrameworkConfig,
+} from '@vramework/core/types'
 import { loadSchema } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { runRoute } from '@vramework/core/router-runner'
@@ -14,19 +19,19 @@ export class VrameworkFastifyServer {
     private readonly vrameworkConfig: VrameworkConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
-    private readonly createSessionServices: CreateSessionServices,
+    private readonly createSessionServices: CreateSessionServices
   ) {}
 
   /**
    * Placeholder for enabling CORS
    */
-  public enableCors (_options: any) {
+  public enableCors(_options: any) {
     throw new Error('Method not implemented.')
   }
 
   public async init() {
     const { routes } = await initializeVrameworkCore(this.vrameworkConfig)
-    
+
     // Verify all schemas are loaded
     routes.forEach((route) => {
       if (route.schema) {
@@ -69,7 +74,7 @@ export class VrameworkFastifyServer {
     this.singletonServices.logger.info('Server stopped')
   }
 
-  public async enableExitOnSigInt () {
+  public async enableExitOnSigInt() {
     process.removeAllListeners('SIGINT').on('SIGINT', async () => {
       await this.stop()
       process.exit(0)

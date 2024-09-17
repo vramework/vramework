@@ -2,35 +2,35 @@ import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { APIGatewayProxyResult } from 'aws-lambda'
 
 export class VrameworkLambdaResponse extends VrameworkResponse {
-    public headers: Record<string, string> = {}
-    private status: number = 200
-    private body: any
-    
-    constructor() {
-        super()
-    }
+  public headers: Record<string, string> = {}
+  private status: number = 200
+  private body: any
 
-    public getLambdaResponse(): APIGatewayProxyResult {
-        return {
-            headers: this.headers,
-            statusCode: this.status,
-            body: this.body
-        }
-    }
+  constructor() {
+    super()
+  }
 
-    public setStatus(status: number): void {
-        this.status = status
+  public getLambdaResponse(): APIGatewayProxyResult {
+    return {
+      headers: this.headers,
+      statusCode: this.status,
+      body: this.body,
     }
+  }
 
-    public setHeader(name, value): void {
-        this.headers[name] = value
-    }
+  public setStatus(status: number): void {
+    this.status = status
+  }
 
-    public setJson(value): void {
-        this.body = JSON.stringify(value)
-    }
+  public setHeader(name, value): void {
+    this.headers[name] = value
+  }
 
-    public setResponse(response): void {
-        this.body = response
-    }
+  public setJson(value): void {
+    this.body = JSON.stringify(value)
+  }
+
+  public setResponse(response): void {
+    this.body = response
+  }
 }

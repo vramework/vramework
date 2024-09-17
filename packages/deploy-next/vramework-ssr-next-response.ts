@@ -1,17 +1,14 @@
-import { VrameworkResponse } from '@vramework/core/vramework-response';
-import { IncomingMessage, ServerResponse } from 'http';
+import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { IncomingMessage, ServerResponse } from 'http'
 
 export class VrameworkSSRNextResponse extends VrameworkResponse {
-    constructor(protected response: ServerResponse<IncomingMessage>) {
-        super()
-    }
+  constructor(protected response: ServerResponse<IncomingMessage>) {
+    super()
+  }
 
-    public setStatus() {
-    }
+  public setStatus() {}
 
-    public setJson() {
-    }
+  public setJson() {}
 
-    public setResponse () {
-    }
+  public setResponse() {}
 }

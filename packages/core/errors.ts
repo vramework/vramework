@@ -1,5 +1,8 @@
 export class EError extends Error {
-  constructor(message?: string, public errorId?: string) {
+  constructor(
+    message?: string,
+    public errorId?: string
+  ) {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
   }
@@ -30,21 +33,30 @@ const apiErrors = new Map<any, ErrorDetails>([
   [NotPermissionedError, { status: 403, message: 'Not permissioned' }],
   [MissingSessionError, { status: 401, message: 'Missing Session' }],
   [InvalidSessionError, { status: 401, message: 'Invalid Session' }],
-  [MaxComputeTimeReachedError, { status: 408, message: 'Max compute time reached' }]
+  [
+    MaxComputeTimeReachedError,
+    { status: 408, message: 'Max compute time reached' },
+  ],
 ])
 
 export const addError = (error: any, { status, message }: ErrorDetails) => {
   apiErrors.set(error, { status, message })
 }
 
-export const addErrors = (errors: Array<[error: any, details: ErrorDetails]>) => {
+export const addErrors = (
+  errors: Array<[error: any, details: ErrorDetails]>
+) => {
   errors.forEach((error) => {
     addError(error[0], error[1])
   })
 }
 
-export const getErrorResponse = (error: Error): { status: number; message: string } | undefined => {
-  const foundError = Array.from(apiErrors.entries()).find(([e]) => e.name === error.constructor.name)
+export const getErrorResponse = (
+  error: Error
+): { status: number; message: string } | undefined => {
+  const foundError = Array.from(apiErrors.entries()).find(
+    ([e]) => e.name === error.constructor.name
+  )
   if (foundError) {
     return foundError[1]
   }

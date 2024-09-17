@@ -17,11 +17,13 @@
     "release": "yarn workspaces foreach -A run release",
     "ncu": "yarn workspaces foreach -A run ncu -x",
     "test": "yarn workspaces foreach -A run test",
-    "lint": "npx oxlint@latest"
+    "lint": "npx oxlint@latest",
+    "prettier": " yarn prettier . --write"
   },
   "packageManager": "yarn@4.5.0",
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "prettier": "3.3.3",
     "typedoc": "^0.26.7"
   },
   "dependencies": {

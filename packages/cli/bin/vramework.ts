@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
 require('ts-node').register({
-    transpileOnly: true
+  transpileOnly: true,
 })
 
 import { Command } from 'commander'

@@ -1,27 +1,27 @@
 {
-    "name": "@vramework/deploy-next",
-    "version": "0.1.15",
-    "license": "MIT",
-    "author": "yasser.fadl@gmail.com",
-    "main": "index.ts",
-    "scripts": {
-        "tsc": "tsc",
-        "build": "rm -rf dist && tsc -b",
-        "release": "npm run build && npm run test && npm publish --access public",
-        "ncu": "ncu",
-        "test": "echo 'No tests'"
-    },
-    "peerDependencies": {
-        "next": "^14.2.9"
-    },
-    "dependencies": {
-        "@vramework/core": "^0.1.15",
-        "cookie": "^0.6.0",
-        "eventemitter3": "^5.0.1"
-    },
-    "devDependencies": {
-        "@types/cookie": "^0.6.0",
-        "@types/next": "^9.0.0",
-        "typescript": "^5.4.2"
-    }
+  "name": "@vramework/deploy-next",
+  "version": "0.1.15",
+  "license": "MIT",
+  "author": "yasser.fadl@gmail.com",
+  "main": "index.ts",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "rm -rf dist && tsc -b",
+    "release": "npm run build && npm run test && npm publish --access public",
+    "ncu": "ncu",
+    "test": "echo 'No tests'"
+  },
+  "peerDependencies": {
+    "next": "^14.2.9"
+  },
+  "dependencies": {
+    "@vramework/core": "^0.1.15",
+    "cookie": "^0.6.0",
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.6.0",
+    "@types/next": "^9.0.0",
+    "typescript": "^5.4.2"
+  }
 }

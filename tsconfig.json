@@ -1,32 +1,32 @@
 {
-    "compilerOptions": {
-      "module": "commonjs",
-      "noImplicitAny": false,
-      "noUnusedLocals": false,
-      "removeComments": true,
-      "noLib": false,
-      "strict": true,
-      "strictNullChecks": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "useUnknownInCatchVariables": false,
-      "target": "ES2021",
-      "sourceMap": true,
-      "allowJs": false,
-      "skipLibCheck": false,
-      "paths": {
-        "@vramework/cli": ["./packages/cli"],
-        "@vramework/cli/*": ["./packages/cli/*"],
-        "@vramework/core": ["./packages/core"],
-        "@vramework/core/*": ["./packages/core/*"],
-        "@vramework/deploy-express": ["./packages/deploy-express"],
-        "@vramework/deploy-express/*": ["./packages/deploy-express/*"],
-        "@vramework/deploy-lambda": ["./packages/deploy-lambda"],
-        "@vramework/deploy-lambda/*": ["./packages/deploy-lambda/*"],
-        "@vramework/aws": ["./packages/services-aws"],
-        "@vramework/aws/*": ["./packages/services-aws/*"],
-      }
-    },
-    "include": ["packages/**/*"],
-    "exclude": ["node_modules", "**/*.spec.ts"]
-  }
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "removeComments": true,
+    "noLib": false,
+    "strict": true,
+    "strictNullChecks": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "useUnknownInCatchVariables": false,
+    "target": "ES2021",
+    "sourceMap": true,
+    "allowJs": false,
+    "skipLibCheck": false,
+    "paths": {
+      "@vramework/cli": ["./packages/cli"],
+      "@vramework/cli/*": ["./packages/cli/*"],
+      "@vramework/core": ["./packages/core"],
+      "@vramework/core/*": ["./packages/core/*"],
+      "@vramework/deploy-express": ["./packages/deploy-express"],
+      "@vramework/deploy-express/*": ["./packages/deploy-express/*"],
+      "@vramework/deploy-lambda": ["./packages/deploy-lambda"],
+      "@vramework/deploy-lambda/*": ["./packages/deploy-lambda/*"],
+      "@vramework/aws": ["./packages/services-aws"],
+      "@vramework/aws/*": ["./packages/services-aws/*"]
+    }
+  },
+  "include": ["packages/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

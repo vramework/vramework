@@ -33,4 +33,3 @@ chore: Updating dependencies
 ### Initial Release
 
 A collection of useful AWS services
-

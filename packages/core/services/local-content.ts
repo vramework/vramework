@@ -4,9 +4,12 @@ import { ContentService } from '../types'
 import { mkdir } from 'fs/promises'
 
 export class LocalContent implements ContentService {
-  constructor(private localFileDirectory: string, private logger: Logger) { }
+  constructor(
+    private localFileDirectory: string,
+    private logger: Logger
+  ) {}
 
-  public async init() { }
+  public async init() {}
 
   public async signURL(url: string): Promise<string> {
     return `${url}?signed=true`
@@ -20,7 +23,7 @@ export class LocalContent implements ContentService {
     this.logger.debug(`going to upload with key: ${assetKey}`)
     return {
       uploadUrl: `http://localhost:4002/api/v1/reaper/${assetKey}`,
-      assetKey
+      assetKey,
     }
   }
 
@@ -37,7 +40,10 @@ export class LocalContent implements ContentService {
     return false
   }
 
-  public async copyFile(assetKey: string, fromAbsolutePath: string): Promise<boolean> {
+  public async copyFile(
+    assetKey: string,
+    fromAbsolutePath: string
+  ): Promise<boolean> {
     this.logger.debug(`Writing file: ${assetKey}`)
     try {
       const path = `${this.localFileDirectory}/${assetKey}`
@@ -70,8 +76,8 @@ export class LocalContent implements ContentService {
     return false
   }
 
-  private async createDirectoryForFile (path: string): Promise<void> {
-      const dir = path.split('/').slice(0, -1).join('/')
-      await mkdir(dir, { recursive: true })
+  private async createDirectoryForFile(path: string): Promise<void> {
+    const dir = path.split('/').slice(0, -1).join('/')
+    await mkdir(dir, { recursive: true })
   }
 }

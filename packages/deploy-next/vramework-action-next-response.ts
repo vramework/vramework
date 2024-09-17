@@ -1,28 +1,29 @@
-import { VrameworkResponse } from '@vramework/core/vramework-response';
-import { CookieSerializeOptions } from 'cookie';
+import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { CookieSerializeOptions } from 'cookie'
 import { cookies } from 'next/headers'
 
 export class VrameworkActionNextResponse extends VrameworkResponse {
-    constructor() {
-        super()
-    }
+  constructor() {
+    super()
+  }
 
-    public setStatus() {
-    }
+  public setStatus() {}
 
-    public setJson() {
-    }
+  public setJson() {}
 
-    public setResponse() {
-    }
+  public setResponse() {}
 
-    public setCookie(name: string, value: string, options: CookieSerializeOptions): void {
-        const cookieStore = cookies()
-        cookieStore.set(name, value, options)
-    }
+  public setCookie(
+    name: string,
+    value: string,
+    options: CookieSerializeOptions
+  ): void {
+    const cookieStore = cookies()
+    cookieStore.set(name, value, options)
+  }
 
-    public clearCookie(name: string): void {
-        const cookieStore = cookies()
-        cookieStore.delete(name)
-    }
+  public clearCookie(name: string): void {
+    const cookieStore = cookies()
+    cookieStore.delete(name)
+  }
 }

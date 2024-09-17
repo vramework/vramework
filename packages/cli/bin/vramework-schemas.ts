@@ -5,10 +5,13 @@ import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import path = require('path')
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const { routeDirectories, schemaOutputDirectory, tsconfig, rootDir } = await getVrameworkConfig(configFile)
+  const { routeDirectories, schemaOutputDirectory, tsconfig, rootDir } =
+    await getVrameworkConfig(configFile)
 
-  if (!rootDir || !routeDirectories || !schemaOutputDirectory || !tsconfig) { 
-    console.error('rootDir, routeDirectories, tsconfig file and schema directory are required in vramework.config.json')
+  if (!rootDir || !routeDirectories || !schemaOutputDirectory || !tsconfig) {
+    console.error(
+      'rootDir, routeDirectories, tsconfig file and schema directory are required in vramework.config.json'
+    )
     process.exit(1)
   }
 

@@ -22,10 +22,14 @@ export interface S3ContentConfig {
 export class S3Content implements ContentService {
   private s3: S3Client
 
-  constructor(private config: S3ContentConfig, private logger: Logger, private signConfig: { keypairId: string; privateKeyString: string }) {
+  constructor(
+    private config: S3ContentConfig,
+    private logger: Logger,
+    private signConfig: { keypairId: string; privateKeyString: string }
+  ) {
     this.s3 = new S3Client({
       endpoint: this.config.endpoint,
-      region: this.config.region
+      region: this.config.region,
     })
   }
 
@@ -33,7 +37,7 @@ export class S3Content implements ContentService {
     try {
       return getCDNSignedUrl(url, {
         ...this.signConfig,
-        expireTime: Math.round(Date.now() + 3600000)
+        expireTime: Math.round(Date.now() + 3600000),
       })
     } catch {
       this.logger.error(`Error signing url: ${url}`)
@@ -55,7 +59,7 @@ export class S3Content implements ContentService {
       uploadUrl: await getS3SignedUrl(this.s3, command, {
         expiresIn: 3600,
       }),
-      assetKey: Key
+      assetKey: Key,
     }
   }
 
@@ -65,7 +69,7 @@ export class S3Content implements ContentService {
       new GetObjectCommand({
         Bucket: this.config.bucketName,
         Key,
-      }),
+      })
     )
     const body = response.Body as any
     const responseDataChunks: any[] = []
@@ -84,8 +88,8 @@ export class S3Content implements ContentService {
         new PutObjectCommand({
           Bucket: this.config.bucketName,
           Key,
-          Body: buffer
-        }),
+          Body: buffer,
+        })
       )
       return true
     } catch (e: any) {
@@ -102,8 +106,8 @@ export class S3Content implements ContentService {
         new PutObjectCommand({
           Bucket: this.config.bucketName,
           Key,
-          Body: await readFile(fromAbsolutePath)
-        }),
+          Body: await readFile(fromAbsolutePath),
+        })
       )
       return true
     } catch (e: any) {
@@ -119,7 +123,7 @@ export class S3Content implements ContentService {
         new DeleteObjectCommand({
           Bucket: this.config.bucketName,
           Key,
-        }),
+        })
       )
       return true
     } catch (e: any) {
