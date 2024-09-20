@@ -52,7 +52,7 @@ export class VrameworkUWSServer {
           this.createSessionServices,
           routes,
           {
-            type: req.getMethod() as any,
+            method: req.getMethod() as any,
             route: req.getUrl() as string,
           }
         )

@@ -66,7 +66,7 @@ describe('runRoute', () => {
     await expect(
       runRoute(request, response, services, createSessionServices, routes, {
         route: apiRoute,
-        type: apiType,
+        method: apiType,
       })
     ).to.be.rejectedWith(NotFoundError)
   })
@@ -77,7 +77,7 @@ describe('runRoute', () => {
     const routeFunc = sinon.stub().resolves({ success: true })
     routes.push({
       route: 'test',
-      type: 'get',
+      method: 'get',
       func: routeFunc,
       returnsJSON: true,
     })
@@ -88,7 +88,7 @@ describe('runRoute', () => {
       services,
       createSessionServices,
       routes,
-      { route: apiRoute, type: apiType }
+      { route: apiRoute, method: apiType }
     )
 
     expect(result).to.deep.equal({ success: true })
@@ -104,7 +104,7 @@ describe('runRoute', () => {
     const routeFunc = sinon.stub().resolves({ success: true })
     routes.push({
       route: 'test',
-      type: 'get',
+      method: 'get',
       func: routeFunc,
       permissions,
       returnsJSON: true,
@@ -112,7 +112,7 @@ describe('runRoute', () => {
 
     await runRoute(request, response, services, createSessionServices, routes, {
       route: apiRoute,
-      type: apiType,
+      method: apiType,
     })
 
     expect(permissions.test.calledOnce).to.be.true
@@ -125,7 +125,7 @@ describe('runRoute', () => {
     const routeFunc = sinon.stub().rejects(error)
     routes.push({
       route: 'test',
-      type: 'get',
+      method: 'get',
       func: routeFunc,
       returnsJSON: true,
     })
@@ -133,7 +133,7 @@ describe('runRoute', () => {
     await expect(
       runRoute(request, response, services, createSessionServices, routes, {
         route: apiRoute,
-        type: apiType,
+        method: apiType,
       })
     ).to.be.rejectedWith(Error, 'Test error')
 

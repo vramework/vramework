@@ -51,7 +51,7 @@ export class VrameworkFastifyServer {
           this.createSessionServices,
           routes,
           {
-            type: req.method as any,
+            method: req.method as any,
             route: req.url as string,
           }
         )

@@ -7,9 +7,9 @@ import { CoreAPIRoute } from './routes'
 describe('verifyRoutes', () => {
   it('should not throw an error for unique routes', () => {
     const routes: Array<CoreAPIRoute<unknown, unknown>> = [
-      { type: 'get', route: '/api/v1/resource' },
-      { type: 'post', route: '/api/v1/resource' },
-      { type: 'delete', route: '/api/v1/resource/:id' },
+      { method: 'get', route: '/api/v1/resource' },
+      { method: 'post', route: '/api/v1/resource' },
+      { method: 'delete', route: '/api/v1/resource/:id' },
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.not.throw()
@@ -17,8 +17,8 @@ describe('verifyRoutes', () => {
 
   it('should throw an error for duplicate routes', () => {
     const routes: Array<CoreAPIRoute<unknown, unknown>> = [
-      { type: 'get', route: '/api/v1/resource' },
-      { type: 'get', route: '/api/v1/resource' },
+      { method: 'get', route: '/api/v1/resource' },
+      { method: 'get', route: '/api/v1/resource' },
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.throw(
@@ -28,8 +28,8 @@ describe('verifyRoutes', () => {
 
   it('should handle different HTTP methods separately', () => {
     const routes: Array<CoreAPIRoute<unknown, unknown>> = [
-      { type: 'get', route: '/api/v1/resource' },
-      { type: 'post', route: '/api/v1/resource' },
+      { method: 'get', route: '/api/v1/resource' },
+      { method: 'post', route: '/api/v1/resource' },
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.not.throw()
@@ -37,10 +37,10 @@ describe('verifyRoutes', () => {
 
   it('should throw an error for duplicate routes with different methods', () => {
     const routes: Array<CoreAPIRoute<unknown, unknown>> = [
-      { type: 'get', route: '/api/v1/resource' },
-      { type: 'get', route: '/api/v1/resource' },
-      { type: 'post', route: '/api/v1/resource' },
-      { type: 'post', route: '/api/v1/resource' },
+      { method: 'get', route: '/api/v1/resource' },
+      { method: 'get', route: '/api/v1/resource' },
+      { method: 'post', route: '/api/v1/resource' },
+      { method: 'post', route: '/api/v1/resource' },
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.throw(
@@ -50,8 +50,8 @@ describe('verifyRoutes', () => {
 
   it('should normalize routes with parameters', () => {
     const routes: Array<CoreAPIRoute<unknown, unknown>> = [
-      { type: 'get', route: '/api/v1/resource/:id' },
-      { type: 'get', route: '/api/v1/resource/:name' },
+      { method: 'get', route: '/api/v1/resource/:id' },
+      { method: 'get', route: '/api/v1/resource/:name' },
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.throw(
@@ -61,8 +61,8 @@ describe('verifyRoutes', () => {
 
   it('should not throw an error for unique normalized routes', () => {
     const routes: Array<CoreAPIRoute<unknown, unknown>> = [
-      { type: 'get', route: '/api/v1/resource/:id' },
-      { type: 'post', route: '/api/v1/resource/:id' },
+      { method: 'get', route: '/api/v1/resource/:id' },
+      { method: 'post', route: '/api/v1/resource/:id' },
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.not.throw()
@@ -187,13 +187,13 @@ describe('Route Loader', () => {
       loadRoutesFromDirectoryStub.withArgs('/root/dir1').returns(
         Promise.resolve({
           filesWithRoutes: ['/root/dir1/file1.ts'],
-          apiRoutes: [{ route: '/route1', type: 'get' }],
+          apiRoutes: [{ route: '/route1', method: 'get' }],
         }) as any
       )
       loadRoutesFromDirectoryStub.withArgs('/root/dir2').returns(
         Promise.resolve({
           filesWithRoutes: ['/root/dir2/file2.ts'],
-          apiRoutes: [{ route: '/route2', type: 'post' }],
+          apiRoutes: [{ route: '/route2', method: 'post' }],
         }) as any
       )
 
@@ -204,8 +204,8 @@ describe('Route Loader', () => {
         '/root/dir2/file2.ts',
       ])
       expect(result.apiRoutes).to.deep.equal([
-        { route: '/route1', type: 'get' },
-        { route: '/route2', type: 'post' },
+        { route: '/route1', method: 'get' },
+        { route: '/route2', method: 'post' },
       ])
     })
 

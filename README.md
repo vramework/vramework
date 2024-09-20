@@ -10,7 +10,7 @@ So the concept of making things HTTP agnostic is pretty simple at its core.
 A JSON HTTP request (usually) comes in with the following format:
 
 ```yaml
-type: post | patch | delete | get | head
+method: post | patch | delete | get | head
 route: /v1/object/:objectId
 pathParams:
   objectId: string
@@ -249,7 +249,7 @@ User sessions are dealt with by indicating if the API call requires a session or
 ```typescript
 export const routes: APIRoutes = [
   {
-    type: 'post',
+    method: 'post',
     route: 'v1/send-greeting-card',
     func: sendGreetingCard,
     schema: 'SendGreedingCard',
@@ -333,7 +333,7 @@ const hasSpecialOverride: APIPermission<SendGreedingCard> = (
 
 export const routes: APIRoutes = [
   {
-    type: 'post',
+    method: 'post',
     route: 'v1/send-greeting-card',
     func: sendGreetingCard,
     schema: 'SendGreedingCard',

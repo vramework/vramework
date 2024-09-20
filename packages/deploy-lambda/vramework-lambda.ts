@@ -58,7 +58,7 @@ const generalHandler = async (
   try {
     await runRoute(request, response, services, createSessionServices, routes, {
       route: request.getPath(),
-      type: request.getMethod() as any,
+      method: request.getMethod() as any,
     })
   } catch {
     // Error should have already been handled by runRoute

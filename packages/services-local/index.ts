@@ -1,5 +1,4 @@
 export * from './local-secrets'
 export * from './jose-jwt-service'
 export * from './local-content'
-export * from './stream-service'
 export * from './vramework-session-service'

@@ -21,7 +21,7 @@ const getMatchingRoute = (
   routes: Array<CoreAPIRoute<unknown, unknown>>
 ) => {
   for (const route of routes) {
-    if (route.type !== requestType.toLowerCase()) {
+    if (route.method !== requestType.toLowerCase()) {
       continue
     }
     const matchFunc = match(`/${route.route}`.replace(/^\/\//, '/'), {
@@ -63,11 +63,11 @@ export const runRoute = async <In, Out>(
   routes: CoreAPIRoutes,
   {
     route: apiRoute,
-    type: apiType,
-  }: Pick<CoreAPIRoute<unknown, unknown>, 'route' | 'type'>
+    method: apiType,
+  }: Pick<CoreAPIRoute<unknown, unknown>, 'route' | 'method'>
 ): Promise<Out> => {
   try {
-    let session
+    let session: CoreUserSession | undefined
 
     const { matchedPath, params, route } = getMatchingRoute(
       services.logger,
@@ -113,6 +113,7 @@ export const runRoute = async <In, Out>(
       },
       session
     )
+
     if (route.permissions) {
       await verifyPermissions(route.permissions, sessionServices, data, session)
     }
@@ -120,7 +121,7 @@ export const runRoute = async <In, Out>(
     const result: any = (await route.func(
       sessionServices,
       data,
-      session
+      session!
     )) as unknown as Out
     response.setStatus(200)
     if (route.returnsJSON) {

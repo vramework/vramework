@@ -1698,6 +1698,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/busboy@npm:^1":
+  version: 1.5.4
+  resolution: "@types/busboy@npm:1.5.4"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/43cdd26754603fbee81f538ac52769f2cc8445d5f238666845d99a9fee22e0b608a075d0c346f78c43ade4ce4ec04433a51a1ffa21524ca29ead9d2375f4ec9c
+  languageName: node
+  linkType: hard
+
 "@types/chai-as-promised@npm:^7":
   version: 7.1.8
   resolution: "@types/chai-as-promised@npm:7.1.8"
@@ -2026,6 +2035,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/deploy-express@workspace:packages/deploy-express"
   dependencies:
+    "@types/busboy": "npm:^1"
     "@types/content-type": "npm:^1.1.8"
     "@types/cookie-parser": "npm:^1.4.7"
     "@types/cors": "npm:^2.8.17"
@@ -2033,6 +2043,7 @@ __metadata:
     "@types/express-pino-logger": "npm:^4.0.5"
     bcryptjs: "npm:^2.4.3"
     body-parser: "npm:^1.20.2"
+    busboy: "npm:^1.6.0"
     cookie: "npm:^0.6.0"
     cookie-parser: "npm:^1.4.6"
     cors: "npm:^2.8.5"
@@ -2455,7 +2466,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"busboy@npm:1.6.0":
+"busboy@npm:1.6.0, busboy@npm:^1.6.0":
   version: 1.6.0
   resolution: "busboy@npm:1.6.0"
   dependencies:

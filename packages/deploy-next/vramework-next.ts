@@ -32,7 +32,7 @@ export class VrameworkNextJS<APIRoutes> {
   public async actionRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'type'>,
+    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'method'>,
   >(route: R, data: In): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
     return await runRoute<In, Out>(
@@ -43,7 +43,7 @@ export class VrameworkNextJS<APIRoutes> {
       this.routes as unknown as CoreAPIRoutes,
       {
         route: injectIntoUrl(route.route, data),
-        type: route.type,
+        method: route.method,
       }
     )
   }
@@ -51,7 +51,7 @@ export class VrameworkNextJS<APIRoutes> {
   public async ssrRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'type'>,
+    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'method'>,
   >(
     request: IncomingMessage & {
       cookies: Partial<{ [key: string]: string }>
@@ -69,7 +69,7 @@ export class VrameworkNextJS<APIRoutes> {
       this.routes as unknown as CoreAPIRoutes,
       {
         route: injectIntoUrl(route.route, data),
-        type: route.type,
+        method: route.method,
       }
     )
   }
@@ -77,7 +77,7 @@ export class VrameworkNextJS<APIRoutes> {
   public async apiRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'type'>,
+    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'method'>,
   >(
     request: NextApiRequest,
     response: NextApiResponse,
@@ -95,7 +95,7 @@ export class VrameworkNextJS<APIRoutes> {
       this.routes as unknown as CoreAPIRoutes,
       {
         route: injectIntoUrl(route.route, data),
-        type: route.type,
+        method: route.method,
       }
     )
   }

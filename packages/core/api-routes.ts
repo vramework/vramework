@@ -15,7 +15,7 @@ export const verifyRoutes = (routes: Array<CoreAPIRoute<unknown, unknown>>) => {
   }
 
   routes.forEach((route) => {
-    const paths = typedRoutes.get(route.type)
+    const paths = typedRoutes.get(route.method)
     const normalizedRoute = route.route.replace(/:[^/]+/g, ':param')
     if (paths.has(normalizedRoute)) {
       throw new Error(`Duplicate route: ${JSON.stringify(route)}`)

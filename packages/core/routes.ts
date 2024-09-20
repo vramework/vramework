@@ -1,27 +1,53 @@
+import { EError } from './errors'
 import { CoreUserSession, CoreServices } from './types'
 
-export type CoreAPIFunction<In, Out> = (
-  services: CoreServices,
+export type CoreAPIFunction<In, Out, Services = CoreServices, Session = CoreUserSession> = (
+  services: Services,
   data: In,
-  session?: CoreUserSession
+  session: Session
 ) => Promise<Out>
-export type CoreAPIPermission<In = any> = (
-  services: CoreServices,
+
+export type CoreAPIFunctionSessionless<In, Out, Services = CoreServices, Session = CoreUserSession> = (
+  services: Services,
   data: In,
-  session?: CoreUserSession
+  session?: Session
+) => Promise<Out>
+
+export type CoreAPIPermission<In = any, Services = CoreServices, Session = CoreUserSession> = (
+  services: Services,
+  data: In,
+  session?: Session
 ) => Promise<boolean>
 
-export type CoreAPIRoute<In, Out> = {
-  type: 'post' | 'get' | 'delete' | 'patch' | 'head'
+export type APIRouteMethod = 'post' | 'get' | 'delete' | 'patch' | 'head'
+
+type CoreFunctionlessAPIRoute<In> = {
+  method: APIRouteMethod
   contentType?: 'xml' | 'json'
   route: string
-  schema: string | null
-  requiresSession?: false | true
+  schema?: string
   eventStream?: false
-  permissions?: Record<string, CoreAPIPermission<In>[] | CoreAPIPermission<In>>
   returnsJSON?: false
   timeout?: number
-  func: CoreAPIFunction<In, Out>
+  docs?: Partial<{
+    summary: string
+    description: string
+    response: string
+    errors: EError[]
+    query: Array<keyof In>
+    tags: string[]
+  }>
 }
+
+export type CoreAPIRoute<In, Out, APIFunction = CoreAPIFunction<In, Out>, APIFunctionSessionless = CoreAPIFunctionSessionless<In, Out>, APIPermission = CoreAPIPermission<In>> =
+  (CoreFunctionlessAPIRoute<In> & {
+    func: APIFunction
+    permissions?: Record<string, APIPermission[] | APIPermission>
+    requiresSession?: true
+  }) | (CoreFunctionlessAPIRoute<In> & {
+    func: APIFunctionSessionless
+    permissions?: undefined
+    requiresSession?: false
+  })
 
 export type CoreAPIRoutes = Array<CoreAPIRoute<unknown, unknown>>
