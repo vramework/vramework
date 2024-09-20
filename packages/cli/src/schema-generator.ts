@@ -9,7 +9,7 @@ export async function generateSchemas(
 ) {
   const schemasSet = new Set(
     routes
-      .map<string | null>(({ schema }) => schema)
+      .map<string | undefined | null>(({ schema }) => schema)
       .filter((s) => !!s) as string[]
   )
   const schemas = Array.from(schemasSet)

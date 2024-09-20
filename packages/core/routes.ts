@@ -25,7 +25,7 @@ type CoreFunctionlessAPIRoute<In> = {
   method: APIRouteMethod
   contentType?: 'xml' | 'json'
   route: string
-  schema?: string
+  schema: string | null
   eventStream?: false
   returnsJSON?: false
   timeout?: number
