@@ -22,7 +22,7 @@ describe('verifyRoutes', () => {
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.throw(
-      'Duplicate route: {"type":"get","route":"/api/v1/resource"}'
+      'Duplicate route: {"method":"get","route":"/api/v1/resource"}'
     )
   })
 
@@ -44,7 +44,7 @@ describe('verifyRoutes', () => {
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.throw(
-      'Duplicate route: {"type":"get","route":"/api/v1/resource"}'
+      'Duplicate route: {"method":"get","route":"/api/v1/resource"}'
     )
   })
 
@@ -55,7 +55,7 @@ describe('verifyRoutes', () => {
     ] as any
 
     expect(() => routeLoader.verifyRoutes(routes)).to.throw(
-      'Duplicate route: {"type":"get","route":"/api/v1/resource/:name"}'
+      'Duplicate route: {"method":"get","route":"/api/v1/resource/:name"}'
     )
   })
 
