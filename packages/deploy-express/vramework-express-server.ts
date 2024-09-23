@@ -65,7 +65,7 @@ export class VrameworkExpressServer {
   }
 
   public async init() {
-    const { routes } = await initializeVrameworkCore(
+    const routes = await initializeVrameworkCore(
       this.singletonServices.logger,
       this.vrameworkConfig
     )

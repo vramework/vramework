@@ -2,7 +2,6 @@ import { promises } from 'fs'
 import { CoreAPIRoute, CoreAPIRoutes } from './routes'
 import { join } from 'path'
 import { readFile } from 'fs/promises'
-import { getRoutes } from './router-runner'
 
 const importFile = async (path: string) => {
   return await import(path)
@@ -40,10 +39,7 @@ export const verifyRoutes = (routes: Array<CoreAPIRoute<unknown, unknown>>) => {
 export const loadRoutes = async (
   relativeRootDir: string,
   routeDirectories: string[] = []
-): Promise<{
-  filesWithRoutes: string[],
-  apiRoutes: CoreAPIRoutes
-}> => {
+): Promise<string[]> => {
   let filesWithRoutes: string[] = []
 
   for (const routeDirectory of routeDirectories) {
@@ -53,7 +49,7 @@ export const loadRoutes = async (
     filesWithRoutes = [...filesWithRoutes, ...files]
   }
 
-  return { filesWithRoutes, apiRoutes: getRoutes() }
+  return filesWithRoutes
 }
 
 /**

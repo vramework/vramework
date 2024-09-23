@@ -1,11 +1,10 @@
 import { join } from 'path'
 
-import { loadRoutes, verifyRoutes } from './api-routes'
-import { loadSchemas } from './schema'
-import { CoreAPIRoutes } from './routes'
+import { loadSchema, loadSchemas } from './schema'
 import { VrameworkConfig } from './types'
 import { Logger } from './services'
-import { loadSchema } from '@vramework/core/schema'
+import { getRoutes } from './router-runner'
+import path = require('path')
 
 /**
  * Initializes the Vramework core.
@@ -17,13 +16,20 @@ import { loadSchema } from '@vramework/core/schema'
 export const initializeVrameworkCore = async (
   logger: Logger,
   config: VrameworkConfig
-): Promise<{ routes: CoreAPIRoutes }> => {
+) => {
+  const { routesMeta } = await import(path.join(config.rootDir, config.routesOutputFile))
+  logger.info('Routes files loaded')
+
+  const routes = getRoutes()
+
   await loadSchemas(join(config.rootDir, config.schemaOutputDirectory))
-  const { apiRoutes, filesWithRoutes } = await loadRoutes(
-    config.rootDir,
-    config.routeDirectories
-  )
-  logger.info(`Routes files loaded: \n\t${filesWithRoutes.join('\n\t')}`)
-  await verifyRoutes(apiRoutes)
-  return { routes: apiRoutes }
+  routesMeta.forEach((route) => {
+    if (route.input) {
+      logger.debug(`Loading schema ${route.input}`)
+      loadSchema(route.input, logger)
+    }
+  })
+  logger.info(`Schemas loaded`)
+
+  return routes
 }

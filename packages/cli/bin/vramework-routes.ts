@@ -1,6 +1,7 @@
 import { Command } from 'commander'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
-import { generateRoutesImports, serializeRoutes } from '../src/routes-generator'
+import { loadRoutes } from '@vramework/core/api-routes'
+import { serializeRoutes } from '../src/routes-generator'
 import { generateRouteMeta } from '../src/generate-route-meta'
 import * as promises from 'fs/promises'
 import path = require('path')
@@ -27,11 +28,7 @@ Generating Route File:
     - Route Output:\n\t${routesOutputFile}
 `)
 
-  const routeFiles = await generateRoutesImports(
-    rootDir,
-    routeDirectories,
-  )
-
+  const routeFiles = await loadRoutes(rootDir,routeDirectories)
   const { routesMeta, routesInterface } = await generateRouteMeta(routesOutputFile, routeFiles)
 
   const outputPath = path.join(rootDir, routesOutputFile)

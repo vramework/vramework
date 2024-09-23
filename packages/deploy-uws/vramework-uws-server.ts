@@ -6,7 +6,6 @@ import {
   CreateSessionServices,
   VrameworkConfig,
 } from '@vramework/core/types'
-import { loadSchema } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { runRoute } from '@vramework/core/router-runner'
 import { VrameworkUWSRequest } from './vramework-uws-request'
@@ -31,17 +30,10 @@ export class VrameworkUWSServer {
   }
 
   public async init() {
-    const { routes } = await initializeVrameworkCore(
+    const routes = await initializeVrameworkCore(
       this.singletonServices.logger,
       this.vrameworkConfig
     )
-
-    // Verify all schemas are loaded
-    routes.forEach((route) => {
-      if (route.schema) {
-        loadSchema(route.schema, this.singletonServices.logger)
-      }
-    })
 
     this.app.any('/*', async (res, req) => {
       try {
