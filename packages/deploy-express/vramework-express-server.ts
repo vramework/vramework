@@ -4,11 +4,6 @@ import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
-import busboy from 'busboy'
-
-import * as path from 'path'
-import { createWriteStream } from 'fs'
-import * as fs from 'fs/promises'
 
 import {
   CoreConfig,
@@ -16,12 +11,10 @@ import {
   CreateSessionServices,
   VrameworkConfig,
 } from '@vramework/core/types'
-import { loadSchema } from '@vramework/core/schema'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
 import { runRoute } from '@vramework/core/router-runner'
-import { VrameworkRequest } from '@vramework/core/vramework-request'
 
 export class VrameworkExpressServer {
   public app = express()
@@ -67,42 +60,6 @@ export class VrameworkExpressServer {
     this.app.use(cors(options))
   }
 
-  public enableFileUploads(uploadDir: string, uploadUrl: string, validateUploadSignature: (request: VrameworkRequest) => Promise<boolean>) {
-    this.app.put(
-      uploadUrl,
-      async (req, res) => {
-        const request = new VrameworkExpressRequest(req)
-
-        const isValid = await validateUploadSignature(request)
-        if (!isValid) {
-          res.status(403).end()
-          return
-        }
-        
-        const contentType = request.getHeader('content-type')
-        const key = req.path.replace(uploadUrl, '')
-        const parts = key.split('/')
-        const dir = `${uploadDir}/${parts.join('/')}`
-        await fs.mkdir(dir, { recursive: true })
-
-        if (contentType === 'multipart/form-data') {
-          const bb = busboy({ headers: req.headers })
-          bb.on('file', (_name, file, _info) => {
-            file.pipe(createWriteStream(path.join(uploadDir, key)))
-          })
-          bb.on('close', () => {
-            res.writeHead(200, { 'Connection': 'close' });
-            res.end()
-          })
-          req.pipe(bb)
-        } else {
-          this.singletonServices.logger.info('Only multipart/form-data uploads supported')
-          throw new Error()
-        }
-      }
-    )
-  }
-
   public enableStaticAssets(assetsUrl: string, contentDirectory: string) {
     this.app.use(assetsUrl || '/assets/', express.static(contentDirectory))
   }
@@ -112,13 +69,6 @@ export class VrameworkExpressServer {
       this.singletonServices.logger,
       this.vrameworkConfig
     )
-
-    // Verify all schemas are loaded
-    routes.forEach((route) => {
-      if (route.schema) {
-        loadSchema(route.schema, this.singletonServices.logger)
-      }
-    })
 
     this.app.use(async (req, res) => {
       try {

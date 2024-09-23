@@ -53,7 +53,6 @@ export const loadRoutes = async (
     filesWithRoutes = [...filesWithRoutes, ...files]
   }
 
-
   return { filesWithRoutes, apiRoutes: getRoutes() }
 }
 

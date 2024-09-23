@@ -1,12 +1,12 @@
 import { Command } from 'commander'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
-import { generateRoutesImports } from '../src/routes-generator'
+import { generateRoutesImports, serializeRoutes } from '../src/routes-generator'
 import { generateRouteMeta } from '../src/generate-route-meta'
 import * as promises from 'fs/promises'
 import path = require('path')
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let { routeDirectories, routesOutputFile, routesInterfaceFile, routesMetaFile, rootDir } =
+  let { routeDirectories, routesOutputFile, rootDir } =
     await getVrameworkConfig(configFile)
 
   if (
@@ -27,29 +27,19 @@ Generating Route File:
     - Route Output:\n\t${routesOutputFile}
 `)
 
-  const outputPath = await generateRoutesImports(
+  const routeFiles = await generateRoutesImports(
     rootDir,
     routeDirectories,
-    routesOutputFile
   )
 
-  const { routesMeta, routesInterface } = await generateRouteMeta(routesOutputFile, outputPath)
+  const { routesMeta, routesInterface } = await generateRouteMeta(routesOutputFile, routeFiles)
 
-  if (routesMetaFile) {
-    routesMetaFile = path.join(rootDir, routesMetaFile)
-    const parts = routesMetaFile.split('/')
-    parts.pop()
-    await promises.mkdir(parts.join('/'), { recursive: true })
-    await promises.writeFile(routesMetaFile, JSON.stringify(routesMeta), 'utf-8')
-  }
-
-  if (routesInterfaceFile){
-    routesInterfaceFile = path.join(rootDir, routesInterfaceFile)
-    const parts = routesInterfaceFile.split('/')
-    parts.pop()
-    await promises.mkdir(parts.join('/'), { recursive: true })
-    await promises.writeFile(routesInterfaceFile, routesInterface, 'utf-8')
-  }
+  const outputPath = path.join(rootDir, routesOutputFile)
+  const parts = outputPath.split('/')
+  parts.pop()
+  await promises.mkdir(parts.join('/'), { recursive: true })
+  const content = `${serializeRoutes(outputPath, routeFiles)}\n\n${routesInterface}\n\nexport const routesMeta = ${JSON.stringify(routesMeta)}`
+  await promises.writeFile(outputPath, content, 'utf-8')
 
   console.log(`Routes generated in ${Date.now() - startedAt}ms.`)
 }

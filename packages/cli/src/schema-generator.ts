@@ -1,15 +1,14 @@
-import { CoreAPIRoutes } from '@vramework/core/routes'
 import { promises } from 'fs'
 import { createGenerator } from 'ts-json-schema-generator'
 
 export async function generateSchemas(
   tsconfig: string,
   schemaParentDir: string,
-  routes: CoreAPIRoutes
+  routesMeta: Array<{ "route": string, "method": string, "input": string | null, "output": string | null }>
 ) {
   const schemasSet = new Set(
-    routes
-      .map<string | undefined | null>(({ schema }) => schema)
+    routesMeta
+      .map<string | undefined | null>(({ input }) => input)
       .filter((s) => !!s) as string[]
   )
   const schemas = Array.from(schemasSet)
@@ -37,13 +36,13 @@ export async function generateSchemas(
     `
 import { addSchema } from '@vramework/core/schema'
 ` +
-      schemas
-        .map(
-          (schema) => `
+    schemas
+      .map(
+        (schema) => `
 import ${schema} from './schemas/${schema}.schema.json'
 addSchema('${schema}', ${schema})`
-        )
-        .join('\n'),
+      )
+      .join('\n'),
     'utf8'
   )
 }

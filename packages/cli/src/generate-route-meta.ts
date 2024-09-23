@@ -6,10 +6,10 @@ interface ImportInfo {
   namedImports: Set<string>;
 }
 
-export const generateRouteMeta = (outputFile: string, fileName: string) => {
+export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
   const importMap: Map<string, ImportInfo> = new Map();
   
-  const program = ts.createProgram([fileName], {
+  const program = ts.createProgram(routeFiles, {
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.CommonJS,
   });
@@ -24,7 +24,6 @@ export const generateRouteMeta = (outputFile: string, fileName: string) => {
           if (declarations && declarations.length > 0) {
             const decl = declarations[0];
             const filePath = path.relative(outputFile, decl.getSourceFile().fileName)
-
             const importInfo = importMap.get(filePath) || { importPath: filePath, namedImports: new Set() }
             importInfo.namedImports.add(symbol.getName())
             importMap.set(filePath, importInfo)
@@ -44,10 +43,7 @@ export const generateRouteMeta = (outputFile: string, fileName: string) => {
     output: string | null
   }> = []
 
-  const sourceFiles = program.getSourceFiles().filter((sf) => {
-    const filePath = sf.fileName;
-    return !filePath.includes('node_modules') && !filePath.endsWith('.d.ts');
-  });
+  const sourceFiles = program.getSourceFiles()
 
   for (const sourceFile of sourceFiles) {
     ts.forEachChild(sourceFile, (child) => visit(child));
@@ -172,14 +168,12 @@ export const generateRouteMeta = (outputFile: string, fileName: string) => {
 
   let imports = ''
   for (const [importPath, { namedImports }] of importMap) {
-    imports += `import { ${Array.from(namedImports).join(', ')} } from '${importPath}'\n`
+    imports += `import { ${Array.from(namedImports).join(', ')} } from '../${importPath.replace('.ts', '')}'\n`
   }
 
-  let routesInterface = `${imports}\n\nexport type RoutesMeta = \n`
-  routesMeta.map(({ route, method, input, output }) => {
-    routesInterface += ` { route: '${route}', method: ${method}, input: ${input}, output: ${output} }\n`
-  })
-  routesInterface += '}\n'
+  let routesInterface = `${imports}\n\nexport type RoutesInterface = `
+  const result = routesMeta.map(({ route, method, input, output }) => `{ route: '${route}', method: '${method}', input: ${input}, output: ${output} }`)
+  routesInterface += result.join(' |\n\t')
 
   return {
     routesMeta,

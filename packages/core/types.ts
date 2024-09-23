@@ -22,8 +22,6 @@ export interface VrameworkConfig {
   rootDir: string
   routeDirectories: string[]
   routesOutputFile?: string
-  routesInterfaceFile?: string
-  routesMetaFile?: string
   schemaOutputDirectory: string
   tsconfig: string
 }

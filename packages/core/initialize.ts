@@ -5,6 +5,7 @@ import { loadSchemas } from './schema'
 import { CoreAPIRoutes } from './routes'
 import { VrameworkConfig } from './types'
 import { Logger } from './services'
+import { loadSchema } from '@vramework/core/schema'
 
 /**
  * Initializes the Vramework core.

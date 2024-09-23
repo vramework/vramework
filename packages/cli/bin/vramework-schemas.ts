@@ -1,16 +1,19 @@
 import { Command } from 'commander'
 import { generateSchemas } from '../src/schema-generator'
-import { loadRoutes } from '@vramework/core/api-routes'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import { join } from 'path'
 
+const importFile = async (path: string) => {
+  return await import(path)
+}
+
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const { routeDirectories, schemaOutputDirectory, tsconfig, rootDir } =
+  const { schemaOutputDirectory, tsconfig, rootDir, routesOutputFile } =
     await getVrameworkConfig(configFile)
 
-  if (!rootDir || !routeDirectories || !schemaOutputDirectory || !tsconfig) {
+  if (!rootDir || !routesOutputFile || !schemaOutputDirectory || !tsconfig) {
     console.error(
-      'rootDir, routeDirectories, tsconfig file and schema directory are required in vramework.config.json'
+      'rootDir, routesOutputFile, tsconfig file and schema directory are required in vramework.config.json'
     )
     process.exit(1)
   }
@@ -20,15 +23,24 @@ async function action({ configFile }: { configFile?: string }): Promise<void> {
 Generating schemas:
     - TSConfig:\n\t${tsconfig}
     - Output Directory:\n\t${schemaOutputDirectory}
-    - Route Directories:${['', ...routeDirectories].join('\n\t- ')}
+    - Route Meta:\n\t${routesOutputFile}
 `)
 
-  const routes = await loadRoutes(rootDir, routeDirectories)
+  let routesMeta: any
+
+  try {
+    const routes = await importFile(join(rootDir, routesOutputFile))
+    routesMeta = routes.routesMeta
+  } catch (e) {
+    console.error(e)
+    console.error('Error loading routes meta, has it been generated?')
+    return
+  }
 
   await generateSchemas(
     join(rootDir, tsconfig),
     join(rootDir, schemaOutputDirectory),
-    routes.apiRoutes
+    routesMeta
   )
 
   console.log(`Schemas generated in ${Date.now() - startedAt}ms.`)
