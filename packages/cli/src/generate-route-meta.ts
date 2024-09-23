@@ -1,17 +1,48 @@
 import * as ts from 'typescript';
+import * as path from 'path';
 
-export const generateRouteMeta = (fileNames: string[]) => {
-  const program = ts.createProgram(fileNames, {
+interface ImportInfo {
+  importPath: string;
+  namedImports: Set<string>;
+}
+
+export const generateRouteMeta = (outputFile: string, fileName: string) => {
+  const importMap: Map<string, ImportInfo> = new Map();
+  
+  const program = ts.createProgram([fileName], {
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.CommonJS,
   });
 
+  function findSymbolFile(symbolName: string): string | null {
+    for (const sourceFile of program.getSourceFiles()) {
+      if (sourceFile.isDeclarationFile) continue;
+      const symbols = checker.getSymbolsInScope(sourceFile, ts.SymbolFlags.Function | ts.SymbolFlags.TypeAlias | ts.SymbolFlags.Interface | ts.SymbolFlags.Class);
+      for (const symbol of symbols) {
+        if (symbol.getName() === symbolName) {
+          const declarations = symbol.getDeclarations();
+          if (declarations && declarations.length > 0) {
+            const decl = declarations[0];
+            const filePath = path.relative(outputFile, decl.getSourceFile().fileName)
+
+            const importInfo = importMap.get(filePath) || { importPath: filePath, namedImports: new Set() }
+            importInfo.namedImports.add(symbol.getName())
+            importMap.set(filePath, importInfo)
+          }
+        }
+      }
+    }
+    return null;
+  }
+
   const checker = program.getTypeChecker();
 
-  const routeMappings: Record<string, {
+  const routesMeta: Array<{
+    route: string
+    method: string
     input: string | null,
     output: string | null
-  }> = {}
+  }> = []
 
   const sourceFiles = program.getSourceFiles().filter((sf) => {
     const filePath = sf.fileName;
@@ -24,6 +55,7 @@ export const generateRouteMeta = (fileNames: string[]) => {
 
   function visit(node: ts.Node) {
     let routeValue: string | null = null;
+    let methodValue: string | null = null;
     let input: string | null = null;
     let output: string | null = null;
 
@@ -47,6 +79,12 @@ export const generateRouteMeta = (fileNames: string[]) => {
                 p.name.text === 'route'
             );
 
+            const methodProperty = obj.properties.find(
+              (p) =>
+                ts.isPropertyAssignment(p) &&
+                ts.isIdentifier(p.name) &&
+                p.name.text === 'method'
+            );
 
             if (routeProperty && ts.isPropertyAssignment(routeProperty)) {
               const initializer = routeProperty.initializer;
@@ -55,6 +93,16 @@ export const generateRouteMeta = (fileNames: string[]) => {
               } else {
                 // Handle other initializer types if necessary
                 routeValue = initializer.getText();
+              }
+            }
+
+            if (methodProperty && ts.isPropertyAssignment(methodProperty)) {
+              const initializer = methodProperty.initializer;
+              if (ts.isStringLiteral(initializer) || ts.isNoSubstitutionTemplateLiteral(initializer)) {
+                methodValue = initializer.text;
+              } else {
+                // Handle other initializer types if necessary
+                methodValue = initializer.getText();
               }
             }
 
@@ -96,6 +144,7 @@ export const generateRouteMeta = (fileNames: string[]) => {
         }
       }
     }
+
     if (routeValue) {
       const nullifyTypes = (type: string | null) => {
         if (type === 'void' || type === 'undefined' || type === 'unknown' || type === 'any') {
@@ -103,13 +152,37 @@ export const generateRouteMeta = (fileNames: string[]) => {
         }
         return type
       }
-      routeMappings[routeValue] = { 
+
+      routesMeta.push({
+        route: routeValue!,
+        method: methodValue!, 
         input: nullifyTypes(input), 
         output: nullifyTypes(output)
-      };
+      })
+
+      if (input) {
+        findSymbolFile(input)
+      }
+      if (output) {
+        findSymbolFile(output)
+      }
     }
     ts.forEachChild(node, (child) => visit(child));
   }
 
-  return routeMappings
+  let imports = ''
+  for (const [importPath, { namedImports }] of importMap) {
+    imports += `import { ${Array.from(namedImports).join(', ')} } from '${importPath}'\n`
+  }
+
+  let routesInterface = `${imports}\n\nexport type RoutesMeta = \n`
+  routesMeta.map(({ route, method, input, output }) => {
+    routesInterface += ` { route: '${route}', method: ${method}, input: ${input}, output: ${output} }\n`
+  })
+  routesInterface += '}\n'
+
+  return {
+    routesMeta,
+    routesInterface,
+  }
 };

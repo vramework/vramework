@@ -2,9 +2,11 @@ import { Command } from 'commander'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import { generateRoutesImports } from '../src/routes-generator'
 import { generateRouteMeta } from '../src/generate-route-meta'
+import * as promises from 'fs/promises'
+import path = require('path')
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const { vrameworkTypesModule, routeDirectories, routesOutputFile, rootDir } =
+  let { vrameworkTypesModule, routeDirectories, routesOutputFile, routesInterfaceFile, routesMetaFile, rootDir } =
     await getVrameworkConfig(configFile)
 
   if (
@@ -25,15 +27,30 @@ Generating Route File:
     - Route Directories: ${['', ...routeDirectories].join('\n\t- ')}
     - Route Output:\n\t${routesOutputFile}
 `)
-  
+
   const outputPath = await generateRoutesImports(
     rootDir,
     routeDirectories,
     routesOutputFile
   )
 
-  console.log('Generating schema mappings...', outputPath)
-  await generateRouteMeta([outputPath])
+  const { routesMeta, routesInterface } = await generateRouteMeta(routesOutputFile, outputPath)
+
+  if (routesMetaFile) {
+    routesMetaFile = path.join(rootDir, routesMetaFile)
+    const parts = routesMetaFile.split('/')
+    parts.pop()
+    await promises.mkdir(parts.join('/'), { recursive: true })
+    await promises.writeFile(routesMetaFile, JSON.stringify(routesMeta), 'utf-8')
+  }
+
+  if (routesInterfaceFile){
+    routesInterfaceFile = path.join(rootDir, routesInterfaceFile)
+    const parts = routesInterfaceFile.split('/')
+    parts.pop()
+    await promises.mkdir(parts.join('/'), { recursive: true })
+    await promises.writeFile(routesInterfaceFile, routesInterface, 'utf-8')
+  }
 
   console.log(`Routes generated in ${Date.now() - startedAt}ms.`)
 }

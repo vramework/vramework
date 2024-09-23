@@ -23,7 +23,8 @@ export interface VrameworkConfig {
   routeDirectories: string[]
   vrameworkTypesModule: string
   routesOutputFile?: string
-
+  routesInterfaceFile?: string
+  routesMetaFile?: string
   schemaOutputDirectory: string
   tsconfig: string
 }
