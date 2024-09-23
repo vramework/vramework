@@ -3,7 +3,7 @@ import { readdir } from 'fs/promises'
 import { VrameworkConfig } from './types'
 
 export const getVrameworkConfig = async (
-  configFile?: string
+  configFile?: string,
 ): Promise<VrameworkConfig> => {
   if (!configFile) {
     let execDirectory = process.cwd()

@@ -21,7 +21,6 @@ export type RequireAtLeastOne<T> = {
 export interface VrameworkConfig {
   rootDir: string
   routeDirectories: string[]
-  vrameworkTypesModule: string
   routesOutputFile?: string
   routesInterfaceFile?: string
   routesMetaFile?: string

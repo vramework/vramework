@@ -6,17 +6,16 @@ import * as promises from 'fs/promises'
 import path = require('path')
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let { vrameworkTypesModule, routeDirectories, routesOutputFile, routesInterfaceFile, routesMetaFile, rootDir } =
+  let { routeDirectories, routesOutputFile, routesInterfaceFile, routesMetaFile, rootDir } =
     await getVrameworkConfig(configFile)
 
   if (
-    !vrameworkTypesModule ||
     !rootDir ||
     !routeDirectories ||
     !routesOutputFile
   ) {
     console.error(
-      'vrameworkTypesModule, rootDir, routeDirectories and routesOutputFile are required in vramework.config.json'
+      'rootDir, routeDirectories and routesOutputFile are required in vramework.config.json'
     )
     process.exit(1)
   }
