@@ -22,7 +22,6 @@ export type CoreAPIPermission<In = any, Services = CoreServices, Session = CoreU
 export type APIRouteMethod = 'post' | 'get' | 'delete' | 'patch' | 'head'
 
 type CoreFunctionlessAPIRoute<In> = {
-  method: APIRouteMethod
   contentType?: 'xml' | 'json'
   route: string
   schema?: string | null
@@ -41,13 +40,27 @@ type CoreFunctionlessAPIRoute<In> = {
 
 export type CoreAPIRoute<In, Out, APIFunction = CoreAPIFunction<In, Out>, APIFunctionSessionless = CoreAPIFunctionSessionless<In, Out>, APIPermission = CoreAPIPermission<In>> =
   (CoreFunctionlessAPIRoute<In> & {
+    method: APIRouteMethod
     func: APIFunction
     permissions?: Record<string, APIPermission[] | APIPermission>
     requiresSession?: true
   }) | (CoreFunctionlessAPIRoute<In> & {
+    method: APIRouteMethod
     func: APIFunctionSessionless
     permissions?: undefined
     requiresSession?: false
+  }) |  (CoreFunctionlessAPIRoute<In> & {
+    method: 'post'
+    func: APIFunction
+    permissions?: Record<string, APIPermission[] | APIPermission>
+    requiresSession?: true
+    query?: Array<keyof In>
+  }) | (CoreFunctionlessAPIRoute<In> & {
+    method: 'post'
+    func: APIFunctionSessionless
+    permissions?: undefined
+    requiresSession?: false
+    query?: Array<keyof In>
   })
 
 export type CoreAPIRoutes = Array<CoreAPIRoute<unknown, unknown>>
