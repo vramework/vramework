@@ -43,23 +43,23 @@ export type CoreAPIRoute<In, Out, APIFunction = CoreAPIFunction<In, Out>, APIFun
     method: APIRouteMethod
     func: APIFunction
     permissions?: Record<string, APIPermission[] | APIPermission>
-    requiresSession?: true
+    auth?: true
   }) | (CoreFunctionlessAPIRoute<In> & {
     method: APIRouteMethod
     func: APIFunctionSessionless
     permissions?: undefined
-    requiresSession?: false
+    auth?: false
   }) |  (CoreFunctionlessAPIRoute<In> & {
     method: 'post'
     func: APIFunction
     permissions?: Record<string, APIPermission[] | APIPermission>
-    requiresSession?: true
+    auth?: true
     query?: Array<keyof In>
   }) | (CoreFunctionlessAPIRoute<In> & {
     method: 'post'
     func: APIFunctionSessionless
     permissions?: undefined
-    requiresSession?: false
+    auth?: false
     query?: Array<keyof In>
   })
 

@@ -52,15 +52,15 @@ const getMatchingRoute = (
 
 export const getUserSession = async <UserSession extends CoreUserSession>(
   sessionService: SessionService<UserSession> | undefined,
-  requiresSession: boolean,
+  auth: boolean,
   request: VrameworkRequest
 ): Promise<CoreUserSession | undefined> => {
   if (sessionService) {
     return (await sessionService.getUserSession(
-      requiresSession,
+      auth,
       request
     )) as UserSession
-  } else if (requiresSession) {
+  } else if (auth) {
     throw new NotImplementedError('Session service not implemented')
   }
 }
@@ -96,7 +96,7 @@ export const runRoute = async <In, Out>(
     try {
       session = await getUserSession(
         services.sessionService,
-        route.requiresSession !== false,
+        route.auth !== false,
         request
       )
     } catch (e: any) {
