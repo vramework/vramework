@@ -89,7 +89,7 @@ export abstract class VrameworkRequest<In = any> {
    * @description This method combines the request parameters, query parameters, and body into a single object.
    */
   public async getData(
-    contentType: string | undefined = 'application/json'
+    _contentType: string | undefined = 'application/json'
   ): Promise<In> {
     return {
       ...this.getParams(),

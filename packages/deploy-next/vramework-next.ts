@@ -1,4 +1,4 @@
-import { CoreAPIRoute, CoreAPIRoutes } from '@vramework/core/routes'
+import { CoreAPIRoute } from '@vramework/core/routes'
 import {
   CoreConfig,
   CoreSingletonServices,
@@ -16,18 +16,18 @@ import { VrameworkActionNextResponse } from './vramework-action-next-response'
 import { EventEmitter } from 'eventemitter3'
 import { runRoute } from '@vramework/core/router-runner'
 
-export class VrameworkNextJS<APIRoutes> {
+export class VrameworkNextJS {
   private readyEmitter = new EventEmitter()
   private singletonServices: CoreSingletonServices | undefined
 
   constructor(
     private readonly config: CoreConfig,
-    private readonly routes: APIRoutes,
     private readonly createSingletonServices: (
       config: CoreConfig
     ) => Promise<CoreSingletonServices>,
     private readonly createSessionServices: CreateSessionServices
-  ) {}
+  ) {
+  }
 
   public async actionRequest<
     In extends Record<string, any>,
@@ -40,7 +40,6 @@ export class VrameworkNextJS<APIRoutes> {
       new VrameworkActionNextResponse(),
       singletonServices,
       this.createSessionServices,
-      this.routes as unknown as CoreAPIRoutes,
       {
         route: injectIntoUrl(route.route, data),
         method: route.method,
@@ -66,7 +65,6 @@ export class VrameworkNextJS<APIRoutes> {
       new VrameworkSSRNextResponse(response),
       singletonServices,
       this.createSessionServices,
-      this.routes as unknown as CoreAPIRoutes,
       {
         route: injectIntoUrl(route.route, data),
         method: route.method,
@@ -92,7 +90,6 @@ export class VrameworkNextJS<APIRoutes> {
       vrameworkResponse,
       singletonServices,
       this.createSessionServices,
-      this.routes as unknown as CoreAPIRoutes,
       {
         route: injectIntoUrl(route.route, data),
         method: route.method,

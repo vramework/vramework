@@ -11,7 +11,6 @@ import {
   CreateSessionServices,
   VrameworkConfig,
 } from '@vramework/core/types'
-import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
 import { runRoute } from '@vramework/core/router-runner'
@@ -65,11 +64,6 @@ export class VrameworkExpressServer {
   }
 
   public async init() {
-    const routes = await initializeVrameworkCore(
-      this.singletonServices.logger,
-      this.vrameworkConfig
-    )
-
     this.app.use(async (req, res) => {
       try {
         await runRoute(
@@ -77,7 +71,6 @@ export class VrameworkExpressServer {
           new VrameworkExpressResponse(res),
           this.singletonServices,
           this.createSessionServices,
-          routes,
           {
             method: req.method.toLowerCase() as any,
             route: req.path,

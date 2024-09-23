@@ -35,7 +35,14 @@ Generating Route File:
   const parts = outputPath.split('/')
   parts.pop()
   await promises.mkdir(parts.join('/'), { recursive: true })
-  const content = `${serializeRoutes(outputPath, routeFiles)}\n\n${routesInterface}\n\nexport const routesMeta = ${JSON.stringify(routesMeta)}`
+  const content = `
+${serializeRoutes(outputPath, routeFiles)}
+
+${routesInterface}
+
+import { addRouteMeta } from '@vramework/core/route-runner'
+addRouteMeta(${JSON.stringify(routesMeta)})
+`
   await promises.writeFile(outputPath, content, 'utf-8')
 
   console.log(`Routes generated in ${Date.now() - startedAt}ms.`)

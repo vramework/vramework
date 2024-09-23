@@ -19,7 +19,7 @@ export class VrameworkFastifyServer {
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices
-  ) {}
+  ) { }
 
   /**
    * Placeholder for enabling CORS
@@ -29,11 +29,6 @@ export class VrameworkFastifyServer {
   }
 
   public async init() {
-    const routes = await initializeVrameworkCore(
-      this.singletonServices.logger,
-      this.vrameworkConfig
-    )
-
     this.app.all('/*', async (req, res) => {
       try {
         await runRoute(
@@ -41,7 +36,6 @@ export class VrameworkFastifyServer {
           new VrameworkFastifyResponse(res),
           this.singletonServices,
           this.createSessionServices,
-          routes,
           {
             method: req.method as any,
             route: req.url as string,

@@ -4,7 +4,7 @@ import {
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types'
-import { CoreAPIRoutes } from '@vramework/core/routes'
+import { CoreAPIRoutes, RoutesMeta } from '@vramework/core/routes'
 import { InvalidOriginError } from '@vramework/core/errors'
 import { VrameworkLambdaRequest } from './vramework-lambda-request'
 import { VrameworkLambdaResponse } from './vramework-lambda-response'
@@ -36,6 +36,7 @@ const generalHandler = async (
   services: CoreSingletonServices,
   createSessionServices: CreateSessionServices,
   routes: CoreAPIRoutes,
+  routesMeta: RoutesMeta,
   request: VrameworkLambdaRequest,
   response: VrameworkLambdaResponse
 ): Promise<APIGatewayProxyResult> => {
@@ -56,7 +57,7 @@ const generalHandler = async (
   }
 
   try {
-    await runRoute(request, response, services, createSessionServices, routes, {
+    await runRoute(request, response, services, createSessionServices, {
       route: request.getPath(),
       method: request.getMethod() as any,
     })
@@ -70,6 +71,7 @@ const generalHandler = async (
 export const processCorsless = async (
   event: APIGatewayProxyEvent,
   routes: CoreAPIRoutes,
+  routesMeta: RoutesMeta,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices
@@ -80,6 +82,7 @@ export const processCorsless = async (
     singletonServices,
     createSessionServices,
     routes,
+    routesMeta,
     request,
     response
   )
@@ -88,7 +91,7 @@ export const processCorsless = async (
 export const processFromAnywhereCors = async (
   event: APIGatewayProxyEvent,
   routes: CoreAPIRoutes,
-  config: CoreConfig,
+  routesMeta: RoutesMeta,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices
 ) => {
@@ -100,6 +103,7 @@ export const processFromAnywhereCors = async (
     singletonServices,
     createSessionServices,
     routes,
+    routesMeta,
     request,
     response
   )
@@ -109,6 +113,7 @@ export const processCors = async (
   event: APIGatewayProxyEvent,
   allowedOrigins: string[],
   routes: CoreAPIRoutes,
+  routesMeta: RoutesMeta,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices
 ) => {
@@ -130,6 +135,7 @@ export const processCors = async (
     singletonServices,
     createSessionServices,
     routes,
+    routesMeta,
     request,
     response
   )

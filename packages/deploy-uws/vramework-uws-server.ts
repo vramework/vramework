@@ -30,11 +30,6 @@ export class VrameworkUWSServer {
   }
 
   public async init() {
-    const routes = await initializeVrameworkCore(
-      this.singletonServices.logger,
-      this.vrameworkConfig
-    )
-
     this.app.any('/*', async (res, req) => {
       try {
         await runRoute(
@@ -42,7 +37,6 @@ export class VrameworkUWSServer {
           new VrameworkUWSResponse(res),
           this.singletonServices,
           this.createSessionServices,
-          routes,
           {
             method: req.getMethod() as any,
             route: req.getUrl() as string,

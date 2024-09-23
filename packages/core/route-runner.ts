@@ -1,6 +1,6 @@
 import { getErrorResponse } from './error-handler'
 import { verifyPermissions } from './permissions'
-import { CoreAPIRoute, CoreAPIRoutes } from './routes'
+import { CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './routes'
 import { loadSchema, validateJson } from './schema'
 import {
   CoreSingletonServices,
@@ -15,20 +15,27 @@ import { SessionService } from './services'
 import { NotFoundError, NotImplementedError } from './errors'
 
 const routes: CoreAPIRoutes = []
+let routesMeta: RoutesMeta = []
 
 export const addCoreRoute = (route: CoreAPIRoute<any, any, any>) => {
   routes.push(route as any)
 }
 
+export const addRouteMeta = (_routeMeta: RoutesMeta) => {
+  routesMeta = _routeMeta
+}
+
 export const getRoutes = () => {
-  return routes
+  return {
+    routes,
+    routesMeta
+  }
 }
 
 const getMatchingRoute = (
   logger: CoreSingletonServices['logger'],
   requestType: string,
-  requestPath: string,
-  routes: Array<CoreAPIRoute<unknown, unknown>>
+  requestPath: string
 ) => {
   for (const route of routes) {
     if (route.method !== requestType.toLowerCase()) {
@@ -40,10 +47,11 @@ const getMatchingRoute = (
     const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
 
     if (matchedPath) {
-      if (route.schema) {
-        loadSchema(route.schema, logger)
+      const schema = routesMeta.find(routeMeta => routeMeta.method === route.method && routeMeta.route === route.route)?.input
+      if (schema) {
+        loadSchema(schema, logger)
       }
-      return { matchedPath, params: matchedPath.params, route }
+      return { matchedPath, params: matchedPath.params, route, schema }
     }
   }
   logger.info({ message: 'Invalid route', requestPath, requestType })
@@ -70,7 +78,6 @@ export const runRoute = async <In, Out>(
   response: VrameworkResponse,
   services: CoreSingletonServices,
   createSessionServices: CreateSessionServices,
-  routes: CoreAPIRoutes,
   {
     route: apiRoute,
     method: apiType,
@@ -79,11 +86,10 @@ export const runRoute = async <In, Out>(
   try {
     let session: CoreUserSession | undefined
 
-    const { matchedPath, params, route } = getMatchingRoute(
+    const { matchedPath, params, route, schema } = getMatchingRoute(
       services.logger,
       apiType,
       apiRoute,
-      routes
     )
     request.setParams(params)
 
@@ -111,8 +117,9 @@ export const runRoute = async <In, Out>(
     const data = await request.getData(
       request.getHeader('Content-Type') || 'application/json'
     )
-    if (route.schema) {
-      validateJson(route.schema, data)
+
+    if (schema) {
+      validateJson(schema, data)
     }
 
     const sessionServices = await createSessionServices(
