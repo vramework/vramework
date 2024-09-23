@@ -1,6 +1,6 @@
+import { CoreAPIRoutes } from '@vramework/core/routes'
 import { promises } from 'fs'
 import { createGenerator } from 'ts-json-schema-generator'
-import { CoreAPIRoutes } from '@vramework/core/routes'
 
 export async function generateSchemas(
   tsconfig: string,

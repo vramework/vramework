@@ -15,10 +15,9 @@
   },
   "dependencies": {
     "commander": "^12",
+    "glob": "^11.0.0",
     "ts-json-schema-generator": "^2.3.0",
-    "ts-node": "^10.9.2"
-  },
-  "devDependencies": {
-    "typescript": "^5.5.4"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6"
   }
 }

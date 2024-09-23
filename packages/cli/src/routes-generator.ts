@@ -5,37 +5,29 @@ import { join, relative } from 'path'
 export const generateRoutesImports = async (
   rootPath: string,
   routesDirPath: string[],
-  vrameworkTypesModule: string,
   outputPathFilePath: string
-): Promise<void> => {
+): Promise<string> => {
   const outputPath = join(rootPath, outputPathFilePath)
 
   let routes: string[] = []
   const { filesWithRoutes } = await loadRoutes(rootPath, routesDirPath)
 
-  const routesFile = `
-import { APIRoutes } from "${vrameworkTypesModule}"
-
-${filesWithRoutes
+  const routesFile = filesWithRoutes
   .sort()
-  .map((path, i) => {
+  .map((path) => {
     const filePath = relative(outputPath, path)
       .replace('.ts', '')
       .replace('../..', '..')
-    return `import { routes as routes${i} } from '${filePath}'`
-  })
-  .join('\n')}
+    routes.push(filePath)
+    return `import '${filePath}'`
+  }).join('\n')
 
-export const getRoutes = (): APIRoutes => {
-  return [
-  ${routes.map((_, i) => `    ...routes${i}`).join(',\n')}
-  ]
-}
-`
   const parts = outputPath.split('/')
   parts.pop()
 
   console.log(`Writing routes to ${outputPath}`)
   await promises.mkdir(parts.join('/'), { recursive: true })
   await promises.writeFile(outputPath, routesFile, 'utf-8')
+
+  return outputPath
 }

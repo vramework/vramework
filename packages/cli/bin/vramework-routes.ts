@@ -1,6 +1,7 @@
 import { Command } from 'commander'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import { generateRoutesImports } from '../src/routes-generator'
+import { generateRouteMeta } from '../src/generate-route-meta'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
   const { vrameworkTypesModule, routeDirectories, routesOutputFile, rootDir } =
@@ -24,13 +25,15 @@ Generating Route File:
     - Route Directories: ${['', ...routeDirectories].join('\n\t- ')}
     - Route Output:\n\t${routesOutputFile}
 `)
-
-  await generateRoutesImports(
+  
+  const outputPath = await generateRoutesImports(
     rootDir,
     routeDirectories,
-    vrameworkTypesModule,
     routesOutputFile
   )
+
+  console.log('Generating schema mappings...', outputPath)
+  await generateRouteMeta([outputPath])
 
   console.log(`Routes generated in ${Date.now() - startedAt}ms.`)
 }

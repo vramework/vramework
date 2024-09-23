@@ -1,6 +1,12 @@
 import { promises } from 'fs'
 import { CoreAPIRoute, CoreAPIRoutes } from './routes'
 import { join } from 'path'
+import { readFile } from 'fs/promises'
+import { getRoutes } from './router-runner'
+
+const importFile = async (path: string) => {
+  return await import(path)
+}
 
 /**
  * Verifies that there are no duplicate routes in the provided array of routes.
@@ -24,10 +30,6 @@ export const verifyRoutes = (routes: Array<CoreAPIRoute<unknown, unknown>>) => {
   })
 }
 
-export const importFile = async (path: string) => {
-  return await import(path)
-}
-
 /**
  * Recursively loads all API file paths from the specified directory.
  * @param dir - The directory to load API file paths from.
@@ -39,24 +41,20 @@ export const loadRoutes = async (
   relativeRootDir: string,
   routeDirectories: string[] = []
 ): Promise<{
-  filesWithRoutes: string[]
+  filesWithRoutes: string[],
   apiRoutes: CoreAPIRoutes
 }> => {
   let filesWithRoutes: string[] = []
-  let apiRoutes: CoreAPIRoutes = []
 
   for (const routeDirectory of routeDirectories) {
-    const { apiRoutes: routes, filesWithRoutes: files } =
-      await loadRoutesFromDirectory(
-        join(`${relativeRootDir}/${routeDirectory}`)
-      )
+    const files = await loadRoutesFromDirectory(
+      join(`${relativeRootDir}/${routeDirectory}`)
+    )
     filesWithRoutes = [...filesWithRoutes, ...files]
-    apiRoutes = [...apiRoutes, ...routes]
   }
 
-  verifyRoutes(apiRoutes)
 
-  return { apiRoutes, filesWithRoutes }
+  return { filesWithRoutes, apiRoutes: getRoutes() }
 }
 
 /**
@@ -64,17 +62,14 @@ export const loadRoutes = async (
  * @param relativeRootDir - The root directory to load routes from.
  * @param apiRoutes - An array to store the loaded API routes.
  * @param filesWithRoutes - An array to store the file paths that contain routes.
- * @returns A promise that resolves to an object containing the loaded API routes and file paths.
+ * @returns A promise that resolves to an object containing the file paths with routes.
  * @description This function recursively traverses the specified directory, loading all TypeScript file paths that contain API routes. It imports the routes from each file and aggregates them into the provided arrays.
  */
 export const loadRoutesFromDirectory = async (
   relativeRootDir: string,
   apiRoutes: CoreAPIRoutes = [],
   filesWithRoutes: string[] = []
-): Promise<{
-  filesWithRoutes: string[]
-  apiRoutes: CoreAPIRoutes
-}> => {
+): Promise<string[]> => {
   const entries = await promises.readdir(relativeRootDir)
 
   await Promise.all(
@@ -95,17 +90,16 @@ export const loadRoutesFromDirectory = async (
           !entry.endsWith('.d.ts') &&
           !entry.endsWith('.test.ts')
         ) {
-          const routes = await importFile(`${relativeRootDir}/${entry}`)
-          if (routes.routes) {
+          const content = await readFile(`${relativeRootDir}/${entry}`)
+          if (content.includes('addRoute')) {
+            await importFile(`${relativeRootDir}/${entry}`)
             filesWithRoutes.push(`${relativeRootDir}/${entry}`)
-            for (const route of routes.routes) {
-              apiRoutes.push(route)
-            }
           }
         }
       }
     })
   )
 
-  return { apiRoutes, filesWithRoutes }
+  return filesWithRoutes
 }
+

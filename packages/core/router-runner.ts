@@ -1,6 +1,6 @@
 import { getErrorResponse } from './error-handler'
 import { verifyPermissions } from './permissions'
-import { CoreAPIRoute, CoreAPIRoutes } from './routes'
+import { CoreAPIFunction, CoreAPIRoute, CoreAPIRoutes } from './routes'
 import { loadSchema, validateJson } from './schema'
 import {
   CoreSingletonServices,
@@ -13,6 +13,16 @@ import { VrameworkRequest } from './vramework-request'
 import { VrameworkResponse } from './vramework-response'
 import { SessionService } from './services'
 import { NotFoundError, NotImplementedError } from './errors'
+
+const routes: any[] = []
+
+export const addRoute = <APIFunction = CoreAPIFunction<any, any>>(route: APIFunction) => {
+  routes.push(route)
+}
+
+export const getRoutes = () => {
+  return routes
+}
 
 const getMatchingRoute = (
   logger: CoreSingletonServices['logger'],
