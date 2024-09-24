@@ -14,10 +14,30 @@ import { VrameworkResponse } from './vramework-response'
 import { SessionService } from './services'
 import { NotFoundError, NotImplementedError } from './errors'
 
+type ExtractRouteParams<S extends string> =
+  S extends `${string}:${infer Param}/${infer Rest}`
+    ? Param | ExtractRouteParams<`/${Rest}`>
+    : S extends `${string}:${infer Param}`
+      ? Param
+      : never;
+
+export type AssertRouteParams<In, Route extends string> =
+  ExtractRouteParams<Route> extends keyof In
+    ? unknown
+    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In];
+
+
 const routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
 
-export const addCoreRoute = (route: CoreAPIRoute<any, any, any>) => {
+export const addCoreRoute = <
+  In,
+  Out,
+  Route extends string,
+  APIFunction,
+  APIFunctionSessionless,
+  APIPermission
+>(route: CoreAPIRoute<In, Out, Route, APIFunction, APIFunctionSessionless, APIPermission>) => {
   routes.push(route as any)
 }
 
@@ -71,6 +91,7 @@ export const getUserSession = async <UserSession extends CoreUserSession>(
   } else if (auth) {
     throw new NotImplementedError('Session service not implemented')
   }
+  return undefined
 }
 
 export const runRoute = async <In, Out>(
@@ -81,7 +102,7 @@ export const runRoute = async <In, Out>(
   {
     route: apiRoute,
     method: apiType,
-  }: Pick<CoreAPIRoute<unknown, unknown>, 'route' | 'method'>
+  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'>
 ): Promise<Out> => {
   try {
     let session: CoreUserSession | undefined

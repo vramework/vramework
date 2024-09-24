@@ -32,7 +32,7 @@ export class VrameworkNextJS {
   public async actionRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'method'>,
+    R extends Pick<CoreAPIRoute<In, Out, R['route']>, 'route' | 'method'>,
   >(route: R, data: In): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
     return await runRoute<In, Out>(
@@ -50,7 +50,7 @@ export class VrameworkNextJS {
   public async ssrRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'method'>,
+    R extends Pick<CoreAPIRoute<In, Out, R['route']>, 'route' | 'method'>,
   >(
     request: IncomingMessage & {
       cookies: Partial<{ [key: string]: string }>
@@ -75,7 +75,7 @@ export class VrameworkNextJS {
   public async apiRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out>, 'route' | 'method'>,
+    R extends Pick<CoreAPIRoute<In, Out, R['route']>, 'route' | 'method'>,
   >(
     request: NextApiRequest,
     response: NextApiResponse,

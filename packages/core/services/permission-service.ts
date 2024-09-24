@@ -13,7 +13,7 @@ export interface PermissionService {
    * @description This method checks if the provided user session has the necessary permissions to access the specified route.
    */
   verifyRouteAccess(
-    route: CoreAPIRoute<unknown, unknown>,
+    route: CoreAPIRoute<unknown, unknown, any>,
     session?: CoreUserSession
   ): Promise<void>
 }

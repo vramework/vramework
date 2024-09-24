@@ -11,8 +11,8 @@ export interface LocalContentConfig {
  */
 export abstract class LocalContent implements ContentService {
   constructor(
-    private config: LocalContentConfig,
-    private logger: Logger
+    _config: LocalContentConfig,
+    _logger: Logger
   ) {}
 
   public abstract getUploadURL: (

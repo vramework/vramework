@@ -94,24 +94,3 @@ export const validateJson = (schema: string, json: unknown): void => {
     throw new InvalidParametersError(errorText)
   }
 }
-
-/**
- * Retrieves validation errors for JSON data against a schema.
- * @param logger - A logger for logging information.
- * @param schema - The name of the schema to validate against.
- * @param json - The JSON data to validate.
- * @returns An array of validation errors, or undefined if the data is valid.
- * @description This function validates JSON data against the specified schema and returns an array of validation errors if the data is invalid, or undefined if the data is valid.
- */
-export const getValidationErrors = (
-  logger: Logger,
-  schema: string,
-  json: unknown
-) => {
-  const validator = validators.get(schema)
-  if (!validator) {
-    throw `Missing validator for ${schema}`
-  }
-  const result = validator(json)
-  return result ? undefined : validator.errors
-}

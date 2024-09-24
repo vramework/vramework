@@ -36,32 +36,47 @@ type CoreFunctionlessAPIRoute = {
   }>
 }
 
-export type CoreAPIRoute<In, Out, APIFunction = CoreAPIFunction<In, Out>, APIFunctionSessionless = CoreAPIFunctionSessionless<In, Out>, APIPermission = CoreAPIPermission<In>> =
-  (CoreFunctionlessAPIRoute & {
-    method: APIRouteMethod
-    func: APIFunction
-    permissions?: Record<string, APIPermission[] | APIPermission>
-    auth?: true
-  }) | (CoreFunctionlessAPIRoute & {
-    method: APIRouteMethod
-    func: APIFunctionSessionless
-    permissions?: undefined
-    auth?: false
-  }) | (CoreFunctionlessAPIRoute & {
-    method: 'post'
-    func: APIFunction
-    permissions?: Record<string, APIPermission[] | APIPermission>
-    auth?: true
-    query?: Array<keyof In>
-  }) | (CoreFunctionlessAPIRoute & {
-    method: 'post'
-    func: APIFunctionSessionless
-    permissions?: undefined
-    auth?: false
-    query?: Array<keyof In>
-  })
+export type CoreAPIRoute<
+  In,
+  Out,
+  R extends string,
+  APIFunction = CoreAPIFunction<In, Out>,
+  APIFunctionSessionless = CoreAPIFunctionSessionless<In, Out>,
+  APIPermission = CoreAPIPermission<In>
+> =
+  | (CoreFunctionlessAPIRoute & {
+      route: R;
+      method: APIRouteMethod;
+      func: APIFunction;
+      permissions?: Record<string, APIPermission[] | APIPermission>;
+      auth?: true;
+    })
+  | (CoreFunctionlessAPIRoute & {
+      route: R;
+      method: APIRouteMethod;
+      func: APIFunctionSessionless;
+      permissions?: undefined;
+      auth?: false;
+    })
+  | (CoreFunctionlessAPIRoute & {
+      route: R;
+      method: 'post';
+      func: APIFunction;
+      permissions?: Record<string, APIPermission[] | APIPermission>;
+      auth?: true;
+      query?: Array<keyof In>;
+    })
+  | (CoreFunctionlessAPIRoute & {
+      route: R;
+      method: 'post';
+      func: APIFunctionSessionless;
+      permissions?: undefined;
+      auth?: false;
+      query?: Array<keyof In>;
+    });
 
-export type CoreAPIRoutes = Array<CoreAPIRoute<unknown, unknown>>
+export type CoreAPIRoutes = Array<CoreAPIRoute<any, any, string>>
+
 export type RoutesMeta = Array<{
   route: string,
   method: APIRouteMethod,

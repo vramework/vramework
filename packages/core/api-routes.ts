@@ -13,7 +13,7 @@ const importFile = async (path: string) => {
  * @throws {Error} If a duplicate route is found.
  * @description This function checks for duplicate routes in the provided array of routes. It throws an error if any duplicate routes are found.
  */
-export const verifyRoutes = (routes: Array<CoreAPIRoute<unknown, unknown>>) => {
+export const verifyRoutes = (routes: Array<CoreAPIRoute<unknown, unknown, any>>) => {
   const typedRoutes = new Map()
   for (const type of ['get', 'patch', 'delete', 'post', 'head']) {
     typedRoutes.set(type, new Set<string[]>())
