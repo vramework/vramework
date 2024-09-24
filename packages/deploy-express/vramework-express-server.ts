@@ -13,7 +13,8 @@ import {
 } from '@vramework/core/types'
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
-import { runRoute } from '@vramework/core/router-runner'
+import { runRoute } from '@vramework/core/route-runner'
+import { initializeVrameworkCore } from '@vramework/core/initialize'
 
 export class VrameworkExpressServer {
   public app = express()
@@ -64,6 +65,8 @@ export class VrameworkExpressServer {
   }
 
   public async init() {
+    await initializeVrameworkCore(this.singletonServices.logger, this.vrameworkConfig)
+
     this.app.use(async (req, res) => {
       try {
         await runRoute(

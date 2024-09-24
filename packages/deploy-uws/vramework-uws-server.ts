@@ -6,8 +6,7 @@ import {
   CreateSessionServices,
   VrameworkConfig,
 } from '@vramework/core/types'
-import { initializeVrameworkCore } from '@vramework/core/initialize'
-import { runRoute } from '@vramework/core/router-runner'
+import { runRoute } from '@vramework/core/route-runner'
 import { VrameworkUWSRequest } from './vramework-uws-request'
 import { VrameworkUWSResponse } from './vramework-uws-response'
 

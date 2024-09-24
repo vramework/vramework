@@ -14,7 +14,7 @@ import { VrameworkAPINextResponse } from './vramework-api-next-response'
 import { VrameworkActionNextRequest } from './vramework-action-next-request'
 import { VrameworkActionNextResponse } from './vramework-action-next-response'
 import { EventEmitter } from 'eventemitter3'
-import { runRoute } from '@vramework/core/router-runner'
+import { runRoute } from '@vramework/core/route-runner'
 
 export class VrameworkNextJS {
   private readyEmitter = new EventEmitter()

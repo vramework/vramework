@@ -6,10 +6,10 @@ import {
   CreateSessionServices,
   VrameworkConfig,
 } from '@vramework/core/types'
-import { initializeVrameworkCore } from '@vramework/core/initialize'
-import { runRoute } from '@vramework/core/router-runner'
+import { runRoute } from '@vramework/core/route-runner'
 import { VrameworkFastifyRequest } from './vramework-fastify-request'
 import { VrameworkFastifyResponse } from './vramework-fastify-response'
+import { initializeVrameworkCore } from '@vramework/core/initialize'
 
 export class VrameworkFastifyServer {
   public app = Fastify({})
@@ -29,6 +29,8 @@ export class VrameworkFastifyServer {
   }
 
   public async init() {
+    await initializeVrameworkCore(this.singletonServices.logger, this.vrameworkConfig)
+
     this.app.all('/*', async (req, res) => {
       try {
         await runRoute(
