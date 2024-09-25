@@ -1,14 +1,19 @@
 import * as ts from 'typescript';
-import * as path from 'path';
+import { APIRouteMethod, RoutesMeta } from '@vramework/core/routes';
+import { getFileImportRelativePath } from './utils';
 
-interface ImportInfo {
+export interface ImportInfo {
   importPath: string;
   namedImports: Set<string>;
 }
 
-export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
-  const importMap: Map<string, ImportInfo> = new Map();
-  
+export type ImportMap = Map<string, ImportInfo>
+
+export const inspectRoutes = (outputFile: string, routeFiles: string[], packageMappings: Record<string, string> = {}) => {
+  const typesImportMap: ImportMap = new Map();
+  const routesMeta: RoutesMeta = []
+  const filesWithRoutes = new Set<string>()
+
   const program = ts.createProgram(routeFiles, {
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.CommonJS,
@@ -22,11 +27,10 @@ export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
         if (symbol.getName() === symbolName) {
           const declarations = symbol.getDeclarations();
           if (declarations && declarations.length > 0) {
-            const decl = declarations[0];
-            const filePath = path.relative(path.dirname(outputFile), decl.getSourceFile().fileName)
-            const importInfo = importMap.get(filePath) || { importPath: filePath, namedImports: new Set() }
+            let filePath = getFileImportRelativePath(outputFile , declarations[0].getSourceFile().fileName, packageMappings)
+            const importInfo = typesImportMap.get(filePath) || { importPath: filePath, namedImports: new Set() }
             importInfo.namedImports.add(symbol.getName())
-            importMap.set(filePath, importInfo)
+            typesImportMap.set(filePath, importInfo)
           }
         }
       }
@@ -35,14 +39,6 @@ export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
   }
 
   const checker = program.getTypeChecker();
-
-  const routesMeta: Array<{
-    route: string
-    method: string
-    input: string | null,
-    output: string | null
-  }> = []
-
   const sourceFiles = program.getSourceFiles()
 
   for (const sourceFile of sourceFiles) {
@@ -60,6 +56,8 @@ export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
 
       // Check if the call is to addRoute
       if (ts.isIdentifier(expression) && expression.text === 'addRoute') {
+        filesWithRoutes.add(node.getSourceFile().fileName);
+
         const args = node.arguments;
         if (args.length > 0) {
           const firstArg = args[0];
@@ -151,7 +149,7 @@ export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
 
       routesMeta.push({
         route: routeValue!,
-        method: methodValue!, 
+        method: methodValue! as APIRouteMethod, 
         input: nullifyTypes(input), 
         output: nullifyTypes(output)
       })
@@ -166,17 +164,9 @@ export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
     ts.forEachChild(node, (child) => visit(child));
   }
 
-  let imports = ''
-  for (const [importPath, { namedImports }] of importMap) {
-    imports += `import { ${Array.from(namedImports).join(', ')} } from '${importPath.replace('.ts', '')}'\n`
-  }
-
-  let routesInterface = `${imports}\n\nexport type RoutesInterface = `
-  const result = routesMeta.map(({ route, method, input, output }) => `{ route: '${route}', method: '${method}', input: ${input}, output: ${output} }`)
-  routesInterface += result.join(' |\n\t')
-
   return {
     routesMeta,
-    routesInterface,
+    typesImportMap,
+    filesWithRoutes: [...filesWithRoutes]
   }
 };

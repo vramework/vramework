@@ -1,6 +1,6 @@
 import { promises } from 'fs'
 import { CoreAPIRoute, CoreAPIRoutes } from './routes'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { readFile } from 'fs/promises'
 
 const importFile = async (path: string) => {
@@ -88,12 +88,14 @@ export const loadRoutesFromDirectory = async (
           const content = await readFile(`${relativeRootDir}/${entry}`)
           if (content.includes('addRoute')) {
             await importFile(`${relativeRootDir}/${entry}`)
-            filesWithRoutes.push(`${relativeRootDir}/${entry}`)
+            filesWithRoutes.push(resolve(relativeRootDir, entry))
           }
         }
       }
     })
   )
+
+  console.log(filesWithRoutes)
 
   return filesWithRoutes
 }

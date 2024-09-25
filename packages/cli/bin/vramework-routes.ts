@@ -1,13 +1,13 @@
 import { Command } from 'commander'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
-import { loadRoutes } from '@vramework/core/api-routes'
-import { serializeRoutes } from '../src/routes-generator'
-import { generateRouteMeta } from '../src/generate-route-meta'
+import { inspectRoutes } from '../src/inspect-routes'
 import * as promises from 'fs/promises'
 import path = require('path')
+import { serializeInterface, serializeRouteMeta, serializeRoutes } from '../src/routes-serializers'
+import { glob } from 'glob'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let { routeDirectories, routesOutputFile, rootDir } =
+  let { routeDirectories, routesOutputFile, rootDir, packageMappings  } =
     await getVrameworkConfig(configFile)
 
   if (
@@ -28,18 +28,18 @@ Generating Route File:
     - Route Output:\n\t${routesOutputFile}
 `)
 
-  const routeFiles = await loadRoutes(rootDir,routeDirectories)
+  const routeFiles = (await Promise.all(routeDirectories.map((dir) => glob(`${path.join(rootDir, dir)}/**/*.ts`)))).flat()
   const outputPath = path.join(rootDir, routesOutputFile)
 
-  const { routesMeta, routesInterface } = await generateRouteMeta(outputPath, routeFiles)
+  const { routesMeta, typesImportMap, filesWithRoutes } = await inspectRoutes(outputPath, routeFiles, packageMappings)
 
   const parts = outputPath.split('/')
   parts.pop()
   await promises.mkdir(parts.join('/'), { recursive: true })
   const content = [
-    serializeRoutes(outputPath, routeFiles),
-    routesInterface,
-    `import { addRouteMeta } from '@vramework/core/route-runner'\naddRouteMeta(${JSON.stringify(routesMeta)})`
+    serializeRoutes(outputPath, filesWithRoutes, packageMappings),
+    serializeInterface(typesImportMap, routesMeta),
+    serializeRouteMeta(routesMeta)
   ]
   await promises.writeFile(outputPath, content.join('\n\n'), 'utf-8')
 
