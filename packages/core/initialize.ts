@@ -16,13 +16,19 @@ export const initializeVrameworkCore = async (
   logger: Logger,
   config: VrameworkConfig
 ) => {
+  logger.info(`Starting Vramework`)
+
   const { routes, routesMeta } = getRoutes()
+  let routesDebugMessage = 'Routes loading:'
+  for (const { method, route } of routes) {
+    routesDebugMessage += `\n\t- ${method.toUpperCase()}::${route}`
+  }
+  logger.debug(routesDebugMessage)
   logger.info(`Routes loaded`)
 
   await loadSchemas(join(config.rootDir, config.schemaOutputDirectory))
   routesMeta.forEach((route: any) => {
     if (route.input) {
-      logger.debug(`Loading schema ${route.input}`)
       loadSchema(route.input, logger)
     }
   })

@@ -26,7 +26,6 @@ export type AssertRouteParams<In, Route extends string> =
     ? unknown
     : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In];
 
-
 const routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
 

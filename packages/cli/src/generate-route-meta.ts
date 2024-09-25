@@ -23,7 +23,7 @@ export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
           const declarations = symbol.getDeclarations();
           if (declarations && declarations.length > 0) {
             const decl = declarations[0];
-            const filePath = path.relative(outputFile, decl.getSourceFile().fileName)
+            const filePath = path.relative(path.dirname(outputFile), decl.getSourceFile().fileName)
             const importInfo = importMap.get(filePath) || { importPath: filePath, namedImports: new Set() }
             importInfo.namedImports.add(symbol.getName())
             importMap.set(filePath, importInfo)
@@ -168,7 +168,7 @@ export const generateRouteMeta = (outputFile: string, routeFiles: string[]) => {
 
   let imports = ''
   for (const [importPath, { namedImports }] of importMap) {
-    imports += `import { ${Array.from(namedImports).join(', ')} } from '../${importPath.replace('.ts', '')}'\n`
+    imports += `import { ${Array.from(namedImports).join(', ')} } from '${importPath.replace('.ts', '')}'\n`
   }
 
   let routesInterface = `${imports}\n\nexport type RoutesInterface = `

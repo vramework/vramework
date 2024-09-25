@@ -29,9 +29,10 @@ Generating Route File:
 `)
 
   const routeFiles = await loadRoutes(rootDir,routeDirectories)
-  const { routesMeta, routesInterface } = await generateRouteMeta(routesOutputFile, routeFiles)
-
   const outputPath = path.join(rootDir, routesOutputFile)
+
+  const { routesMeta, routesInterface } = await generateRouteMeta(outputPath, routeFiles)
+
   const parts = outputPath.split('/')
   parts.pop()
   await promises.mkdir(parts.join('/'), { recursive: true })

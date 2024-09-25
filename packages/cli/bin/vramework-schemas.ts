@@ -1,6 +1,7 @@
 import { Command } from 'commander'
 import { generateSchemas } from '../src/schema-generator'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
+import { getRoutes } from '@vramework/core/route-runner'
 import { join } from 'path'
 
 const importFile = async (path: string) => {
@@ -26,11 +27,8 @@ Generating schemas:
     - Route Meta:\n\t${routesOutputFile}
 `)
 
-  let routesMeta: any
-
   try {
-    const routes = await importFile(join(rootDir, routesOutputFile))
-    routesMeta = routes.routesMeta
+    await importFile(join(rootDir, routesOutputFile))
   } catch (e) {
     console.error(e)
     console.error('Error loading routes meta, has it been generated?')
@@ -40,7 +38,7 @@ Generating schemas:
   await generateSchemas(
     join(rootDir, tsconfig),
     join(rootDir, schemaOutputDirectory),
-    routesMeta
+    getRoutes().routesMeta
   )
 
   console.log(`Schemas generated in ${Date.now() - startedAt}ms.`)
