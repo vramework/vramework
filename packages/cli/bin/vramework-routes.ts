@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { getVrameworkConfig } from '@vramework/core/vramework-config'
+import { getVrameworkConfig } from '@vramework/core'
 import { inspectRoutes } from '../src/inspect-routes'
 import * as promises from 'fs/promises'
 import path = require('path')

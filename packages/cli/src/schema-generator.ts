@@ -34,7 +34,7 @@ export async function generateSchemas(
   await promises.writeFile(
     `${schemaParentDir}/schemas.ts`,
     `
-import { addSchema } from '@vramework/core/schema'
+import { addSchema } from '@vramework/core'
 ` +
     schemas
       .map(

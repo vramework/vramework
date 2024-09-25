@@ -1,4 +1,4 @@
-import { VrameworkRequest } from '@vramework/core/vramework-request'
+import { VrameworkRequest } from '@vramework/core'
 import { Request } from 'express-serve-static-core'
 import getRawBody from 'raw-body'
 

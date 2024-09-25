@@ -1,6 +1,6 @@
 import { JWTService, Logger } from '@vramework/core/services'
 import { MissingSessionError } from '@vramework/core/errors'
-import { CoreUserSession } from '@vramework/core/types'
+import { CoreUserSession } from '@vramework/core'
 import * as jose from 'jose'
 
 /**

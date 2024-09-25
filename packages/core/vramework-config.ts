@@ -1,6 +1,6 @@
 import { join, dirname, resolve } from 'path'
 import { readdir } from 'fs/promises'
-import { VrameworkConfig } from './types'
+import { VrameworkConfig } from './types/core.types'
 
 export const getVrameworkConfig = async (
   configFile?: string,

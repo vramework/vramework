@@ -1,12 +1,12 @@
 import { getErrorResponse } from './error-handler'
 import { verifyPermissions } from './permissions'
-import { CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './routes'
+import { CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './types/routes.types'
 import { loadSchema, validateJson } from './schema'
 import {
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
-} from './types'
+} from './types/core.types'
 import { match } from 'path-to-regexp'
 import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from './vramework-request'

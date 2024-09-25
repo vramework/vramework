@@ -1,5 +1,5 @@
 import { CookieSerializeOptions } from 'cookie'
-import { JSONValue } from './types'
+import { JSONValue } from './types/core.types'
 
 /**
  * Abstract class representing a vramework response.

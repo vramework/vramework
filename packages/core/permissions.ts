@@ -1,6 +1,6 @@
 import { NotPermissionedError } from './errors'
-import { CoreAPIPermission } from './routes'
-import { CoreServices, CoreUserSession } from './types'
+import { CoreAPIPermission } from './types/routes.types'
+import { CoreServices, CoreUserSession } from './types/core.types'
 
 /**
  * Validates permissions based on the provided services, data, and session.

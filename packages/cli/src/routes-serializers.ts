@@ -1,4 +1,4 @@
-import { RoutesMeta } from '@vramework/core/routes'
+import { RoutesMeta } from '@vramework/core'
 import { ImportMap } from './inspect-routes'
 import { getFileImportRelativePath } from './utils'
 
@@ -37,7 +37,7 @@ export const serializeInterface = (importMap: ImportMap, routesMeta: RoutesMeta)
 
 export const serializeRouteMeta = (routesMeta: RoutesMeta) => {
   const serializedOutput: string[] = ['/* Files with addRoute function within them */']
-  serializedOutput.push('import { addRouteMeta } from \'@vramework/core/route-runner\'')
+  serializedOutput.push('import { addRouteMeta } from \'@vramework/core\'')
   serializedOutput.push(`addRouteMeta(${JSON.stringify(routesMeta, null, 2)})`)
   return serializedOutput.join('\n')
 }

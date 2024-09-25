@@ -1,4 +1,4 @@
-import { JSONValue } from '@vramework/core/types'
+import { JSONValue } from '@vramework/core'
 import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { Response, CookieOptions } from 'express-serve-static-core'
 

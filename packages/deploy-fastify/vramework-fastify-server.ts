@@ -5,8 +5,8 @@ import {
   CoreSingletonServices,
   CreateSessionServices,
   VrameworkConfig,
-} from '@vramework/core/types'
-import { runRoute } from '@vramework/core/route-runner'
+  runRoute
+} from '@vramework/core'
 import { VrameworkFastifyRequest } from './vramework-fastify-request'
 import { VrameworkFastifyResponse } from './vramework-fastify-response'
 import { initializeVrameworkCore } from '@vramework/core/initialize'

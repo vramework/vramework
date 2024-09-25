@@ -1,7 +1,7 @@
-import { Logger, LogLevel } from './services/logger'
-import { PermissionService, SessionService } from './services'
-import { VrameworkRequest } from './vramework-request'
-import { VrameworkResponse } from './vramework-response'
+import { Logger, LogLevel } from '../services/logger'
+import { PermissionService, SessionService } from '../services'
+import { VrameworkRequest } from '../vramework-request'
+import { VrameworkResponse } from '../vramework-response'
 
 export type JSONPrimitive = string | number | boolean | null | undefined
 

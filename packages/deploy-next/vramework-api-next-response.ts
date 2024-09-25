@@ -1,4 +1,4 @@
-import { JSONValue } from '@vramework/core/types'
+import { JSONValue } from '@vramework/core'
 import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { NextApiResponse } from 'next'
 import * as cookie from 'cookie'

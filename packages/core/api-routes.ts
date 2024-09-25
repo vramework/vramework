@@ -1,5 +1,5 @@
 import { promises } from 'fs'
-import { CoreAPIRoute, CoreAPIRoutes } from './routes'
+import { CoreAPIRoute, CoreAPIRoutes } from './types/routes.types'
 import { join, resolve } from 'path'
 import { readFile } from 'fs/promises'
 

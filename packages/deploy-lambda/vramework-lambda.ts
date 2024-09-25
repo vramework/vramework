@@ -3,8 +3,8 @@ import {
   CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
-} from '@vramework/core/types'
-import { CoreAPIRoutes, RoutesMeta } from '@vramework/core/routes'
+} from '@vramework/core'
+import { CoreAPIRoutes, RoutesMeta } from '@vramework/core'
 import { InvalidOriginError } from '@vramework/core/errors'
 import { VrameworkLambdaRequest } from './vramework-lambda-request'
 import { VrameworkLambdaResponse } from './vramework-lambda-response'

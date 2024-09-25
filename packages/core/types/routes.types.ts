@@ -1,5 +1,5 @@
-import { EError } from './errors'
-import { CoreUserSession, CoreServices } from './types'
+import { EError } from '../errors'
+import { CoreUserSession, CoreServices } from './core.types'
 
 export type CoreAPIFunction<In, Out, Services = CoreServices, Session = CoreUserSession> = (
   services: Services,

@@ -1,7 +1,6 @@
 import { Command } from 'commander'
 import { generateSchemas } from '../src/schema-generator'
-import { getVrameworkConfig } from '@vramework/core/vramework-config'
-import { getRoutes } from '@vramework/core/route-runner'
+import { getVrameworkConfig, getRoutes } from '@vramework/core'
 import { join } from 'path'
 
 const importFile = async (path: string) => {

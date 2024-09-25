@@ -1,7 +1,7 @@
 import { join } from 'path'
 
 import { loadSchema, loadSchemas } from './schema'
-import { VrameworkConfig } from './types'
+import { VrameworkConfig } from './types/core.types'
 import { Logger } from './services'
 import { getRoutes } from './route-runner'
 

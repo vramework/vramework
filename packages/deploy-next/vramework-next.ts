@@ -1,21 +1,26 @@
-import { CoreAPIRoute } from '@vramework/core/routes'
+import { compile } from 'path-to-regexp'
+import { IncomingMessage, ServerResponse } from 'http'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { EventEmitter } from 'eventemitter3'
+
 import {
+  CoreAPIRoute,
   CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
-} from '@vramework/core/types'
-import { injectIntoUrl } from '@vramework/core/utils'
-import { IncomingMessage, ServerResponse } from 'http'
-import { NextApiRequest, NextApiResponse } from 'next'
+  runRoute
+} from '@vramework/core'
 import { VrameworkSSRNextRequest } from './vramework-ssr-next-request'
 import { VrameworkSSRNextResponse } from './vramework-ssr-next-response'
 import { VrameworkAPINextRequest } from './vramework-api-next-request'
 import { VrameworkAPINextResponse } from './vramework-api-next-response'
 import { VrameworkActionNextRequest } from './vramework-action-next-request'
 import { VrameworkActionNextResponse } from './vramework-action-next-response'
-import { EventEmitter } from 'eventemitter3'
-import { runRoute } from '@vramework/core/route-runner'
 
+const injectIntoUrl = (route: string, keys: Record<string, string>) => {
+  const path = compile(route)
+  return path(keys)
+}
 export class VrameworkNextJS {
   private readyEmitter = new EventEmitter()
   private singletonServices: CoreSingletonServices | undefined
