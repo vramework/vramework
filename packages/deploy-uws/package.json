@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-uws",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "The vramework uws server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -8,12 +8,12 @@
   "scripts": {
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
-    "release": "npm run build && npm run test && npm publish --access public",
+    "release": "npm run build && npm publish --access public",
     "ncu": "ncu",
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.2"
+    "@vramework/core": "^0.3"
   },
   "dependencies": {
     "qs": "^6.13.0",
