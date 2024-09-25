@@ -1,4 +1,5 @@
 import * as ts from 'typescript';
+import { pathToRegexp } from 'path-to-regexp'
 import { APIRouteMethod, RoutesMeta } from '@vramework/core/routes';
 import { getFileImportRelativePath } from './utils';
 
@@ -8,6 +9,44 @@ export interface ImportInfo {
 }
 
 export type ImportMap = Map<string, ImportInfo>
+
+const getPropertyValue = (
+  obj: ts.ObjectLiteralExpression, 
+  propertyName: string
+): string | string[] | null => {
+  const property = obj.properties.find(
+    (p) =>
+      ts.isPropertyAssignment(p) &&
+      ts.isIdentifier(p.name) &&
+      p.name.text === propertyName
+  );
+
+  if (property && ts.isPropertyAssignment(property)) {
+    const initializer = property.initializer;
+
+    // Special handling for 'query' -> expect an array of strings
+    if (propertyName === 'query' && ts.isArrayLiteralExpression(initializer)) {
+      const stringArray = initializer.elements.map((element) => {
+        if (ts.isStringLiteral(element)) {
+          return element.text;
+        }
+        return null;
+      }).filter((item) => item !== null) as string[]; // Filter non-null and assert type
+
+      return stringArray.length > 0 ? stringArray : null;
+    }
+
+    // Handle string literals for other properties
+    if (ts.isStringLiteral(initializer) || ts.isNoSubstitutionTemplateLiteral(initializer)) {
+      return initializer.text;
+    } else {
+      // Handle other initializer types if necessary
+      return initializer.getText();
+    }
+  }
+
+  return null;
+};
 
 export const inspectRoutes = (outputFile: string, routeFiles: string[], packageMappings: Record<string, string> = {}) => {
   const typesImportMap: ImportMap = new Map();
@@ -48,6 +87,8 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
   function visit(node: ts.Node) {
     let routeValue: string | null = null;
     let methodValue: string | null = null;
+    let params: string[] | null = [];
+    let queryValues: string[] | null = null;
     let input: string | null = null;
     let output: string | null = null;
 
@@ -65,40 +106,20 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
           // Check if the first argument is an object literal
           if (ts.isObjectLiteralExpression(firstArg)) {
             const obj = firstArg;
-            // Extract the 'route' property
-            const routeProperty = obj.properties.find(
-              (p) =>
-                ts.isPropertyAssignment(p) &&
-                ts.isIdentifier(p.name) &&
-                p.name.text === 'route'
-            );
 
-            const methodProperty = obj.properties.find(
-              (p) =>
-                ts.isPropertyAssignment(p) &&
-                ts.isIdentifier(p.name) &&
-                p.name.text === 'method'
-            );
-
-            if (routeProperty && ts.isPropertyAssignment(routeProperty)) {
-              const initializer = routeProperty.initializer;
-              if (ts.isStringLiteral(initializer) || ts.isNoSubstitutionTemplateLiteral(initializer)) {
-                routeValue = initializer.text;
-              } else {
-                // Handle other initializer types if necessary
-                routeValue = initializer.getText();
-              }
+            routeValue = getPropertyValue(obj, 'route') as string | null
+            if (routeValue) {
+              const { keys } = pathToRegexp(routeValue)
+              params = keys.reduce((result, { type, name }) => {
+                if (type === 'param') {
+                  result.push(name)
+                }
+                return result
+              }, [] as string[])
             }
 
-            if (methodProperty && ts.isPropertyAssignment(methodProperty)) {
-              const initializer = methodProperty.initializer;
-              if (ts.isStringLiteral(initializer) || ts.isNoSubstitutionTemplateLiteral(initializer)) {
-                methodValue = initializer.text;
-              } else {
-                // Handle other initializer types if necessary
-                methodValue = initializer.getText();
-              }
-            }
+            methodValue = getPropertyValue(obj, 'method') as string | null
+            queryValues = getPropertyValue(obj, 'query') as string[] | null
 
             // Find the 'func' property within the object
             const funcProperty = obj.properties.find(
@@ -150,8 +171,10 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
       routesMeta.push({
         route: routeValue!,
         method: methodValue! as APIRouteMethod, 
-        input: nullifyTypes(input), 
-        output: nullifyTypes(output)
+        input: nullifyTypes(input),
+        output: nullifyTypes(output),
+        params: params.length > 0 ? params : undefined,
+        query: queryValues ? queryValues : undefined
       })
 
       if (input) {

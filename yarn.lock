@@ -1998,6 +1998,7 @@ __metadata:
   dependencies:
     commander: "npm:^12"
     glob: "npm:^11.0.0"
+    path-to-regexp: "npm:^8.1.0"
     ts-json-schema-generator: "npm:^2.3.0"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.6"

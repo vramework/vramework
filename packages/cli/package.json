@@ -16,6 +16,7 @@
   "dependencies": {
     "commander": "^12",
     "glob": "^11.0.0",
+    "path-to-regexp": "^8.1.0",
     "ts-json-schema-generator": "^2.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.6"

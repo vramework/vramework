@@ -14,7 +14,7 @@ import { VrameworkResponse } from './vramework-response'
 import { SessionService } from './services'
 import { NotFoundError, NotImplementedError } from './errors'
 
-type ExtractRouteParams<S extends string> =
+export type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
     ? Param | ExtractRouteParams<`/${Rest}`>
     : S extends `${string}:${infer Param}`

@@ -80,6 +80,8 @@ export type CoreAPIRoutes = Array<CoreAPIRoute<any, any, string>>
 export type RoutesMeta = Array<{
   route: string,
   method: APIRouteMethod,
+  params?: string[],
+  query?: string[],
   input: string | null,
   output: string | null
 }>
