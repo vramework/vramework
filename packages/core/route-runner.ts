@@ -26,7 +26,7 @@ export type AssertRouteParams<In, Route extends string> =
     ? unknown
     : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In];
 
-const routes: CoreAPIRoutes = []
+let routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
 
 export const addCoreRoute = <
@@ -38,6 +38,10 @@ export const addCoreRoute = <
   APIPermission
 >(route: CoreAPIRoute<In, Out, Route, APIFunction, APIFunctionSessionless, APIPermission>) => {
   routes.push(route as any)
+}
+
+export const clearRoutes = () => {
+  routes = []
 }
 
 export const addRouteMeta = (_routeMeta: RoutesMeta) => {
@@ -161,10 +165,11 @@ export const runRoute = async <In, Out>(
       session!
     )) as unknown as Out
     response.setStatus(200)
-    if (route.returnsJSON) {
-      response.setJson(result)
-    } else {
+
+    if (route.returnsJSON === false) {
       response.setResponse(result)
+    } else {
+      response.setJson(result)
     }
     return result
   } catch (e: any) {

@@ -4,11 +4,11 @@ import { expect } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 chai.use(chaiAsPromised)
 
-import { runRoute, getUserSession } from './router-runner'
 import { NotFoundError, NotImplementedError } from './errors'
 import { VrameworkRequest } from './vramework-request'
 import { VrameworkResponse } from './vramework-response'
-import { JSONValue } from './types'
+import { JSONValue } from './types/core.types'
+import { getUserSession, runRoute, clearRoutes, addCoreRoute } from './route-runner'
 
 class VrameworkTestRequest extends VrameworkRequest {
   public getHeader(_headerName: string): string | undefined {
@@ -29,9 +29,11 @@ class VrameworkTestResponse extends VrameworkResponse {
 }
 
 describe('runRoute', () => {
-  let services, createSessionServices, routes, request, response
+  let services, createSessionServices, request, response
 
   beforeEach(() => {
+    clearRoutes()
+
     services = {
       logger: {
         info: sinon.stub(),
@@ -43,7 +45,6 @@ describe('runRoute', () => {
       },
     }
     createSessionServices = sinon.stub().resolves({})
-    routes = []
     request = new VrameworkTestRequest()
     response = new VrameworkTestResponse()
 
@@ -64,7 +65,7 @@ describe('runRoute', () => {
     const apiType = 'get'
 
     await expect(
-      runRoute(request, response, services, createSessionServices, routes, {
+      runRoute(request, response, services, createSessionServices, {
         route: apiRoute,
         method: apiType,
       })
@@ -75,11 +76,10 @@ describe('runRoute', () => {
     const apiRoute = '/test'
     const apiType = 'get'
     const routeFunc = sinon.stub().resolves({ success: true })
-    routes.push({
+    addCoreRoute({
       route: 'test',
       method: 'get',
       func: routeFunc,
-      returnsJSON: true,
     })
 
     const result = await runRoute(
@@ -87,7 +87,6 @@ describe('runRoute', () => {
       response,
       services,
       createSessionServices,
-      routes,
       { route: apiRoute, method: apiType }
     )
 
@@ -102,15 +101,14 @@ describe('runRoute', () => {
     const apiType = 'get'
     const permissions = { test: sinon.stub().resolves(true) }
     const routeFunc = sinon.stub().resolves({ success: true })
-    routes.push({
+    addCoreRoute({
       route: 'test',
       method: 'get',
       func: routeFunc,
       permissions,
-      returnsJSON: true,
     })
 
-    await runRoute(request, response, services, createSessionServices, routes, {
+    await runRoute(request, response, services, createSessionServices, {
       route: apiRoute,
       method: apiType,
     })
@@ -123,15 +121,14 @@ describe('runRoute', () => {
     const apiType = 'get'
     const error = new Error('Test error')
     const routeFunc = sinon.stub().rejects(error)
-    routes.push({
+    addCoreRoute({
       route: 'test',
       method: 'get',
       func: routeFunc,
-      returnsJSON: true,
     })
 
     await expect(
-      runRoute(request, response, services, createSessionServices, routes, {
+      runRoute(request, response, services, createSessionServices, {
         route: apiRoute,
         method: apiType,
       })

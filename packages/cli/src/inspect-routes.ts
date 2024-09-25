@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { pathToRegexp } from 'path-to-regexp'
-import { APIRouteMethod, RoutesMeta } from '@vramework/core';
 import { getFileImportRelativePath } from './utils';
+import { APIRouteMethod, RoutesMeta } from '@vramework/core';
 
 export interface ImportInfo {
   importPath: string;
