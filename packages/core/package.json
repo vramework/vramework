@@ -1,6 +1,6 @@
 {
   "name": "@vramework/core",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
     "ncu": "ncu",
-    "release": "npm run build && npm publish --access public",
+    "release": "npm run build && npm test && npm publish --access public",
     "test": "mocha"
   },
   "dependencies": {

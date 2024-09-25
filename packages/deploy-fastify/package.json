@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-fastify",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "The vramework fastify server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -8,12 +8,12 @@
   "scripts": {
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
-    "release": "npm run build && npm publish --access public",
+    "release": "npm run build && npm test && npm publish --access public",
     "ncu": "ncu",
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.3"
+    "@vramework/core": "^0.3.2"
   },
   "dependencies": {
     "fastify": "^4.28.1",
