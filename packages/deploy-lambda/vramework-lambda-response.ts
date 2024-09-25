@@ -1,4 +1,4 @@
-import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { VrameworkResponse } from '@vramework/core'
 import { APIGatewayProxyResult } from 'aws-lambda'
 
 export class VrameworkLambdaResponse extends VrameworkResponse {

@@ -1,4 +1,4 @@
-import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { VrameworkResponse } from '@vramework/core'
 import cookie from 'cookie'
 import { FastifyReply } from 'fastify'
 

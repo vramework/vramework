@@ -5,8 +5,8 @@ import {
   CoreSingletonServices,
   CreateSessionServices,
   VrameworkConfig,
+  runRoute
 } from '@vramework/core'
-import { runRoute } from '@vramework/core/route-runner'
 import { VrameworkUWSRequest } from './vramework-uws-request'
 import { VrameworkUWSResponse } from './vramework-uws-response'
 

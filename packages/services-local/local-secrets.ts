@@ -1,4 +1,4 @@
-import { SecretService } from '@vramework/core/services'
+import { SecretService } from '@vramework/core'
 
 /**
  * Service for retrieving secrets from environment variables.

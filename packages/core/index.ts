@@ -1,6 +1,6 @@
 export { getVrameworkConfig } from './vramework-config'
 export { initializeVrameworkCore } from './initialize'
-export { runRoute, getRoutes, addRouteMeta } from './route-runner'
+export { runRoute, getRoutes, addRouteMeta, addCoreRoute } from './route-runner'
 export { addError, addErrors } from './error-handler'
 export { addSchema, loadSchema, loadSchemas } from './schema'
 export * from './errors'

@@ -1,4 +1,4 @@
-import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { VrameworkResponse } from '@vramework/core'
 import { HttpResponse } from 'uWebSockets.js'
 import cookie from 'cookie'
 

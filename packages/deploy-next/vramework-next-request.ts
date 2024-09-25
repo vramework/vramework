@@ -1,4 +1,4 @@
-import { VrameworkRequest } from '@vramework/core/vramework-request'
+import { VrameworkRequest } from '@vramework/core'
 import { NextRequest } from 'next/server'
 
 export class VrameworkNextRequest extends VrameworkRequest {

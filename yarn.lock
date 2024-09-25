@@ -2023,7 +2023,6 @@ __metadata:
     chai-as-promised: "npm:^7.1.2"
     cookie: "npm:^0.6.0"
     eventemitter3: "npm:^5.0.1"
-    jose: "npm:^5.9.2"
     mocha: "npm:^10.7.3"
     path-to-regexp: "npm:^8.1.0"
     sinon: "npm:^19.0.2"

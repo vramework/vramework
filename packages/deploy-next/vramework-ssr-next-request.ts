@@ -1,4 +1,4 @@
-import { VrameworkRequest } from '@vramework/core/vramework-request'
+import { VrameworkRequest } from '@vramework/core'
 import { IncomingMessage } from 'http'
 
 export class VrameworkSSRNextRequest extends VrameworkRequest {

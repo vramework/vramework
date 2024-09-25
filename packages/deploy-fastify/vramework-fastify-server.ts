@@ -5,11 +5,11 @@ import {
   CoreSingletonServices,
   CreateSessionServices,
   VrameworkConfig,
-  runRoute
+  runRoute,
+  initializeVrameworkCore
 } from '@vramework/core'
 import { VrameworkFastifyRequest } from './vramework-fastify-request'
 import { VrameworkFastifyResponse } from './vramework-fastify-response'
-import { initializeVrameworkCore } from '@vramework/core/initialize'
 
 export class VrameworkFastifyServer {
   public app = Fastify({})

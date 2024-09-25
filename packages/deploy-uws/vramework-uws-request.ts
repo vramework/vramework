@@ -1,4 +1,4 @@
-import { VrameworkRequest } from '@vramework/core/vramework-request'
+import { VrameworkRequest } from '@vramework/core'
 import { HttpRequest, HttpResponse } from 'uWebSockets.js'
 import cookie from 'cookie'
 import querystring from 'qs'
