@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-next",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "main": "index.ts",
@@ -15,7 +15,7 @@
     "next": "^14.2.9"
   },
   "dependencies": {
-    "@vramework/core": "^0.3.3",
+    "@vramework/core": "^0.3.4",
     "cookie": "^0.6.0",
     "eventemitter3": "^5.0.1"
   },
