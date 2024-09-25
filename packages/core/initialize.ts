@@ -21,7 +21,7 @@ export const initializeVrameworkCore = async (
   const { routes, routesMeta } = getRoutes()
   let routesDebugMessage = 'Routes loading:'
   for (const { method, route } of routes) {
-    routesDebugMessage += `\n\t- ${method.toUpperCase()}::${route}`
+    routesDebugMessage += `\n\t- ${method.toUpperCase()} -> ${route}`
   }
   logger.debug(routesDebugMessage)
   logger.info(`Routes loaded`)
