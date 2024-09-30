@@ -26,12 +26,16 @@ const serializeImportMap = (importMap: ImportMap) => {
 export const serializeInterface = (importMap: ImportMap, routesMeta: RoutesMeta) => {
   const serializedOutput: string[] = ['/* Files with addRoute function within them */']
   serializedOutput.push(serializeImportMap(importMap))
-  
+
   let routesInterface = 'export type RoutesInterface = '
-  const result = routesMeta.map(({ route, method, input, output }) => `{ route: '${route}', method: '${method}', input: ${input}, output: ${output} }`)
-  routesInterface += result.join(' |\n\t')
+  if (routesMeta.length === 0) {
+    routesInterface += 'never'
+  } else {
+    const result = routesMeta.map(({ route, method, input, output }) => `{ route: '${route}', method: '${method}', input: ${input}, output: ${output} }`)
+    routesInterface += result.join(' |\n\t')
+  }
   serializedOutput.push(routesInterface)
-  
+
   return serializedOutput.join('\n')
 }
 
