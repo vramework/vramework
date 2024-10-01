@@ -1,6 +1,6 @@
 import { getErrorResponse } from './error-handler'
 import { verifyPermissions } from './permissions'
-import { CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './types/routes.types'
+import { CoreAPIController, CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './types/routes.types'
 import { loadSchema, validateJson } from './schema'
 import {
   CoreSingletonServices,
@@ -30,13 +30,21 @@ let routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
 
 export const addCoreRoute = <
-  In,
-  Out,
+  Data extends ControllerIn,
+  Response,
+  ControllerIn,
+  MicroServices extends string[],
   Route extends string,
   APIFunction,
   APIFunctionSessionless,
   APIPermission
->(route: CoreAPIRoute<In, Out, Route, APIFunction, APIFunctionSessionless, APIPermission>) => {
+>(
+  route: CoreAPIRoute<Data, Response, Route, MicroServices, APIFunction, APIFunctionSessionless, APIPermission>,
+  controller?: CoreAPIController<ControllerIn, APIPermission>
+) => {
+  if (controller) {
+    // merge controller into routes
+  }
   routes.push(route as any)
 }
 
@@ -105,7 +113,7 @@ export const runRoute = async <In, Out>(
   {
     route: apiRoute,
     method: apiType,
-  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'>
+  }: Pick<CoreAPIRoute<unknown, unknown, any, string[]>, 'route' | 'method'>
 ): Promise<Out> => {
   try {
     let session: CoreUserSession | undefined

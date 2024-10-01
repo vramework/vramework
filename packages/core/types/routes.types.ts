@@ -21,61 +21,85 @@ export type CoreAPIPermission<In = any, Services = CoreServices, Session = CoreU
 
 export type APIRouteMethod = 'post' | 'get' | 'delete' | 'patch' | 'head'
 
-type CoreFunctionlessAPIRoute = {
+type CoreAPIControllerCommon<MicroServices> = {
   contentType?: 'xml' | 'json'
-  route: string
-  eventStream?: false
-  returnsJSON?: false
+  prefix?: string
   timeout?: number
+  version?: {
+    from?: SemVer
+    to?: SemVer
+  }
+  microservices: MicroServices
   docs?: Partial<{
     summary: string
     description: string
-    response: string
-    errors: EError[]
     tags: string[]
   }>
 }
+
+type CoreFunctionlessAPIRoute<MicroServices> = CoreAPIControllerCommon<MicroServices> & {
+  route: string
+  eventStream?: false
+  returnsJSON?: false
+  docs?: Partial<{
+    response: string
+    errors: EError[]
+  }>
+}
+
+type SemVer = string
+
+export type CoreAPIController<In, APIPermission = CoreAPIPermission<In>, MicroServices extends string[] = []> =
+  | (CoreAPIControllerCommon<MicroServices> & {
+    permissions?: Record<string, APIPermission[] | APIPermission>;
+    auth?: true;
+  })
+  | (CoreAPIControllerCommon<MicroServices> & {
+    permissions?: undefined;
+    auth?: false;
+  })
 
 export type CoreAPIRoute<
   In,
   Out,
   R extends string,
+  MicroServices extends string[],
   APIFunction = CoreAPIFunction<In, Out>,
   APIFunctionSessionless = CoreAPIFunctionSessionless<In, Out>,
   APIPermission = CoreAPIPermission<In>
 > =
-  | (CoreFunctionlessAPIRoute & {
-      route: R;
-      method: APIRouteMethod;
-      func: APIFunction;
-      permissions?: Record<string, APIPermission[] | APIPermission>;
-      auth?: true;
-    })
-  | (CoreFunctionlessAPIRoute & {
-      route: R;
-      method: APIRouteMethod;
-      func: APIFunctionSessionless;
-      permissions?: undefined;
-      auth?: false;
-    })
-  | (CoreFunctionlessAPIRoute & {
-      route: R;
-      method: 'post';
-      func: APIFunction;
-      permissions?: Record<string, APIPermission[] | APIPermission>;
-      auth?: true;
-      query?: Array<keyof In>;
-    })
-  | (CoreFunctionlessAPIRoute & {
-      route: R;
-      method: 'post';
-      func: APIFunctionSessionless;
-      permissions?: undefined;
-      auth?: false;
-      query?: Array<keyof In>;
-    });
+  | (CoreFunctionlessAPIRoute<MicroServices> & {
+    route: R;
+    method: APIRouteMethod;
+    func: APIFunction;
+    permissions?: Record<string, APIPermission[] | APIPermission>;
+    auth?: true;
+  })
+  | (CoreFunctionlessAPIRoute<MicroServices> & {
+    route: R;
+    method: APIRouteMethod;
+    func: APIFunctionSessionless;
+    permissions?: undefined;
+    auth?: false;
+  })
+  | (CoreFunctionlessAPIRoute<MicroServices> & {
+    route: R;
+    method: 'post';
+    func: APIFunction;
+    permissions?: Record<string, APIPermission[] | APIPermission>;
+    auth?: true;
+    query?: Array<keyof In>;
+  })
+  | (CoreFunctionlessAPIRoute<MicroServices> & {
+    route: R;
+    method: 'post';
+    func: APIFunctionSessionless;
+    permissions?: undefined;
+    auth?: false;
+    query?: Array<keyof In>;
+  });
 
-export type CoreAPIRoutes = Array<CoreAPIRoute<any, any, string>>
+export type CoreAPIRoutes = Array<CoreAPIRoute<any, any, string, string[]>>
 
 export type RoutesMeta = Array<{
   route: string,
