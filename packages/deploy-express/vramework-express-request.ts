@@ -7,10 +7,6 @@ export class VrameworkExpressRequest extends VrameworkRequest {
     super()
   }
 
-  public getParams() {
-    return this.request.params
-  }
-
   public getBody() {
     return this.request.body
   }
