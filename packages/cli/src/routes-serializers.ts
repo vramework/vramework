@@ -52,6 +52,11 @@ export const serailizeTypedRouteRunner = (importMap: ImportMap, routesMeta: Rout
 import { runRoute, CoreSingletonServices, CreateSessionServices, VrameworkRequest, VrameworkResponse } from '@vramework/core'
 ${serializeImportMap(importMap)}
 
+interface RouteHandler<I, O> {
+  input: I;
+  output: O;
+}
+
 ${generateRoutes(routesMeta)}
 export type RoutesMap = typeof routes;
 
