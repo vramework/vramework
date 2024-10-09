@@ -46,3 +46,79 @@ export const serializeRouteMeta = (routesMeta: RoutesMeta) => {
   return serializedOutput.join('\n')
 }
 
+export const serailizeTypedRouteRunner = (importMap: ImportMap, routesMeta: RoutesMeta) => {
+  return `
+// The typed route runner allows us to infer our types when running routes
+import { runRoute, CoreSingletonServices, CreateSessionServices, VrameworkRequest, VrameworkResponse } from '@vramework/core'
+${serializeImportMap(importMap)}
+
+${generateRoutes(routesMeta)}
+export type RoutesMap = typeof routes;
+
+export type RouteHandlerOf<Route extends keyof RoutesMap, Method extends keyof RoutesMap[Route]> =
+  RoutesMap[Route][Method] extends { input: infer I; output: infer O }
+    ? RouteHandler<I, O>
+    : never;
+
+export const runTypedRoute = async <
+  Route extends keyof RoutesMap,
+  Method extends keyof RoutesMap[Route]
+>(
+  request: VrameworkRequest<RouteHandlerOf<Route, Method>['input']>,
+  response: VrameworkResponse,
+  services: CoreSingletonServices,
+  createSessionServices: CreateSessionServices,
+  route: { route: Route; method: Method }
+): Promise<RouteHandlerOf<Route, Method>['output']> => {
+  return runRoute(request, response, services, createSessionServices, route as any)
+};
+`
+}
+
+function generateRoutes(routesMeta: RoutesMeta): string {
+  // Initialize an object to collect routes
+  const routesObj: Record<
+    string,
+    Record<string, { input: string; output: string; inputType: string; outputType: string }>
+  > = {};
+
+  for (const meta of routesMeta) {
+    const { route, method, input, output } = meta;
+
+    // Initialize the route entry if it doesn't exist
+    if (!routesObj[route]) {
+      routesObj[route] = {};
+    }
+
+    // Prepare input and output strings
+    const inputStr = input ? `{} as ${input}` : 'null as null';
+    const outputStr = output ? `{} as ${output}` : 'null as null';
+
+    // Store the input and output types separately for RouteHandler
+    const inputType = input ? input : 'null';
+    const outputType = output ? output : 'null';
+
+    // Add method entry
+    routesObj[route][method] = {
+      input: inputStr,
+      output: outputStr,
+      inputType,
+      outputType,
+    };
+  }
+
+  // Build the routes object as a string
+  let routesStr = 'const routes = {\n';
+
+  for (const [routePath, methods] of Object.entries(routesObj)) {
+    routesStr += `  '${routePath}': {\n`;
+    for (const [method, handler] of Object.entries(methods)) {
+      routesStr += `    ${method}: { input: ${handler.input}, output: ${handler.output} } as RouteHandler<${handler.inputType}, ${handler.outputType}>,\n`;
+    }
+    routesStr += '  },\n';
+  }
+
+  routesStr += '} as const;\n';
+
+  return routesStr;
+}

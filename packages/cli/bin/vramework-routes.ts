@@ -3,7 +3,7 @@ import { getVrameworkConfig } from '@vramework/core'
 import { inspectRoutes } from '../src/inspect-routes'
 import * as promises from 'fs/promises'
 import path = require('path')
-import { serializeInterface, serializeRouteMeta, serializeRoutes } from '../src/routes-serializers'
+import { serailizeTypedRouteRunner, serializeInterface, serializeRouteMeta, serializeRoutes } from '../src/routes-serializers'
 import { glob } from 'glob'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
@@ -38,8 +38,9 @@ Generating Route File:
   await promises.mkdir(parts.join('/'), { recursive: true })
   const content = [
     serializeRoutes(outputPath, filesWithRoutes, packageMappings),
-    serializeInterface(typesImportMap, routesMeta),
-    serializeRouteMeta(routesMeta)
+    // serializeInterface(typesImportMap, routesMeta),
+    serializeRouteMeta(routesMeta),
+    serailizeTypedRouteRunner(typesImportMap, routesMeta)
   ]
   await promises.writeFile(outputPath, content.join('\n\n'), 'utf-8')
 

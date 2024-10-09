@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { EventEmitter } from 'eventemitter3'
 
 import {
-  CoreAPIRoute,
+  APIRouteMethod,
   CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
@@ -37,8 +37,7 @@ export class VrameworkNextJS {
   public async actionRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out, R['route']>, 'route' | 'method'>,
-  >(route: R, data: In): Promise<Out> {
+  >(route: unknown, method: unknown, data: In): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
     return await runRoute<In, Out>(
       new VrameworkActionNextRequest(data),
@@ -46,8 +45,8 @@ export class VrameworkNextJS {
       singletonServices,
       this.createSessionServices,
       {
-        route: injectIntoUrl(route.route, data),
-        method: route.method,
+        route: injectIntoUrl(route as string, data),
+        method: method as APIRouteMethod
       }
     )
   }
@@ -55,13 +54,13 @@ export class VrameworkNextJS {
   public async ssrRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out, R['route']>, 'route' | 'method'>,
   >(
     request: IncomingMessage & {
       cookies: Partial<{ [key: string]: string }>
     },
     response: ServerResponse<IncomingMessage>,
-    route: R,
+    route: string, 
+    method: APIRouteMethod,
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
@@ -71,8 +70,8 @@ export class VrameworkNextJS {
       singletonServices,
       this.createSessionServices,
       {
-        route: injectIntoUrl(route.route, data),
-        method: route.method,
+        route: injectIntoUrl(route, data),
+        method,
       }
     )
   }
@@ -80,11 +79,11 @@ export class VrameworkNextJS {
   public async apiRequest<
     In extends Record<string, any>,
     Out,
-    R extends Pick<CoreAPIRoute<In, Out, R['route']>, 'route' | 'method'>,
   >(
     request: NextApiRequest,
     response: NextApiResponse,
-    route: R
+    route: string, 
+    method: APIRouteMethod
   ): Promise<void> {
     const singletonServices = await this.getSingletonServices()
     const vrameworkRequest = new VrameworkAPINextRequest(request)
@@ -96,8 +95,8 @@ export class VrameworkNextJS {
       singletonServices,
       this.createSessionServices,
       {
-        route: injectIntoUrl(route.route, data),
-        method: route.method,
+        route: injectIntoUrl(route, data),
+        method
       }
     )
   }
