@@ -1,6 +1,6 @@
 {
   "name": "@vramework/mono",
-  "version": "0.3.7",
+  "version": "0.3.9",
   "description": "The vramework monorepo",
   "repository": "git@github.com:vlandor/vramework.git",
   "author": "yasser.fadl@gmail.com",
