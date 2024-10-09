@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-fastify",
-  "version": "0.3.5",
+  "version": "0.3.7",
   "description": "The vramework fastify server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -13,7 +13,7 @@
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.3.5"
+    "@vramework/core": "^0.3.7"
   },
   "dependencies": {
     "fastify": "^4.28.1",
