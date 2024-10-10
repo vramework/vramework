@@ -1,9 +1,9 @@
 import { Command } from 'commander'
-import { getVrameworkConfig } from '@vramework/core'
+import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import { inspectRoutes } from '../src/inspect-routes'
 import * as promises from 'fs/promises'
 import path = require('path')
-import { serailizeTypedRouteRunner, serializeInterface, serializeRouteMeta, serializeRoutes } from '../src/routes-serializers'
+import { serailizeTypedRouteRunner, serializeRouteMeta, serializeRoutes } from '../src/routes-serializers'
 import { glob } from 'glob'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
