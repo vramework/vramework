@@ -1,6 +1,6 @@
 {
   "name": "@vramework/cli",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
