@@ -105,7 +105,7 @@ export const runRoute = async <In, Out>(
   {
     route: apiRoute,
     method: apiType,
-    skipUserSession = false
+    skipUserSession = false,
   }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> & { skipUserSession?: boolean },
 ): Promise<Out> => {
   try {
@@ -128,7 +128,7 @@ export const runRoute = async <In, Out>(
       throw new Error('Can\'t skip trying to get user session if auth is required')
     }
 
-    if (skipUserSession === true) {
+    if (skipUserSession === false) {
       try {
         session = await getUserSession(
           services.sessionService,
@@ -145,9 +145,7 @@ export const runRoute = async <In, Out>(
       }
     }
 
-    const data = await request.getData(
-      request.getHeader('Content-Type') || 'application/json'
-    )
+    const data = await request.getData()
 
     if (schema) {
       validateJson(schema, data)

@@ -84,13 +84,10 @@ export abstract class VrameworkRequest<In = any> {
 
   /**
    * Retrieves the combined data from the request, including parameters, query, and body.
-   * @param contentType - The content type of the request body. Defaults to 'application/json'.
    * @returns A promise that resolves to an object containing the combined data.
    * @description This method combines the request parameters, query parameters, and body into a single object.
    */
-  public async getData(
-    _contentType: string | undefined = 'application/json'
-  ): Promise<In> {
+  public async getData(): Promise<In> {
     return {
       ...this.getParams(),
       ...this.getQuery(),
