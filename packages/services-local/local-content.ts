@@ -1,4 +1,5 @@
-import { ContentService, Logger } from '@vramework/core'
+import { ContentService } from "@vramework/core/services/content-service";
+import { Logger } from "@vramework/core/services/logger";
 
 export interface LocalContentConfig {
   contentDirectory: string

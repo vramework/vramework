@@ -1,4 +1,4 @@
-import { RoutesMeta } from '@vramework/core'
+import { RoutesMeta } from '@vramework/core/types/routes.types'
 import { ImportMap } from './inspect-routes'
 import { getFileImportRelativePath } from './utils'
 

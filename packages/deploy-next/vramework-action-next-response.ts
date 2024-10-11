@@ -1,4 +1,4 @@
-import { VrameworkResponse } from '@vramework/core'
+import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { CookieSerializeOptions } from 'cookie'
 import { cookies } from 'next/headers'
 

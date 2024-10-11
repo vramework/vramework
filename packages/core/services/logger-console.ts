@@ -1,4 +1,4 @@
-import { Logger, LogLevel } from '@vramework/core'
+import { Logger, LogLevel } from "./logger"
 
 /**
  * A logger implementation that logs messages to the console.

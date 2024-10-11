@@ -1,16 +1,12 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import {
-  CoreAPIRoutes,
-  CoreConfig,
-  CoreSingletonServices,
-  CreateSessionServices,
-  InvalidOriginError,
-  RoutesMeta,
-  Logger,
-  runRoute
-} from '@vramework/core'
+
 import { VrameworkLambdaRequest } from './vramework-lambda-request'
 import { VrameworkLambdaResponse } from './vramework-lambda-response'
+import { InvalidOriginError } from '@vramework/core/errors'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
+import { CoreAPIRoutes, RoutesMeta } from '@vramework/core/types/routes.types'
+import { runRoute } from '@vramework/core/route-runner'
+import { Logger } from '@vramework/core/services/logger'
 
 const validateOrigin = (
   allowsOrigins: string[],

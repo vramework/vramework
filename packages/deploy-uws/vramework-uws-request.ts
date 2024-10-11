@@ -1,7 +1,7 @@
-import { VrameworkRequest } from '@vramework/core'
 import { HttpRequest, HttpResponse } from 'uWebSockets.js'
 import cookie from 'cookie'
 import querystring from 'qs'
+import { VrameworkRequest } from '@vramework/core/vramework-request'
 
 export class VrameworkUWSRequest extends VrameworkRequest {
   constructor(

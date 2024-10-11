@@ -3,19 +3,15 @@ import { IncomingMessage, ServerResponse } from 'http'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { EventEmitter } from 'eventemitter3'
 
-import {
-  APIRouteMethod,
-  CoreConfig,
-  CoreSingletonServices,
-  CreateSessionServices,
-  runRoute
-} from '@vramework/core'
 import { VrameworkSSRNextRequest } from './vramework-ssr-next-request'
 import { VrameworkSSRNextResponse } from './vramework-ssr-next-response'
 import { VrameworkAPINextRequest } from './vramework-api-next-request'
 import { VrameworkAPINextResponse } from './vramework-api-next-response'
 import { VrameworkActionNextRequest } from './vramework-action-next-request'
 import { VrameworkActionNextResponse } from './vramework-action-next-response'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
+import { APIRouteMethod } from '@vramework/core/types/routes.types'
+import { runRoute } from '@vramework/core/route-runner'
 
 const injectIntoUrl = (route: string, keys: Record<string, string>) => {
   const path = compile(route)

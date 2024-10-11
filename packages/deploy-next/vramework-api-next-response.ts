@@ -1,6 +1,7 @@
-import { JSONValue, VrameworkResponse } from '@vramework/core'
 import { NextApiResponse } from 'next'
 import * as cookie from 'cookie'
+import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { JSONValue } from '@vramework/core/types/core.types'
 
 export class VrameworkAPINextResponse extends VrameworkResponse {
   constructor(protected response: NextApiResponse) {

@@ -1,6 +1,6 @@
-import { VrameworkResponse } from '@vramework/core'
 import { HttpResponse } from 'uWebSockets.js'
 import cookie from 'cookie'
+import { VrameworkResponse } from '@vramework/core/vramework-response'
 
 export class VrameworkUWSResponse extends VrameworkResponse {
   constructor(protected response: HttpResponse) {

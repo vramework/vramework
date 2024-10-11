@@ -1,6 +1,6 @@
+import { VrameworkRequest } from '@vramework/core/vramework-request'
 import { cookies, headers } from 'next/headers'
 
-import { VrameworkRequest } from '@vramework/core'
 
 export class VrameworkActionNextRequest extends VrameworkRequest {
   private body: any
