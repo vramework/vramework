@@ -1,6 +1,6 @@
 {
   "name": "@vramework/core",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "types": "dist/index.d.ts",

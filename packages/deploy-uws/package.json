@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-uws",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "The vramework uws server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -13,7 +13,7 @@
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.3.12"
+    "@vramework/core": "^0.3.13"
   },
   "dependencies": {
     "qs": "^6.13.0",
