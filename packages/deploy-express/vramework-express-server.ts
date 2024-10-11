@@ -1,4 +1,5 @@
 import express from 'express'
+import core from 'express-serve-static-core'
 import { Server } from 'http'
 import { json, text } from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -8,12 +9,11 @@ import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
 import { VrameworkConfig, CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
-import { Logger } from '@vramework/core/services'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { runRoute } from '@vramework/core/route-runner'
 
 export class VrameworkExpressServer {
-  public app = express()
+  public app: core.Express = express()
   private server: Server | undefined
 
   constructor(
