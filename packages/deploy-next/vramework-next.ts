@@ -9,6 +9,8 @@ import { VrameworkAPINextRequest } from './vramework-api-next-request'
 import { VrameworkAPINextResponse } from './vramework-api-next-response'
 import { VrameworkActionNextRequest } from './vramework-action-next-request'
 import { VrameworkActionNextResponse } from './vramework-action-next-response'
+import { VrameworkActionStaticNextRequest } from './vramework-action-static-next-request'
+
 import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
 import { APIRouteMethod } from '@vramework/core/types/routes.types'
 import { runRoute } from '@vramework/core/route-runner'
@@ -47,6 +49,23 @@ export class VrameworkNextJS {
     )
   }
 
+  public async staticActionRequest<
+    In extends Record<string, any>,
+    Out,
+  >(route: unknown, method: unknown, data: In): Promise<Out> {
+    const singletonServices = await this.getSingletonServices()
+    return await runRoute<In, Out>(
+      new VrameworkActionStaticNextRequest(data),
+      new VrameworkActionNextResponse(),
+      singletonServices,
+      this.createSessionServices,
+      {
+        route: injectIntoUrl(route as string, data),
+        method: method as APIRouteMethod
+      }
+    )
+  }
+
   public async ssrRequest<
     In extends Record<string, any>,
     Out,
@@ -55,7 +74,7 @@ export class VrameworkNextJS {
       cookies: Partial<{ [key: string]: string }>
     },
     response: ServerResponse<IncomingMessage>,
-    route: string, 
+    route: string,
     method: APIRouteMethod,
     data: In
   ): Promise<Out> {
@@ -78,7 +97,7 @@ export class VrameworkNextJS {
   >(
     request: NextApiRequest,
     response: NextApiResponse,
-    route: string, 
+    route: string,
     method: APIRouteMethod
   ): Promise<void> {
     const singletonServices = await this.getSingletonServices()
