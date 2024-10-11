@@ -16,15 +16,15 @@ import { NotFoundError, NotImplementedError } from './errors'
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
-    ? Param | ExtractRouteParams<`/${Rest}`>
-    : S extends `${string}:${infer Param}`
-      ? Param
-      : never;
+  ? Param | ExtractRouteParams<`/${Rest}`>
+  : S extends `${string}:${infer Param}`
+  ? Param
+  : never;
 
 export type AssertRouteParams<In, Route extends string> =
   ExtractRouteParams<Route> extends keyof In
-    ? unknown
-    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In];
+  ? unknown
+  : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In];
 
 let routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
@@ -105,7 +105,8 @@ export const runRoute = async <In, Out>(
   {
     route: apiRoute,
     method: apiType,
-  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'>
+    skipUserSession = false
+  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> & { skipUserSession?: boolean },
 ): Promise<Out> => {
   try {
     let session: CoreUserSession | undefined
@@ -123,19 +124,25 @@ export const runRoute = async <In, Out>(
       route,
     })
 
-    try {
-      session = await getUserSession(
-        services.sessionService,
-        route.auth !== false,
-        request
-      )
-    } catch (e: any) {
-      services.logger.info({
-        action: 'Rejecting route (invalid session)',
-        path: matchedPath,
-        route,
-      })
-      throw e
+    if (skipUserSession && route.auth !== false) {
+      throw new Error('Can\'t skip trying to get user session if auth is required')
+    }
+
+    if (skipUserSession === true) {
+      try {
+        session = await getUserSession(
+          services.sessionService,
+          route.auth !== false,
+          request
+        )
+      } catch (e: any) {
+        services.logger.info({
+          action: 'Rejecting route (invalid session)',
+          path: matchedPath,
+          route,
+        })
+        throw e
+      }
     }
 
     const data = await request.getData(

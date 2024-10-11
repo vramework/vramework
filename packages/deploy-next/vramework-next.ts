@@ -61,8 +61,9 @@ export class VrameworkNextJS {
       this.createSessionServices,
       {
         route: injectIntoUrl(route as string, data),
-        method: method as APIRouteMethod
-      }
+        method: method as APIRouteMethod,
+        skipUserSession: true
+      },
     )
   }
 
