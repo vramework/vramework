@@ -118,11 +118,7 @@ export const runRoute = async <In, Out>(
     )
     request.setParams(params)
 
-    services.logger.info({
-      message: 'Matched route',
-      matchedPath,
-      route,
-    })
+    services.logger.info(`Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${(!!route.auth).toString()}`)
 
     if (skipUserSession && route.auth !== false) {
       throw new Error('Can\'t skip trying to get user session if auth is required')
