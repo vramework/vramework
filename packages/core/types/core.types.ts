@@ -24,7 +24,9 @@ export interface VrameworkConfig {
   routesOutputFile: string
   schemaOutputDirectory: string
   tsconfig: string
+  vrameworkNextFile?: string
   packageMappings?: Record<string, string>
+  configDir: string
 }
 
 export interface CoreConfig {

@@ -49,6 +49,6 @@ export const schemas = (program: Command): void => {
   program
     .command('schemas')
     .description('generate schemas')
-    .option('-c | --config-file <string>', 'The path to vramework config file')
+    .option('-c | --config <string>', 'The path to vramework config file')
     .action(action)
 }
