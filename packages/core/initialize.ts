@@ -1,7 +1,7 @@
 import { join } from 'path'
 
 import { loadSchema, loadSchemas } from './schema'
-import { VrameworkConfig } from './types/core.types'
+import { VrameworkCLIConfig } from './types/core.types'
 import { Logger } from './services'
 import { getRoutes } from './route-runner'
 
@@ -14,7 +14,7 @@ import { getRoutes } from './route-runner'
  */
 export const initializeVrameworkCore = async (
   logger: Logger,
-  config: VrameworkConfig
+  config: VrameworkCLIConfig
 ) => {
   logger.info(`Starting Vramework`)
 

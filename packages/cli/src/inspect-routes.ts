@@ -11,7 +11,7 @@ export interface ImportInfo {
 export type ImportMap = Map<string, ImportInfo>
 
 const getPropertyValue = (
-  obj: ts.ObjectLiteralExpression, 
+  obj: ts.ObjectLiteralExpression,
   propertyName: string
 ): string | string[] | null => {
   const property = obj.properties.find(
@@ -48,25 +48,63 @@ const getPropertyValue = (
   return null;
 };
 
+function addFileWithFactory(node: ts.Node, factorySet: Set<string>, expectedTypeName: string) {
+  if (ts.isVariableDeclaration(node)) {
+    const variableType = node.type;
+    if (variableType && ts.isTypeReferenceNode(variableType)) {
+      const typeName = variableType.typeName;
+
+      // Check if the type name matches the expected type name
+      if (ts.isIdentifier(typeName) && typeName.text === expectedTypeName) {
+        factorySet.add(node.getSourceFile().fileName);
+        return;
+      }
+
+      // Handle qualified type names if necessary
+      if (ts.isQualifiedName(typeName)) {
+        const lastName = typeName.right.text;
+        if (lastName === expectedTypeName) {
+          factorySet.add(node.getSourceFile().fileName)
+          return
+        }
+      }
+    }
+  }
+}
+
+function addFileWithConfig(node: ts.Node, configName: string, configSet: Set<string>) {
+  if (ts.isVariableDeclaration(node)) {
+    const name = node.name
+    if (name && name.getText() === configName) {
+      configSet.add(node.getSourceFile().fileName);
+    }
+  }
+}
+
 export const inspectRoutes = (outputFile: string, routeFiles: string[], packageMappings: Record<string, string> = {}) => {
   const typesImportMap: ImportMap = new Map();
   const routesMeta: RoutesMeta = []
   const filesWithRoutes = new Set<string>()
+  const filesWithSingletonServicesFactory = new Set<string>()
+  const filesWithSessionServicesFactory = new Set<string>()
+  const filesWithConfig = new Set<string>()
 
   const program = ts.createProgram(routeFiles, {
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.CommonJS,
   });
+  const checker = program.getTypeChecker();
+  const sourceFiles = program.getSourceFiles()
 
   function findSymbolFile(symbolName: string): string | null {
     for (const sourceFile of program.getSourceFiles()) {
-      if (sourceFile.isDeclarationFile) continue;
+      if (sourceFile.isDeclarationFile) { continue };
       const symbols = checker.getSymbolsInScope(sourceFile, ts.SymbolFlags.Function | ts.SymbolFlags.TypeAlias | ts.SymbolFlags.Interface | ts.SymbolFlags.Class);
       for (const symbol of symbols) {
         if (symbol.getName() === symbolName) {
           const declarations = symbol.getDeclarations();
           if (declarations && declarations.length > 0) {
-            let filePath = getFileImportRelativePath(outputFile , declarations[0].getSourceFile().fileName, packageMappings)
+            let filePath = getFileImportRelativePath(outputFile, declarations[0].getSourceFile().fileName, packageMappings)
             const importInfo = typesImportMap.get(filePath) || { importPath: filePath, namedImports: new Set() }
             importInfo.namedImports.add(symbol.getName())
             typesImportMap.set(filePath, importInfo)
@@ -76,9 +114,6 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
     }
     return null;
   }
-
-  const checker = program.getTypeChecker();
-  const sourceFiles = program.getSourceFiles()
 
   for (const sourceFile of sourceFiles) {
     ts.forEachChild(sourceFile, (child) => visit(child));
@@ -91,6 +126,10 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
     let queryValues: string[] | null = null;
     let input: string | null = null;
     let output: string | null = null;
+
+    addFileWithConfig(node, 'config', filesWithConfig)
+    addFileWithFactory(node, filesWithSingletonServicesFactory, 'CreateSingletonServices')
+    addFileWithFactory(node, filesWithSessionServicesFactory, 'CreateSessionServices')
 
     if (ts.isCallExpression(node)) {
       const expression = node.expression;
@@ -170,7 +209,7 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
 
       routesMeta.push({
         route: routeValue!,
-        method: methodValue! as APIRouteMethod, 
+        method: methodValue! as APIRouteMethod,
         input: nullifyTypes(input),
         output: nullifyTypes(output),
         params: params.length > 0 ? params : undefined,
@@ -190,6 +229,9 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
   return {
     routesMeta,
     typesImportMap,
-    filesWithRoutes: [...filesWithRoutes]
+    filesWithRoutes: [...filesWithRoutes],
+    filesWithSessionServicesFactory: [...filesWithSessionServicesFactory],
+    filesWithSingletonServicesFactory: [...filesWithSingletonServicesFactory],
+    filesWithConfig: [...filesWithConfig]
   }
 };

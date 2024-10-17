@@ -18,7 +18,7 @@ export type RequireAtLeastOne<T> = {
   [K in keyof T]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<keyof T, K>>>
 }[keyof T]
 
-export interface VrameworkConfig {
+export interface VrameworkCLIConfig {
   rootDir: string
   routeDirectories: string[]
   routesOutputFile: string
@@ -58,17 +58,17 @@ export interface CoreHTTPServices extends CoreServices {
   response: VrameworkResponse
 }
 
-export type CreateSingletonServices = (
-  config: CoreConfig
-) => Promise<CoreSingletonServices>
+export type CreateSingletonServices<Config extends CoreConfig, SingletonServices extends CoreSingletonServices> = (
+  config: Config
+) => Promise<SingletonServices>
 
-export type CreateSessionServices = (
-  services: CoreSingletonServices & {
+export type CreateSessionServices = <SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices>(
+  services: SingletonServices & {
     request: VrameworkRequest
     response: VrameworkResponse
   },
-  session: CoreUserSession | undefined
-) => Promise<CoreServices>
+  session: UserSession | undefined
+) => Promise<Services>
 
 export type VrameworkQuery<T = unknown> = Record<
   string,

@@ -1,4 +1,4 @@
-import { CookieSerializeOptions } from 'cookie'
+import { SerializeOptions } from 'cookie'
 import { JSONValue } from './types/core.types'
 
 /**
@@ -53,7 +53,7 @@ export abstract class VrameworkResponse {
   public setCookie(
     _name: string,
     _value: string,
-    _options: CookieSerializeOptions
+    _options: SerializeOptions
   ) {
     throw new Error('Method not implemented.')
   }

@@ -7,7 +7,7 @@ import { serializeRouteMeta, serializeRoutes, serializeTypedRouteRunner } from '
 import { glob } from 'glob'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let { routeDirectories, routesOutputFile, rootDir, packageMappings  } =
+  let { routeDirectories, routesOutputFile, rootDir, packageMappings } =
     await getVrameworkConfig(configFile)
 
   if (
@@ -31,7 +31,9 @@ Generating Route File:
   const routeFiles = (await Promise.all(routeDirectories.map((dir) => glob(`${path.join(rootDir, dir)}/**/*.ts`)))).flat()
   const outputPath = path.join(rootDir, routesOutputFile)
 
-  const { routesMeta, typesImportMap, filesWithRoutes } = await inspectRoutes(outputPath, routeFiles, packageMappings)
+  const inspectedRoutes = await inspectRoutes(outputPath, routeFiles, packageMappings)
+  const { routesMeta, typesImportMap, filesWithRoutes } = inspectedRoutes
+  console.log({ inspectedRoutes })
 
   const parts = outputPath.split('/')
   parts.pop()

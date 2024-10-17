@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@vramework/core": "^0.3.15",
-    "cookie": "^0.6.0",
+    "cookie": "^1.0.0",
     "eventemitter3": "^5.0.1"
   },
   "devDependencies": {

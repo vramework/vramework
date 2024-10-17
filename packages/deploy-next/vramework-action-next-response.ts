@@ -1,5 +1,5 @@
 import { VrameworkResponse } from '@vramework/core/vramework-response'
-import { CookieSerializeOptions } from 'cookie'
+import { SerializeOptions } from 'cookie'
 import { cookies } from 'next/headers'
 
 export class VrameworkActionNextResponse extends VrameworkResponse {
@@ -16,7 +16,7 @@ export class VrameworkActionNextResponse extends VrameworkResponse {
   public setCookie(
     name: string,
     value: string,
-    options: CookieSerializeOptions
+    options: SerializeOptions
   ): void {
     const cookieStore = cookies()
     cookieStore.set(name, value, options)

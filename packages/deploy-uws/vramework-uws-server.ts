@@ -3,7 +3,7 @@ import uWS from 'uWebSockets.js'
 
 import { VrameworkUWSRequest } from './vramework-uws-request'
 import { VrameworkUWSResponse } from './vramework-uws-response'
-import { CoreConfig, CoreSingletonServices, CreateSessionServices, VrameworkConfig } from '@vramework/core/types/core.types'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices, VrameworkCLIConfig } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 
 export class VrameworkUWSServer {
@@ -11,7 +11,7 @@ export class VrameworkUWSServer {
   private listenSocket: boolean | uWS.us_listen_socket | null = null
 
   constructor(
-    private readonly vrameworkConfig: VrameworkConfig,
+    private readonly vrameworkConfig: VrameworkCLIConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices

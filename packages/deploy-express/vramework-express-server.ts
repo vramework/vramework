@@ -8,7 +8,7 @@ import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
 
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
-import { VrameworkConfig, CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
+import { VrameworkCLIConfig, CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { runRoute } from '@vramework/core/route-runner'
 
@@ -17,7 +17,7 @@ export class VrameworkExpressServer {
   private server: Server | undefined
 
   constructor(
-    private readonly vrameworkConfig: VrameworkConfig,
+    private readonly vrameworkConfig: VrameworkCLIConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices
