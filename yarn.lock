@@ -1867,15 +1867,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20":
-  version: 20.16.13
-  resolution: "@types/node@npm:20.16.13"
-  dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10/6e7b82119372cc12d28fcc1b0c10d1b8fa560bbb500f87a4c68bc446a0986d42c92e0f583040167841a0c598131979c3399b17c736c9fb8ba4f0dcf2b2048a84
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^20.11.30":
   version: 20.16.5
   resolution: "@types/node@npm:20.16.5"
@@ -1961,10 +1952,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/cli@workspace:packages/cli"
   dependencies:
-    "@types/node": "npm:20"
+    "@types/chai-as-promised": "npm:^7"
+    "@types/cookie": "npm:^0.6.0"
+    "@types/mocha": "npm:^10.0.8"
+    "@types/node": "npm:^22.5.5"
+    "@types/sinon": "npm:^17.0.3"
+    "@types/uuid": "npm:^10.0.0"
+    chai: "npm:^4"
+    chai-as-promised: "npm:^7.1.2"
     commander: "npm:^12"
     glob: "npm:^11.0.0"
+    mocha: "npm:^10.7.3"
     path-to-regexp: "npm:^8.1.0"
+    sinon: "npm:^19.0.2"
     ts-json-schema-generator: "npm:^2.3.0"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.6"

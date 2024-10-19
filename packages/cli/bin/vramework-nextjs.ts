@@ -25,6 +25,11 @@ async function action({ configFile, vrameworkConfigFile, vrameworkConfigVariable
 
   const startedAt = Date.now()
 
+  const _nextOutputFile = path.join(configDir, vrameworkNextFile).split('/')
+  _nextOutputFile.pop()
+  const nextOutputDirectory = _nextOutputFile.join('/')
+  const nextOutputFile = path.join(configDir, vrameworkNextFile)
+
   const routesPath = getFileImportRelativePath(path.join(configDir, vrameworkNextFile), path.join(rootDir, routesOutputFile), packageMappings)
   const schemasPath = getFileImportRelativePath(path.join(configDir, vrameworkNextFile), path.join(rootDir, schemaOutputDirectory, 'schemas.ts'), packageMappings)
 
@@ -44,6 +49,7 @@ async function action({ configFile, vrameworkConfigFile, vrameworkConfigVariable
       errors.push(Object.values(vrameworkConfigs).join('-\n'))
     } else {
       vrameworkConfigFile = Object.keys(vrameworkConfigs)[0]
+      vrameworkConfigVariable = Object.values(vrameworkConfigs)[0][0]
     }
   }
   if (!singletonServicesFactoryFile) {
@@ -54,8 +60,8 @@ async function action({ configFile, vrameworkConfigFile, vrameworkConfigVariable
       errors.push('No singleton-services-factory-file config defined and more than one CreateSingletonServices function found')
       errors.push(totalValues.join('-\n'))
     } else {
-      singletonServicesFactoryFile = Object.keys(sessionServicesFactories)[0]
-      singletonServicesFactoryVariable = Object.values(sessionServicesFactories)[0][0]
+      singletonServicesFactoryFile = Object.keys(singletonServicesFactories)[0]
+      singletonServicesFactoryVariable = Object.values(singletonServicesFactories)[0][0]
     }
   }
   if (!sessionServicesFactoryFile) {
@@ -71,35 +77,32 @@ async function action({ configFile, vrameworkConfigFile, vrameworkConfigVariable
     }
   }
 
-  if (errors) {
+  if (errors.length > 0) {
+    console.error('Found errors:')
     console.error(errors)
     process.exit(1)
   }
 
-  const vrameworkConfigImport = `import { ${vrameworkConfigVariable} } from '${vrameworkConfigFile}'`
-  const singletonServicesImport = `import { ${singletonServicesFactoryVariable} } from '${singletonServicesFactoryFile}'`
-  const sessionServicesImport = `import { ${sessionServicesFactoryVariable} } from '${sessionServicesFactoryFile}'`
+  const vrameworkConfigImport = `import { ${vrameworkConfigVariable} } from '${getFileImportRelativePath(nextOutputFile, vrameworkConfigFile!, packageMappings)}'`
+  const singletonServicesImport = `import { ${singletonServicesFactoryVariable} } from '${getFileImportRelativePath(nextOutputFile, singletonServicesFactoryFile!, packageMappings)}'`
+  const sessionServicesImport = `import { ${sessionServicesFactoryVariable} } from '${getFileImportRelativePath(nextOutputFile, sessionServicesFactoryFile!, packageMappings)}'`
       
   console.log(`
     Generating Vramework NextJS File:
-        - VrameworkNextJSFile: \n\t${vrameworkNextFile}
-        - Route Output:\n\t${routesOutputFile}
-        - Schemas directory:\n\t${schemaOutputDirectory}
-        - Vramework Config import: \n\t${vrameworkConfigImport}
-        - Singleton Services import: \n\t${singletonServicesImport}
-        - Session Services import: \n\t${sessionServicesImport}
+        - VrameworkNextJSFile: \n\t\t${vrameworkNextFile}
+        - Route Output:\n\t\t${routesOutputFile}
+        - Schemas directory:\n\t\t${schemaOutputDirectory}
+        - Vramework Config import: \n\t\t${vrameworkConfigImport}
+        - Singleton Services import: \n\t\t${singletonServicesImport}
+        - Session Services import: \n\t\t${sessionServicesImport}
     `)
 
   const content = [
     generateNextJsWrapper(routesPath, schemasPath, vrameworkConfigImport, singletonServicesImport, sessionServicesImport)
   ]
 
-  const output = path.join(configDir, vrameworkNextFile).split('/')
-  output.pop()
-  const outputDirectory = output.join('/')
-
-  await promises.mkdir(outputDirectory, { recursive: true })
-  await promises.writeFile(path.join(configDir, vrameworkNextFile), content.join('\n\n'), 'utf-8')
+  await promises.mkdir(nextOutputDirectory, { recursive: true })
+  await promises.writeFile(nextOutputFile, content.join('\n\n'), 'utf-8')
 
   console.log(`NextJSWrapper generated in ${Date.now() - startedAt}ms.`)
 }
