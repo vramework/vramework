@@ -1,4 +1,4 @@
-export const generateNextJsWrapper = (routesPath: string, schemasPath: string, configImport: string, servicesImport: string) => {
+export const generateNextJsWrapper = (routesPath: string, schemasPath: string, configImport: string, singleServicesFactoryImport: string, sessionServicesImport: string) => {
     return `
 'server-only'
 import { VrameworkNextJS } from '@vramework/deploy-next'
@@ -6,8 +6,9 @@ import { IncomingMessage, ServerResponse } from 'http'
 import { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils'
 import { APIRouteMethod } from '@vramework/core'
 
-import { config } from '${configImport}'
-import { createSessionServices, createSingletonServices } from '${servicesImport}'
+${configImport}
+${singleServicesFactoryImport}
+${sessionServicesImport}
 
 import { RoutesMap, RouteHandlerOf } from '${routesPath}'
 import '${routesPath}'

@@ -48,24 +48,29 @@ const getPropertyValue = (
   return null;
 };
 
-function addFileWithFactory(node: ts.Node, factorySet: Set<string>, expectedTypeName: string) {
+function addFileWithFactory(node: ts.Node, methods: Record<string, string[]> = {}, expectedTypeName: string) {
   if (ts.isVariableDeclaration(node)) {
+    const fileName = node.getSourceFile().fileName
     const variableType = node.type;
+    const variableName = node.name.getText()
+
     if (variableType && ts.isTypeReferenceNode(variableType)) {
       const typeName = variableType.typeName;
 
       // Check if the type name matches the expected type name
       if (ts.isIdentifier(typeName) && typeName.text === expectedTypeName) {
-        factorySet.add(node.getSourceFile().fileName);
-        return;
+        const variables = methods[fileName] || []
+        variables.push(variableName)
+        methods[fileName] = variables
       }
 
       // Handle qualified type names if necessary
-      if (ts.isQualifiedName(typeName)) {
+      else if (ts.isQualifiedName(typeName)) {
         const lastName = typeName.right.text;
         if (lastName === expectedTypeName) {
-          factorySet.add(node.getSourceFile().fileName)
-          return
+          const variables = methods[fileName] || []
+          variables.push(variableName)
+          methods[fileName] = variables
         }
       }
     }
@@ -74,16 +79,21 @@ function addFileWithFactory(node: ts.Node, factorySet: Set<string>, expectedType
 
 function addVariableWithTypeExtendingCoreConfig(
   node: ts.Node,
-  configSet: Set<string>,
+  configs: Record<string, string[]>,
   checker: ts.TypeChecker
 ) {
   if (ts.isVariableDeclaration(node)) {
+    const fileName = node.getSourceFile().fileName
     const variableSymbol = checker.getSymbolAtLocation(node.name);
+    
     if (variableSymbol) {
       const variableType = checker.getTypeOfSymbolAtLocation(variableSymbol, node.name);
+      const variableName = node.name.getText()
 
       if (doesTypeExtendCoreConfig(variableType, checker, new Set())) {
-        configSet.add(node.getSourceFile().fileName);
+        const variables = configs[fileName] || []
+        variables.push(variableName)
+        configs[fileName] = variables
       }
     }
   }
@@ -144,9 +154,9 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
   const typesImportMap: ImportMap = new Map();
   const routesMeta: RoutesMeta = []
   const filesWithRoutes = new Set<string>()
-  const filesWithSingletonServicesFactory = new Set<string>()
-  const filesWithSessionServicesFactory = new Set<string>()
-  const filesWithConfig = new Set<string>()
+  const singletonServicesFactories: Record<string, string[]> = {}
+  const sessionServicesFactories: Record<string, string[]> = {}
+  const vrameworkConfigs: Record<string, string[]> = {}
 
   const program = ts.createProgram(routeFiles, {
     target: ts.ScriptTarget.ESNext,
@@ -186,9 +196,9 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
     let input: string | null = null;
     let output: string | null = null;
 
-    addVariableWithTypeExtendingCoreConfig(node, filesWithConfig, checker)
-    addFileWithFactory(node, filesWithSingletonServicesFactory, 'CreateSingletonServices')
-    addFileWithFactory(node, filesWithSessionServicesFactory, 'CreateSessionServices')
+    addVariableWithTypeExtendingCoreConfig(node, vrameworkConfigs, checker)
+    addFileWithFactory(node, singletonServicesFactories, 'CreateSingletonServices')
+    addFileWithFactory(node, sessionServicesFactories, 'CreateSessionServices')
 
     if (ts.isCallExpression(node)) {
       const expression = node.expression;
@@ -288,9 +298,10 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
   return {
     routesMeta,
     typesImportMap,
+    routesOutputPath: outputFile,
     filesWithRoutes: [...filesWithRoutes],
-    filesWithSessionServicesFactory: [...filesWithSessionServicesFactory],
-    filesWithSingletonServicesFactory: [...filesWithSingletonServicesFactory],
-    filesWithConfig: [...filesWithConfig]
+    sessionServicesFactories,
+    singletonServicesFactories,
+    vrameworkConfigs
   }
 };

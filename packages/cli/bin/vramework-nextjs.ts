@@ -4,8 +4,9 @@ import * as promises from 'fs/promises'
 import path = require('path')
 import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator'
 import { getFileImportRelativePath } from '../src/utils'
+import { extractVrameworkInformation } from '../src/extract-vramework-information'
 
-async function action(configImport: string, servicesImport: string, { configFile }: { configFile?: string }): Promise<void> {
+async function action({ configFile, vrameworkConfigFile, vrameworkConfigVariable, singletonServicesFactoryFile, singletonServicesFactoryVariable, sessionServicesFactoryFile, sessionServicesFactoryVariable}: { configFile?: string, vrameworkConfigFile?: string, vrameworkConfigVariable?: string, configImport?: string, singletonServicesFactoryFile?: string, singletonServicesFactoryVariable?: string, sessionServicesFactoryFile?: string, sessionServicesFactoryVariable?: string }): Promise<void> {
   const vrameworkConfig = await getVrameworkConfig(configFile, true)
   let { vrameworkNextFile, rootDir, routesOutputFile, configDir, packageMappings, schemaOutputDirectory } = vrameworkConfig
 
@@ -23,32 +24,74 @@ async function action(configImport: string, servicesImport: string, { configFile
   }
 
   const startedAt = Date.now()
-  console.log(`
-Generating Vramework NextJS File:
-    - VrameworkNextJSFile: \n\t${vrameworkNextFile}
-    - Route Output:\n\t${routesOutputFile}
-    - Schemas directory:\n\t${schemaOutputDirectory}
-    - Config import: \n\t${configImport}
-    - Services import: \n\t${servicesImport}
-`)
-
-//   const importedConfig = await import(configImport)
-//   if (importedConfig.config === undefined) {
-//     console.error(`${configImport} does not export a config object`)
-//     process.exit(1)
-//   }
-
-//   const importServiceFactory = await import(servicesImport)
-//   if (importServiceFactory.createSessionServices === undefined || importServiceFactory.createSingletonServices === undefined) {
-//     console.error(`${configImport} does not export the createSessionServices and createSingletonServices functions.`)
-//     process.exit(1)
-//   }
 
   const routesPath = getFileImportRelativePath(path.join(configDir, vrameworkNextFile), path.join(rootDir, routesOutputFile), packageMappings)
   const schemasPath = getFileImportRelativePath(path.join(configDir, vrameworkNextFile), path.join(rootDir, schemaOutputDirectory, 'schemas.ts'), packageMappings)
 
+  const {
+    vrameworkConfigs,
+    sessionServicesFactories,
+    singletonServicesFactories
+  } = await extractVrameworkInformation(vrameworkConfig)
+
+  let errors: string[] = []
+  if (!vrameworkConfigFile) {
+    let totalValues = Object.values(vrameworkConfigs).flat()
+    if (totalValues.length === 0) {
+      errors.push('No config import defined and no VrameworkConfig object found')
+    } else if (totalValues.length > 1) {
+      errors.push('No config import defined and more than one VrameworkConfig found')
+      errors.push(Object.values(vrameworkConfigs).join('-\n'))
+    } else {
+      vrameworkConfigFile = Object.keys(vrameworkConfigs)[0]
+    }
+  }
+  if (!singletonServicesFactoryFile) {
+    let totalValues = Object.values(sessionServicesFactories).flat()
+    if (totalValues.length === 0) {
+      errors.push('No singleton-services-factory-file config defined and no CreateSingletonServices function found')
+    } else if (totalValues.length > 1) {
+      errors.push('No singleton-services-factory-file config defined and more than one CreateSingletonServices function found')
+      errors.push(totalValues.join('-\n'))
+    } else {
+      singletonServicesFactoryFile = Object.keys(sessionServicesFactories)[0]
+      singletonServicesFactoryVariable = Object.values(sessionServicesFactories)[0][0]
+    }
+  }
+  if (!sessionServicesFactoryFile) {
+    let totalValues = Object.values(singletonServicesFactories).flat()
+    if (totalValues.length === 0) {
+      errors.push('No session-services-factory-file config defined and no CreateSessionServices object function found')
+    } else if (totalValues.length > 1) {
+      errors.push('No session-services-factory-file config defined and more than one CreateSingletonService function found')
+      errors.push(totalValues.join('-\n'))
+    } else {
+      sessionServicesFactoryFile = Object.keys(sessionServicesFactories)[0]
+      sessionServicesFactoryVariable = Object.values(sessionServicesFactories)[0][0]
+    }
+  }
+
+  if (errors) {
+    console.error(errors)
+    process.exit(1)
+  }
+
+  const vrameworkConfigImport = `import { ${vrameworkConfigVariable} } from '${vrameworkConfigFile}'`
+  const singletonServicesImport = `import { ${singletonServicesFactoryVariable} } from '${singletonServicesFactoryFile}'`
+  const sessionServicesImport = `import { ${sessionServicesFactoryVariable} } from '${sessionServicesFactoryFile}'`
+      
+  console.log(`
+    Generating Vramework NextJS File:
+        - VrameworkNextJSFile: \n\t${vrameworkNextFile}
+        - Route Output:\n\t${routesOutputFile}
+        - Schemas directory:\n\t${schemaOutputDirectory}
+        - Vramework Config import: \n\t${vrameworkConfigImport}
+        - Singleton Services import: \n\t${singletonServicesImport}
+        - Session Services import: \n\t${sessionServicesImport}
+    `)
+
   const content = [
-    generateNextJsWrapper(routesPath, schemasPath, configImport, servicesImport)
+    generateNextJsWrapper(routesPath, schemasPath, vrameworkConfigImport, singletonServicesImport, sessionServicesImport)
   ]
 
   const output = path.join(configDir, vrameworkNextFile).split('/')
@@ -65,8 +108,9 @@ export const nextjs = (program: Command): void => {
   program
     .command('nextjs')
     .description('generate nextjs wrapper')
-    .argument('config-file', 'The path to the application config file')
-    .argument('services-file', 'The path to the services files')
-    .option('-c | --config <string>', 'The path to vramework config file')
+    .option('-vc | --vramework-config-file', 'The path to the vramework config file with an object called config with type VrameworkConfig')
+    .option('-si | --singleton-services-factory-file', 'The path to the application config file with a function called createSingletonServices with type CreateSingletonServices')
+    .option('-se | --session-services-factory-file', 'The path to the services file')
+    .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }

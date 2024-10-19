@@ -2,7 +2,7 @@ import { join, dirname, resolve } from 'path'
 import { readdir } from 'fs/promises'
 import { VrameworkCLIConfig } from './types/core.types'
 
-export const getVrameworkConfig = async (
+export const getVrameworkCLIConfig = async (
   configFile: string | undefined = undefined,
   exitProcess: boolean = false
 ): Promise<VrameworkCLIConfig> => {

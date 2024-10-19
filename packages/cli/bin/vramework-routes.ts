@@ -1,14 +1,12 @@
 import { Command } from 'commander'
 import { getVrameworkConfig } from '@vramework/core/vramework-config'
-import { inspectRoutes } from '../src/inspect-routes'
 import * as promises from 'fs/promises'
-import path = require('path')
 import { serializeRouteMeta, serializeRoutes, serializeTypedRouteRunner } from '../src/routes-serializers'
-import { glob } from 'glob'
+import { extractVrameworkInformation } from '../src/extract-vramework-information'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let { routeDirectories, routesOutputFile, rootDir, packageMappings } =
-    await getVrameworkConfig(configFile)
+  let cliConfig = await getVrameworkConfig(configFile)
+  const {rootDir, routeDirectories, routesOutputFile } = cliConfig
 
   if (
     !rootDir ||
@@ -28,22 +26,18 @@ Generating Route File:
     - Route Output:\n\t${routesOutputFile}
 `)
 
-  const routeFiles = (await Promise.all(routeDirectories.map((dir) => glob(`${path.join(rootDir, dir)}/**/*.ts`)))).flat()
-  const outputPath = path.join(rootDir, routesOutputFile)
+  const { routesMeta, typesImportMap, filesWithRoutes, routesOutputPath } = await extractVrameworkInformation(cliConfig)
 
-  const inspectedRoutes = await inspectRoutes(outputPath, routeFiles, packageMappings)
-  const { routesMeta, typesImportMap, filesWithRoutes } = inspectedRoutes
-
-  const parts = outputPath.split('/')
+  const parts = routesOutputPath.split('/')
   parts.pop()
   await promises.mkdir(parts.join('/'), { recursive: true })
   const content = [
-    serializeRoutes(outputPath, filesWithRoutes, packageMappings),
+    serializeRoutes(routesOutputPath, filesWithRoutes, cliConfig.packageMappings),
     // serializeInterface(typesImportMap, routesMeta),
     serializeRouteMeta(routesMeta),
     serializeTypedRouteRunner(typesImportMap, routesMeta)
   ]
-  await promises.writeFile(outputPath, content.join('\n\n'), 'utf-8')
+  await promises.writeFile(routesOutputPath, content.join('\n\n'), 'utf-8')
 
   console.log(`Routes generated in ${Date.now() - startedAt}ms.`)
 }
@@ -52,6 +46,6 @@ export const routes = (program: Command): void => {
   program
     .command('routes')
     .description('generate routes')
-    .option('-c | --config <string>', 'The path to vramework config file')
+    .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }
