@@ -1867,6 +1867,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:20":
+  version: 20.16.13
+  resolution: "@types/node@npm:20.16.13"
+  dependencies:
+    undici-types: "npm:~6.19.2"
+  checksum: 10/6e7b82119372cc12d28fcc1b0c10d1b8fa560bbb500f87a4c68bc446a0986d42c92e0f583040167841a0c598131979c3399b17c736c9fb8ba4f0dcf2b2048a84
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^20.11.30":
   version: 20.16.5
   resolution: "@types/node@npm:20.16.5"
@@ -1952,6 +1961,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/cli@workspace:packages/cli"
   dependencies:
+    "@types/node": "npm:20"
     commander: "npm:^12"
     glob: "npm:^11.0.0"
     path-to-regexp: "npm:^8.1.0"
@@ -1963,7 +1973,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/core@npm:^0.3.15, @vramework/core@workspace:packages/core":
+"@vramework/core@npm:^0.4.0, @vramework/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@vramework/core@workspace:packages/core"
   dependencies:
@@ -2004,7 +2014,7 @@ __metadata:
     express: "npm:^5"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.3.15
+    "@vramework/core": ^0.4.0
   languageName: unknown
   linkType: soft
 
@@ -2019,7 +2029,7 @@ __metadata:
     typescript: "npm:^5.4.2"
     uWebSockets.js: "uNetworking/uWebSockets.js#v20.48.0"
   peerDependencies:
-    "@vramework/core": ^0.3.15
+    "@vramework/core": ^0.4.0
   languageName: unknown
   linkType: soft
 
@@ -2030,7 +2040,7 @@ __metadata:
     "@types/aws-lambda": "npm:^8.10.136"
     typescript: "npm:^5.4.2"
   peerDependencies:
-    "@vramework/core": ^0.3.15
+    "@vramework/core": ^0.4.0
     aws-lambda: ^1.0.7
     cookie: ^1.0.0
     path-to-regexp: ^8.1.0
@@ -2043,7 +2053,7 @@ __metadata:
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     "@types/next": "npm:^9.0.0"
-    "@vramework/core": "npm:^0.3.15"
+    "@vramework/core": "npm:^0.4.0"
     cookie: "npm:^1.0.0"
     eventemitter3: "npm:^5.0.1"
     typescript: "npm:^5.4.2"
@@ -2062,7 +2072,7 @@ __metadata:
     typescript: "npm:^5.4.2"
     uWebSockets.js: "uNetworking/uWebSockets.js#v20.48.0"
   peerDependencies:
-    "@vramework/core": ^0.3.15
+    "@vramework/core": ^0.4.0
   languageName: unknown
   linkType: soft
 
@@ -2088,7 +2098,7 @@ __metadata:
     aws-cloudfront-sign: "npm:^3.0.2"
     typescript: "npm:^5.6"
   peerDependencies:
-    "@vramework/core": ^0.3.15
+    "@vramework/core": ^0.4.0
   languageName: unknown
   linkType: soft
 
@@ -2108,7 +2118,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.6"
   peerDependencies:
-    "@vramework/core": ^0.3.15
+    "@vramework/core": ^0.4.0
   languageName: unknown
   linkType: soft
 
