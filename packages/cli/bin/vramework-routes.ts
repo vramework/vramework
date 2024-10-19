@@ -1,11 +1,11 @@
 import { Command } from 'commander'
-import { getVrameworkConfig } from '@vramework/core/vramework-config'
+import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
 import * as promises from 'fs/promises'
 import { serializeRouteMeta, serializeRoutes, serializeTypedRouteRunner } from '../src/routes-serializers'
 import { extractVrameworkInformation } from '../src/extract-vramework-information'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let cliConfig = await getVrameworkConfig(configFile)
+  let cliConfig = await getVrameworkCLIConfig(configFile)
   const {rootDir, routeDirectories, routesOutputFile } = cliConfig
 
   if (

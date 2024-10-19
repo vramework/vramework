@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { getVrameworkConfig } from '@vramework/core/vramework-config'
+import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
 import * as promises from 'fs/promises'
 import path = require('path')
 import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator'
@@ -7,7 +7,7 @@ import { getFileImportRelativePath } from '../src/utils'
 import { extractVrameworkInformation } from '../src/extract-vramework-information'
 
 async function action({ configFile, vrameworkConfigFile, vrameworkConfigVariable, singletonServicesFactoryFile, singletonServicesFactoryVariable, sessionServicesFactoryFile, sessionServicesFactoryVariable}: { configFile?: string, vrameworkConfigFile?: string, vrameworkConfigVariable?: string, configImport?: string, singletonServicesFactoryFile?: string, singletonServicesFactoryVariable?: string, sessionServicesFactoryFile?: string, sessionServicesFactoryVariable?: string }): Promise<void> {
-  const vrameworkConfig = await getVrameworkConfig(configFile, true)
+  const vrameworkConfig = await getVrameworkCLIConfig(configFile, true)
   let { vrameworkNextFile, rootDir, routesOutputFile, configDir, packageMappings, schemaOutputDirectory } = vrameworkConfig
 
   if (

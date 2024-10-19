@@ -20,7 +20,7 @@ export class VrameworkExpressServer {
     private readonly vrameworkConfig: VrameworkCLIConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
-    private readonly createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
+    private readonly createSessionServices: CreateSessionServices<any, any, any>,
   ) {
     this.app.use(
       json({

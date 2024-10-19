@@ -2,7 +2,7 @@ import { Command } from 'commander'
 import { generateSchemas } from '../src/schema-generator'
 
 import { join } from 'path'
-import { getVrameworkConfig } from '@vramework/core/vramework-config'
+import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
 import { getRoutes } from '@vramework/core/route-runner'
 
 const importFile = async (path: string) => {
@@ -11,7 +11,7 @@ const importFile = async (path: string) => {
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
   const { schemaOutputDirectory, tsconfig, rootDir, routesOutputFile } =
-    await getVrameworkConfig(configFile)
+    await getVrameworkCLIConfig(configFile)
 
   if (!rootDir || !routesOutputFile || !schemaOutputDirectory || !tsconfig) {
     console.error(
