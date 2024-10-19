@@ -3,6 +3,7 @@ import { verifyPermissions } from './permissions'
 import { CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './types/routes.types'
 import { loadSchema, validateJson } from './schema'
 import {
+  CoreServices,
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
@@ -101,7 +102,7 @@ export const runRoute = async <In, Out>(
   request: VrameworkRequest<In>,
   response: VrameworkResponse,
   services: CoreSingletonServices,
-  createSessionServices: CreateSessionServices,
+  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
   {
     route: apiRoute,
     method: apiType,

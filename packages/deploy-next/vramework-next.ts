@@ -28,7 +28,7 @@ export class VrameworkNextJS {
     private readonly createSingletonServices: (
       config: CoreConfig
     ) => Promise<CoreSingletonServices>,
-    private readonly createSessionServices: CreateSessionServices
+    private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {
   }
 

@@ -3,7 +3,7 @@ import uWS from 'uWebSockets.js'
 
 import { VrameworkUWSRequest } from './vramework-uws-request'
 import { VrameworkUWSResponse } from './vramework-uws-response'
-import { CoreConfig, CoreSingletonServices, CreateSessionServices, VrameworkCLIConfig } from '@vramework/core/types/core.types'
+import { CoreConfig, CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices, VrameworkCLIConfig } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 
 export class VrameworkUWSServer {
@@ -14,7 +14,7 @@ export class VrameworkUWSServer {
     private readonly vrameworkConfig: VrameworkCLIConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
-    private readonly createSessionServices: CreateSessionServices
+    private readonly createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
   ) {}
 
   /**

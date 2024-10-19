@@ -62,7 +62,7 @@ export type CreateSingletonServices<Config extends CoreConfig, SingletonServices
   config: Config
 ) => Promise<SingletonServices>
 
-export type CreateSessionServices = <SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices>(
+export type CreateSessionServices<SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices> = (
   services: SingletonServices & {
     request: VrameworkRequest
     response: VrameworkResponse

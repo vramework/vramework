@@ -33,7 +33,6 @@ Generating Route File:
 
   const inspectedRoutes = await inspectRoutes(outputPath, routeFiles, packageMappings)
   const { routesMeta, typesImportMap, filesWithRoutes } = inspectedRoutes
-  console.log({ inspectedRoutes })
 
   const parts = outputPath.split('/')
   parts.pop()

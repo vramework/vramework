@@ -49,7 +49,7 @@ export const serializeRouteMeta = (routesMeta: RoutesMeta) => {
 export const serializeTypedRouteRunner = (importMap: ImportMap, routesMeta: RoutesMeta) => {
   return `
 // The typed route runner allows us to infer our types when running routes
-import { runRoute, CoreSingletonServices, CreateSessionServices, VrameworkRequest, VrameworkResponse } from '@vramework/core'
+import { runRoute, CoreSingletonServices, CreateSessionServices, CoreServices, CoreUserSession, VrameworkRequest, VrameworkResponse } from '@vramework/core'
 ${serializeImportMap(importMap)}
 
 interface RouteHandler<I, O> {
@@ -72,7 +72,7 @@ export const runTypedRoute = async <
   request: VrameworkRequest<RouteHandlerOf<Route, Method>['input']>,
   response: VrameworkResponse,
   services: CoreSingletonServices,
-  createSessionServices: CreateSessionServices,
+  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
   route: { route: Route; method: Method }
 ): Promise<RouteHandlerOf<Route, Method>['output']> => {
   return runRoute(request, response, services, createSessionServices, route as any)

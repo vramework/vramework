@@ -3,7 +3,7 @@ import Fastify from 'fastify'
 
 import { VrameworkFastifyRequest } from './vramework-fastify-request'
 import { VrameworkFastifyResponse } from './vramework-fastify-response'
-import { CoreConfig, CoreSingletonServices, CreateSessionServices, VrameworkCLIConfig } from '@vramework/core/types/core.types'
+import { CoreConfig, CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices, VrameworkCLIConfig } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 
@@ -14,7 +14,7 @@ export class VrameworkFastifyServer {
     private readonly vrameworkConfig: VrameworkCLIConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
-    private readonly createSessionServices: CreateSessionServices
+    private readonly createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>
   ) { }
 
   /**

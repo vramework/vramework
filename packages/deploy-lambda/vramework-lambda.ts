@@ -3,7 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { VrameworkLambdaRequest } from './vramework-lambda-request'
 import { VrameworkLambdaResponse } from './vramework-lambda-response'
 import { InvalidOriginError } from '@vramework/core/errors'
-import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
+import { CoreConfig, CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices } from '@vramework/core/types/core.types'
 import { CoreAPIRoutes, RoutesMeta } from '@vramework/core/types/routes.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { Logger } from '@vramework/core/services/logger'
@@ -31,7 +31,7 @@ CORS Error
 
 const generalHandler = async (
   services: CoreSingletonServices,
-  createSessionServices: CreateSessionServices,
+  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
   routes: CoreAPIRoutes,
   routesMeta: RoutesMeta,
   request: VrameworkLambdaRequest,
@@ -71,7 +71,7 @@ export const processCorsless = async (
   routesMeta: RoutesMeta,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
-  createSessionServices: CreateSessionServices
+  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
 ) => {
   const request = new VrameworkLambdaRequest(event)
   const response = new VrameworkLambdaResponse()
@@ -90,7 +90,7 @@ export const processFromAnywhereCors = async (
   routes: CoreAPIRoutes,
   routesMeta: RoutesMeta,
   singletonServices: CoreSingletonServices,
-  createSessionServices: CreateSessionServices
+  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
 ) => {
   const request = new VrameworkLambdaRequest(event)
   const response = new VrameworkLambdaResponse()
@@ -112,7 +112,7 @@ export const processCors = async (
   routes: CoreAPIRoutes,
   routesMeta: RoutesMeta,
   singletonServices: CoreSingletonServices,
-  createSessionServices: CreateSessionServices
+  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
 ) => {
   const request = new VrameworkLambdaRequest(event)
   const response = new VrameworkLambdaResponse()

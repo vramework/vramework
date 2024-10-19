@@ -95,8 +95,6 @@ export const loadRoutesFromDirectory = async (
     })
   )
 
-  console.log(filesWithRoutes)
-
   return filesWithRoutes
 }
 
