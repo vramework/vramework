@@ -72,13 +72,72 @@ function addFileWithFactory(node: ts.Node, factorySet: Set<string>, expectedType
   }
 }
 
-function addFileWithConfig(node: ts.Node, configName: string, configSet: Set<string>) {
+function addVariableWithTypeExtendingCoreConfig(
+  node: ts.Node,
+  configSet: Set<string>,
+  checker: ts.TypeChecker
+) {
   if (ts.isVariableDeclaration(node)) {
-    const name = node.name
-    if (name && name.getText() === configName) {
-      configSet.add(node.getSourceFile().fileName);
+    const variableSymbol = checker.getSymbolAtLocation(node.name);
+    if (variableSymbol) {
+      const variableType = checker.getTypeOfSymbolAtLocation(variableSymbol, node.name);
+
+      if (doesTypeExtendCoreConfig(variableType, checker, new Set())) {
+        configSet.add(node.getSourceFile().fileName);
+      }
     }
   }
+}
+
+function doesTypeExtendCoreConfig(
+  type: ts.Type,
+  checker: ts.TypeChecker,
+  visitedTypes: Set<ts.Type>
+): boolean {
+  if (!type || !checker) return false;
+
+  // Avoid infinite recursion by checking if we've already visited this type
+  if (visitedTypes.has(type)) {
+    return false;
+  }
+  visitedTypes.add(type);
+
+  const typeSymbol = type.getSymbol();
+  if (typeSymbol) {
+    // Check if the type is 'CoreConfig' itself
+    if (typeSymbol.getName() === 'CoreConfig') {
+      return true;
+    }
+
+    // For interface and class types, check their base types
+    if (type.isClassOrInterface()) {
+      const baseTypes = type.getBaseTypes() || [];
+      for (const baseType of baseTypes) {
+        if (doesTypeExtendCoreConfig(baseType, checker, visitedTypes)) {
+          return true;
+        }
+      }
+    }
+  }
+
+  // For type aliases, get the aliased type
+  if (type.aliasSymbol) {
+    const aliasedType = checker.getDeclaredTypeOfSymbol(type.aliasSymbol);
+    if (doesTypeExtendCoreConfig(aliasedType, checker, visitedTypes)) {
+      return true;
+    }
+  }
+
+  // For union and intersection types, check all constituent types
+  if (type.isUnionOrIntersection()) {
+    for (const subType of type.types) {
+      if (doesTypeExtendCoreConfig(subType, checker, visitedTypes)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 export const inspectRoutes = (outputFile: string, routeFiles: string[], packageMappings: Record<string, string> = {}) => {
@@ -127,7 +186,7 @@ export const inspectRoutes = (outputFile: string, routeFiles: string[], packageM
     let input: string | null = null;
     let output: string | null = null;
 
-    addFileWithConfig(node, 'config', filesWithConfig)
+    addVariableWithTypeExtendingCoreConfig(node, filesWithConfig, checker)
     addFileWithFactory(node, filesWithSingletonServicesFactory, 'CreateSingletonServices')
     addFileWithFactory(node, filesWithSessionServicesFactory, 'CreateSessionServices')
 
