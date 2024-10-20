@@ -1,3 +1,4 @@
+import { JSONValue } from '@vramework/core'
 import { VrameworkResponse } from '@vramework/core/vramework-response'
 import cookie from 'cookie'
 import { FastifyReply } from 'fastify'
@@ -15,11 +16,11 @@ export class VrameworkFastifyResponse extends VrameworkResponse {
     this.response.redirect(path, status)
   }
 
-  public setJson(body): void {
+  public setJson(body: JSONValue): void {
     this.response.send(JSON.stringify(body))
   }
 
-  public setResponse(body): void {
+  public setResponse(body: string | Buffer): void {
     this.response.send(body)
   }
 

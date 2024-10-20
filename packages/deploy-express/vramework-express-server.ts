@@ -8,7 +8,7 @@ import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
 
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
-import { VrameworkCLIConfig, CoreConfig, CoreSingletonServices, CreateSessionServices, CoreServices, CoreUserSession } from '@vramework/core/types/core.types'
+import { VrameworkCLIConfig, CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { runRoute } from '@vramework/core/route-runner'
 

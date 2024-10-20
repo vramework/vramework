@@ -1,6 +1,7 @@
 import { HttpResponse } from 'uWebSockets.js'
 import cookie from 'cookie'
 import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { JSONValue } from '@vramework/core'
 
 export class VrameworkUWSResponse extends VrameworkResponse {
   constructor(protected response: HttpResponse) {
@@ -16,11 +17,11 @@ export class VrameworkUWSResponse extends VrameworkResponse {
     this.response.writeHeader('location', path)
   }
 
-  public setJson(body): void {
+  public setJson(body: JSONValue): void {
     this.response.write(JSON.stringify(body))
   }
 
-  public setResponse(body): void {
+  public setResponse(body: string | Buffer): void {
     this.response.write(body)
   }
 

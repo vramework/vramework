@@ -4,7 +4,6 @@ import * as promises from 'fs/promises'
 import path = require('path')
 import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator'
 import { getFileImportRelativePath, getVrameworkFilesAndMethods } from '../src/utils'
-import { extractVrameworkInformation } from '../src/extract-vramework-information'
 
 interface VrameworkNextJSCliOptions {
   configFile?: string, vrameworkConfigFile?: string, vrameworkConfigVariable?: string, configImport?: string, singletonServicesFactoryFile?: string, singletonServicesFactoryVariable?: string, sessionServicesFactoryFile?: string, sessionServicesFactoryVariable?: string

@@ -3,8 +3,9 @@ import uWS from 'uWebSockets.js'
 
 import { VrameworkUWSRequest } from './vramework-uws-request'
 import { VrameworkUWSResponse } from './vramework-uws-response'
-import { CoreConfig, CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices, VrameworkCLIConfig } from '@vramework/core/types/core.types'
+import { CoreConfig, CoreSingletonServices, CreateSessionServices, VrameworkCLIConfig } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
+import { initializeVrameworkCore } from '@vramework/core/initialize'
 
 export class VrameworkUWSServer {
   public app = uWS.App()
@@ -25,6 +26,8 @@ export class VrameworkUWSServer {
   }
 
   public async init() {
+    await initializeVrameworkCore(this.singletonServices.logger, this.vrameworkConfig)
+
     this.app.any('/*', async (res, req) => {
       try {
         await runRoute(

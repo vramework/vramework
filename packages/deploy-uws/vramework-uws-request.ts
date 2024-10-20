@@ -35,7 +35,7 @@ export class VrameworkUWSRequest extends VrameworkRequest {
 
   private readJson() {
     return new Promise((resolve, reject) => {
-      let buffer
+      let buffer: Buffer | undefined
       /* Register data cb */
       this.response.onData((ab, isLast) => {
         let chunk = Buffer.from(ab)

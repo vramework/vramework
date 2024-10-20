@@ -94,7 +94,9 @@ export const processFromAnywhereCors = async (
 ) => {
   const request = new VrameworkLambdaRequest(event)
   const response = new VrameworkLambdaResponse()
-  response.setHeader('Access-Control-Allow-Origin', event.headers.origin)
+  if (event.headers.origin) {
+    response.setHeader('Access-Control-Allow-Origin', event.headers.origin.toString())
+  }
   response.setHeader('Access-Control-Allow-Credentials', true)
   return await generalHandler(
     singletonServices,
