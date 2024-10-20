@@ -1,6 +1,6 @@
 {
   "name": "@vramework/services-local",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "types": "dist/index.d.ts",
@@ -13,7 +13,7 @@
     "test": "mocha"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.4.0"
+    "@vramework/core": "^0.4.1"
   },
   "dependencies": {
     "eventemitter3": "^5.0.1",
