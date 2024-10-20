@@ -8,7 +8,7 @@
   "scripts": {
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
-    "release": "npm run build && npm test && npm publish --access public",
+    "release": "npm run build && npm test",
     "ncu": "ncu",
     "test": "echo 'No tests'"
   },

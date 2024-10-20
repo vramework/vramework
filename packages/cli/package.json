@@ -10,7 +10,7 @@
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
     "ncu": "ncu",
-    "release": "npm run build && npm test && npm publish --access public",
+    "release": "npm run build && npm test",
     "test": "mocha"
   },
   "dependencies": {
