@@ -2,7 +2,7 @@ import { join } from 'path'
 
 import { loadSchema, loadSchemas } from './schema'
 import { VrameworkCLIConfig } from './types/core.types'
-import { Logger } from './services'
+import { Logger } from './services/logger'
 import { getRoutes } from './route-runner'
 
 /**

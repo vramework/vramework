@@ -4,7 +4,6 @@
     "composite": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": ".",
   },
   "exclude": ["node_modules", "dist", "*.spec.ts"],
   "references": []

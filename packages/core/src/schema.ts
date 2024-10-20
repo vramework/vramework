@@ -1,4 +1,4 @@
-import { Logger } from './services'
+import { Logger } from './services/logger'
 import Ajv, { ValidateFunction } from 'ajv'
 import addFormats from 'ajv-formats'
 import { InvalidParametersError } from './errors'

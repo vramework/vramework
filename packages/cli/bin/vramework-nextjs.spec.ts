@@ -5,12 +5,12 @@ import * as sinon from 'sinon';
 import { action } from './vramework-nextjs';
 
 // Mocking external dependencies
-import * as fsPromises from 'fs/promises';
+import fsPromises from 'fs/promises';
 import * as extractVrameworkInformation from '../src/extract-vramework-information'
 import * as getFileImportRelativePath from '../src/utils'
 import * as nextjsWrapperGenerator from '../src/nextjs-wrapper-generator'
 
-import * as getVrameworkCLIConfig from '@vramework/core/vramework-cli-config'
+import * as getVrameworkCLIConfig from '@vramework/core/vramework-cli-config.js'
 
 describe('action function - generateNextJsWrapper arguments', () => {
   let sandbox: sinon.SinonSandbox;

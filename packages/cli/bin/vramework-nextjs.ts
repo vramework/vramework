@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
+import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config.js'
 import * as promises from 'fs/promises'
 import path = require('path')
 import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator'

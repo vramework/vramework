@@ -9,7 +9,8 @@
     "dist"
   ],
   "exports": {
-    "./*": "./dist/*"
+    "./*": "./dist/*",
+    "./**/*": "./dist/**/*"
   },
   "typesVersions": {
     "*": {
@@ -21,7 +22,7 @@
   "type": "commonjs",
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf dist && tsc -b",
+    "build": "rm -rf dist && tsc -b tsconfig.build.json",
     "ncu": "ncu",
     "release": "npm run build && npm test",
     "test": "mocha"

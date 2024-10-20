@@ -1,5 +1,6 @@
 import { Logger, LogLevel } from '../services/logger'
-import { PermissionService, SessionService } from '../services'
+import { PermissionService } from '../services/permission-service'
+import { SessionService } from '../services/session-service'
 import { VrameworkRequest } from '../vramework-request'
 import { VrameworkResponse } from '../vramework-response'
 

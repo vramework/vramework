@@ -12,7 +12,7 @@ import { match } from 'path-to-regexp'
 import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from './vramework-request'
 import { VrameworkResponse } from './vramework-response'
-import { SessionService } from './services'
+import { SessionService } from './services/session-service'
 import { NotFoundError, NotImplementedError } from './errors'
 
 type ExtractRouteParams<S extends string> =
