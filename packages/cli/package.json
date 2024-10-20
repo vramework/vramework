@@ -13,6 +13,9 @@
     "release": "npm run build && npm test",
     "test": "mocha"
   },
+  "peerDependencies": {
+    "@vramework/core": "^0.4.1"
+  },
   "dependencies": {
     "commander": "^12",
     "glob": "^11.0.0",

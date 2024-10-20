@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "composite": true,
     "types": ["node", "mocha"],
     "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
     "declaration": true,
     "noImplicitAny": false,
     "skipLibCheck": true,

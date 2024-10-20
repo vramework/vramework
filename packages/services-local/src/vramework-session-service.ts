@@ -1,5 +1,5 @@
 import { JWTService, SessionService } from '@vramework/core/services'
-import { VrameworkRequest } from '../core/vramework-request'
+import { VrameworkRequest } from '@vramework/core/src/vramework-request'
 import { InvalidSessionError, MissingSessionError } from '@vramework/core/errors'
 
 export class VrameworkSessionService<UserSession>

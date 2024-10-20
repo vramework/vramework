@@ -2278,6 +2278,8 @@ __metadata:
     ts-json-schema-generator: "npm:^2.3.0"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.6"
+  peerDependencies:
+    "@vramework/core": ^0.4.1
   bin:
     vramework: bin/vramework.js
   languageName: unknown
