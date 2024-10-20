@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "composite": true,
+    "types": ["node", "mocha"],
     "module": "commonjs",
     "declaration": true,
     "noImplicitAny": false,
@@ -16,7 +17,6 @@
     "sourceMap": false,
     "allowJs": false,
     "strict": true,
-    "strictNullChecks": true,
-    "types": ["node"]
+    "strictNullChecks": true
   }
 }

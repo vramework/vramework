@@ -1849,6 +1849,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mocha@npm:^10.0.9":
+  version: 10.0.9
+  resolution: "@types/mocha@npm:10.0.9"
+  checksum: 10/aa34e61e6373c5a9e8f904302fc736c04d6757f079d8500689c589b610e8b8e28bdefc2da398569e6328c6b1e6dc5a59fb485211b2bacb465c2aad04d822c28c
+  languageName: node
+  linkType: hard
+
 "@types/next@npm:^9.0.0":
   version: 9.0.0
   resolution: "@types/next@npm:9.0.0"
@@ -1954,7 +1961,7 @@ __metadata:
   dependencies:
     "@types/chai-as-promised": "npm:^7"
     "@types/cookie": "npm:^0.6.0"
-    "@types/mocha": "npm:^10.0.8"
+    "@types/mocha": "npm:^10.0.9"
     "@types/node": "npm:^22.5.5"
     "@types/sinon": "npm:^17.0.3"
     "@types/uuid": "npm:^10.0.0"
