@@ -42,4 +42,4 @@ Fix: Using global space for schemas as it appears to not always return the same 
 
 ### Initial Release
 
-A package that contains vramework types and
+A package that contains vramework types

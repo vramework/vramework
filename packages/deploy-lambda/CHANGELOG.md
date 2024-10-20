@@ -1,10 +1,10 @@
-## 0.0.14 - 02.09.2022
-
 ## 0.4.2
 
 ### Patch Changes
 
 - 5a012d9: Fixing typedoc generation
+
+## 0.0.14 - 02.09.2022
 
 feat: log all routes, not just failed ones
 
