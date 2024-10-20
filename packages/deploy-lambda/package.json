@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-lambda",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "main": "lambda.js",

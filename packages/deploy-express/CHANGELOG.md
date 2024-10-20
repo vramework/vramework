@@ -1,5 +1,11 @@
 ## 0.0.9 - 01.09.2022
 
+## 0.4.2
+
+### Patch Changes
+
+- 5a012d9: Fixing typedoc generation
+
 fix: use error as a lookup via name
 
 ## 0.0.8 - 21.07.2022
