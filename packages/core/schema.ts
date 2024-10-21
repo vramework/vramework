@@ -14,7 +14,6 @@ const validators = new Map<string, ValidateFunction>()
 /**
  * Retrieves the global schemas map.
  * @returns A map of schemas.
- * @description This function retrieves the global schemas map, initializing it if it doesn't exist.
  */
 const getSchemas = () => {
   // @ts-ignore
@@ -29,7 +28,6 @@ const getSchemas = () => {
 /**
  * Loads schemas from the specified directory.
  * @param schemaDir - The directory to load schemas from.
- * @description This function attempts to load schemas from the specified directory. If it fails, it logs an error message.
  */
 export const loadSchemas = async (schemaDir: string) => {
   try {
@@ -45,7 +43,6 @@ export const loadSchemas = async (schemaDir: string) => {
  * Adds a schema to the global schemas map.
  * @param name - The name of the schema.
  * @param value - The schema value.
- * @description This function adds a schema to the global schemas map.
  */
 export const addSchema = (name: string, value: any) => {
   getSchemas().set(name, value)
@@ -55,7 +52,6 @@ export const addSchema = (name: string, value: any) => {
  * Loads a schema and compiles it into a validator.
  * @param schema - The name of the schema to load.
  * @param logger - A logger for logging information.
- * @description This function loads a schema by name, compiles it into a validator, and stores the validator in the validators map.
  */
 export const loadSchema = (schema: string, logger: Logger): void => {
   if (!validators.has(schema)) {
@@ -76,7 +72,6 @@ export const loadSchema = (schema: string, logger: Logger): void => {
  * @param schema - The name of the schema to validate against.
  * @param json - The JSON data to validate.
  * @throws {InvalidParametersError} If the JSON data is invalid.
- * @description This function validates JSON data against the specified schema. If the data is invalid, it throws an InvalidParametersError.
  */
 export const validateJson = (schema: string, json: unknown): void => {
   const validator = validators.get(schema)

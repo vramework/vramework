@@ -10,7 +10,6 @@ import { getRoutes } from './route-runner'
  * @param logger - A logger for logging information.
  * @param config - The configuration object for Vramework.
  * @returns A promise that resolves to an object containing the loaded API routes.
- * @description This function initializes the Vramework core by loading schemas, loading routes, logging the loaded route files, verifying the routes, and returning the loaded API routes.
  */
 export const initializeVrameworkCore = async (
   logger: Logger,

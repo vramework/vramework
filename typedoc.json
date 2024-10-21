@@ -11,6 +11,8 @@
   "out": ".typedocs",
   "compilerOptions": {
     "skipLibCheck": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "noUnusedParameters": false,
+  },
+  "exclude": ["**/node_modules/**/*", "**/dist/**/*", "**/*.spec.ts", "**/*.d.ts"]
 }

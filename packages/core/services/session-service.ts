@@ -11,7 +11,6 @@ export interface SessionService<UserSession = CoreUserSession> {
    * @param credentialsRequired - A flag indicating whether credentials are required.
    * @param vrameworkRequest - The request object.
    * @returns A promise that resolves to the user session or undefined.
-   * @description This method retrieves the user session based on the provided request and credentials requirement.
    */
   getUserSession: (
     credentialsRequired: boolean,

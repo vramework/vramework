@@ -11,7 +11,6 @@ const importFile = async (path: string) => {
  * Verifies that there are no duplicate routes in the provided array of routes.
  * @param routes - An array of CoreAPIRoute objects to verify.
  * @throws {Error} If a duplicate route is found.
- * @description This function checks for duplicate routes in the provided array of routes. It throws an error if any duplicate routes are found.
  */
 export const verifyRoutes = (
   routes: Array<CoreAPIRoute<unknown, unknown, any>>
@@ -33,10 +32,9 @@ export const verifyRoutes = (
 
 /**
  * Recursively loads all API file paths from the specified directory.
- * @param dir - The directory to load API file paths from.
- * @param filesWithRoutes - An array to store the file paths.
+ * @param relativeRootDir - The directory to load API file paths from.
+ * @param routeDirectories - An array of directories within the root directory to look in.
  * @returns A promise that resolves to an array of file paths containing API routes.
- * @description This function recursively traverses the specified directory, loading all TypeScript file paths that contain API routes.
  */
 export const loadRoutes = async (
   relativeRootDir: string,
@@ -60,7 +58,6 @@ export const loadRoutes = async (
  * @param apiRoutes - An array to store the loaded API routes.
  * @param filesWithRoutes - An array to store the file paths that contain routes.
  * @returns A promise that resolves to an object containing the file paths with routes.
- * @description This function recursively traverses the specified directory, loading all TypeScript file paths that contain API routes. It imports the routes from each file and aggregates them into the provided arrays.
  */
 export const loadRoutesFromDirectory = async (
   relativeRootDir: string,

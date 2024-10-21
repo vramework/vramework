@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": ".",
     "rootDir": ".",
-    "paths": {}
+    "paths": {},
+    "composite": true
   },
   "exclude": ["node_modules", "dist", "*.spec.ts"],
   "references": []

@@ -4,7 +4,6 @@ import { VrameworkQuery } from './types/core.types'
 /**
  * Abstract class representing a vramework request.
  * @template In - The type of the request body.
- * @description This class provides an abstract interface for handling various aspects of an HTTP request, such as body, headers, cookies, parameters, query, and IP address.
  */
 export abstract class VrameworkRequest<In = any> {
   private params: Partial<Record<string, string | string[]>> = {}
@@ -29,14 +28,12 @@ export abstract class VrameworkRequest<In = any> {
    * Retrieves the value of a specific header.
    * @param headerName - The name of the header to retrieve.
    * @returns The value of the header, or undefined if the header is not found.
-   * @description This method should be implemented by subclasses to provide concrete behavior for retrieving header values.
    */
   public abstract getHeader(headerName: string): string | undefined
 
   /**
    * Retrieves the cookies from the request.
    * @returns An object containing the cookies.
-   * @description This method parses the 'cookie' header and returns an object containing the cookies.
    */
   public getCookies(): Partial<Record<string, string>> {
     const cookieHeader = this.getHeader('cookie')
@@ -67,7 +64,6 @@ export abstract class VrameworkRequest<In = any> {
   /**
    * Retrieves the query parameters from the request.
    * @returns An object containing the query parameters.
-   * @description This method should be overridden by subclasses to provide concrete behavior for retrieving query parameters.
    */
   public getQuery(): VrameworkQuery {
     return {}
@@ -85,7 +81,6 @@ export abstract class VrameworkRequest<In = any> {
   /**
    * Retrieves the combined data from the request, including parameters, query, and body.
    * @returns A promise that resolves to an object containing the combined data.
-   * @description This method combines the request parameters, query parameters, and body into a single object.
    */
   public async getData(): Promise<In> {
     return {
