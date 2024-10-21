@@ -1,5 +1,13 @@
 ## 0.0.9 - 01.09.2022
 
+## 0.4.4
+
+### Patch Changes
+
+- 94f8a74: fix: finalizing cjs and esm packages
+- Updated dependencies [94f8a74]
+  - @vramework/core@0.4.3
+
 ## 0.4.3
 
 ### Patch Changes

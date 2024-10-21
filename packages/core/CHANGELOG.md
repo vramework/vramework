@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.4.3
+
+### Patch Changes
+
+- 94f8a74: fix: finalizing cjs and esm packages
+
 ## 0.4.2
 
 ### Patch Changes

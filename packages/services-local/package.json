@@ -1,6 +1,6 @@
 {
   "name": "@vramework/services-local",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "main": "dist/cjs/index.js",
@@ -30,7 +30,7 @@
     }
   },
   "peerDependencies": {
-    "@vramework/core": "^0.4.2"
+    "@vramework/core": "^0.4.3"
   },
   "dependencies": {
     "eventemitter3": "^5.0.1",
