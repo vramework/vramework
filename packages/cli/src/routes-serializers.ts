@@ -1,4 +1,4 @@
-import { RoutesMeta } from '@vramework/core/types/routes.types.d.ts'
+import type { RoutesMeta } from '@vramework/core/types/routes.types.d.ts'
 import { ImportMap } from './inspect-routes.js'
 import { getFileImportRelativePath } from './utils.js'
 

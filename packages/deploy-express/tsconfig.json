@@ -1,13 +1,23 @@
 {
-  "extends": "../tsconfig.build.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "noEmit": true
+    "rootDir": ".",
+    "composite": true,
+    "module": "NodeNext",
+    "outDir": "dist/esm",
+    "target": "esnext"
   },
-  "files": [],
-  "include": ["src/**/*.ts"],
+  "include": [
+    "bin/**/*.ts",
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "bin/dist"
+  ],
   "references": [
     {
-      "path": "../core"
+      "path": "../core/tsconfig.json"
     }
   ]
 }

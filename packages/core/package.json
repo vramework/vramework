@@ -3,24 +3,31 @@
   "version": "0.4.1",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
   "type": "module",
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf dist && tsc -b tsconfig.build.json",
+    "build:mjs": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
+    "build:cjs": "tsc -b tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "build": "rm -rf dist && yarn build:mjs && yarn build:cjs",
     "ncu": "ncu",
     "release": "npm run build && npm test",
     "test": "mocha"
   },
   "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
     "./*": {
-      "import": "./dist/*.js",
-      "require": "./dist/*.js"
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.js"
     },
     "./*.d.ts": {
-      "import": "./dist/*.d.ts",
-      "require": "./dist/*.d.ts"
+      "import": "./dist/esm/*.d.ts",
+      "require": "./dist/cjs/*.d.ts"
     }
   },
   "dependencies": {
@@ -28,18 +35,18 @@
     "@types/uuid": "^10.0.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
-    "cookie": "^1.0.0",
+    "cookie": "^1.0.1",
     "eventemitter3": "^5.0.1",
-    "path-to-regexp": "^8.1.0",
+    "path-to-regexp": "^8.2.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/chai-as-promised": "^7",
-    "@types/mocha": "^10.0.8",
-    "@types/node": "^22.5.5",
+    "@types/chai-as-promised": "^8",
+    "@types/mocha": "^10.0.9",
+    "@types/node": "^22.7.7",
     "@types/sinon": "^17.0.3",
-    "chai": "^4",
-    "chai-as-promised": "^7.1.2",
+    "chai": "^5",
+    "chai-as-promised": "^8.0.0",
     "mocha": "^10.7.3",
     "sinon": "^19.0.2",
     "ts-node": "^10.9.2",

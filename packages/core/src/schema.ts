@@ -1,11 +1,13 @@
-import Ajv from 'ajv'
+import * as AjvImp from 'ajv'
+const Ajv = 'default' in AjvImp ? AjvImp.default : AjvImp as any
+
 import addFormats from 'ajv-formats'
 import { ValidateFunction } from 'ajv'
 
 import { Logger } from './services/logger.js'
 import { InvalidParametersError } from './errors.js'
 
-const ajv = new Ajv.default({
+const ajv = new Ajv({
   removeAdditional: false,
   coerceTypes: false,
 })

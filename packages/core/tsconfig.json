@@ -1,10 +1,13 @@
 {
-  "extends": "../tsconfig.build.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
     "rootDir": "./src",
-    "composite": true
+    "composite": true,
+    "module": "NodeNext",
+    "outDir": "dist/esm",
+    "target": "esnext",
+    "moduleResolution": "NodeNext",
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
+  "references": []
 }

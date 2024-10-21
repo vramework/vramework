@@ -1,6 +1,11 @@
 #!/usr/bin/env node
-require('ts-node').register({
+import * as tsNode from 'ts-node'
+tsNode.register({
   transpileOnly: true,
+  compilerOptions: {
+    module: 'node16',
+    target: 'esnext',
+  },
 })
 
 import { Command } from 'commander'

@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "dist/cjs",
+    "target": "es2015",
+    "moduleResolution": "node",
+    "paths": {
+      "@vramework/core/*": [
+        "../core/dist/cjs/*" 
+      ]
+    }
+  },
+  "references": [    {
+    "path": "../core/tsconfig.cjs.json"
+  }],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

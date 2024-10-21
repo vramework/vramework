@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
 import * as promises from 'fs/promises'
-import path = require('path')
+import * as path from 'path'
 import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator.js'
 import {
   getFileImportRelativePath,

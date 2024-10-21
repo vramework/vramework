@@ -7,28 +7,30 @@
   "type": "module",
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf dist && tsc -b tsconfig.build.json",
+    "build:esm": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
+    "build:cjs": "tsc -b tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
     "release": "npm run build && npm test",
     "ncu": "ncu",
     "test": "echo 'No tests'"
   },
   "exports": {
     "./*": {
-      "import": "./dist/*.js",
-      "require": "./dist/*.js"
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.js"
     },
     "./*.d.ts": {
-      "import": "./dist/*.d.ts",
-      "require": "./dist/*.d.ts"
+      "import": "./dist/esm/*.d.ts",
+      "require": "./dist/cjs/*.d.ts"
     }
   },
   "peerDependencies": {
     "@vramework/core": "^0.4.1"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.624.0",
-    "@aws-sdk/client-secrets-manager": "3.624.0",
-    "@aws-sdk/s3-request-presigner": "3.624.0",
+    "@aws-sdk/client-s3": "3.675.0",
+    "@aws-sdk/client-secrets-manager": "3.675.0",
+    "@aws-sdk/s3-request-presigner": "3.675.0",
     "aws-cloudfront-sign": "^3.0.2"
   },
   "devDependencies": {

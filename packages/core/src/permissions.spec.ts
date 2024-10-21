@@ -1,8 +1,8 @@
-import sinon from 'sinon'
-import chai from 'chai'
+import * as sinon from 'sinon'
+import * as chai from 'chai'
 import { expect } from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-chai.use(chaiAsPromised)
+import * as chaiAsPromised from 'chai-as-promised'
+chai.use('default' in chaiAsPromised ? chaiAsPromised.default : chaiAsPromised as any)
 
 import { verifyPermissions } from './permissions.js'
 import { NotPermissionedError } from './errors.js'

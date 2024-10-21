@@ -1,8 +1,8 @@
-import sinon from 'sinon'
-import chai from 'chai'
+import * as sinon from 'sinon'
+import * as chai from 'chai'
 import { expect } from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-chai.use(chaiAsPromised)
+import * as chaiAsPromised from 'chai-as-promised'
+chai.use('default' in chaiAsPromised ? chaiAsPromised.default : chaiAsPromised as any)
 
 import { NotFoundError, NotImplementedError } from './errors.js'
 import { VrameworkRequest } from './vramework-request.js'

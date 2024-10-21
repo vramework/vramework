@@ -1,5 +1,5 @@
 import { VrameworkRequest } from '@vramework/core/vramework-request'
-import cookie from 'cookie'
+import * as cookie from 'cookie'
 import { FastifyRequest } from 'fastify'
 
 export class VrameworkFastifyRequest extends VrameworkRequest {

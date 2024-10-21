@@ -1,10 +1,14 @@
-import express from 'express'
-import core from 'express-serve-static-core'
+import * as expressImp from 'express'
+const express = 'default' in expressImp ? (expressImp.default as any) : expressImp
+import * as core from 'express-serve-static-core'
 import { Server } from 'http'
 import { json, text } from 'body-parser'
-import cookieParser from 'cookie-parser'
-import bodyParser from 'body-parser'
-import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
+import * as cookieParserImp from 'cookie-parser'
+const cookieParser = 'default' in cookieParserImp ? (cookieParserImp.default as any) : cookieParserImp
+import * as bodyParser from 'body-parser'
+import * as corsImp from 'cors'
+const cors = 'default' in corsImp ? (corsImp.default as any) : corsImp
+import { CorsOptions, CorsOptionsDelegate } from 'cors'
 
 import { VrameworkExpressRequest } from './vramework-express-request.js'
 import { VrameworkExpressResponse } from './vramework-express-response.js'

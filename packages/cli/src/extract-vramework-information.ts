@@ -1,7 +1,7 @@
-import path = require('path')
+import * as path from 'path'
 import { inspectRoutes } from './inspect-routes.js'
 import { glob } from 'glob'
-import { VrameworkCLIConfig } from '@vramework/core/types/core.types'
+import type { VrameworkCLIConfig } from '@vramework/core/types/core.types'
 
 export const extractVrameworkInformation = async ({
   rootDir,

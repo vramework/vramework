@@ -1,4 +1,4 @@
-import uWS from 'uWebSockets.js'
+import * as uWS from 'uWebSockets.js'
 
 import {
   CoreConfig,
