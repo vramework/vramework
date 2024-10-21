@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.4.4
+
+### Patch Changes
+
+- 94f8a74: fix: finalizing cjs and esm packages
+
 ## 0.4.3
 
 ### Patch Changes
