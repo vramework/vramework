@@ -3,14 +3,13 @@
   "version": "0.4.2",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
-  "types": "dist/cjs/index.d.ts",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "type": "module",
   "scripts": {
     "tsc": "tsc",
     "build:mjs": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
-    "build:cjs": "tsc -b tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "build:cjs": "tsc -b tsconfig.cjs.json && cp package.json dist/cjs/package.json && sed -i '' -e 's/\"type\": \"module\"/\"type\": \"commonjs\"/' dist/cjs/package.json || sed -i 's/\"type\": \"module\"/\"type\": \"commonjs\"/' dist/cjs/package.json",
     "build": "rm -rf dist && yarn build:mjs && yarn build:cjs",
     "ncu": "ncu",
     "release": "npm run build && npm test",
@@ -26,8 +25,8 @@
       "require": "./dist/cjs/*.js"
     },
     "./*.d.ts": {
-      "import": "./dist/esm/*.d.ts",
-      "require": "./dist/cjs/*.d.ts"
+      "import": "./dist/types/*.d.ts",
+      "require": "./dist/types/*.d.ts"
     }
   },
   "dependencies": {

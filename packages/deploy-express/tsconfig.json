@@ -1,11 +1,12 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "composite": true,
+    "rootDir": "./src",
     "module": "NodeNext",
     "outDir": "dist/esm",
-    "target": "esnext"
+    "target": "esnext",
+    "declaration": true
+    
   },
   "include": [
     "bin/**/*.ts",

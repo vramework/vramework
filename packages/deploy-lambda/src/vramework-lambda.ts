@@ -48,11 +48,14 @@ const generalHandler = async (
   response: VrameworkLambdaResponse
 ): Promise<APIGatewayProxyResult> => {
   if (request.getMethod() === 'options') {
-    response.setHeaders({
-      'Access-Control-Allow-Headers':
-        'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-      'Access-Control-Allow-Methods': 'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT',
-    })
+    response.setHeader(
+      'Access-Control-Allow-Headers',
+      'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'
+    )
+    response.setHeader(
+      'Access-Control-Allow-Methods',
+      'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT',
+    )
     response.setStatus(200)
     response.setJson({})
     return response.getLambdaResponse()

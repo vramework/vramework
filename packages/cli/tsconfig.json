@@ -4,7 +4,8 @@
     "rootDir": ".",
     "module": "NodeNext",
     "outDir": "dist/esm",
-    "target": "esnext"
+    "target": "esnext",
+    "declaration": true
   },
   "include": [
     "bin/**/*.ts",

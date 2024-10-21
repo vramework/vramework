@@ -4,23 +4,25 @@
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
-    "vramework": "dist/bin/vramework.js"
+    "vramework": "dist/cjs/bin/vramework.js"
   },
   "type": "module",
+  "main": "dist/cjs/bin/vramework.js",
+  "module": "dist/esm/bin/vramework.js",
   "exports": {
     "./*": {
       "import": "./dist/esm/*.js",
       "require": "./dist/cjs/*.js"
     },
     "./*.d.ts": {
-      "import": "./dist/esm/*.d.ts",
-      "require": "./dist/cjs/*.d.ts"
+      "import": "./dist/types/*.d.ts",
+      "require": "./dist/types/*.d.ts"
     }
   },
   "scripts": {
     "tsc": "tsc",
-    "build:esm": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
-    "build:cjs": "tsc -b tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
+    "build:esm": "tsc -b && cp package.json dist/esm/package.json",
+    "build:cjs": "tsc -b tsconfig.cjs.json && cp package.json dist/cjs/package.json && sed -i '' -e 's/\"type\": \"module\"/\"type\": \"commonjs\"/' dist/cjs/package.json || sed -i 's/\"type\": \"module\"/\"type\": \"commonjs\"/' dist/cjs/package.json",
     "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
     "ncu": "ncu",
     "release": "yarn build && npm test",

@@ -4,6 +4,7 @@
     "module": "commonjs",
     "outDir": "dist/cjs",
     "target": "es2015",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "composite": true
   }
 }
