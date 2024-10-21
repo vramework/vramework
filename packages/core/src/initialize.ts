@@ -1,9 +1,9 @@
 import { join } from 'path'
 
-import { loadSchema, loadSchemas } from './schema'
-import { VrameworkCLIConfig } from './types/core.types'
-import { Logger } from './services'
-import { getRoutes } from './route-runner'
+import { loadSchema, loadSchemas } from './schema.js'
+import { VrameworkCLIConfig } from './types/core.types.js'
+import { Logger } from './services/index.js'
+import { getRoutes } from './route-runner.js'
 
 /**
  * Initializes the Vramework core.

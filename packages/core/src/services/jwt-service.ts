@@ -1,4 +1,4 @@
-import { CoreUserSession } from '../types/core.types'
+import { CoreUserSession } from '../types/core.types.js'
 
 /**
  * Interface for handling JSON Web Tokens (JWT).

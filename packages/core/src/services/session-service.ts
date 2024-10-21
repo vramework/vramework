@@ -1,5 +1,5 @@
-import { CoreUserSession } from '../types/core.types'
-import { VrameworkRequest } from '../vramework-request'
+import { CoreUserSession } from '../types/core.types.js'
+import { VrameworkRequest } from '../vramework-request.js'
 
 /**
  * Interface for handling user sessions.

@@ -5,8 +5,8 @@ import {
   serializeRouteMeta,
   serializeRoutes,
   serializeTypedRouteRunner,
-} from '../src/routes-serializers'
-import { extractVrameworkInformation } from '../src/extract-vramework-information'
+} from '../src/routes-serializers.js'
+import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
   let cliConfig = await getVrameworkCLIConfig(configFile)

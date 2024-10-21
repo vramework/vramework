@@ -6,6 +6,7 @@
   "bin": {
     "vramework": "bin/vramework.js"
   },
+  "type": "module",
   "scripts": {
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",

@@ -1,5 +1,5 @@
 import path = require('path')
-import { inspectRoutes } from './inspect-routes'
+import { inspectRoutes } from './inspect-routes.js'
 import { glob } from 'glob'
 import { VrameworkCLIConfig } from '@vramework/core/types/core.types'
 

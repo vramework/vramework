@@ -1,5 +1,5 @@
-import { EError } from '../errors'
-import { CoreUserSession, CoreServices } from './core.types'
+import { EError } from '../errors.js'
+import { CoreUserSession, CoreServices } from './core.types.js'
 
 export type CoreAPIFunction<
   In,

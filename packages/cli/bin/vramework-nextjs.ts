@@ -2,11 +2,11 @@ import { Command } from 'commander'
 import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
 import * as promises from 'fs/promises'
 import path = require('path')
-import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator'
+import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator.js'
 import {
   getFileImportRelativePath,
   getVrameworkFilesAndMethods,
-} from '../src/utils'
+} from '../src/utils.js'
 
 interface VrameworkNextJSCliOptions {
   configFile?: string

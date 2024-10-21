@@ -3,8 +3,9 @@
   "compilerOptions": {
     "outDir": ".",
     "rootDir": ".",
-    "paths": {}
   },
-  "exclude": ["node_modules", "dist", "*.spec.ts"],
-  "references": []
+  "include": ["bin/**/*.ts", "src/**/*.ts"],
+  "references": [    {
+    "path": "../core/tsconfig.build.json"
+  }]
 }

@@ -3,11 +3,9 @@
   "compilerOptions": {
     "outDir": ".",
     "rootDir": ".",
-    "paths": {
-      "@vramework/core": ["../core"]
-    }
   },
-  "exclude": ["node_modules", "dist", "*.spec.ts"],
+  "exclude": ["node_modules", "dist"],
+  "include": ["../core/dist/**/*"],
   "references": [
     {
       "path": "../core/tsconfig.build.json"

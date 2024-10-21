@@ -1,13 +1,15 @@
-import { Logger } from './services'
-import Ajv, { ValidateFunction } from 'ajv'
+import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
-import { InvalidParametersError } from './errors'
+import { ValidateFunction } from 'ajv'
 
-const ajv = new Ajv({
+import { Logger } from './services/logger.js'
+import { InvalidParametersError } from './errors.js'
+
+const ajv = new Ajv.default({
   removeAdditional: false,
   coerceTypes: false,
 })
-addFormats(ajv as any)
+addFormats.default(ajv as any)
 
 const validators = new Map<string, ValidateFunction>()
 

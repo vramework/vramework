@@ -1,5 +1,5 @@
-import { CoreAPIRoute } from '../types/routes.types'
-import { CoreUserSession } from '../types/core.types'
+import { CoreAPIRoute } from '../types/routes.types.js'
+import { CoreUserSession } from '../types/core.types.js'
 
 /**
  * Interface for handling permission verification.

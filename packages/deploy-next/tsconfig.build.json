@@ -5,6 +5,7 @@
     "rootDir": ".",
     "paths": {}
   },
+  "include": ["../core/dist/**/*"],
   "exclude": ["node_modules", "dist", "*.spec.ts"],
   "references": [
     {

@@ -1,19 +1,19 @@
-import * as sinon from 'sinon'
-import * as chai from 'chai'
+import sinon from 'sinon'
+import chai from 'chai'
 import { expect } from 'chai'
-import * as chaiAsPromised from 'chai-as-promised'
+import chaiAsPromised from 'chai-as-promised'
 chai.use(chaiAsPromised)
 
-import { NotFoundError, NotImplementedError } from './errors'
-import { VrameworkRequest } from './vramework-request'
-import { VrameworkResponse } from './vramework-response'
-import { JSONValue } from './types/core.types'
+import { NotFoundError, NotImplementedError } from './errors.js'
+import { VrameworkRequest } from './vramework-request.js'
+import { VrameworkResponse } from './vramework-response.js'
+import { JSONValue } from './types/core.types.js'
 import {
   getUserSession,
   runRoute,
   clearRoutes,
   addCoreRoute,
-} from './route-runner'
+} from './route-runner.js'
 
 class VrameworkTestRequest extends VrameworkRequest {
   public getHeader(_headerName: string): string | undefined {

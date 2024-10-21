@@ -4,10 +4,9 @@
     "types": ["node", "mocha"]
   },
   "files": [],
-  "include": [],
   "references": [
     {
-      "path": "./tsconfig.build.json"
+      "path": "../core"
     }
   ]
 }

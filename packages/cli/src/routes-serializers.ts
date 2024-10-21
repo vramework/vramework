@@ -1,6 +1,6 @@
-import { RoutesMeta } from '@vramework/core/types/routes.types'
-import { ImportMap } from './inspect-routes'
-import { getFileImportRelativePath } from './utils'
+import { RoutesMeta } from '@vramework/core/types/routes.types.d.ts'
+import { ImportMap } from './inspect-routes.js'
+import { getFileImportRelativePath } from './utils.js'
 
 export const serializeRoutes = (
   outputPath: string,

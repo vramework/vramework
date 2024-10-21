@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { generateSchemas } from '../src/schema-generator'
+import { generateSchemas } from '../src/schema-generator.js'
 
 import { join } from 'path'
 import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'

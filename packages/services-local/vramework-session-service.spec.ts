@@ -4,11 +4,12 @@ import { expect } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 chai.use(chaiAsPromised)
 
-import { VrameworkSessionService } from './vramework-session-service'
 import {
   MissingSessionError,
   InvalidSessionError,
 } from '@vramework/core/errors'
+
+import { VrameworkSessionService } from './vramework-session-service.js'
 
 describe('VrameworkSessionService', () => {
   let sessionServiceOptions: any

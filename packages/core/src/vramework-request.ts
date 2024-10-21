@@ -1,5 +1,5 @@
 import { parse as parseCookie } from 'cookie'
-import { VrameworkQuery } from './types/core.types'
+import { VrameworkQuery } from './types/core.types.js'
 
 /**
  * Abstract class representing a vramework request.

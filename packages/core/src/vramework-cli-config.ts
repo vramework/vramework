@@ -1,6 +1,6 @@
 import { join, dirname, resolve } from 'path'
 import { readdir } from 'fs/promises'
-import { VrameworkCLIConfig } from './types/core.types'
+import { VrameworkCLIConfig } from './types/core.types.js'
 
 export const getVrameworkCLIConfig = async (
   configFile: string | undefined = undefined,

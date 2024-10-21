@@ -15,20 +15,9 @@
     "allowJs": false,
     "skipLibCheck": false,
     "paths": {
-      "@vramework/cli": ["./packages/cli"],
-      "@vramework/cli/*": ["./packages/cli/*"],
       "@vramework/core": ["./packages/core"],
       "@vramework/core/*": ["./packages/core/*"],
-      "@vramework/deploy-express": ["./packages/deploy-express"],
-      "@vramework/deploy-express/*": ["./packages/deploy-express/*"],
-      "@vramework/deploy-lambda": ["./packages/deploy-lambda"],
-      "@vramework/deploy-lambda/*": ["./packages/deploy-lambda/*"],
-      "@vramework/services-aws": ["./packages/services-aws"],
-      "@vramework/services-aws/*": ["./packages/services-aws/*"],
-      "@vramework/services-local": ["./packages/services-local"],
-      "@vramework/services-local/*": ["./packages/services-local/*"]
     }
   },
-  "include": ["packages/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts"],
 }

@@ -5,10 +5,10 @@
     "esModuleInterop": true
   },
   "files": [],
-  "include": [],
+  "include": ["src/**/*.ts"],
   "references": [
     {
-      "path": "./tsconfig.build.json"
+      "path": "../core"
     }
   ]
 }

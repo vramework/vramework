@@ -7,7 +7,7 @@
   "include": [],
   "references": [
     {
-      "path": "./tsconfig.build.json"
+      "path": "../core"
     }
   ]
 }

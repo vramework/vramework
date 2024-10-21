@@ -1,11 +1,11 @@
-import * as sinon from 'sinon'
-import * as chai from 'chai'
+import sinon from 'sinon'
+import chai from 'chai'
 import { expect } from 'chai'
-import * as chaiAsPromised from 'chai-as-promised'
+import chaiAsPromised from 'chai-as-promised'
 chai.use(chaiAsPromised)
 
-import { verifyPermissions } from './permissions'
-import { NotPermissionedError } from './errors'
+import { verifyPermissions } from './permissions.js'
+import { NotPermissionedError } from './errors.js'
 
 describe('verifyPermissions', () => {
   let services: any, data: any, session: any

@@ -1,10 +1,10 @@
 {
   "extends": "../tsconfig.build.json",
   "files": [],
-  "include": [],
+  "include": ["bin/**/*.ts", "src/**/*.ts", "../core/dist/**/*"],
   "references": [
     {
-      "path": "./tsconfig.build.json"
+      "path": "../core"
     }
   ]
 }

@@ -5,12 +5,23 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
+  "type": "module",
   "scripts": {
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b tsconfig.build.json",
     "ncu": "ncu",
     "release": "npm run build && npm test",
     "test": "mocha"
+  },
+  "exports": {
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.js"
+    },
+    "./*.d.ts": {
+      "import": "./dist/*.d.ts",
+      "require": "./dist/*.d.ts"
+    }
   },
   "dependencies": {
     "@types/cookie": "^0.6.0",

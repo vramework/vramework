@@ -8,7 +8,7 @@ import {
   MissingSessionError,
   InvalidSessionError,
   MaxComputeTimeReachedError,
-} from './errors'
+} from './errors.js'
 
 /**
  * Interface for error details.

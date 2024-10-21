@@ -1,19 +1,19 @@
-import { getErrorResponse } from './error-handler'
-import { verifyPermissions } from './permissions'
-import { CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './types/routes.types'
-import { loadSchema, validateJson } from './schema'
+import { getErrorResponse } from './error-handler.js'
+import { verifyPermissions } from './permissions.js'
+import { CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './types/routes.types.js'
+import { loadSchema, validateJson } from './schema.js'
 import {
   CoreServices,
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
-} from './types/core.types'
+} from './types/core.types.js'
 import { match } from 'path-to-regexp'
 import { v4 as uuid } from 'uuid'
-import { VrameworkRequest } from './vramework-request'
-import { VrameworkResponse } from './vramework-response'
-import { SessionService } from './services'
-import { NotFoundError, NotImplementedError } from './errors'
+import { VrameworkRequest } from './vramework-request.js'
+import { VrameworkResponse } from './vramework-response.js'
+import { SessionService } from './services/index.js'
+import { NotFoundError, NotImplementedError } from './errors.js'
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`

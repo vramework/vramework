@@ -1,5 +1,5 @@
 import { relative, dirname } from 'path'
-import { extractVrameworkInformation } from './extract-vramework-information'
+import { extractVrameworkInformation } from './extract-vramework-information.js'
 import { VrameworkCLIConfig } from '@vramework/core/types/core.types'
 
 export const getFileImportRelativePath = (
