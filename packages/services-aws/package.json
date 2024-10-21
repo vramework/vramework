@@ -1,6 +1,6 @@
 {
   "name": "@vramework/services-aws",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "author": "yasser.fadl@gmail.com",
   "license": "UNLICENSED",
   "main": "dist",
@@ -25,7 +25,7 @@
     }
   },
   "peerDependencies": {
-    "@vramework/core": "^0.4.1"
+    "@vramework/core": "^0.4.2"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.675.0",

@@ -1,5 +1,12 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.4.2
+
+### Patch Changes
+
+- 28f62ea: refactor: using cjs and esm builds!
+- 14783ee: fix: including all types as dependencies to avoid users needing to install them
+
 feat: adding a maximum compute time for better error handling on lambda timeouts
 
 ## 0.0.17 - 24.08.2022

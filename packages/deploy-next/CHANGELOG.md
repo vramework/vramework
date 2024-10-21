@@ -1,6 +1,6 @@
-# @vramework/deploy-uws
+# @vramework/deploy-next
 
-## 0.4.3
+## 0.4.2
 
 ### Patch Changes
 
@@ -9,9 +9,3 @@
 - Updated dependencies [28f62ea]
 - Updated dependencies [14783ee]
   - @vramework/core@0.4.2
-
-## 0.4.2
-
-### Patch Changes
-
-- 5a012d9: Fixing typedoc generation
