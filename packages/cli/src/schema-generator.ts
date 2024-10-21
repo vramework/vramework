@@ -44,7 +44,7 @@ import { addSchema } from '@vramework/core'
       schemas
         .map(
           (schema) => `
-import ${schema} from './schemas/${schema}.schema.json'
+import * as ${schema} from './schemas/${schema}.schema.json'
 addSchema('${schema}', ${schema})`
         )
         .join('\n'),
