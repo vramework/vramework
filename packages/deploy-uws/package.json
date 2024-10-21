@@ -16,12 +16,12 @@
     "@vramework/core": "^0.4.1"
   },
   "dependencies": {
+    "@types/qs": "^6",
     "qs": "^6.13.0",
     "query-string": "^9.1.0",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.48.0"
   },
   "devDependencies": {
-    "@types/qs": "^6",
     "typescript": "^5.4.2"
   }
 }

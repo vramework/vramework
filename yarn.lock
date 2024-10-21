@@ -1977,13 +1977,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:^8.10.136":
-  version: 8.10.145
-  resolution: "@types/aws-lambda@npm:8.10.145"
-  checksum: 10/e83bfa8901f5f2a8b838baa0b280c7ea6f4e4c9317cab508d45e51bc34999fb63adf95b382f388ad8f8163773ad1dd08130dea655aab7b4961ed6d048f0bc8f9
-  languageName: node
-  linkType: hard
-
 "@types/body-parser@npm:*":
   version: 1.19.5
   resolution: "@types/body-parser@npm:1.19.5"
@@ -2347,9 +2340,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/deploy-lambda@workspace:packages/deploy-lambda"
   dependencies:
-    "@types/aws-lambda": "npm:^8.10.136"
     typescript: "npm:^5.4.2"
   peerDependencies:
+    "@types/aws-lambda": ^8.10.136
     "@vramework/core": ^0.4.1
     aws-lambda: ^1.0.7
     cookie: ^1.0.0
