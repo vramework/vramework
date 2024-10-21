@@ -1,5 +1,7 @@
 import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { SerializeOptions } from 'cookie'
+
+// @ts-ignore
 import { cookies } from 'next/headers'
 
 export class VrameworkActionNextResponse extends VrameworkResponse {

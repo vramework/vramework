@@ -1,7 +1,5 @@
 import uWS from 'uWebSockets.js'
 
-import { VrameworkUWSRequest } from './vramework-uws-request'
-import { VrameworkUWSResponse } from './vramework-uws-response'
 import {
   CoreConfig,
   CoreSingletonServices,
@@ -10,6 +8,9 @@ import {
 } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
+
+import { VrameworkUWSRequest } from './vramework-uws-request.js'
+import { VrameworkUWSResponse } from './vramework-uws-response.js'
 
 export class VrameworkUWSServer {
   public app = uWS.App()

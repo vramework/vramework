@@ -6,8 +6,8 @@ import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
 
-import { VrameworkExpressRequest } from './vramework-express-request'
-import { VrameworkExpressResponse } from './vramework-express-response'
+import { VrameworkExpressRequest } from './vramework-express-request.js'
+import { VrameworkExpressResponse } from './vramework-express-response.js'
 import {
   VrameworkCLIConfig,
   CoreConfig,

@@ -3,13 +3,13 @@ import { IncomingMessage, ServerResponse } from 'http'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { EventEmitter } from 'eventemitter3'
 
-import { VrameworkSSRNextRequest } from './vramework-ssr-next-request'
-import { VrameworkSSRNextResponse } from './vramework-ssr-next-response'
-import { VrameworkAPINextRequest } from './vramework-api-next-request'
-import { VrameworkAPINextResponse } from './vramework-api-next-response'
-import { VrameworkActionNextRequest } from './vramework-action-next-request'
-import { VrameworkActionNextResponse } from './vramework-action-next-response'
-import { VrameworkActionStaticNextRequest } from './vramework-action-static-next-request'
+import { VrameworkSSRNextRequest } from './vramework-ssr-next-request.js'
+import { VrameworkSSRNextResponse } from './vramework-ssr-next-response.js'
+import { VrameworkAPINextRequest } from './vramework-api-next-request.js'
+import { VrameworkAPINextResponse } from './vramework-api-next-response.js'
+import { VrameworkActionNextRequest } from './vramework-action-next-request.js'
+import { VrameworkActionNextResponse } from './vramework-action-next-response.js'
+import { VrameworkActionStaticNextRequest } from './vramework-action-static-next-request.js'
 
 import {
   CoreConfig,

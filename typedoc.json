@@ -1,18 +1,17 @@
 {
   "entryPoints": [
-    "packages/core/*.ts",
-    "packages/deploy-express/*.ts",
-    "packages/deploy-fastify/*.ts",
-    "packages/deploy-next/*.ts",
-    "packages/deploy-uws/*.ts",
-    "packages/deploy-next/*.ts",
-    "packages/services-aws/*.ts"
+    "packages/core/src/*.ts",
+    "packages/deploy-express/src/*.ts",
+    "packages/deploy-fastify/src/*.ts",
+    "packages/deploy-next/src/*.ts",
+    "packages/deploy-uws/src/*.ts",
+    "packages/deploy-next/src/*.ts",
+    "packages/services-aws/src/*.ts"
   ],
   "out": ".typedocs",
   "compilerOptions": {
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "noUnusedParameters": false,
+    "skipLibCheck": true, 
+    "noImplicitAny": false
   },
   "exclude": ["**/node_modules/**/*", "**/dist/**/*", "**/*.spec.ts", "**/*.d.ts"]
 }

@@ -1,4 +1,6 @@
 import { VrameworkRequest } from '@vramework/core/vramework-request'
+
+// @ts-ignore
 import { NextRequest } from 'next/server'
 
 export class VrameworkNextRequest extends VrameworkRequest {
@@ -7,12 +9,12 @@ export class VrameworkNextRequest extends VrameworkRequest {
   }
 
   public getCookies() {
-    return this.request.cookies.getAll().reduce(
+    return this.request.cookies.getAll().reduce<Record<string, string>>(
       (acc, cookie) => {
         acc[cookie.name] = cookie.value
         return acc
       },
-      {} as Record<string, string>
+      {}
     )
   }
 

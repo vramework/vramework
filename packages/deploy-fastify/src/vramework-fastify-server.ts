@@ -1,7 +1,5 @@
 import Fastify from 'fastify'
 
-import { VrameworkFastifyRequest } from './vramework-fastify-request'
-import { VrameworkFastifyResponse } from './vramework-fastify-response'
 import {
   CoreConfig,
   CoreSingletonServices,
@@ -10,6 +8,9 @@ import {
 } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
+
+import { VrameworkFastifyRequest } from './vramework-fastify-request.js'
+import { VrameworkFastifyResponse } from './vramework-fastify-response.js'
 
 export class VrameworkFastifyServer {
   public app = Fastify({})

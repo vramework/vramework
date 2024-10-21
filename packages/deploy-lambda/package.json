@@ -4,12 +4,23 @@
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "main": "dist/vramework-lambda.js",
+  "type": "module",
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf dist && tsc -b",
+    "build": "rm -rf dist && tsc -b tsconfig.build.json",
     "release": "npm run build && npm test",
     "ncu": "ncu",
     "test": "echo 'No tests'"
+  },
+  "exports": {
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.js"
+    },
+    "./*.d.ts": {
+      "import": "./dist/*.d.ts",
+      "require": "./dist/*.d.ts"
+    }
   },
   "peerDependencies": {
     "@vramework/core": "^0.4.1"

@@ -1,7 +1,4 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-
-import { VrameworkLambdaRequest } from './vramework-lambda-request'
-import { VrameworkLambdaResponse } from './vramework-lambda-response'
 import { InvalidOriginError } from '@vramework/core/errors'
 import {
   CoreConfig,
@@ -13,6 +10,9 @@ import {
 import { CoreAPIRoutes, RoutesMeta } from '@vramework/core/types/routes.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { Logger } from '@vramework/core/services/logger'
+
+import { VrameworkLambdaRequest } from './vramework-lambda-request.js'
+import { VrameworkLambdaResponse } from './vramework-lambda-response.js'
 
 const validateOrigin = (
   allowsOrigins: string[],

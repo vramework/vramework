@@ -2270,7 +2270,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.6"
   bin:
-    vramework: bin/vramework.js
+    vramework: dist/bin/vramework.js
   languageName: unknown
   linkType: soft
 

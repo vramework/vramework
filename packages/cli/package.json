@@ -4,14 +4,24 @@
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
-    "vramework": "bin/vramework.js"
+    "vramework": "dist/bin/vramework.js"
   },
   "type": "module",
+  "exports": {
+    "./*": {
+      "import": "./dist/*.js",
+      "require": "./dist/*.js"
+    },
+    "./*.d.ts": {
+      "import": "./dist/*.d.ts",
+      "require": "./dist/*.d.ts"
+    }
+  },
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf dist && tsc -b",
+    "build": "rm -rf dist && tsc -b tsconfig.build.json",
     "ncu": "ncu",
-    "release": "npm run build && npm test",
+    "release": "yarn build && npm test",
     "test": "mocha"
   },
   "dependencies": {
