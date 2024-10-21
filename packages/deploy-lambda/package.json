@@ -3,7 +3,7 @@
   "version": "0.4.2",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
-  "main": "lambda.js",
+  "main": "dist/vramework-lambda.js",
   "scripts": {
     "tsc": "tsc",
     "build": "rm -rf dist && tsc -b",
@@ -12,8 +12,10 @@
     "test": "echo 'No tests'"
   },
   "peerDependencies": {
+    "@vramework/core": "^0.4.1"
+  },
+  "dependencies": {
     "@types/aws-lambda": "^8.10.136",
-    "@vramework/core": "^0.4.1",
     "aws-lambda": "^1.0.7",
     "cookie": "^1.0.0",
     "path-to-regexp": "^8.1.0"

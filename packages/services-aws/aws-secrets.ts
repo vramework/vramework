@@ -12,7 +12,9 @@ export class AWSSecrets implements SecretService {
     this.client = new SecretsManagerClient({ region: config.awsRegion })
   }
 
-  public async getSecretJSON<Result = string>(SecretId: string): Promise<Result> {
+  public async getSecretJSON<Result = string>(
+    SecretId: string
+  ): Promise<Result> {
     const secretValue = await this.getSecret(SecretId)
     return JSON.parse(secretValue)
   }

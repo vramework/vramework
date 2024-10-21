@@ -5,7 +5,10 @@ import * as chaiAsPromised from 'chai-as-promised'
 chai.use(chaiAsPromised)
 
 import { VrameworkSessionService } from './vramework-session-service'
-import { MissingSessionError, InvalidSessionError } from '@vramework/core/errors'
+import {
+  MissingSessionError,
+  InvalidSessionError,
+} from '@vramework/core/errors'
 
 describe('VrameworkSessionService', () => {
   let sessionServiceOptions: any

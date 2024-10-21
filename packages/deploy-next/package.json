@@ -16,12 +16,12 @@
   },
   "dependencies": {
     "@types/cookie": "^0.6.0",
-    "@types/next": "^9.0.0",
     "@vramework/core": "^0.4.1",
     "cookie": "^1.0.0",
     "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
+    "next": "^14.2.9",
     "typescript": "^5.4.2"
   }
 }

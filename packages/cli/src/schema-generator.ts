@@ -4,7 +4,12 @@ import { createGenerator } from 'ts-json-schema-generator'
 export async function generateSchemas(
   tsconfig: string,
   schemaParentDir: string,
-  routesMeta: Array<{ "route": string, "method": string, "input": string | null, "output": string | null }>
+  routesMeta: Array<{
+    route: string
+    method: string
+    input: string | null
+    output: string | null
+  }>
 ) {
   const schemasSet = new Set(
     routesMeta
@@ -36,13 +41,13 @@ export async function generateSchemas(
     `
 import { addSchema } from '@vramework/core'
 ` +
-    schemas
-      .map(
-        (schema) => `
+      schemas
+        .map(
+          (schema) => `
 import ${schema} from './schemas/${schema}.schema.json'
 addSchema('${schema}', ${schema})`
-      )
-      .join('\n'),
+        )
+        .join('\n'),
     'utf8'
   )
 }

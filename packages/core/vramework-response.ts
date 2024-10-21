@@ -50,11 +50,7 @@ export abstract class VrameworkResponse {
    * @param value - The value of the cookie.
    * @param options - Options for cookie serialization.
    */
-  public setCookie(
-    _name: string,
-    _value: string,
-    _options: SerializeOptions
-  ) {
+  public setCookie(_name: string, _value: string, _options: SerializeOptions) {
     throw new Error('Method not implemented.')
   }
 

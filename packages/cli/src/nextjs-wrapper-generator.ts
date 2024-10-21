@@ -1,5 +1,11 @@
-export const generateNextJsWrapper = (routesPath: string, schemasPath: string, configImport: string, singleServicesFactoryImport: string, sessionServicesImport: string) => {
-    return `
+export const generateNextJsWrapper = (
+  routesPath: string,
+  schemasPath: string,
+  configImport: string,
+  singleServicesFactoryImport: string,
+  sessionServicesImport: string
+) => {
+  return `
 'server-only'
 import { VrameworkNextJS } from '@vramework/deploy-next'
 import { IncomingMessage, ServerResponse } from 'http'
@@ -75,5 +81,4 @@ export const vramework = () => {
     ssrRequest
   }
 }`
-    
 }

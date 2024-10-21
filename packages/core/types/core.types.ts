@@ -58,11 +58,16 @@ export interface CoreHTTPServices extends CoreServices {
   response: VrameworkResponse
 }
 
-export type CreateSingletonServices<Config extends CoreConfig, SingletonServices extends CoreSingletonServices> = (
-  config: Config
-) => Promise<SingletonServices>
+export type CreateSingletonServices<
+  Config extends CoreConfig,
+  SingletonServices extends CoreSingletonServices,
+> = (config: Config) => Promise<SingletonServices>
 
-export type CreateSessionServices<SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices> = (
+export type CreateSessionServices<
+  SingletonServices extends CoreSingletonServices,
+  UserSession extends CoreUserSession,
+  Services extends CoreServices,
+> = (
   services: SingletonServices & {
     request: VrameworkRequest
     response: VrameworkResponse

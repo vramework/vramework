@@ -17,15 +17,15 @@ import { NotFoundError, NotImplementedError } from './errors'
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
-  ? Param | ExtractRouteParams<`/${Rest}`>
-  : S extends `${string}:${infer Param}`
-  ? Param
-  : never;
+    ? Param | ExtractRouteParams<`/${Rest}`>
+    : S extends `${string}:${infer Param}`
+      ? Param
+      : never
 
 export type AssertRouteParams<In, Route extends string> =
   ExtractRouteParams<Route> extends keyof In
-  ? unknown
-  : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In];
+    ? unknown
+    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
 
 let routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
@@ -36,8 +36,17 @@ export const addCoreRoute = <
   Route extends string,
   APIFunction,
   APIFunctionSessionless,
-  APIPermission
->(route: CoreAPIRoute<In, Out, Route, APIFunction, APIFunctionSessionless, APIPermission>) => {
+  APIPermission,
+>(
+  route: CoreAPIRoute<
+    In,
+    Out,
+    Route,
+    APIFunction,
+    APIFunctionSessionless,
+    APIPermission
+  >
+) => {
   routes.push(route as any)
 }
 
@@ -52,7 +61,7 @@ export const addRouteMeta = (_routeMeta: RoutesMeta) => {
 export const getRoutes = () => {
   return {
     routes,
-    routesMeta
+    routesMeta,
   }
 }
 
@@ -71,7 +80,10 @@ const getMatchingRoute = (
     const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
 
     if (matchedPath) {
-      const schema = routesMeta.find(routeMeta => routeMeta.method === route.method && routeMeta.route === route.route)?.input
+      const schema = routesMeta.find(
+        (routeMeta) =>
+          routeMeta.method === route.method && routeMeta.route === route.route
+      )?.input
       if (schema) {
         loadSchema(schema, logger)
       }
@@ -88,10 +100,7 @@ export const getUserSession = async <UserSession extends CoreUserSession>(
   request: VrameworkRequest
 ): Promise<CoreUserSession | undefined> => {
   if (sessionService) {
-    return (await sessionService.getUserSession(
-      auth,
-      request
-    )) as UserSession
+    return (await sessionService.getUserSession(auth, request)) as UserSession
   } else if (auth) {
     throw new NotImplementedError('Session service not implemented')
   }
@@ -102,12 +111,18 @@ export const runRoute = async <In, Out>(
   request: VrameworkRequest<In>,
   response: VrameworkResponse,
   services: CoreSingletonServices,
-  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
+  createSessionServices: CreateSessionServices<
+    CoreSingletonServices,
+    CoreUserSession,
+    CoreServices
+  >,
   {
     route: apiRoute,
     method: apiType,
     skipUserSession = false,
-  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> & { skipUserSession?: boolean },
+  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> & {
+    skipUserSession?: boolean
+  }
 ): Promise<Out> => {
   try {
     let session: CoreUserSession | undefined
@@ -115,14 +130,18 @@ export const runRoute = async <In, Out>(
     const { matchedPath, params, route, schema } = getMatchingRoute(
       services.logger,
       apiType,
-      apiRoute,
+      apiRoute
     )
     request.setParams(params)
 
-    services.logger.info(`Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${(!!route.auth).toString()}`)
+    services.logger.info(
+      `Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${(!!route.auth).toString()}`
+    )
 
     if (skipUserSession && route.auth !== false) {
-      throw new Error('Can\'t skip trying to get user session if auth is required')
+      throw new Error(
+        "Can't skip trying to get user session if auth is required"
+      )
     }
 
     if (skipUserSession === false) {

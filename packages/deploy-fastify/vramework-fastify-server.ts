@@ -1,9 +1,13 @@
 import Fastify from 'fastify'
 
-
 import { VrameworkFastifyRequest } from './vramework-fastify-request'
 import { VrameworkFastifyResponse } from './vramework-fastify-response'
-import { CoreConfig, CoreSingletonServices, CreateSessionServices, VrameworkCLIConfig } from '@vramework/core/types/core.types'
+import {
+  CoreConfig,
+  CoreSingletonServices,
+  CreateSessionServices,
+  VrameworkCLIConfig,
+} from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 
@@ -14,8 +18,8 @@ export class VrameworkFastifyServer {
     private readonly vrameworkConfig: VrameworkCLIConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
-    private readonly createSessionServices: CreateSessionServices<any, any, any>,
-  ) { }
+    private readonly createSessionServices: CreateSessionServices<any, any, any>
+  ) {}
 
   /**
    * Placeholder for enabling CORS
@@ -25,7 +29,10 @@ export class VrameworkFastifyServer {
   }
 
   public async init() {
-    await initializeVrameworkCore(this.singletonServices.logger, this.vrameworkConfig)
+    await initializeVrameworkCore(
+      this.singletonServices.logger,
+      this.vrameworkConfig
+    )
 
     this.app.all('/*', async (req, res) => {
       try {

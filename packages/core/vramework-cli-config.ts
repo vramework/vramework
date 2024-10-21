@@ -11,7 +11,8 @@ export const getVrameworkCLIConfig = async (
     const files = await readdir(execDirectory)
     const file = files.find((file) => file.endsWith('vramework.config.json'))
     if (!file) {
-      const errorMessage = '\nConfig file vramework.config.json not found\nExiting...'
+      const errorMessage =
+        '\nConfig file vramework.config.json not found\nExiting...'
       if (exitProcess) {
         console.error(errorMessage)
         process.exit(1)

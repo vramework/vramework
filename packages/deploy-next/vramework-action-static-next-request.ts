@@ -11,7 +11,7 @@ export class VrameworkActionStaticNextRequest extends VrameworkRequest {
   }
 
   public getHeader(_headerName: string): string | undefined {
-    throw new Error('Can\'t acces headers in a static request')
+    throw new Error("Can't acces headers in a static request")
   }
 
   public getBody() {

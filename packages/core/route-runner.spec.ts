@@ -8,7 +8,12 @@ import { NotFoundError, NotImplementedError } from './errors'
 import { VrameworkRequest } from './vramework-request'
 import { VrameworkResponse } from './vramework-response'
 import { JSONValue } from './types/core.types'
-import { getUserSession, runRoute, clearRoutes, addCoreRoute } from './route-runner'
+import {
+  getUserSession,
+  runRoute,
+  clearRoutes,
+  addCoreRoute,
+} from './route-runner'
 
 class VrameworkTestRequest extends VrameworkRequest {
   public getHeader(_headerName: string): string | undefined {

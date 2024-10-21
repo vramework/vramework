@@ -1,7 +1,7 @@
-import { MissingSessionError } from '@vramework/core/errors';
-import { JWTService } from '@vramework/core/services/jwt-service';
-import { Logger } from '@vramework/core/services/logger';
-import { CoreUserSession } from '@vramework/core/types/core.types';
+import { MissingSessionError } from '@vramework/core/errors'
+import { JWTService } from '@vramework/core/services/jwt-service'
+import { Logger } from '@vramework/core/services/logger'
+import { CoreUserSession } from '@vramework/core/types/core.types'
 import * as jose from 'jose'
 
 /**

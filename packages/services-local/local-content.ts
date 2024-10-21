@@ -1,5 +1,5 @@
-import { ContentService } from "@vramework/core/services/content-service";
-import { Logger } from "@vramework/core/services/logger";
+import { ContentService } from '@vramework/core/services/content-service'
+import { Logger } from '@vramework/core/services/logger'
 
 export interface LocalContentConfig {
   contentDirectory: string
@@ -11,10 +11,7 @@ export interface LocalContentConfig {
  * Service for handling local content operations.
  */
 export abstract class LocalContent implements ContentService {
-  constructor(
-    _config: LocalContentConfig,
-    _logger: Logger
-  ) {}
+  constructor(_config: LocalContentConfig, _logger: Logger) {}
 
   public abstract getUploadURL: (
     fileKey: string,

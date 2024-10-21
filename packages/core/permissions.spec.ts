@@ -8,7 +8,7 @@ import { verifyPermissions } from './permissions'
 import { NotPermissionedError } from './errors'
 
 describe('verifyPermissions', () => {
-  let services, data, session
+  let services: any, data: any, session: any
 
   beforeEach(() => {
     services = {}

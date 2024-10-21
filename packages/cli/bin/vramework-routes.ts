@@ -1,18 +1,18 @@
 import { Command } from 'commander'
 import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
 import * as promises from 'fs/promises'
-import { serializeRouteMeta, serializeRoutes, serializeTypedRouteRunner } from '../src/routes-serializers'
+import {
+  serializeRouteMeta,
+  serializeRoutes,
+  serializeTypedRouteRunner,
+} from '../src/routes-serializers'
 import { extractVrameworkInformation } from '../src/extract-vramework-information'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
   let cliConfig = await getVrameworkCLIConfig(configFile)
-  const {rootDir, routeDirectories, routesOutputFile } = cliConfig
+  const { rootDir, routeDirectories, routesOutputFile } = cliConfig
 
-  if (
-    !rootDir ||
-    !routeDirectories ||
-    !routesOutputFile
-  ) {
+  if (!rootDir || !routeDirectories || !routesOutputFile) {
     console.error(
       'rootDir, routeDirectories and routesOutputFile are required in vramework.config.json'
     )
@@ -26,16 +26,21 @@ Generating Route File:
     - Route Output:\n\t${routesOutputFile}
 `)
 
-  const { routesMeta, typesImportMap, filesWithRoutes, routesOutputPath } = await extractVrameworkInformation(cliConfig)
+  const { routesMeta, typesImportMap, filesWithRoutes, routesOutputPath } =
+    await extractVrameworkInformation(cliConfig)
 
   const parts = routesOutputPath.split('/')
   parts.pop()
   await promises.mkdir(parts.join('/'), { recursive: true })
   const content = [
-    serializeRoutes(routesOutputPath, filesWithRoutes, cliConfig.packageMappings),
+    serializeRoutes(
+      routesOutputPath,
+      filesWithRoutes,
+      cliConfig.packageMappings
+    ),
     // serializeInterface(typesImportMap, routesMeta),
     serializeRouteMeta(routesMeta),
-    serializeTypedRouteRunner(typesImportMap, routesMeta)
+    serializeTypedRouteRunner(typesImportMap, routesMeta),
   ]
   await promises.writeFile(routesOutputPath, content.join('\n\n'), 'utf-8')
 

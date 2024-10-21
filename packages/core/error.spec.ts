@@ -1,9 +1,10 @@
 import { expect } from 'chai'
+import { getErrorResponse, addError } from './error-handler'
 import {
-  getErrorResponse,
-  addError,
-} from './error-handler'
-import { AccessDeniedError, InvalidParametersError, NotFoundError } from './errors'
+  AccessDeniedError,
+  InvalidParametersError,
+  NotFoundError,
+} from './errors'
 
 describe('getErrorResponse', () => {
   it('should return the correct error response for InvalidParametersError', () => {

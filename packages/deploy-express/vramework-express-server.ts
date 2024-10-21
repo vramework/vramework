@@ -8,7 +8,12 @@ import cors, { CorsOptions, CorsOptionsDelegate } from 'cors'
 
 import { VrameworkExpressRequest } from './vramework-express-request'
 import { VrameworkExpressResponse } from './vramework-express-response'
-import { VrameworkCLIConfig, CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
+import {
+  VrameworkCLIConfig,
+  CoreConfig,
+  CoreSingletonServices,
+  CreateSessionServices,
+} from '@vramework/core/types/core.types'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { runRoute } from '@vramework/core/route-runner'
 
@@ -20,7 +25,7 @@ export class VrameworkExpressServer {
     private readonly vrameworkConfig: VrameworkCLIConfig,
     private readonly config: CoreConfig,
     private readonly singletonServices: CoreSingletonServices,
-    private readonly createSessionServices: CreateSessionServices<any, any, any>,
+    private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {
     this.app.use(
       json({
@@ -61,7 +66,10 @@ export class VrameworkExpressServer {
   }
 
   public async init() {
-    await initializeVrameworkCore(this.singletonServices.logger, this.vrameworkConfig)
+    await initializeVrameworkCore(
+      this.singletonServices.logger,
+      this.vrameworkConfig
+    )
 
     this.app.use(async (req, res) => {
       try {
@@ -117,5 +125,3 @@ export class VrameworkExpressServer {
     })
   }
 }
-
-

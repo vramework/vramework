@@ -6,7 +6,7 @@
     "declaration": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "importHelpers": true,
     "removeComments": false,
     "noLib": false,

@@ -1,23 +1,25 @@
 import { EError } from '../errors'
 import { CoreUserSession, CoreServices } from './core.types'
 
-export type CoreAPIFunction<In, Out, Services = CoreServices, Session = CoreUserSession> = (
-  services: Services,
-  data: In,
-  session: Session
-) => Promise<Out>
+export type CoreAPIFunction<
+  In,
+  Out,
+  Services = CoreServices,
+  Session = CoreUserSession,
+> = (services: Services, data: In, session: Session) => Promise<Out>
 
-export type CoreAPIFunctionSessionless<In, Out, Services = CoreServices, Session = CoreUserSession> = (
-  services: Services,
-  data: In,
-  session?: Session
-) => Promise<Out>
+export type CoreAPIFunctionSessionless<
+  In,
+  Out,
+  Services = CoreServices,
+  Session = CoreUserSession,
+> = (services: Services, data: In, session?: Session) => Promise<Out>
 
-export type CoreAPIPermission<In = any, Services = CoreServices, Session = CoreUserSession> = (
-  services: Services,
-  data: In,
-  session?: Session
-) => Promise<boolean>
+export type CoreAPIPermission<
+  In = any,
+  Services = CoreServices,
+  Session = CoreUserSession,
+> = (services: Services, data: In, session?: Session) => Promise<boolean>
 
 export type APIRouteMethod = 'post' | 'get' | 'delete' | 'patch' | 'head'
 
@@ -42,46 +44,46 @@ export type CoreAPIRoute<
   R extends string,
   APIFunction = CoreAPIFunction<In, Out>,
   APIFunctionSessionless = CoreAPIFunctionSessionless<In, Out>,
-  APIPermission = CoreAPIPermission<In>
+  APIPermission = CoreAPIPermission<In>,
 > =
   | (CoreFunctionlessAPIRoute & {
-      route: R;
-      method: APIRouteMethod;
-      func: APIFunction;
-      permissions?: Record<string, APIPermission[] | APIPermission>;
-      auth?: true;
+      route: R
+      method: APIRouteMethod
+      func: APIFunction
+      permissions?: Record<string, APIPermission[] | APIPermission>
+      auth?: true
     })
   | (CoreFunctionlessAPIRoute & {
-      route: R;
-      method: APIRouteMethod;
-      func: APIFunctionSessionless;
-      permissions?: undefined;
-      auth?: false;
+      route: R
+      method: APIRouteMethod
+      func: APIFunctionSessionless
+      permissions?: undefined
+      auth?: false
     })
   | (CoreFunctionlessAPIRoute & {
-      route: R;
-      method: 'post';
-      func: APIFunction;
-      permissions?: Record<string, APIPermission[] | APIPermission>;
-      auth?: true;
-      query?: Array<keyof In>;
+      route: R
+      method: 'post'
+      func: APIFunction
+      permissions?: Record<string, APIPermission[] | APIPermission>
+      auth?: true
+      query?: Array<keyof In>
     })
   | (CoreFunctionlessAPIRoute & {
-      route: R;
-      method: 'post';
-      func: APIFunctionSessionless;
-      permissions?: undefined;
-      auth?: false;
-      query?: Array<keyof In>;
-    });
+      route: R
+      method: 'post'
+      func: APIFunctionSessionless
+      permissions?: undefined
+      auth?: false
+      query?: Array<keyof In>
+    })
 
 export type CoreAPIRoutes = Array<CoreAPIRoute<any, any, string>>
 
 export type RoutesMeta = Array<{
-  route: string,
-  method: APIRouteMethod,
-  params?: string[],
-  query?: string[],
-  input: string | null,
+  route: string
+  method: APIRouteMethod
+  params?: string[]
+  query?: string[]
+  input: string | null
   output: string | null
 }>

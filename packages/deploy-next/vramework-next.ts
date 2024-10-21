@@ -11,7 +11,11 @@ import { VrameworkActionNextRequest } from './vramework-action-next-request'
 import { VrameworkActionNextResponse } from './vramework-action-next-response'
 import { VrameworkActionStaticNextRequest } from './vramework-action-static-next-request'
 
-import { CoreConfig, CoreSingletonServices, CreateSessionServices } from '@vramework/core/types/core.types'
+import {
+  CoreConfig,
+  CoreSingletonServices,
+  CreateSessionServices,
+} from '@vramework/core/types/core.types'
 import { APIRouteMethod } from '@vramework/core/types/routes.types'
 import { runRoute } from '@vramework/core/route-runner'
 
@@ -28,14 +32,14 @@ export class VrameworkNextJS {
     private readonly createSingletonServices: (
       config: CoreConfig
     ) => Promise<CoreSingletonServices>,
-    private readonly createSessionServices: CreateSessionServices<any, any, any>,
-  ) {
-  }
+    private readonly createSessionServices: CreateSessionServices<any, any, any>
+  ) {}
 
-  public async actionRequest<
-    In extends Record<string, any>,
-    Out,
-  >(route: unknown, method: unknown, data: In): Promise<Out> {
+  public async actionRequest<In extends Record<string, any>, Out>(
+    route: unknown,
+    method: unknown,
+    data: In
+  ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
     return await runRoute<In, Out>(
       new VrameworkActionNextRequest(data),
@@ -44,15 +48,16 @@ export class VrameworkNextJS {
       this.createSessionServices,
       {
         route: injectIntoUrl(route as string, data),
-        method: method as APIRouteMethod
+        method: method as APIRouteMethod,
       }
     )
   }
 
-  public async staticActionRequest<
-    In extends Record<string, any>,
-    Out,
-  >(route: unknown, method: unknown, data: In): Promise<Out> {
+  public async staticActionRequest<In extends Record<string, any>, Out>(
+    route: unknown,
+    method: unknown,
+    data: In
+  ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
     return await runRoute<In, Out>(
       new VrameworkActionStaticNextRequest(data),
@@ -62,15 +67,12 @@ export class VrameworkNextJS {
       {
         route: injectIntoUrl(route as string, data),
         method: method as APIRouteMethod,
-        skipUserSession: true
-      },
+        skipUserSession: true,
+      }
     )
   }
 
-  public async ssrRequest<
-    In extends Record<string, any>,
-    Out,
-  >(
+  public async ssrRequest<In extends Record<string, any>, Out>(
     request: IncomingMessage & {
       cookies: Partial<{ [key: string]: string }>
     },
@@ -92,10 +94,7 @@ export class VrameworkNextJS {
     )
   }
 
-  public async apiRequest<
-    In extends Record<string, any>,
-    Out,
-  >(
+  public async apiRequest<In extends Record<string, any>, Out>(
     request: NextApiRequest,
     response: NextApiResponse,
     route: string,
@@ -112,7 +111,7 @@ export class VrameworkNextJS {
       this.createSessionServices,
       {
         route: injectIntoUrl(route, data),
-        method
+        method,
       }
     )
   }
