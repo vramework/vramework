@@ -9,11 +9,14 @@ export const extractVrameworkInformation = async ({
   routesOutputFile,
   packageMappings,
 }: VrameworkCLIConfig) => {
+  console.time('introspecting')
   const routeFiles = (
     await Promise.all(
       routeDirectories.map((dir) => glob(`${path.join(rootDir, dir)}/**/*.ts`))
     )
   ).flat()
   const outputPath = path.join(rootDir, routesOutputFile)
-  return await inspectRoutes(outputPath, routeFiles, packageMappings)
+  const result = await inspectRoutes(outputPath, routeFiles, packageMappings)
+  console.timeEnd('introspecting')
+  return result
 }

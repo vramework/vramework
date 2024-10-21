@@ -15,7 +15,7 @@
     "ncu": "ncu",
     "test": "echo 'No tests'"
   },
-"exports": {
+  "exports": {
     ".": {
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"

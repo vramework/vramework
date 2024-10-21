@@ -1,13 +1,4 @@
 #!/usr/bin/env node
-import * as tsNode from 'ts-node'
-tsNode.register({
-  transpileOnly: true,
-  compilerOptions: {
-    module: 'node16',
-    target: 'esnext',
-  },
-})
-
 import { Command } from 'commander'
 import { schemas } from './vramework-schemas.js'
 import { routes } from './vramework-routes.js'

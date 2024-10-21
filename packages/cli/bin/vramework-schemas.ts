@@ -3,15 +3,11 @@ import { generateSchemas } from '../src/schema-generator.js'
 
 import { join } from 'path'
 import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
-import { getRoutes } from '@vramework/core/route-runner'
-
-const importFile = async (path: string) => {
-  return await import(path)
-}
+import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const { schemaOutputDirectory, tsconfig, rootDir, routesOutputFile } =
-    await getVrameworkCLIConfig(configFile)
+  const vrameworkCliConfig = await getVrameworkCLIConfig(configFile)
+  const { schemaOutputDirectory, tsconfig, rootDir, routesOutputFile } = vrameworkCliConfig
 
   if (!rootDir || !routesOutputFile || !schemaOutputDirectory || !tsconfig) {
     console.error(
@@ -28,18 +24,12 @@ Generating schemas:
     - Route Meta:\n\t${routesOutputFile}
 `)
 
-  try {
-    await importFile(join(rootDir, routesOutputFile))
-  } catch (e) {
-    console.error(e)
-    console.error('Error loading routes meta, has it been generated?')
-    return
-  }
+  const { routesMeta } = await extractVrameworkInformation(vrameworkCliConfig)
 
   await generateSchemas(
     join(rootDir, tsconfig),
     join(rootDir, schemaOutputDirectory),
-    getRoutes().routesMeta
+    routesMeta
   )
 
   console.log(`Schemas generated in ${Date.now() - startedAt}ms.`)

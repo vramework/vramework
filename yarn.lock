@@ -2248,10 +2248,9 @@ __metadata:
     path-to-regexp: "npm:^8.2.0"
     sinon: "npm:^19.0.2"
     ts-json-schema-generator: "npm:^2.3.0"
-    ts-node: "npm:^10.9.2"
     typescript: "npm:^5.6"
   bin:
-    vramework: dist/bin/vramework.js
+    vramework: dist/cjs/bin/vramework.js
   languageName: unknown
   linkType: soft
 
