@@ -10,7 +10,7 @@ import * as extractVrameworkInformation from '../src/extract-vramework-informati
 import * as getFileImportRelativePath from '../src/utils'
 import * as nextjsWrapperGenerator from '../src/nextjs-wrapper-generator'
 
-import * as getVrameworkCLIConfig from '@vramework/core/vramework-cli-config.js'
+import * as getVrameworkCLIConfig from '@vramework/core/vramework-cli-config'
 
 describe('action function - generateNextJsWrapper arguments', () => {
   let sandbox: sinon.SinonSandbox;
@@ -56,7 +56,7 @@ describe('action function - generateNextJsWrapper arguments', () => {
     });
 
     // Mock getFileImportRelativePath to return predictable paths
-    getFileImportRelativePathStub.callsFake((from: string, to: string, packageMappings: any) => {
+    getFileImportRelativePathStub.callsFake((_from: string, to: string, _packageMappings: any) => {
       return `./${to}`;
     });
   });

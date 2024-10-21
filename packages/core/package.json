@@ -9,6 +9,8 @@
     "dist"
   ],
   "exports": {
+    "./vramework-cli-config": "./dist/vramework-cli-config.js",
+    "./errors": "./dist/errors.js",
     "./*": "./dist/*",
     "./**/*": "./dist/**/*"
   },
@@ -22,7 +24,7 @@
   "type": "commonjs",
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf dist && tsc -b tsconfig.build.json",
+    "build": "rm -rf dist && tsc -b",
     "ncu": "ncu",
     "release": "npm run build && npm test",
     "test": "mocha"

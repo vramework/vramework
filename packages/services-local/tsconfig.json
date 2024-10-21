@@ -1,12 +1,16 @@
 {
   "extends": "../tsconfig.build.json",
   "compilerOptions": {
-    "noEmit": true
+    "types": ["node", "mocha"],
   },
+  "files": [],
+  "include": [],
   "references": [
+    {
+      "path": "./tsconfig.build.json"
+    },
     {
       "path": "../core"
     }
-  ],
-  "include": ["src/**/*", "../../node_modules/@vramework/**/*"]
+  ]
 }

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "types": ["node", "mocha"],
     "module": "commonjs",
     "moduleResolution": "node",
