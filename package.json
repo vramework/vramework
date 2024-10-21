@@ -19,7 +19,8 @@
     "test": "yarn workspaces foreach -A run test",
     "lint": "npx oxlint@latest",
     "prettier": "npx prettier . --write",
-    "typedoc": "npx typedoc"
+    "typedoc": "npx typedoc",
+    "changeset": "npx changeset"
   },
   "packageManager": "yarn@4.5.0",
   "devDependencies": {
