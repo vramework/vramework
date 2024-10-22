@@ -15,7 +15,7 @@ export const initializeVrameworkCore = async (
   logger: Logger,
   config: VrameworkConfig
 ) => {
-  logger.info(`Starting Vramework`)
+  logger.info(`Initializing Vramework Core`)
 
   const { routes, routesMeta } = getRoutes()
   let routesDebugMessage = 'Routes loading:'
