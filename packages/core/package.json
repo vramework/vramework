@@ -50,5 +50,8 @@
     "sinon": "^19.0.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.6"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

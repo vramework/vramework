@@ -41,5 +41,8 @@
   "devDependencies": {
     "next": "^14.2.15",
     "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

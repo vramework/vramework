@@ -46,5 +46,8 @@
     "chai-as-promised": "^8.0.0",
     "mocha": "^10.7.3",
     "sinon": "^19.0.2"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
