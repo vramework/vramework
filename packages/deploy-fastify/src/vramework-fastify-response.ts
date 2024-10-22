@@ -41,7 +41,7 @@ export class VrameworkFastifyResponse extends VrameworkResponse {
 
   public end () {
     if (!this.response.sent) {
-      this.response.send()
+      this.response.send({})
     } else {
       // TODO: Warning but no logger yet
     }
