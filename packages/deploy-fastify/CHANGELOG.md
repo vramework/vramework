@@ -1,5 +1,11 @@
 # @vramework/deploy-fastify
 
+## 0.4.9
+
+### Patch Changes
+
+- 1508deb: fix: fixing fastify health check
+
 ## 0.4.8
 
 ### Patch Changes
