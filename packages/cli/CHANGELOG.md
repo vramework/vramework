@@ -1,5 +1,12 @@
 # @vramework/cli
 
+## 0.4.5
+
+### Patch Changes
+
+- 0650348: fix: export schemas using \*
+- 3019265: fix: ensuring node 18 compatability
+
 ## 0.4.4
 
 ### Patch Changes

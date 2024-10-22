@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.4.4
+
+### Patch Changes
+
+- 0650348: fix: export schemas using \*
+
 ## 0.4.3
 
 ### Patch Changes
