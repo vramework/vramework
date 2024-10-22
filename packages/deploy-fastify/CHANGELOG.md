@@ -1,5 +1,11 @@
 # @vramework/deploy-fastify
 
+## 0.4.8
+
+### Patch Changes
+
+- a877168: fix: fastify send can't be empty apparently
+
 ## 0.4.7
 
 ### Patch Changes
