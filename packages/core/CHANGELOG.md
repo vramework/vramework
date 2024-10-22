@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.0
+
+### Minor Changes
+
+- c66b106: Bumping minor version to align
+
 ## 0.4.5
 
 ### Patch Changes

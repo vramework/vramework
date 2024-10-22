@@ -1,5 +1,16 @@
 # @vramework/deploy-fastify
 
+## 0.5.0
+
+### Minor Changes
+
+- c66b106: Bumping minor version to align
+
+### Patch Changes
+
+- Updated dependencies [c66b106]
+  - @vramework/core@0.5.0
+
 ## 0.4.5
 
 ### Patch Changes
