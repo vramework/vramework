@@ -13,10 +13,10 @@ import { CorsOptions, CorsOptionsDelegate } from 'cors'
 import { VrameworkExpressRequest } from './vramework-express-request.js'
 import { VrameworkExpressResponse } from './vramework-express-response.js'
 import {
-  VrameworkCLIConfig,
-  CoreConfig,
+  VrameworkConfig,
   CoreSingletonServices,
   CreateSessionServices,
+  CoreServerConfig,
 } from '@vramework/core/types/core.types'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { runRoute } from '@vramework/core/route-runner'
@@ -26,8 +26,8 @@ export class VrameworkExpressServer {
   private server: Server | undefined
 
   constructor(
-    private readonly vrameworkConfig: VrameworkCLIConfig,
-    private readonly config: CoreConfig,
+    private readonly vrameworkConfig: VrameworkConfig,
+    private readonly config: CoreServerConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {
@@ -54,7 +54,7 @@ export class VrameworkExpressServer {
     this.app.use(cookieParser())
 
     this.app.get(
-      this.config.healthCheckPath || 'health-check',
+      this.config.healthCheckPath || '/health-check',
       function (req, res) {
         res.status(200).end()
       }

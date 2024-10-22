@@ -13,19 +13,19 @@ import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from './vramework-request.js'
 import { VrameworkResponse } from './vramework-response.js'
 import { SessionService } from './services/index.js'
-import { NotFoundError, NotImplementedError } from './errors.js'
+import { RouteNotFoundError, NotImplementedError } from './errors.js'
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
-    ? Param | ExtractRouteParams<`/${Rest}`>
-    : S extends `${string}:${infer Param}`
-      ? Param
-      : never
+  ? Param | ExtractRouteParams<`/${Rest}`>
+  : S extends `${string}:${infer Param}`
+  ? Param
+  : never
 
 export type AssertRouteParams<In, Route extends string> =
   ExtractRouteParams<Route> extends keyof In
-    ? unknown
-    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
+  ? unknown
+  : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
 
 let routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
@@ -91,7 +91,7 @@ const getMatchingRoute = (
     }
   }
   logger.info({ message: 'Invalid route', requestPath, requestType })
-  throw new NotFoundError()
+  throw new RouteNotFoundError()
 }
 
 export const getUserSession = async <UserSession extends CoreUserSession>(
@@ -194,11 +194,18 @@ export const runRoute = async <In, Out>(
     }
     return result
   } catch (e: any) {
+    if (e instanceof RouteNotFoundError) {
+      response.setStatus(404)
+      response.end()
+      throw e
+    }
+
     const errorId = e.errorId || uuid()
     const errorResponse = getErrorResponse(e)
 
     if (errorResponse != null) {
       response.setStatus(errorResponse.status)
+
       response.setJson({
         message: errorResponse.message,
         payload: (e as any).payload,

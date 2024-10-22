@@ -1,10 +1,10 @@
 import * as uWS from 'uWebSockets.js'
 
 import {
-  CoreConfig,
+  CoreServerConfig,
   CoreSingletonServices,
   CreateSessionServices,
-  VrameworkCLIConfig,
+  VrameworkConfig,
 } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
@@ -17,8 +17,8 @@ export class VrameworkUWSServer {
   private listenSocket: boolean | uWS.us_listen_socket | null = null
 
   constructor(
-    private readonly vrameworkConfig: VrameworkCLIConfig,
-    private readonly config: CoreConfig,
+    private readonly vrameworkConfig: VrameworkConfig,
+    private readonly config: CoreServerConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {}

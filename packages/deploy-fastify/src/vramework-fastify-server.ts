@@ -1,10 +1,10 @@
 import Fastify from 'fastify'
 
 import {
-  CoreConfig,
+  CoreServerConfig,
   CoreSingletonServices,
   CreateSessionServices,
-  VrameworkCLIConfig,
+  VrameworkConfig,
 } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
@@ -16,8 +16,8 @@ export class VrameworkFastifyServer {
   public app = Fastify({})
 
   constructor(
-    private readonly vrameworkConfig: VrameworkCLIConfig,
-    private readonly config: CoreConfig,
+    private readonly vrameworkConfig: VrameworkConfig,
+    private readonly config: CoreServerConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {}

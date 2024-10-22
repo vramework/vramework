@@ -2,12 +2,12 @@ import { Command } from 'commander'
 import { generateSchemas } from '../src/schema-generator.js'
 
 import { join } from 'path'
-import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
+import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const vrameworkCliConfig = await getVrameworkCLIConfig(configFile)
-  const { schemaOutputDirectory, tsconfig, rootDir, routesOutputFile } = vrameworkCliConfig
+  const VrameworkConfig = await getVrameworkConfig(configFile)
+  const { schemaOutputDirectory, tsconfig, rootDir, routesOutputFile } = VrameworkConfig
 
   if (!rootDir || !routesOutputFile || !schemaOutputDirectory || !tsconfig) {
     console.error(
@@ -24,7 +24,7 @@ Generating schemas:
     - Route Meta:\n\t${routesOutputFile}
 `)
 
-  const { routesMeta } = await extractVrameworkInformation(vrameworkCliConfig)
+  const { routesMeta } = await extractVrameworkInformation(VrameworkConfig)
 
   await generateSchemas(
     join(rootDir, tsconfig),

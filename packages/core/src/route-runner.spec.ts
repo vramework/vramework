@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 chai.use('default' in chaiAsPromised ? chaiAsPromised.default : chaiAsPromised as any)
 
-import { NotFoundError, NotImplementedError } from './errors.js'
+import { NotImplementedError, RouteNotFoundError } from './errors.js'
 import { VrameworkRequest } from './vramework-request.js'
 import { VrameworkResponse } from './vramework-response.js'
 import { JSONValue } from './types/core.types.js'
@@ -65,7 +65,7 @@ describe('runRoute', () => {
     sinon.restore()
   })
 
-  it('should throw NotFoundError when no matching route is found', async () => {
+  it('should throw RouteNotFoundError when no matching route is found', async () => {
     const apiRoute = '/test'
     const apiType = 'get'
 
@@ -74,7 +74,7 @@ describe('runRoute', () => {
         route: apiRoute,
         method: apiType,
       })
-    ).to.be.rejectedWith(NotFoundError)
+    ).to.be.rejectedWith(RouteNotFoundError)
   })
 
   it('should call the route function and return its result when a matching route is found', async () => {

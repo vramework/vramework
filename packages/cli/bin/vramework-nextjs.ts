@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
+import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import * as promises from 'fs/promises'
 import * as path from 'path'
 import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator.js'
@@ -23,7 +23,7 @@ export const action = async (
   options: VrameworkNextJSCliOptions
 ): Promise<void> => {
   const { configFile } = options
-  const vrameworkConfig = await getVrameworkCLIConfig(configFile, true)
+  const vrameworkConfig = await getVrameworkConfig(configFile, true)
   let {
     vrameworkNextFile,
     rootDir,

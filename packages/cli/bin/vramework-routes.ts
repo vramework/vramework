@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { getVrameworkCLIConfig } from '@vramework/core/vramework-cli-config'
+import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import * as promises from 'fs/promises'
 import {
   serializeRouteMeta,
@@ -9,8 +9,8 @@ import {
 import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let cliConfig = await getVrameworkCLIConfig(configFile)
-  const { rootDir, routeDirectories, routesOutputFile } = cliConfig
+  let vrameworkConfig = await getVrameworkConfig(configFile)
+  const { rootDir, routeDirectories, routesOutputFile } = vrameworkConfig
 
   if (!rootDir || !routeDirectories || !routesOutputFile) {
     console.error(
@@ -27,7 +27,7 @@ Generating Route File:
 `)
 
   const { routesMeta, typesImportMap, filesWithRoutes, routesOutputPath } =
-    await extractVrameworkInformation(cliConfig)
+    await extractVrameworkInformation(vrameworkConfig)
 
   const parts = routesOutputPath.split('/')
   parts.pop()
@@ -36,7 +36,7 @@ Generating Route File:
     serializeRoutes(
       routesOutputPath,
       filesWithRoutes,
-      cliConfig.packageMappings
+      vrameworkConfig.packageMappings
     ),
     // serializeInterface(typesImportMap, routesMeta),
     serializeRouteMeta(routesMeta),
