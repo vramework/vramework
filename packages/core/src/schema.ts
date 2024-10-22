@@ -40,7 +40,7 @@ export const loadSchemas = async (schemaDir: string) => {
     console.error(`Error: Failed to load schemas from '${schemaDir}/schemas.ts'.`)
     console.error('\tHave you run the schema generation?')
     console.error('\tnpx @vramework/cli schemas')
-    cosole.error(e)
+    console.error(e)
   }
 }
 

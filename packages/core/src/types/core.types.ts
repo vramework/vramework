@@ -18,7 +18,7 @@ export type RequireAtLeastOne<T> = {
   [K in keyof T]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<keyof T, K>>>
 }[keyof T]
 
-export interface VrameworkCLIConfig {
+export interface VrameworkConfig {
   rootDir: string
   routeDirectories: string[]
   routesOutputFile: string
@@ -31,10 +31,13 @@ export interface VrameworkCLIConfig {
 
 export interface CoreConfig {
   logLevel: LogLevel
-  port: number
   maximumComputeTime?: number
-  healthCheckPath?: string
   secrets?: {}
+}
+
+export type CoreServerConfig = CoreConfig & {
+  port: number
+  healthCheckPath?: string
   limits?: Partial<Record<string, string>>
 }
 

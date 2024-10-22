@@ -36,6 +36,12 @@ export class NotImplementedError extends EError {}
 export class NotFoundError extends EError {}
 
 /**
+ * Error indicating a route path was not found.
+ * @extends {EError}
+ */
+export class RouteNotFoundError extends EError {}
+
+/**
  * Error indicating an invalid origin.
  * @extends {EError}
  */

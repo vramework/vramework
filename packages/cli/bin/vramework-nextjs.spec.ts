@@ -10,11 +10,11 @@
 // import * as getFileImportRelativePath from '../src/utils.js'
 // import * as nextjsWrapperGenerator from '../src/nextjs-wrapper-generator.js'
 
-// import * as getVrameworkCLIConfig from '@vramework/core/vramework-cli-config'
+// import * as getVrameworkConfig from '@vramework/core/vramework-config'
 
 // describe('action function - generateNextJsWrapper arguments', () => {
 //   let sandbox: sinon.SinonSandbox
-//   let getVrameworkCLIConfigStub: sinon.SinonStub
+//   let getVrameworkConfigStub: sinon.SinonStub
 //   let extractVrameworkInformationStub: sinon.SinonStub
 //   let getFileImportRelativePathStub: sinon.SinonStub
 //   let generateNextJsWrapperStub: sinon.SinonStub
@@ -25,9 +25,9 @@
 //     sandbox = sinon.createSandbox()
 
 //     // Stub external dependencies
-//     getVrameworkCLIConfigStub = sandbox.stub(
-//       getVrameworkCLIConfig,
-//       'getVrameworkCLIConfig'
+//     getVrameworkConfigStub = sandbox.stub(
+//       getVrameworkConfig,
+//       'getVrameworkConfig'
 //     )
 //     extractVrameworkInformationStub = sandbox.stub(
 //       extractVrameworkInformation,
@@ -52,7 +52,7 @@
 //     consoleErrorStub = sandbox.stub(console, 'error')
 
 //     // Default stubs for external functions
-//     getVrameworkCLIConfigStub.resolves({
+//     getVrameworkConfigStub.resolves({
 //       vrameworkNextFile: 'nextFile.ts',
 //       rootDir: 'rootDir',
 //       routesOutputFile: 'routes.ts',
@@ -172,7 +172,7 @@
 
 //   it('should generate correct import paths with packageMappings', async () => {
 //     // Provide packageMappings in the vrameworkConfig
-//     getVrameworkCLIConfigStub.resolves({
+//     getVrameworkConfigStub.resolves({
 //       vrameworkNextFile: 'nextFile.ts',
 //       rootDir: 'rootDir',
 //       routesOutputFile: 'routes.ts',

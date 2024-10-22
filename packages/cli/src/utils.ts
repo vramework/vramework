@@ -1,6 +1,6 @@
 import { relative, dirname } from 'path'
 import { extractVrameworkInformation } from './extract-vramework-information.js'
-import { VrameworkCLIConfig } from '@vramework/core/types/core.types'
+import { VrameworkConfig } from '@vramework/core/types/core.types'
 
 export const getFileImportRelativePath = (
   from: string,
@@ -27,7 +27,7 @@ interface FilesAndMethods {
 }
 
 export const getVrameworkFilesAndMethods = async (
-  cliConfig: VrameworkCLIConfig,
+  vrameworkConfig: VrameworkConfig,
   outputFile: string,
   filesAndMethods: Partial<FilesAndMethods>
 ): Promise<FilesAndMethods> => {
@@ -44,7 +44,7 @@ export const getVrameworkFilesAndMethods = async (
     vrameworkConfigs,
     sessionServicesFactories,
     singletonServicesFactories,
-  } = await extractVrameworkInformation(cliConfig)
+  } = await extractVrameworkInformation(vrameworkConfig)
 
   let errors = new Map<string, Record<string, string[]>>()
 
@@ -107,7 +107,7 @@ export const getVrameworkFilesAndMethods = async (
         filesAndMethods as Record<string, string[]>
       )) {
         result.push(
-          `\t* file: ${getFileImportRelativePath(outputFile, file, cliConfig.packageMappings)}`
+          `\t* file: ${getFileImportRelativePath(outputFile, file, vrameworkConfig.packageMappings)}`
         )
         result.push(`\t* methods: ${methods.join(', ')}`)
       }

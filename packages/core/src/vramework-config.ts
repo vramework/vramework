@@ -1,11 +1,11 @@
 import { join, dirname, resolve } from 'path'
 import { readdir } from 'fs/promises'
-import { VrameworkCLIConfig } from './types/core.types.js'
+import { VrameworkConfig } from './types/core.types.js'
 
-export const getVrameworkCLIConfig = async (
+export const getVrameworkConfig = async (
   configFile: string | undefined = undefined,
   exitProcess: boolean = false
-): Promise<VrameworkCLIConfig> => {
+): Promise<VrameworkConfig> => {
   if (!configFile) {
     let execDirectory = process.cwd()
     const files = await readdir(execDirectory)
@@ -23,7 +23,7 @@ export const getVrameworkCLIConfig = async (
   }
 
   try {
-    const config: VrameworkCLIConfig = await import(configFile)
+    const config: VrameworkConfig = await import(configFile)
     const configDir = dirname(configFile)
     // TODO: Validate config
     return {
