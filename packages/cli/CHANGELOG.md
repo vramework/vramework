@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.4.5
+
+### Patch Changes
+
+- 0650348: fix: export schemas using \*
+
 ## 0.4.4
 
 ### Patch Changes
