@@ -36,7 +36,7 @@ export class VrameworkFastifyServer {
     )
 
     this.app.get(this.config.healthCheckPath || '/health-check', async (_, res) => {
-      res.status(200).send()
+      return { status: 'ok' }
     })
 
     this.app.all('/*', async (req, res) => {

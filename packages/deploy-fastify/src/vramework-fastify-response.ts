@@ -38,12 +38,4 @@ export class VrameworkFastifyResponse extends VrameworkResponse {
       cookie.serialize(name, '', { expires: new Date(0) })
     )
   }
-
-  public end () {
-    if (!this.response.sent) {
-      this.response.send({})
-    } else {
-      // TODO: Warning but no logger yet
-    }
-  }
 }

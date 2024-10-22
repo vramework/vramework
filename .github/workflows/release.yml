@@ -32,6 +32,7 @@ jobs:
         with:
           version: node .github/changeset-version.cjs
           publish: yarn release
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
