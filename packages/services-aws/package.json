@@ -33,9 +33,9 @@
     "@vramework/core": "^0.4.3"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.675.0",
+    "@aws-sdk/client-s3": "3.676.0",
     "@aws-sdk/client-secrets-manager": "3.675.0",
-    "@aws-sdk/s3-request-presigner": "3.675.0",
+    "@aws-sdk/s3-request-presigner": "3.676.0",
     "aws-cloudfront-sign": "^3.0.2"
   },
   "devDependencies": {
