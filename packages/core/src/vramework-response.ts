@@ -68,4 +68,11 @@ export abstract class VrameworkResponse {
   public setRedirect(path: string, status: number) {
     throw new Error('Method not implemented.')
   }
+
+  /**
+   * Informs the response that it has ended, useful for when setting
+   * a status without a body or response.
+   */
+  public end() {
+  }
 }
