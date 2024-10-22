@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.4.6
+
+### Patch Changes
+
+- 2a2402b: republish since something went wrong
+
 ## 0.4.5
 
 ### Patch Changes

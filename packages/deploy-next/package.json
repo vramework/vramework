@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-next",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "main": "dist/cjs/index.js",
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@types/cookie": "^0.6.0",
-    "@vramework/core": "^0.4.3",
+    "@vramework/core": "^0.4.6",
     "cookie": "^1.0.1",
     "eventemitter3": "^5.0.1"
   },

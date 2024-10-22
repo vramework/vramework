@@ -1,5 +1,13 @@
 ## 0.0.9 - 01.09.2022
 
+## 0.4.6
+
+### Patch Changes
+
+- 2a2402b: republish since something went wrong
+- Updated dependencies [2a2402b]
+  - @vramework/core@0.4.6
+
 ## 0.4.5
 
 ### Patch Changes

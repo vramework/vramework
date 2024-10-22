@@ -1,5 +1,13 @@
 ## 0.4.2
 
+## 0.4.5
+
+### Patch Changes
+
+- 2a2402b: republish since something went wrong
+- Updated dependencies [2a2402b]
+  - @vramework/core@0.4.6
+
 ## 0.4.4
 
 ### Patch Changes
