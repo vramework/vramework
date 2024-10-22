@@ -32,7 +32,7 @@
     "@types/cookie": "^0.6.0",
     "@types/uuid": "^10.0.0",
     "commander": "^12",
-    "glob": "^11.0.0",
+    "glob": "^10",
     "path-to-regexp": "^8.2.0",
     "ts-json-schema-generator": "^2.3.0",
     "typescript": "^5.6"
