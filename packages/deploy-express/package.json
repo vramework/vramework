@@ -1,6 +1,6 @@
 {
   "name": "@vramework/deploy-express",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "The vramework express server ",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -31,7 +31,7 @@
     }
   },
   "peerDependencies": {
-    "@vramework/core": "^0.4.3"
+    "@vramework/core": "^0.4.4"
   },
   "dependencies": {
     "@types/content-type": "^1.1.8",
