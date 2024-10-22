@@ -2249,6 +2249,8 @@ __metadata:
     sinon: "npm:^19.0.2"
     ts-json-schema-generator: "npm:^2.3.0"
     typescript: "npm:^5.6"
+  peerDependencies:
+    "@vramework/core": ^0.4.3
   bin:
     vramework: dist/cjs/bin/vramework.js
   languageName: unknown
