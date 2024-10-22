@@ -1,5 +1,11 @@
 # @vramework/deploy-fastify
 
+## 0.4.10
+
+### Patch Changes
+
+- 16fae36: fix: another health check api issue with docker
+
 ## 0.4.9
 
 ### Patch Changes
