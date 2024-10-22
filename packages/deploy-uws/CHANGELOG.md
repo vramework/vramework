@@ -1,5 +1,16 @@
 # @vramework/deploy-uws
 
+## 0.4.5
+
+### Patch Changes
+
+- 1a708a7: refactor: renaming VrameworkCLIConfig back to VrameworkConfig
+  feat: adding .end() to vramework response for servers that need it
+- Updated dependencies [0650348]
+- Updated dependencies [1a708a7]
+- Updated dependencies [642d370]
+  - @vramework/core@0.4.4
+
 ## 0.4.4
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.4.4
+
+### Patch Changes
+
+- 0650348: fix: export schemas using \*
+- 1a708a7: refactor: renaming VrameworkCLIConfig back to VrameworkConfig
+  feat: adding .end() to vramework response for servers that need it
+- 642d370: fix: adding schema error logs on fail
+
 ## 0.4.3
 
 ### Patch Changes

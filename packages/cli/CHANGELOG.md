@@ -1,5 +1,19 @@
 # @vramework/cli
 
+## 0.4.5
+
+### Patch Changes
+
+- 0650348: fix: export schemas using \*
+- 1a708a7: refactor: renaming VrameworkCLIConfig back to VrameworkConfig
+  feat: adding .end() to vramework response for servers that need it
+- 3019265: fix: ensuring node 18 compatability
+- 642d370: fix: adding schema error logs on fail
+- Updated dependencies [0650348]
+- Updated dependencies [1a708a7]
+- Updated dependencies [642d370]
+  - @vramework/core@0.4.4
+
 ## 0.4.4
 
 ### Patch Changes
