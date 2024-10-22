@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.4.7
+
+### Patch Changes
+
+- c382ed3: putting glob back to 10 again for node 18 support
+
 ## 0.4.6
 
 ### Patch Changes
