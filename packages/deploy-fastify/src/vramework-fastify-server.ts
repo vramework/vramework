@@ -35,6 +35,10 @@ export class VrameworkFastifyServer {
       this.vrameworkConfig
     )
 
+    this.app.get(this.config.healthCheckPath || '/health-check', async (_, res) => {
+      res.status(200).send()
+    })
+
     this.app.all('/*', async (req, res) => {
       try {
         await runRoute(

@@ -36,6 +36,10 @@ export class VrameworkUWSServer {
       this.vrameworkConfig
     )
 
+    this.app.get(this.config.healthCheckPath || '/health-check', async (res) => {
+      res.writeStatus('200').end()
+    })
+
     this.app.any('/*', async (res, req) => {
       try {
         await runRoute(
@@ -52,9 +56,11 @@ export class VrameworkUWSServer {
         // Error should have already been handled by runRoute
       }
 
-      if (!res.writableEnded) {
+
+      // TODO: Find out how we can handle this case, or if it's needed
+      if (false) {
         this.singletonServices.logger.error('Route did not send a response')
-        res.status(500).end()
+        res.writeStatus('500').end()
       }
     })
   }

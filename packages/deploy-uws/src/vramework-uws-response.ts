@@ -35,4 +35,8 @@ export class VrameworkUWSResponse extends VrameworkResponse {
       cookie.serialize(name, value, options)
     )
   }
+
+  public end () {
+    this.response.endWithoutBody()
+  }
 }
