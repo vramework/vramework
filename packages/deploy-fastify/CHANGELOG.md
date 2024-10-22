@@ -1,5 +1,11 @@
 # @vramework/deploy-fastify
 
+## 0.4.7
+
+### Patch Changes
+
+- 75b9460: feat: adding health checks
+
 ## 0.4.6
 
 ### Patch Changes
