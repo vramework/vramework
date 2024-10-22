@@ -1,6 +1,6 @@
 {
   "name": "@vramework/cli",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
@@ -29,7 +29,7 @@
     "test": "mocha"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.4.4"
+    "@vramework/core": "^0.4.6"
   },
   "dependencies": {
     "@types/cookie": "^0.6.0",
