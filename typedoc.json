@@ -1,12 +1,6 @@
 {
   "entryPoints": [
-    "packages/core/src/*.ts",
-    "packages/deploy-express/src/*.ts",
-    "packages/deploy-fastify/src/*.ts",
-    "packages/deploy-next/src/*.ts",
-    "packages/deploy-uws/src/*.ts",
-    "packages/deploy-next/src/*.ts",
-    "packages/services-aws/src/*.ts"
+    "packages/**/src/*.ts",
   ],
   "out": ".typedocs",
   "compilerOptions": {

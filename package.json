@@ -1,6 +1,6 @@
 {
   "name": "@vramework/mono",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "The vramework monorepo",
   "repository": "git@github.com:vlandor/vramework.git",
   "author": "yasser.fadl@gmail.com",
@@ -8,7 +8,13 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/core",
+      "packages/cli",
+      "packages/services/*",
+      "packages/servers/*",
+      "packages/servers/express/*",
+      "packages/servers/fastify/*",
+      "packages/cloud/aws/*"
     ]
   },
   "scripts": {
