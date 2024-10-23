@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.2
+
+### Patch Changes
+
+- 5e0f033: feat: adding a routes map output file to support frontend sdks in the future
+
 ## 0.5.1
 
 ### Patch Changes
