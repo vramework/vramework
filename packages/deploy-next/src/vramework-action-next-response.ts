@@ -1,9 +1,10 @@
 import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { SerializeOptions } from 'cookie'
-import { cookies } from 'next/headers.js'
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies.js'
+
 
 export class VrameworkActionNextResponse extends VrameworkResponse {
-  constructor() {
+  constructor(private cookies: ReadonlyRequestCookies) {
     super()
   }
 
@@ -18,12 +19,10 @@ export class VrameworkActionNextResponse extends VrameworkResponse {
     value: string,
     options: SerializeOptions
   ): void {
-    const cookieStore = cookies()
-    cookieStore.set(name, value, options)
+    this.cookies.set(name, value, options)
   }
 
   public clearCookie(name: string): void {
-    const cookieStore = cookies()
-    cookieStore.delete(name)
+    this.cookies.delete(name)
   }
 }

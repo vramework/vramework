@@ -18,6 +18,7 @@ import {
 } from '@vramework/core/types/core.types'
 import { APIRouteMethod } from '@vramework/core/types/routes.types'
 import { runRoute } from '@vramework/core/route-runner'
+import { cookies, headers } from 'next/headers.js'
 
 const injectIntoUrl = (route: string, keys: Record<string, string>) => {
   const path = compile(route)
@@ -41,9 +42,11 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
+    const requestCookies = await cookies()
+    const requestHeaders = await headers()
     return await runRoute<In, Out>(
-      new VrameworkActionNextRequest(data),
-      new VrameworkActionNextResponse(),
+      new VrameworkActionNextRequest(data, requestCookies, requestHeaders),
+      new VrameworkActionNextResponse(requestCookies),
       singletonServices,
       this.createSessionServices,
       {
@@ -59,9 +62,10 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
+    const requestCookies = await cookies()
     return await runRoute<In, Out>(
       new VrameworkActionStaticNextRequest(data),
-      new VrameworkActionNextResponse(),
+      new VrameworkActionNextResponse(requestCookies),
       singletonServices,
       this.createSessionServices,
       {

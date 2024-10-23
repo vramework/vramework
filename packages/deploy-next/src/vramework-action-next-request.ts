@@ -1,10 +1,11 @@
 import { VrameworkRequest } from '@vramework/core/vramework-request'
-import { cookies, headers } from 'next/headers.js'
+import { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers.js'
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies.js'
 
 export class VrameworkActionNextRequest extends VrameworkRequest {
   private body: any
 
-  constructor(body: any) {
+  constructor(body: any, private cookies: ReadonlyRequestCookies, private headers: ReadonlyHeaders) {
     super()
     // Needed to convert the body to a plain object
     // and date validation
@@ -12,7 +13,7 @@ export class VrameworkActionNextRequest extends VrameworkRequest {
   }
 
   public getCookies() {
-    const allCookies = cookies().getAll()
+    const allCookies = this.cookies.getAll()
     return allCookies.reduce<Record<string, string>>(
       (result, { name, value }) => {
         result[name] = value
@@ -23,7 +24,7 @@ export class VrameworkActionNextRequest extends VrameworkRequest {
   }
 
   public getHeader(headerName: string): string | undefined {
-    return headers().get(headerName) || undefined
+    return this.headers.get(headerName) || undefined
   }
 
   public getBody() {
