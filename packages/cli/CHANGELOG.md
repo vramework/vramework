@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.2
+
+### Patch Changes
+
+- 8712f25: fix: relative paths need to start with ./ for imports to work
+
 ## 0.5.1
 
 ### Patch Changes
