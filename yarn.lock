@@ -2270,7 +2270,7 @@ __metadata:
     aws-cloudfront-sign: "npm:^3.0.2"
     typescript: "npm:^5.6"
   peerDependencies:
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
   languageName: unknown
   linkType: soft
 
@@ -2294,13 +2294,13 @@ __metadata:
     ts-json-schema-generator: "npm:^2.3.0"
     typescript: "npm:^5.6"
   peerDependencies:
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
   bin:
     vramework: dist/cjs/bin/vramework.js
   languageName: unknown
   linkType: soft
 
-"@vramework/core@npm:^0.5.0, @vramework/core@workspace:packages/core":
+"@vramework/core@npm:^0.5.1, @vramework/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@vramework/core@workspace:packages/core"
   dependencies:
@@ -2325,19 +2325,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/express-middleware@npm:^0.5.0, @vramework/express-middleware@workspace:packages/servers/express/express-middleware":
+"@vramework/express-middleware@npm:^0.5.1, @vramework/express-middleware@workspace:packages/servers/express/express-middleware":
   version: 0.0.0-use.local
   resolution: "@vramework/express-middleware@workspace:packages/servers/express/express-middleware"
   dependencies:
     "@types/express": "npm:^5"
     "@types/express-serve-static-core": "npm:^5.0.0"
-    "@vramework/core": "npm:^0.5.0"
+    "@vramework/core": "npm:^0.5.1"
     express: "npm:^5"
     typescript: "npm:^5.6.3"
   peerDependencies:
     "@types/express": ^5
     "@types/express-serve-static-core": ^5.0.0
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
     express: ^5
   languageName: unknown
   linkType: soft
@@ -2351,7 +2351,7 @@ __metadata:
     "@types/cors": "npm:^2.8.17"
     "@types/express": "npm:^5"
     "@types/express-serve-static-core": "npm:^5.0.0"
-    "@vramework/express-middleware": "npm:^0.5.0"
+    "@vramework/express-middleware": "npm:^0.5.1"
     body-parser: "npm:^1.20.3"
     cookie: "npm:^1.0.1"
     cookie-parser: "npm:^1.4.7"
@@ -2359,11 +2359,11 @@ __metadata:
     express: "npm:^5"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
   languageName: unknown
   linkType: soft
 
-"@vramework/fastify-plugin@npm:^0.5.0, @vramework/fastify-plugin@workspace:packages/servers/fastify/fastify-plugin":
+"@vramework/fastify-plugin@npm:^0.5.1, @vramework/fastify-plugin@workspace:packages/servers/fastify/fastify-plugin":
   version: 0.0.0-use.local
   resolution: "@vramework/fastify-plugin@workspace:packages/servers/fastify/fastify-plugin"
   dependencies:
@@ -2371,7 +2371,7 @@ __metadata:
     fastify-plugin: "npm:^5.0.1"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
   languageName: unknown
   linkType: soft
 
@@ -2379,11 +2379,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/fastify@workspace:packages/servers/fastify/fastify-server"
   dependencies:
-    "@vramework/fastify-plugin": "npm:^0.5.0"
+    "@vramework/fastify-plugin": "npm:^0.5.1"
     fastify: "npm:^5.0.0"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
   languageName: unknown
   linkType: soft
 
@@ -2394,7 +2394,7 @@ __metadata:
     jose: "npm:^5.9.6"
     typescript: "npm:^5.6"
   peerDependencies:
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
   languageName: unknown
   linkType: soft
 
@@ -2408,7 +2408,7 @@ __metadata:
     path-to-regexp: "npm:^8.2.0"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
   languageName: unknown
   linkType: soft
 
@@ -2431,7 +2431,7 @@ __metadata:
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     "@types/react": "npm:^18"
-    "@vramework/core": "npm:^0.5.0"
+    "@vramework/core": "npm:^0.5.1"
     cookie: "npm:^1.0.1"
     eventemitter3: "npm:^5.0.1"
     next: "npm:^14.2.15"
@@ -2452,7 +2452,7 @@ __metadata:
     typescript: "npm:^5.6.3"
     uWebSockets.js: "uNetworking/uWebSockets.js#v20.49.0"
   peerDependencies:
-    "@vramework/core": ^0.5.0
+    "@vramework/core": ^0.5.1
   languageName: unknown
   linkType: soft
 

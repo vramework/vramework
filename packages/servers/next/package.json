@@ -1,6 +1,6 @@
 {
   "name": "@vramework/next",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "main": "dist/cjs/index.js",
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@types/cookie": "^0.6.0",
-    "@vramework/core": "^0.5.0",
+    "@vramework/core": "^0.5.1",
     "cookie": "^1.0.1",
     "eventemitter3": "^5.0.1"
   },
