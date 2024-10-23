@@ -1,7 +1,6 @@
 import * as ts from 'typescript'
 import { pathToRegexp } from 'path-to-regexp'
 import { APIRouteMethod, RoutesMeta } from '@vramework/core/types/routes.types'
-import { getFileImportRelativePath } from './utils.js'
 
 export interface ImportInfo {
   importPath: string
@@ -162,11 +161,7 @@ function doesTypeExtendCoreConfig(
   return false
 }
 
-export const inspectRoutes = (
-  outputFile: string,
-  routeFiles: string[],
-  packageMappings: Record<string, string> = {}
-) => {
+export const inspectRoutes = (routeFiles: string[]) => {
   const typesImportMap: ImportMap = new Map()
   const routesMeta: RoutesMeta = []
   const filesWithRoutes = new Set<string>()
@@ -197,11 +192,7 @@ export const inspectRoutes = (
         if (symbol.getName() === symbolName) {
           const declarations = symbol.getDeclarations()
           if (declarations && declarations.length > 0) {
-            let filePath = getFileImportRelativePath(
-              outputFile,
-              declarations[0].getSourceFile().fileName,
-              packageMappings
-            )
+            let filePath = declarations[0].getSourceFile().fileName
             const importInfo = typesImportMap.get(filePath) || {
               importPath: filePath,
               namedImports: new Set(),
@@ -341,7 +332,6 @@ export const inspectRoutes = (
   return {
     routesMeta,
     typesImportMap,
-    routesOutputPath: outputFile,
     filesWithRoutes: [...filesWithRoutes],
     sessionServicesFactories,
     singletonServicesFactories,

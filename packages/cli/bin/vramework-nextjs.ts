@@ -29,7 +29,7 @@ export const action = async (
     rootDir,
     routesOutputFile,
     configDir,
-    packageMappings,
+    packageMappings = {},
     schemaOutputDirectory,
   } = vrameworkConfig
 

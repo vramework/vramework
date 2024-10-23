@@ -23,24 +23,26 @@ export const serializeRoutes = (
   return serializedOutput.join('\n')
 }
 
-const serializeImportMap = (importMap: ImportMap) => {
+const serializeImportMap = (relativeToPath: string, packageMappings: Record<string, string>, importMap: ImportMap) => {
   let imports: string[] = []
   for (const [importPath, { namedImports }] of importMap) {
     imports.push(
-      `import { ${Array.from(namedImports).join(', ')} } from '${importPath.replace('.ts', '')}'`
+      `import { ${Array.from(namedImports).join(', ')} } from '${getFileImportRelativePath(relativeToPath, importPath, packageMappings)}'`
     )
   }
   return imports.join('\n')
 }
 
 export const serializeInterface = (
+  relativeTo: string,
   importMap: ImportMap,
-  routesMeta: RoutesMeta
+  routesMeta: RoutesMeta,
+  packageMappings: Record<string, string>
 ) => {
   const serializedOutput: string[] = [
     '/* Files with addRoute function within them */',
   ]
-  serializedOutput.push(serializeImportMap(importMap))
+  serializedOutput.push(serializeImportMap(relativeTo, packageMappings, importMap))
 
   let routesInterface = 'export type RoutesInterface = '
   if (routesMeta.length === 0) {
@@ -66,27 +68,9 @@ export const serializeRouteMeta = (routesMeta: RoutesMeta) => {
   return serializedOutput.join('\n')
 }
 
-export const serializeTypedRouteRunner = (
-  importMap: ImportMap,
-  routesMeta: RoutesMeta
-) => {
+export const serializeTypedRouteRunner = () => {
   return `
-// The typed route runner allows us to infer our types when running routes
 import { runRoute, CoreSingletonServices, CreateSessionServices, CoreServices, CoreUserSession, VrameworkRequest, VrameworkResponse } from '@vramework/core'
-${serializeImportMap(importMap)}
-
-interface RouteHandler<I, O> {
-  input: I;
-  output: O;
-}
-
-${generateRoutes(routesMeta)}
-export type RoutesMap = typeof routes;
-
-export type RouteHandlerOf<Route extends keyof RoutesMap, Method extends keyof RoutesMap[Route]> =
-  RoutesMap[Route][Method] extends { input: infer I; output: infer O }
-    ? RouteHandler<I, O>
-    : never;
 
 export const runTypedRoute = async <
   Route extends keyof RoutesMap,
@@ -100,6 +84,30 @@ export const runTypedRoute = async <
 ): Promise<RouteHandlerOf<Route, Method>['output']> => {
   return runRoute(request, response, services, createSessionServices, route as any)
 };
+`
+}
+export const serializeTypedRoutesMap = (
+  relativeToPath: string,
+  packageMappings: Record<string, string>,
+  importMap: ImportMap,
+  routesMeta: RoutesMeta,
+) => {
+  return `
+// The typed route runner allows us to infer our types when running routes
+${serializeImportMap(relativeToPath, packageMappings, importMap)}
+
+interface RouteHandler<I, O> {
+  input: I;
+  output: O;
+}
+
+${generateRoutes(routesMeta)}
+export type RoutesMap = typeof routes;
+
+export type RouteHandlerOf<Route extends keyof RoutesMap, Method extends keyof RoutesMap[Route]> =
+  RoutesMap[Route][Method] extends { input: infer I; output: infer O }
+    ? RouteHandler<I, O>
+    : never;
 `
 }
 

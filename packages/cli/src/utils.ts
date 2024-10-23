@@ -5,7 +5,7 @@ import { VrameworkConfig } from '@vramework/core/types/core.types'
 export const getFileImportRelativePath = (
   from: string,
   to: string,
-  packageMappings: Record<string, string> = {}
+  packageMappings: Record<string, string>
 ): string => {
   let filePath = relative(dirname(from), to)
   if (!filePath.startsWith('.')) {
@@ -13,7 +13,7 @@ export const getFileImportRelativePath = (
   }
   for (const [path, packageName] of Object.entries(packageMappings)) {
     if (to.includes(path)) {
-      filePath = to.replace(new RegExp(`.*${path}`), packageName)
+      filePath = filePath.replace(new RegExp(`.*${path}`), packageName)
       break
     }
   }
@@ -30,7 +30,7 @@ interface FilesAndMethods {
 }
 
 export const getVrameworkFilesAndMethods = async (
-  vrameworkConfig: VrameworkConfig,
+  { rootDir, routeDirectories, packageMappings = {} }: VrameworkConfig,
   outputFile: string,
   filesAndMethods: Partial<FilesAndMethods>
 ): Promise<FilesAndMethods> => {
@@ -47,7 +47,7 @@ export const getVrameworkFilesAndMethods = async (
     vrameworkConfigs,
     sessionServicesFactories,
     singletonServicesFactories,
-  } = await extractVrameworkInformation(vrameworkConfig)
+  } = await extractVrameworkInformation(rootDir, routeDirectories)
 
   let errors = new Map<string, Record<string, string[]>>()
 
@@ -110,7 +110,7 @@ export const getVrameworkFilesAndMethods = async (
         filesAndMethods as Record<string, string[]>
       )) {
         result.push(
-          `\t* file: ${getFileImportRelativePath(outputFile, file, vrameworkConfig.packageMappings)}`
+          `\t* file: ${getFileImportRelativePath(outputFile, file, packageMappings)}`
         )
         result.push(`\t* methods: ${methods.join(', ')}`)
       }

@@ -6,8 +6,7 @@ import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const VrameworkConfig = await getVrameworkConfig(configFile)
-  const { schemaOutputDirectory, tsconfig, rootDir, routesOutputFile } = VrameworkConfig
+  const { schemaOutputDirectory, routeDirectories, tsconfig, rootDir, routesOutputFile } = await getVrameworkConfig(configFile)
 
   if (!rootDir || !routesOutputFile || !schemaOutputDirectory || !tsconfig) {
     console.error(
@@ -24,7 +23,7 @@ Generating schemas:
     - Route Meta:\n\t${routesOutputFile}
 `)
 
-  const { routesMeta } = await extractVrameworkInformation(VrameworkConfig)
+  const { routesMeta } = await extractVrameworkInformation(rootDir, routeDirectories)
 
   await generateSchemas(
     join(rootDir, tsconfig),

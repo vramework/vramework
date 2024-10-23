@@ -5,12 +5,13 @@ import {
   serializeRouteMeta,
   serializeRoutes,
   serializeTypedRouteRunner,
+  serializeTypedRoutesMap,
 } from '../src/routes-serializers.js'
 import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
+import { join } from 'path'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let vrameworkConfig = await getVrameworkConfig(configFile)
-  const { rootDir, routeDirectories, routesOutputFile } = vrameworkConfig
+  let { rootDir, routeDirectories, routesOutputFile, routesMapOutputFile, packageMappings = {} } = await getVrameworkConfig(configFile)
 
   if (!rootDir || !routeDirectories || !routesOutputFile) {
     console.error(
@@ -24,25 +25,35 @@ async function action({ configFile }: { configFile?: string }): Promise<void> {
 Generating Route File:
     - Route Directories: ${['', ...routeDirectories].join('\n\t- ')}
     - Route Output:\n\t${routesOutputFile}
+    - Route Mapping Output:\n\t${routesMapOutputFile ? routesMapOutputFile : 'Not provided'}
 `)
 
-  const { routesMeta, typesImportMap, filesWithRoutes, routesOutputPath } =
-    await extractVrameworkInformation(vrameworkConfig)
+  const { routesMeta, typesImportMap, filesWithRoutes } = await extractVrameworkInformation(rootDir, routeDirectories)
 
-  const parts = routesOutputPath.split('/')
+  routesOutputFile = join(rootDir, routesOutputFile)
+  const parts = routesOutputFile.split('/')
   parts.pop()
   await promises.mkdir(parts.join('/'), { recursive: true })
   const content = [
     serializeRoutes(
-      routesOutputPath,
+      routesOutputFile,
       filesWithRoutes,
-      vrameworkConfig.packageMappings
+      packageMappings
     ),
     // serializeInterface(typesImportMap, routesMeta),
     serializeRouteMeta(routesMeta),
-    serializeTypedRouteRunner(typesImportMap, routesMeta),
+    serializeTypedRoutesMap(routesOutputFile, packageMappings, typesImportMap, routesMeta),
+    serializeTypedRouteRunner(),
   ]
-  await promises.writeFile(routesOutputPath, content.join('\n\n'), 'utf-8')
+  await promises.writeFile(routesOutputFile, content.join('\n\n'), 'utf-8')
+
+  if (routesMapOutputFile) {
+    routesMapOutputFile = join(rootDir, routesMapOutputFile)
+    const parts = routesMapOutputFile.split('/')
+    parts.pop()
+    await promises.mkdir(parts.join('/'), { recursive: true })
+    await promises.writeFile(routesMapOutputFile, serializeTypedRoutesMap(routesMapOutputFile, packageMappings, typesImportMap, routesMeta), 'utf-8')
+  }
 
   console.log(`Routes generated in ${Date.now() - startedAt}ms.`)
 }
