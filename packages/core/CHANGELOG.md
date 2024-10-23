@@ -1,5 +1,12 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.4.8
+
+### Patch Changes
+
+- 97900d2: fix: exporting plugins from default barrel files
+- d939d46: refactor: extracting nextjs and fastify to plugins
+
 ## 0.4.7
 
 ### Patch Changes

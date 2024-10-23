@@ -1,5 +1,15 @@
 # @vramework/deploy-fastify
 
+## 0.4.12
+
+### Patch Changes
+
+- 97900d2: fix: exporting plugins from default barrel files
+- d939d46: refactor: extracting nextjs and fastify to plugins
+- Updated dependencies [97900d2]
+- Updated dependencies [d939d46]
+  - @vramework/core@0.4.8
+
 ## 0.4.11
 
 ### Patch Changes
