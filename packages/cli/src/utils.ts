@@ -8,6 +8,9 @@ export const getFileImportRelativePath = (
   packageMappings: Record<string, string> = {}
 ): string => {
   let filePath = relative(dirname(from), to)
+  if (!filePath.startsWith('.')) {
+    filePath = `./${filePath}`
+  }
   for (const [path, packageName] of Object.entries(packageMappings)) {
     if (to.includes(path)) {
       filePath = to.replace(new RegExp(`.*${path}`), packageName)
