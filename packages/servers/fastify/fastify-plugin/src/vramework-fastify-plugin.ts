@@ -1,4 +1,4 @@
-import { CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices, runRoute, RunRouteOptions } from '@vramework/core'
+import { CoreSingletonServices, CreateSessionServices, runRoute, RunRouteOptions } from '@vramework/core'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 import { VrameworkFastifyRequest } from './vramework-fastify-request.js'
@@ -7,7 +7,7 @@ import { VrameworkFastifyResponse } from './vramework-fastify-response.js'
 export type VrameworkFastifyPluginOptions = {
     vramework: {
         singletonServices: CoreSingletonServices
-        createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>
+        createSessionServices: CreateSessionServices<any, any, any>
     } & RunRouteOptions
 }
 
