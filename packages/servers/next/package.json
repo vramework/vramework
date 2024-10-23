@@ -1,6 +1,6 @@
 {
   "name": "@vramework/next",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "main": "dist/cjs/index.js",
