@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.3
+
+### Patch Changes
+
+- 5e0f033: feat: adding a routes map output file to support frontend sdks in the future
+- Updated dependencies [5e0f033]
+  - @vramework/core@0.5.2
+
 ## 0.5.2
 
 ### Patch Changes
