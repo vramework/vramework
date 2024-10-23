@@ -1,7 +1,5 @@
 import { VrameworkRequest } from '@vramework/core/vramework-request'
-
-// @ts-ignore
-import { NextRequest } from 'next/server'
+import { NextRequest } from 'next/server.js'
 
 export class VrameworkNextRequest extends VrameworkRequest {
   constructor(private request: NextRequest) {
