@@ -100,10 +100,8 @@ export class VrameworkExpressServer {
 
   public async start() {
     return await new Promise<void>((resolve) => {
-      this.server = this.app.listen(this.config.port, () => {
-        this.singletonServices.logger.info(
-          `listening on port ${this.config.port}`
-        )
+      this.server = this.app.listen(this.config.port, this.config.hostname, () => {
+        this.singletonServices.logger.info(`listening on port ${this.config.port} and host: ${this.config.hostname}`)
         resolve()
       })
     })

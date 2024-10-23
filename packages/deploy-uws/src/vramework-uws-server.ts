@@ -67,11 +67,9 @@ export class VrameworkUWSServer {
 
   public async start() {
     return await new Promise<void>((resolve) => {
-      this.app.listen(this.config.port, (token) => {
+      this.app.listen(this.config.hostname, this.config.port, (token) => {
         this.listenSocket = token
-        this.singletonServices.logger.info(
-          `listening on port ${this.config.port}`
-        )
+        this.singletonServices.logger.info(`listening on port ${this.config.port} and host: ${this.config.hostname}`)
         resolve()
       })
     })

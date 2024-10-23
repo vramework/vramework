@@ -37,6 +37,7 @@ export interface CoreConfig {
 
 export type CoreServerConfig = CoreConfig & {
   port: number
+  hostname: string
   healthCheckPath?: string
   limits?: Partial<Record<string, string>>
 }

@@ -63,8 +63,8 @@ export class VrameworkFastifyServer {
   }
 
   public async start() {
-    await this.app.listen({ port: this.config.port })
-    this.singletonServices.logger.info(`listening on port ${this.config.port}`)
+    await this.app.listen({ port: this.config.port, host: this.config.hostname })
+    this.singletonServices.logger.info(`listening on port ${this.config.port} and host: ${this.config.hostname}`)
   }
 
   public async stop(): Promise<void> {
