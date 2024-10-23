@@ -65,7 +65,7 @@ export interface CoreHTTPServices extends CoreServices {
 export type CreateSingletonServices<
   Config extends CoreConfig,
   SingletonServices extends CoreSingletonServices,
-> = (config: Config) => Promise<SingletonServices>
+> = (config: Config, ...args: any[]) => Promise<SingletonServices>
 
 export type CreateSessionServices<
   SingletonServices extends CoreSingletonServices,
