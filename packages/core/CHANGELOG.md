@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.4.7
+
+### Patch Changes
+
+- ddaf58f: feat: adding hostname to servers
+
 ## 0.4.6
 
 ### Patch Changes

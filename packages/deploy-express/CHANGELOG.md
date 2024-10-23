@@ -1,5 +1,13 @@
 ## 0.0.9 - 01.09.2022
 
+## 0.4.7
+
+### Patch Changes
+
+- ddaf58f: feat: adding hostname to servers
+- Updated dependencies [ddaf58f]
+  - @vramework/core@0.4.7
+
 ## 0.4.6
 
 ### Patch Changes
