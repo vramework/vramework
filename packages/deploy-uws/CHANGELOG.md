@@ -1,5 +1,13 @@
 # @vramework/deploy-uws
 
+## 0.4.8
+
+### Patch Changes
+
+- ddaf58f: feat: adding hostname to servers
+- Updated dependencies [ddaf58f]
+  - @vramework/core@0.4.7
+
 ## 0.4.7
 
 ### Patch Changes
