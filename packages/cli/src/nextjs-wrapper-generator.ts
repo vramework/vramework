@@ -7,7 +7,7 @@ export const generateNextJsWrapper = (
 ) => {
   return `
 'server-only'
-import { VrameworkNextJS } from '@vramework/deploy-next'
+import { VrameworkNextJS } from '@vramework/next'
 import { IncomingMessage, ServerResponse } from 'http'
 import { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils'
 import { APIRouteMethod } from '@vramework/core'

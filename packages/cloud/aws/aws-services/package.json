@@ -1,19 +1,19 @@
 {
-  "name": "@vramework/core",
+  "name": "@vramework/aws-services",
   "version": "0.5.0",
   "author": "yasser.fadl@gmail.com",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "type": "module",
   "scripts": {
     "tsc": "tsc",
-    "build:mjs": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
+    "build:esm": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
     "build:cjs": "tsc -b tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
-    "build": "rm -rf dist && yarn build:mjs && yarn build:cjs",
-    "ncu": "ncu",
+    "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
     "release": "npm run build && npm test",
-    "test": "mocha"
+    "ncu": "ncu",
+    "test": "echo 'No tests'"
   },
   "exports": {
     ".": {
@@ -29,26 +29,16 @@
       "require": "./dist/types/*.d.ts"
     }
   },
+  "peerDependencies": {
+    "@vramework/core": "^0.5.0"
+  },
   "dependencies": {
-    "@types/cookie": "^0.6.0",
-    "@types/uuid": "^10.0.0",
-    "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
-    "cookie": "^1.0.1",
-    "eventemitter3": "^5.0.1",
-    "path-to-regexp": "^8.2.0",
-    "uuid": "^10.0.0"
+    "@aws-sdk/client-s3": "3.676.0",
+    "@aws-sdk/client-secrets-manager": "3.675.0",
+    "@aws-sdk/s3-request-presigner": "3.676.0",
+    "aws-cloudfront-sign": "^3.0.2"
   },
   "devDependencies": {
-    "@types/chai-as-promised": "^8",
-    "@types/mocha": "^10.0.9",
-    "@types/node": "^22.7.8",
-    "@types/sinon": "^17.0.3",
-    "chai": "^5",
-    "chai-as-promised": "^8.0.0",
-    "mocha": "^10.7.3",
-    "sinon": "^19.0.2",
-    "ts-node": "^10.9.2",
     "typescript": "^5.6"
   },
   "engines": {

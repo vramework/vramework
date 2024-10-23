@@ -1,0 +1,24 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "module": "NodeNext",
+    "outDir": "dist/esm",
+    "target": "esnext",
+    "declaration": true
+    
+  },
+  "include": [
+    "bin/**/*.ts",
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "bin/dist"
+  ],
+  "references": [
+    {
+      "path": "../../../core/tsconfig.json"
+    }
+  ]
+}

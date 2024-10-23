@@ -1,6 +1,6 @@
 ---
-'@vramework/deploy-express': patch
-'@vramework/deploy-fastify': patch
+'@vramework/express': patch
+'@vramework/fastify': patch
 '@vramework/core': patch
 ---
 
