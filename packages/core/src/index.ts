@@ -4,7 +4,8 @@ export {
   getRoutes,
   addRouteMeta,
   addCoreRoute,
-  AssertRouteParams,
+  type AssertRouteParams,
+  type RunRouteOptions
 } from './route-runner.js'
 export { addError, addErrors } from './error-handler.js'
 export { addSchema, loadSchema, loadSchemas } from './schema.js'

@@ -34,6 +34,7 @@
     "@types/qs": "^6",
     "@vramework/core": "^0.4.6",
     "fastify": "^5.0.0",
+    "fastify-plugin": "^5.0.1",
     "qs": "^6.13.0",
     "query-string": "^9.1.1",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.49.0"

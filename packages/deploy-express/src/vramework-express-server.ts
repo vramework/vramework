@@ -10,8 +10,6 @@ import * as corsImp from 'cors'
 const cors = 'default' in corsImp ? (corsImp.default as any) : corsImp
 import { CorsOptions, CorsOptionsDelegate } from 'cors'
 
-import { VrameworkExpressRequest } from './vramework-express-request.js'
-import { VrameworkExpressResponse } from './vramework-express-response.js'
 import {
   VrameworkConfig,
   CoreSingletonServices,
@@ -19,7 +17,7 @@ import {
   CoreServerConfig,
 } from '@vramework/core/types/core.types'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
-import { runRoute } from '@vramework/core/route-runner'
+import { vrameworkMiddleware } from './vramework-express-middleware.js'
 
 export class VrameworkExpressServer {
   public app: core.Express = express()
@@ -56,7 +54,7 @@ export class VrameworkExpressServer {
     this.app.get(
       this.config.healthCheckPath || '/health-check',
       function (req, res) {
-        res.status(200).end()
+        res.status(200).json({ status: 'ok' })
       }
     )
   }
@@ -75,27 +73,9 @@ export class VrameworkExpressServer {
       this.vrameworkConfig
     )
 
-    this.app.use(async (req, res) => {
-      try {
-        await runRoute(
-          new VrameworkExpressRequest(req),
-          new VrameworkExpressResponse(res),
-          this.singletonServices,
-          this.createSessionServices,
-          {
-            method: req.method.toLowerCase() as any,
-            route: req.path,
-          }
-        )
-      } catch {
-        // Error should have already been handled by runRoute
-      }
-
-      if (!res.writableEnded) {
-        this.singletonServices.logger.error('Route did not send a response')
-        res.status(500).end()
-      }
-    })
+    this.app.use(vrameworkMiddleware(this.singletonServices, this.createSessionServices, {
+      set404Status: false,
+    }))
   }
 
   public async start() {

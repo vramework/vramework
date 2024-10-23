@@ -6,11 +6,8 @@ import {
   CreateSessionServices,
   VrameworkConfig,
 } from '@vramework/core/types/core.types'
-import { runRoute } from '@vramework/core/route-runner'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
-
-import { VrameworkFastifyRequest } from './vramework-fastify-request.js'
-import { VrameworkFastifyResponse } from './vramework-fastify-response.js'
+import vrameworkFastifyPlugin from './vramework-fastify-plugin.js'
 
 export class VrameworkFastifyServer {
   public app = Fastify({})
@@ -39,25 +36,11 @@ export class VrameworkFastifyServer {
       return { status: 'ok' }
     })
 
-    this.app.all('/*', async (req, res) => {
-      try {
-        await runRoute(
-          new VrameworkFastifyRequest(req),
-          new VrameworkFastifyResponse(res),
-          this.singletonServices,
-          this.createSessionServices,
-          {
-            method: req.method as any,
-            route: req.url as string,
-          }
-        )
-      } catch {
-        // Error should have already been handled by runRoute
-      }
-
-      if (!res.sent) {
-        this.singletonServices.logger.error('Route did not send a response')
-        res.status(500)
+    this.app.register(vrameworkFastifyPlugin, {
+      vramework: {
+        singletonServices: this.singletonServices,
+        createSessionServices: this.createSessionServices,
+        set404Status: true
       }
     })
   }

@@ -27,6 +27,11 @@ export type AssertRouteParams<In, Route extends string> =
   ? unknown
   : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
 
+export type RunRouteOptions = Partial<{
+  skipUserSession: boolean,
+  set404Status: boolean
+}>
+
 let routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
 
@@ -120,9 +125,8 @@ export const runRoute = async <In, Out>(
     route: apiRoute,
     method: apiType,
     skipUserSession = false,
-  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> & {
-    skipUserSession?: boolean
-  }
+    set404Status = true,
+  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> & RunRouteOptions
 ): Promise<Out> => {
   try {
     let session: CoreUserSession | undefined
@@ -195,8 +199,10 @@ export const runRoute = async <In, Out>(
     return result
   } catch (e: any) {
     if (e instanceof RouteNotFoundError) {
-      response.setStatus(404)
-      response.end()
+      if (set404Status) {
+        response.setStatus(404)
+        response.end()
+      }
       throw e
     }
 
