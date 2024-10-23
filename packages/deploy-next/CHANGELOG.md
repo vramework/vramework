@@ -1,5 +1,11 @@
 # @vramework/deploy-next
 
+## 0.4.5
+
+### Patch Changes
+
+- a7f7cd7: fix: using esm style imports for nextjs
+
 ## 0.4.4
 
 ### Patch Changes
