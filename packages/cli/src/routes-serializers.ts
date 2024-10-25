@@ -25,9 +25,9 @@ export const serializeRoutes = (
 
 const serializeImportMap = (relativeToPath: string, packageMappings: Record<string, string>, importMap: ImportMap) => {
   let imports: string[] = []
-  for (const [importPath, { namedImports }] of importMap) {
+  for (const [importPath, { variableNames }] of importMap) {
     imports.push(
-      `import { ${Array.from(namedImports).join(', ')} } from '${getFileImportRelativePath(relativeToPath, importPath, packageMappings)}'`
+      `import { ${Array.from(variableNames).join(', ')} } from '${getFileImportRelativePath(relativeToPath, importPath, packageMappings)}'`
     )
   }
   return imports.join('\n')

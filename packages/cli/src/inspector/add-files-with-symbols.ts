@@ -20,9 +20,9 @@ export const addFilesWithSymbols = (program: ts.Program, checker: ts.TypeChecker
           let filePath = declarations[0].getSourceFile().fileName
           const importInfo = typesImportMap.get(filePath) || {
             importPath: filePath,
-            namedImports: new Set(),
+            variableNames: new Set(),
           }
-          importInfo.namedImports.add(symbol.getName())
+          importInfo.variableNames.add(symbol.getName())
           typesImportMap.set(filePath, importInfo)
         }
       }

@@ -4,7 +4,7 @@ import { addFilesWithSymbols } from './add-files-with-symbols.js'
 
 export interface ImportInfo {
   importPath: string
-  namedImports: Set<string>
+  variableNames: Set<string>
 }
 
 export type ImportMap = Map<string, ImportInfo>
@@ -23,15 +23,16 @@ export const inspectRoutes = (routeFiles: string[]): VisitState => {
     inputTypes: new Set<string>(),
     outputTypes: new Set<string>(),
     filesWithRoutes: new Set<string>(),
-    singletonServicesFactories: {},
-    sessionServicesFactories: {},
-    vrameworkConfigs: {}
+    singletonServicesFactories: new Map(),
+    sessionServicesFactories: new Map(),
+    vrameworkConfigs: new Map()
   }
 
   for (const sourceFile of sourceFiles) {
     ts.forEachChild(sourceFile, (child) => visit(checker, child, state))
   }
 
+  // Looks for and adds all the input/out schema types
   addFilesWithSymbols(program, checker, state.typesImportMap, [...state.inputTypes, ...state.outputTypes])
 
   return state

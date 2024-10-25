@@ -6,7 +6,8 @@ import { pathToRegexp } from "path-to-regexp"
 import { APIRouteMethod, RoutesMeta } from "@vramework/core/types/routes.types"
 import { ImportMap } from "./inspect-routes.js"
 
-export type PathToNameAndType =  Record<string, { variable: string, type: string | null }[]>
+export type PathToNameAndType =  Map<string, { variable: string, type: string | null }[]>
+
 export interface VisitState {
   typesImportMap: ImportMap,
   routesMeta: RoutesMeta,

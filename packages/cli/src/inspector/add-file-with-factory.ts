@@ -3,7 +3,7 @@ import { PathToNameAndType } from "./visit.js"
 
 export const addFileWithFactory = (
     node: ts.Node,
-    methods: PathToNameAndType = {},
+    methods: PathToNameAndType = new Map(),
     expectedTypeName: string
   ) => {
     if (ts.isVariableDeclaration(node)) {
