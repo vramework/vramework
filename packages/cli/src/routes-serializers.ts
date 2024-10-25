@@ -1,17 +1,17 @@
 import type { RoutesMeta } from '@vramework/core/types/routes.types'
-import { ImportMap } from './inspect-routes.js'
+import { ImportMap } from './inspector/inspect-routes.js'
 import { getFileImportRelativePath } from './utils.js'
 
 export const serializeRoutes = (
   outputPath: string,
-  filesWithRoutes: string[],
+  filesWithRoutes: Set<string>,
   packageMappings: Record<string, string> = {}
 ) => {
   const serializedOutput: string[] = [
     '/* Files with addRoute function within them */',
   ]
 
-  filesWithRoutes.sort().forEach((path) => {
+  Array.from(filesWithRoutes).sort().forEach((path) => {
     const filePath = getFileImportRelativePath(
       outputPath,
       path,
@@ -86,6 +86,25 @@ export const runTypedRoute = async <
 };
 `
 }
+
+export const serializeTypes = (sessionServicesImport: string) => {
+return `
+  ${sessionServicesImport}
+  import { Services, UserSession } from './api'
+
+  import { CoreAPIFunction, CoreAPIPermission, CoreAPIRoute, addCoreRoute, AssertRouteParams } from '@vramework/core'
+  
+  export type APIFunctionSessionless<In, Out, RequiredServices = Services> = CoreAPIFunction<In, Out, RequiredServices, UserSession>
+  export type APIFunction<In, Out, RequiredServices = Services> = CoreAPIFunction<In, Out, RequiredServices, UserSession>
+  export type APIPermission<In, RequiredServices = Services> = CoreAPIPermission<In, RequiredServices, UserSession>
+  
+  type APIRoute<In, Out, Route extends string> = CoreAPIRoute<In, Out, Route, APIFunction<In, Out>, APIFunctionSessionless<In, Out>, APIPermission<In>>
+  export const addRoute = <In, Out, Route extends string>(route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>) => {
+    addCoreRoute(route as any)
+  }
+`
+}
+
 export const serializeTypedRoutesMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,

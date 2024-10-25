@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { inspectRoutes } from './inspect-routes.js'
+import { inspectRoutes } from './inspector/inspect-routes.js'
 import { glob } from 'glob'
 
 export const extractVrameworkInformation = async (rootDir: string, routeDirectories: string[]) => {

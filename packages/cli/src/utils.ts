@@ -1,6 +1,7 @@
 import { relative, dirname } from 'path'
 import { extractVrameworkInformation } from './extract-vramework-information.js'
 import { VrameworkCLIConfig } from './vramework-cli-config.js'
+import { PathToNameAndType } from './inspector/visit.js'
 
 export const getFileImportRelativePath = (
   from: string,
@@ -49,7 +50,7 @@ export const getVrameworkFilesAndMethods = async (
     singletonServicesFactories,
   } = await extractVrameworkInformation(rootDir, routeDirectories)
 
-  let errors = new Map<string, Record<string, string[]>>()
+  let errors = new Map<string, PathToNameAndType>()
 
   if (!vrameworkConfigFile) {
     let totalValues = Object.values(vrameworkConfigs).flat()
@@ -59,9 +60,10 @@ export const getVrameworkFilesAndMethods = async (
       errors.set('More than one VrameworkConfig found', vrameworkConfigs)
     } else {
       vrameworkConfigFile = Object.keys(vrameworkConfigs)[0]
-      vrameworkConfigVariable = Object.values(vrameworkConfigs)[0][0]
+      vrameworkConfigVariable = Object.values(vrameworkConfigs)[0][0].variable
     }
   }
+
   if (!singletonServicesFactoryFile) {
     let totalValues = Object.values(singletonServicesFactories).flat()
     if (totalValues.length === 0) {
@@ -78,7 +80,7 @@ export const getVrameworkFilesAndMethods = async (
       singletonServicesFactoryFile = Object.keys(singletonServicesFactories)[0]
       singletonServicesFactoryVariable = Object.values(
         singletonServicesFactories
-      )[0][0]
+      )[0][0].variable
     }
   }
   if (!sessionServicesFactoryFile) {
@@ -97,7 +99,7 @@ export const getVrameworkFilesAndMethods = async (
       sessionServicesFactoryFile = Object.keys(sessionServicesFactories)[0]
       sessionServicesFactoryVariable = Object.values(
         sessionServicesFactories
-      )[0][0]
+      )[0][0].variable
     }
   }
 
@@ -106,13 +108,11 @@ export const getVrameworkFilesAndMethods = async (
 
     errors.forEach((filesAndMethods, message) => {
       result.push(`- ${message}`)
-      for (const [file, methods] of Object.entries(
-        filesAndMethods as Record<string, string[]>
-      )) {
+      for (const [file, methods] of Object.entries(filesAndMethods)) {
         result.push(
           `\t* file: ${getFileImportRelativePath(outputFile, file, packageMappings)}`
         )
-        result.push(`\t* methods: ${methods.join(', ')}`)
+        result.push(`\t* methods: ${methods.map(({ variable, type }) => `${variable}: ${type}`).join(', ')}`)
       }
     })
 

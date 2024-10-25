@@ -66,9 +66,9 @@ export const action = async (
       nextOutputFile,
       options
     )
-    const vrameworkConfigImport = `import { ${vrameworkConfigVariable} } from '${getFileImportRelativePath(nextOutputFile, vrameworkConfigFile!, packageMappings)}'`
-    const singletonServicesImport = `import { ${singletonServicesFactoryVariable} } from '${getFileImportRelativePath(nextOutputFile, singletonServicesFactoryFile!, packageMappings)}'`
-    const sessionServicesImport = `import { ${sessionServicesFactoryVariable} } from '${getFileImportRelativePath(nextOutputFile, sessionServicesFactoryFile!, packageMappings)}'`
+    const vrameworkConfigImport = `import { ${vrameworkConfigVariable} as config } from '${getFileImportRelativePath(nextOutputFile, vrameworkConfigFile!, packageMappings)}'`
+    const singletonServicesImport = `import { ${singletonServicesFactoryVariable} as createSingletonServices } from '${getFileImportRelativePath(nextOutputFile, singletonServicesFactoryFile!, packageMappings)}'`
+    const sessionServicesImport = `import { ${sessionServicesFactoryVariable} as createSessionServices } from '${getFileImportRelativePath(nextOutputFile, sessionServicesFactoryFile!, packageMappings)}'`
 
     const routesPath = getFileImportRelativePath(
       path.join(configDir, vrameworkNextFile),
