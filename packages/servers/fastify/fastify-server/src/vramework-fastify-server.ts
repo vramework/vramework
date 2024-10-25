@@ -4,7 +4,6 @@ import {
   CoreServerConfig,
   CoreSingletonServices,
   CreateSessionServices,
-  VrameworkConfig,
 } from '@vramework/core/types/core.types'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
 import vrameworkFastifyPlugin from '@vramework/fastify-plugin'
@@ -13,7 +12,6 @@ export class VrameworkFastifyServer {
   public app = Fastify({})
 
   constructor(
-    private readonly vrameworkConfig: VrameworkConfig,
     private readonly config: CoreServerConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
@@ -27,10 +25,7 @@ export class VrameworkFastifyServer {
   }
 
   public async init() {
-    await initializeVrameworkCore(
-      this.singletonServices.logger,
-      this.vrameworkConfig
-    )
+    await initializeVrameworkCore(this.singletonServices.logger)
 
     this.app.get(this.config.healthCheckPath || '/health-check', async () => {
       return { status: 'ok' }

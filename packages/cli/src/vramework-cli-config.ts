@@ -1,11 +1,22 @@
 import { join, dirname, resolve } from 'path'
 import { readdir } from 'fs/promises'
-import { VrameworkConfig } from './types/core.types.js'
 
-export const getVrameworkConfig = async (
+export interface VrameworkCLIConfig {
+  rootDir: string
+  routeDirectories: string[]
+  routesOutputFile: string
+  schemaOutputDirectory: string
+  tsconfig: string
+  vrameworkNextFile?: string
+  routesMapOutputFile?: string
+  packageMappings?: Record<string, string>
+  configDir: string
+}
+
+export const getVrameworkCLIConfig = async (
   configFile: string | undefined = undefined,
   exitProcess: boolean = false
-): Promise<VrameworkConfig> => {
+): Promise<VrameworkCLIConfig> => {
   if (!configFile) {
     let execDirectory = process.cwd()
     const files = await readdir(execDirectory)
@@ -23,7 +34,7 @@ export const getVrameworkConfig = async (
   }
 
   try {
-    const config: VrameworkConfig = await import(configFile)
+    const config: VrameworkCLIConfig = await import(configFile)
     const configDir = dirname(configFile)
     // TODO: Validate config
     return {

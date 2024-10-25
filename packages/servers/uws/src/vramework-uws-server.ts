@@ -4,7 +4,6 @@ import {
   CoreServerConfig,
   CoreSingletonServices,
   CreateSessionServices,
-  VrameworkConfig,
 } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { initializeVrameworkCore } from '@vramework/core/initialize'
@@ -17,7 +16,6 @@ export class VrameworkUWSServer {
   private listenSocket: boolean | uWS.us_listen_socket | null = null
 
   constructor(
-    private readonly vrameworkConfig: VrameworkConfig,
     private readonly config: CoreServerConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
@@ -31,10 +29,7 @@ export class VrameworkUWSServer {
   }
 
   public async init() {
-    await initializeVrameworkCore(
-      this.singletonServices.logger,
-      this.vrameworkConfig
-    )
+    await initializeVrameworkCore(this.singletonServices.logger)
 
     this.app.get(this.config.healthCheckPath || '/health-check', async (res) => {
       res.writeStatus('200').end()

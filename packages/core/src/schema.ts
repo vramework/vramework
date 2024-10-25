@@ -6,6 +6,7 @@ import { ValidateFunction } from 'ajv'
 
 import { Logger } from './services/logger.js'
 import { InvalidParametersError } from './errors.js'
+import { RoutesMeta } from './types/routes.types.js'
 
 const ajv = new Ajv({
   removeAdditional: false,
@@ -30,16 +31,23 @@ const getSchemas = () => {
 }
 
 /**
- * Loads schemas from the specified directory.
- * @param schemaDir - The directory to load schemas from.
  */
-export const loadSchemas = async (schemaDir: string) => {
-  try {
-    await import(`${schemaDir}/schemas.ts`)
-  } catch (e) {
-    console.error(`Error: Failed to load schemas from '${schemaDir}/schemas.ts'.`)
-    console.error('\tHave you run the schema generation?')
-    console.error('\tnpx @vramework/cli schemas')
+export const validateAllSchemasLoaded = async (logger: Logger, routeMeta: RoutesMeta) => {
+  const missingSchemas: string[] = []
+
+  for (const route of routeMeta) {
+      if (!route.input || validators.has(route.input)) {
+        continue
+      }
+      missingSchemas.push(route.input)
+  }
+
+  if (missingSchemas.length > 0) {
+    logger.error(`Error: Failed to load schemas:\n.${missingSchemas.join('\n')}`)
+    logger.error('\tHave you run the schema generation?')
+    logger.error('\tnpx @vramework/cli schemas')
+  } else {
+    logger.info('All schemas loaded')
   }
 }
 

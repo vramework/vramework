@@ -11,7 +11,6 @@ const cors = 'default' in corsImp ? (corsImp.default as any) : corsImp
 import { CorsOptions, CorsOptionsDelegate } from 'cors'
 
 import {
-  VrameworkConfig,
   CoreSingletonServices,
   CreateSessionServices,
   CoreServerConfig,
@@ -24,7 +23,7 @@ export class VrameworkExpressServer {
   private server: Server | undefined
 
   constructor(
-    private readonly vrameworkConfig: VrameworkConfig,
+    // private readonly vrameworkConfig: VrameworkConfig,
     private readonly config: CoreServerConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
@@ -68,10 +67,7 @@ export class VrameworkExpressServer {
   }
 
   public async init() {
-    await initializeVrameworkCore(
-      this.singletonServices.logger,
-      this.vrameworkConfig
-    )
+    await initializeVrameworkCore(this.singletonServices.logger)
 
     this.app.use(vrameworkMiddleware(this.singletonServices, this.createSessionServices, {
       set404Status: false,

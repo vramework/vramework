@@ -18,18 +18,6 @@ export type RequireAtLeastOne<T> = {
   [K in keyof T]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<keyof T, K>>>
 }[keyof T]
 
-export interface VrameworkConfig {
-  rootDir: string
-  routeDirectories: string[]
-  routesOutputFile: string
-  schemaOutputDirectory: string
-  tsconfig: string
-  vrameworkNextFile?: string
-  routesMapOutputFile?: string
-  packageMappings?: Record<string, string>
-  configDir: string
-}
-
 export interface CoreConfig {
   logLevel: LogLevel
   maximumComputeTime?: number

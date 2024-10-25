@@ -1,5 +1,4 @@
 import { Command } from 'commander'
-import { getVrameworkConfig } from '@vramework/core/vramework-config'
 import * as promises from 'fs/promises'
 import {
   serializeRouteMeta,
@@ -9,9 +8,10 @@ import {
 } from '../src/routes-serializers.js'
 import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
 import { join } from 'path'
+import { getVrameworkCLIConfig } from '../src/vramework-cli-config.js'
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let { rootDir, routeDirectories, routesOutputFile, routesMapOutputFile, packageMappings = {} } = await getVrameworkConfig(configFile)
+  let { rootDir, routeDirectories, routesOutputFile, routesMapOutputFile, packageMappings = {} } = await getVrameworkCLIConfig(configFile)
 
   if (!rootDir || !routeDirectories || !routesOutputFile) {
     console.error(

@@ -1,6 +1,6 @@
 import { relative, dirname } from 'path'
 import { extractVrameworkInformation } from './extract-vramework-information.js'
-import { VrameworkConfig } from '@vramework/core/types/core.types'
+import { VrameworkCLIConfig } from './vramework-cli-config.js'
 
 export const getFileImportRelativePath = (
   from: string,
@@ -30,7 +30,7 @@ interface FilesAndMethods {
 }
 
 export const getVrameworkFilesAndMethods = async (
-  { rootDir, routeDirectories, packageMappings = {} }: VrameworkConfig,
+  { rootDir, routeDirectories, packageMappings = {} }: VrameworkCLIConfig,
   outputFile: string,
   filesAndMethods: Partial<FilesAndMethods>
 ): Promise<FilesAndMethods> => {

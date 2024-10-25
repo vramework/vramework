@@ -1,20 +1,13 @@
-import { join } from 'path'
-
-import { loadSchema, loadSchemas } from './schema.js'
-import { VrameworkConfig } from './types/core.types.js'
+import { validateAllSchemasLoaded } from './schema.js'
 import { Logger } from './services/index.js'
 import { getRoutes } from './route-runner.js'
 
 /**
  * Initializes the Vramework core.
  * @param logger - A logger for logging information.
- * @param config - The configuration object for Vramework.
  * @returns A promise that resolves to an object containing the loaded API routes.
  */
-export const initializeVrameworkCore = async (
-  logger: Logger,
-  config: VrameworkConfig
-) => {
+export const initializeVrameworkCore = async (logger: Logger) => {
   logger.info(`Initializing Vramework Core`)
 
   const { routes, routesMeta } = getRoutes()
@@ -25,13 +18,7 @@ export const initializeVrameworkCore = async (
   logger.debug(routesDebugMessage)
   logger.info(`Routes loaded`)
 
-  await loadSchemas(join(config.rootDir, config.schemaOutputDirectory))
-  routesMeta.forEach((route: any) => {
-    if (route.input) {
-      loadSchema(route.input, logger)
-    }
-  })
-  logger.info(`Schemas loaded`)
+  await validateAllSchemasLoaded(logger, routesMeta)
 
   return { routes, routesMeta }
 }
