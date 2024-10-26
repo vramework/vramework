@@ -23,7 +23,6 @@ export class VrameworkExpressServer {
   private server: Server | undefined
 
   constructor(
-    // private readonly vrameworkConfig: VrameworkConfig,
     private readonly config: CoreServerConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
