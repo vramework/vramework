@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.7
+
+### Patch Changes
+
+- 3724449: fix: fixing a cli path issue
+
 ## 0.5.6
 
 ### Patch Changes
