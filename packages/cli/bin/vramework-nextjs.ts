@@ -12,7 +12,7 @@ import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-
 import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 
-export const vrameworkNext = async ({ nextDeclarationFile, routesFile, schemaDirectory, packageMappings }: VrameworkCLIConfig, visitState: VisitState, options: VrameworkCLIOptions) => {
+export const vrameworkNext = async ({ nextDeclarationFile, routesFile, routesMapDeclarationFile, schemaDirectory, packageMappings }: VrameworkCLIConfig, visitState: VisitState, options: VrameworkCLIOptions) => {
   await logCommandInfoAndTime('Generating nextjs wrapper', 'Generated nextjs wrapper', async () => {
     if (!nextDeclarationFile) {
       throw new Error('vrameworkNextFile is required in vramework config')
@@ -38,6 +38,11 @@ export const vrameworkNext = async ({ nextDeclarationFile, routesFile, schemaDir
       routesFile,
       packageMappings
     )
+    const routesMapDeclarationPath = getFileImportRelativePath(
+      nextDeclarationFile,
+      routesMapDeclarationFile,
+      packageMappings
+    )
     const schemasPath = getFileImportRelativePath(
       nextDeclarationFile,
       `${schemaDirectory}/schemas.ts`,
@@ -46,6 +51,7 @@ export const vrameworkNext = async ({ nextDeclarationFile, routesFile, schemaDir
 
     const content = serializeNextJsWrapper(
       routesPath,
+      routesMapDeclarationPath,
       schemasPath,
       vrameworkConfigImport,
       singletonServicesImport,
