@@ -5,22 +5,25 @@ import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import { vrameworkRoutes } from './vramework-routes.js'
 import { vrameworkSchemas } from './vramework-schemas.js'
 import { vrameworkNext } from './vramework-nextjs.js'
-import { vrameworkTypes } from './vramework-types.js'
+import { vrameworkFunctionTypes } from './vramework-function-types.js'
+import { vrameworkRoutesMap } from './vramework-routes-map.js'
 
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
 
-  const cliConfig = await getVrameworkCLIConfig(options.config, true)
+  const cliConfig = await getVrameworkCLIConfig(options.config, [], true)
   
   const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
 
-  await vrameworkTypes(cliConfig, options, visitState)
+  await vrameworkFunctionTypes(cliConfig, options, visitState)
 
   await vrameworkRoutes(cliConfig, visitState)
+
+  await vrameworkRoutesMap(cliConfig, visitState)
   
   await vrameworkSchemas(cliConfig, visitState)
   
-  if (cliConfig.vrameworkNextFile) {
+  if (cliConfig.nextDeclarationFile) {
     await vrameworkNext(cliConfig, visitState, options)
   }
 }

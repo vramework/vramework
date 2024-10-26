@@ -15,17 +15,16 @@ export const serializeTypedRoutesMap = (
 ${serializeImportMap(relativeToPath, packageMappings, importMap)}
 
 interface RouteHandler<I, O> {
-input: I;
-output: O;
+    input: I;
+    output: O;
 }
 
 ${generateRoutes(routesMeta)}
-export type RoutesMap = typeof routes;
 
 export type RouteHandlerOf<Route extends keyof RoutesMap, Method extends keyof RoutesMap[Route]> =
-RoutesMap[Route][Method] extends { input: infer I; output: infer O }
-    ? RouteHandler<I, O>
-    : never;
+    RoutesMap[Route][Method] extends { input: infer I; output: infer O }
+        ? RouteHandler<I, O>
+        : never;
   `
 }
 
@@ -65,17 +64,17 @@ function generateRoutes(routesMeta: RoutesMeta): string {
     }
 
     // Build the routes object as a string
-    let routesStr = 'const routes = {\n'
+    let routesStr = 'export type RoutesMap = {\n'
 
     for (const [routePath, methods] of Object.entries(routesObj)) {
-        routesStr += `  '${routePath}': {\n`
+        routesStr += `  readonly '${routePath}': {\n`
         for (const [method, handler] of Object.entries(methods)) {
-            routesStr += `    ${method}: { input: ${handler.input}, output: ${handler.output} } as RouteHandler<${handler.inputType}, ${handler.outputType}>,\n`
+            routesStr += `    readonly ${method}: RouteHandler<${handler.inputType}, ${handler.outputType}>,\n`
         }
         routesStr += '  },\n'
     }
 
-    routesStr += '} as const;\n'
+    routesStr += '};'
 
     return routesStr
 }

@@ -5,7 +5,7 @@ export const serializeImportMap = (relativeToPath: string, packageMappings: Reco
     let imports: string[] = []
     for (const [importPath, { variableNames }] of importMap) {
       imports.push(
-        `import { ${Array.from(variableNames).join(', ')} } from '${getFileImportRelativePath(relativeToPath, importPath, packageMappings)}'`
+        `import type { ${Array.from(variableNames).join(', ')} } from '${getFileImportRelativePath(relativeToPath, importPath, packageMappings)}'`
       )
     }
     return imports.join('\n')

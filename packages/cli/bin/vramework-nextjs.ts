@@ -1,5 +1,4 @@
 import { Command } from 'commander'
-import * as path from 'path'
 import { serializeNextJsWrapper } from '../src/serializer/serialize-nextjs-wrapper.js'
 import {
   getFileImportRelativePath,
@@ -9,17 +8,15 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { getVrameworkCLIConfig, validateCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
 import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 
-export const vrameworkNext = async ({ configDir, vrameworkNextFile, rootDir, routesFile, schemaDirectory, packageMappings }: VrameworkCLIConfig, visitState: VisitState, options: VrameworkCLIOptions) => {
+export const vrameworkNext = async ({ nextDeclarationFile, routesFile, schemaDirectory, packageMappings }: VrameworkCLIConfig, visitState: VisitState, options: VrameworkCLIOptions) => {
   await logCommandInfoAndTime('Generating nextjs wrapper', 'Generated nextjs wrapper', async () => {
-    if (!vrameworkNextFile) {
+    if (!nextDeclarationFile) {
       throw new Error('vrameworkNextFile is required in vramework config')
     }
-
-    const nextOutputFile = path.join(configDir, vrameworkNextFile)
 
     const {
       vrameworkConfig,
@@ -28,22 +25,22 @@ export const vrameworkNext = async ({ configDir, vrameworkNextFile, rootDir, rou
     } = await getVrameworkFilesAndMethods(
       visitState,
       packageMappings,
-      nextOutputFile,
+      nextDeclarationFile,
       options
     )
 
-    const vrameworkConfigImport = `import { ${vrameworkConfig.variable} as config } from '${getFileImportRelativePath(nextOutputFile, vrameworkConfig.file, packageMappings)}'`
-    const singletonServicesImport = `import { ${singletonServicesFactory.variable} as createSingletonServices } from '${getFileImportRelativePath(nextOutputFile, singletonServicesFactory.file, packageMappings)}'`
-    const sessionServicesImport = `import { ${sessionServicesFactory.variable} as createSessionServices } from '${getFileImportRelativePath(nextOutputFile, sessionServicesFactory.file, packageMappings)}'`
+    const vrameworkConfigImport = `import { ${vrameworkConfig.variable} as config } from '${getFileImportRelativePath(nextDeclarationFile, vrameworkConfig.file, packageMappings)}'`
+    const singletonServicesImport = `import { ${singletonServicesFactory.variable} as createSingletonServices } from '${getFileImportRelativePath(nextDeclarationFile, singletonServicesFactory.file, packageMappings)}'`
+    const sessionServicesImport = `import { ${sessionServicesFactory.variable} as createSessionServices } from '${getFileImportRelativePath(nextDeclarationFile, sessionServicesFactory.file, packageMappings)}'`
 
     const routesPath = getFileImportRelativePath(
-      path.join(configDir, vrameworkNextFile),
-      path.join(rootDir, routesFile),
+      nextDeclarationFile,
+      routesFile,
       packageMappings
     )
     const schemasPath = getFileImportRelativePath(
-      path.join(configDir, vrameworkNextFile),
-      path.join(rootDir, schemaDirectory, 'schemas.ts'),
+      nextDeclarationFile,
+      `${schemaDirectory}/schemas.ts`,
       packageMappings
     )
 
@@ -54,7 +51,7 @@ export const vrameworkNext = async ({ configDir, vrameworkNextFile, rootDir, rou
       singletonServicesImport,
       sessionServicesImport
     )
-    await writeFileInDir(nextOutputFile, content)
+    await writeFileInDir(nextDeclarationFile, content)
   })
 }
 
@@ -62,10 +59,7 @@ export const action = async (
   options: VrameworkCLIOptions
 ): Promise<void> => {
   logVrameworkLogo()
-
-  const cliConfig = await getVrameworkCLIConfig(options.config, true)
-  validateCLIConfig(cliConfig, ['rootDir', 'schemaDirectory', 'configDir', 'vrameworkNextFile'])
-
+  const cliConfig = await getVrameworkCLIConfig(options.config, ['rootDir', 'schemaDirectory', 'configDir', 'nextDeclarationFile'], true)
   const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
   await vrameworkNext(cliConfig, visitState, options)
 }

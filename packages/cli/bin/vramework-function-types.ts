@@ -1,16 +1,13 @@
 import { Command } from 'commander'
-import { join } from 'path'
-import { getVrameworkCLIConfig, validateCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
 import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import { getFileImportRelativePath, getVrameworkFilesAndMethods, logCommandInfoAndTime, logVrameworkLogo, VrameworkCLIOptions, writeFileInDir } from '../src/utils.js'
 import { serializeVrameworkTypes } from '../src/serializer/serialize-vramework-types.js'
 import { vrameworkRoutes } from './vramework-routes.js'
 
-export const vrameworkTypes = async ({ rootDir, typesFile, packageMappings }: VrameworkCLIConfig, options: VrameworkCLIOptions, visitState: VisitState) => {
+export const vrameworkFunctionTypes = async ({ typesDeclarationFile: typesFile, packageMappings }: VrameworkCLIConfig, options: VrameworkCLIOptions, visitState: VisitState) => {
   await logCommandInfoAndTime('Creating api types', 'Created api types', async () => {
-    typesFile = join(rootDir, typesFile)
-
     const {
       userSessionType,
       sessionServicesType
@@ -33,19 +30,16 @@ export const vrameworkTypes = async ({ rootDir, typesFile, packageMappings }: Vr
 async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
   logVrameworkLogo()
   
-  const cliConfig = await getVrameworkCLIConfig(cliOptions.config)
-  validateCLIConfig(cliConfig, ['rootDir', 'routeDirectories', 'typesFile'])
+  const cliConfig = await getVrameworkCLIConfig(cliOptions.config, ['rootDir', 'routeDirectories', 'typesDeclarationFile'])
 
-  const startedAt = Date.now()
   const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
   await vrameworkRoutes(cliConfig, visitState)
-  console.log(`Routes generated in ${Date.now() - startedAt}ms.`)
 }
 
-export const types = (program: Command): void => {
+export const functionTypes = (program: Command): void => {
   program
     .command('types')
-    .description('generate types')
+    .description('Generate the core API')
     .option(
       '-ct | --vramework-config-type',
       'The type of your vramework config object'

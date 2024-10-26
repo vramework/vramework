@@ -12,14 +12,16 @@ export interface VrameworkCLIConfig {
   tsconfig: string
 
   routesFile: string
-  typesFile: string
   schemaDirectory: string
-  vrameworkNextFile?: string
-  routesMapFile?: string
+
+  typesDeclarationFile: string
+  routesMapDeclarationFile: string
+  nextDeclarationFile?: string
 }
 
 export const getVrameworkCLIConfig = async (
   configFile: string | undefined = undefined,
+  requiredFields: Array<keyof VrameworkCLIConfig>,
   exitProcess: boolean = false
 ): Promise<VrameworkCLIConfig> => {
   if (!configFile) {
@@ -39,14 +41,16 @@ export const getVrameworkCLIConfig = async (
   }
 
   try {
+    let result: VrameworkCLIConfig
     const config: VrameworkCLIConfig = await import(configFile)
     const configDir = dirname(configFile)
     if (config.extends) {
       const extendedConfig = await getVrameworkCLIConfig(
         resolve(configDir, config.extends),
+        [],
         exitProcess
       )
-      return {
+      result = {
         ...extendedConfig,
         ...config,
         configDir,
@@ -55,13 +59,31 @@ export const getVrameworkCLIConfig = async (
           ...config.packageMappings,
         },
       }
+    } else {
+      result = {
+        ...config,
+        configDir,
+        packageMappings: config.packageMappings || {},
+        rootDir: config.rootDir ? resolve(configDir, config.rootDir) : configDir,
+      }
     }
-    return {
-      ...config,
-      configDir,
-      packageMappings: config.packageMappings || {},
-      rootDir: config.rootDir ? resolve(configDir, config.rootDir) : configDir,
+
+    if (requiredFields.length > 0) {
+      validateCLIConfig(result, requiredFields)
     }
+
+    for (const objectKey of Object.keys(result)) {
+      if (objectKey.endsWith('File') || objectKey.endsWith('Directory')) {
+        const relativeTo = objectKey === 'nextDeclarationFile' ? result.configDir : result.rootDir
+        if (result[objectKey]) {
+          result[objectKey] = join(relativeTo, result[objectKey])
+        }
+      }
+    }
+
+    result.tsconfig = join(result.rootDir, result.tsconfig)
+
+    return result
   } catch (e: any) {
     console.error(e)
     console.error(`Config file not found: ${configFile}`)
