@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.3
+
+### Patch Changes
+
+- 8065e48: refactor: large cli refactor for a better dev experience
+
 ## 0.5.2
 
 ### Patch Changes
