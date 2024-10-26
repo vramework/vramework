@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.9
+
+### Patch Changes
+
+- 0e1f01c: fix: inccorect string replacement
+
 ## 0.5.8
 
 ### Patch Changes
