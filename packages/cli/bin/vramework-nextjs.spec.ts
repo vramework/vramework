@@ -55,10 +55,10 @@
 //     getVrameworkConfigStub.resolves({
 //       vrameworkNextFile: 'nextFile.ts',
 //       rootDir: 'rootDir',
-//       routesOutputFile: 'routes.ts',
+//       routesFile: 'routes.ts',
 //       configDir: 'configDir',
 //       packageMappings: {},
-//       schemaOutputDirectory: 'schemas',
+//       schemaDirectory: 'schemas',
 //     })
 
 //     extractVrameworkInformationStub.resolves({
@@ -175,14 +175,14 @@
 //     getVrameworkConfigStub.resolves({
 //       vrameworkNextFile: 'nextFile.ts',
 //       rootDir: 'rootDir',
-//       routesOutputFile: 'routes.ts',
+//       routesFile: 'routes.ts',
 //       configDir: 'configDir',
 //       packageMappings: {
 //         'configFile.ts': '@configs/configFile',
 //         'singletonFactoryFile.ts': '@factories/singletonFactory',
 //         'sessionFactoryFile.ts': '@factories/sessionFactory',
 //       },
-//       schemaOutputDirectory: 'schemas',
+//       schemaDirectory: 'schemas',
 //     })
 
 //     // Modify getFileImportRelativePath to consider packageMappings

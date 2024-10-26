@@ -1,5 +1,5 @@
-import { promises } from 'fs'
 import { createGenerator } from 'ts-json-schema-generator'
+import { writeFileInDir } from './utils.js'
 
 export async function generateSchemas(
   tsconfig: string,
@@ -18,36 +18,32 @@ export async function generateSchemas(
   )
   const schemas = Array.from(schemasSet)
 
-  await promises.mkdir(`${schemaParentDir}/schemas`, { recursive: true })
-  await promises.writeFile(
+  await writeFileInDir(
     `${schemaParentDir}/schemas.ts`,
     'export const empty = null;',
-    'utf-8'
   )
 
-  const generator = createGenerator({ tsconfig })
+  const generator = createGenerator({ tsconfig, skipTypeCheck: true})
   await Promise.all(
     schemas.map(async (schema) => {
-      await promises.writeFile(
+      await writeFileInDir(
         `${schemaParentDir}/schemas/${schema}.schema.json`,
         JSON.stringify(generator.createSchema(schema)),
-        'utf-8'
       )
     })
   )
 
-  await promises.writeFile(
+  await writeFileInDir(
     `${schemaParentDir}/schemas.ts`,
     `
 import { addSchema } from '@vramework/core'
 ` +
-      schemas
-        .map(
-          (schema) => `
+    schemas
+      .map(
+        (schema) => `
 import * as ${schema} from './schemas/${schema}.schema.json'
 addSchema('${schema}', ${schema})`
-        )
-        .join('\n'),
-    'utf8'
+      )
+      .join('\n')
   )
 }

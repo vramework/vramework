@@ -1,12 +1,16 @@
-export const generateNextJsWrapper = (
+export const serializeNextJsWrapper = (
   routesPath: string,
   schemasPath: string,
   configImport: string,
   singleServicesFactoryImport: string,
   sessionServicesImport: string
 ) => {
-  return `
-'server-only'
+  return `'server-only'
+
+/**
+ * This provides a wrapper around the VrameworkNextJS class to allow for methods to be type checked against your routes
+ */
+
 import { VrameworkNextJS } from '@vramework/next'
 import { IncomingMessage, ServerResponse } from 'http'
 import { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils'

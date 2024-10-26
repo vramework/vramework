@@ -9,7 +9,7 @@ export interface ImportInfo {
 
 export type ImportMap = Map<string, ImportInfo>
 
-export const inspectRoutes = (routeFiles: string[]): VisitState => {
+export const inspector = (routeFiles: string[]): VisitState => {
   const program = ts.createProgram(routeFiles, {
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.CommonJS,
@@ -18,7 +18,9 @@ export const inspectRoutes = (routeFiles: string[]): VisitState => {
   const sourceFiles = program.getSourceFiles()
 
   const state: VisitState = {
-    typesImportMap: new Map(),
+    sessionServicesTypeImportMap: new Map(),
+    userSessionTypeImportMap: new Map(),
+    functionTypesImportMap: new Map(),
     routesMeta: [],
     inputTypes: new Set<string>(),
     outputTypes: new Set<string>(),
@@ -33,7 +35,7 @@ export const inspectRoutes = (routeFiles: string[]): VisitState => {
   }
 
   // Looks for and adds all the input/out schema types
-  addFilesWithSymbols(program, checker, state.typesImportMap, [...state.inputTypes, ...state.outputTypes])
+  addFilesWithSymbols(program, checker, state.functionTypesImportMap, [...state.inputTypes, ...state.outputTypes])
 
   return state
 }

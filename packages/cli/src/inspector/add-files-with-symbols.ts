@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
-import { ImportMap } from './inspect-routes.js'
+import { ImportMap } from './inspector.js'
 
-export const addFilesWithSymbols = (program: ts.Program, checker: ts.TypeChecker, typesImportMap: ImportMap, symbolNames: string[]): string | null => {
+export const addFilesWithSymbols = (program: ts.Program, checker: ts.TypeChecker, functionTypesImportMap: ImportMap, symbolNames: string[]): string | null => {
   for (const sourceFile of program.getSourceFiles()) {
     if (sourceFile.isDeclarationFile) {
       continue
@@ -18,12 +18,12 @@ export const addFilesWithSymbols = (program: ts.Program, checker: ts.TypeChecker
         const declarations = symbol.getDeclarations()
         if (declarations && declarations.length > 0) {
           let filePath = declarations[0].getSourceFile().fileName
-          const importInfo = typesImportMap.get(filePath) || {
+          const importInfo = functionTypesImportMap.get(filePath) || {
             importPath: filePath,
             variableNames: new Set(),
           }
           importInfo.variableNames.add(symbol.getName())
-          typesImportMap.set(filePath, importInfo)
+          functionTypesImportMap.set(filePath, importInfo)
         }
       }
     }

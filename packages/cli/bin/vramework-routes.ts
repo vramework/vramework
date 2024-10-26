@@ -1,60 +1,45 @@
 import { Command } from 'commander'
-import * as promises from 'fs/promises'
-import {
-  serializeRouteMeta,
-  serializeRoutes,
-  serializeTypedRouteRunner,
-  serializeTypedRoutesMap,
-} from '../src/routes-serializers.js'
-import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
 import { join } from 'path'
-import { getVrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { getVrameworkCLIConfig, validateCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { serializeRoutes } from '../src/serializer/serialize-routes.js'
+import { serializeRouteMeta } from '../src/serializer/serialize-route-meta.js'
+import { serializeTypedRoutesMap } from '../src/serializer/serialize-typed-route-map.js'
+import { serializeTypedRouteRunner } from '../src/serializer/serialize-typed-route-runner.js'
+import { VisitState } from '../src/inspector/visit.js'
+import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { logCommandInfoAndTime, logVrameworkLogo, VrameworkCLIOptions, writeFileInDir } from '../src/utils.js'
 
-async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let { rootDir, routeDirectories, routesOutputFile, routesMapOutputFile, packageMappings = {} } = await getVrameworkCLIConfig(configFile)
+export const vrameworkRoutes = async ({ rootDir, routesFile, packageMappings }: VrameworkCLIConfig, visitState: VisitState) => {
+  return await logCommandInfoAndTime('Finding routes', 'Found routes', async () => {
+    const { filesWithRoutes, routesMeta, functionTypesImportMap } = visitState
 
-  if (!rootDir || !routeDirectories || !routesOutputFile) {
-    console.error(
-      'rootDir, routeDirectories and routesOutputFile are required in vramework.config.json'
-    )
-    process.exit(1)
-  }
+    routesFile = join(rootDir, routesFile)
+
+    const content = [
+      serializeRoutes(
+        routesFile,
+        filesWithRoutes,
+        packageMappings
+      ),
+      // serializeInterface(functionTypesImportMap, routesMeta),
+      serializeRouteMeta(routesMeta),
+      serializeTypedRoutesMap(routesFile, packageMappings, functionTypesImportMap, routesMeta),
+      serializeTypedRouteRunner(),
+    ]
+
+    await writeFileInDir(routesFile, content.join('\n\n'))
+  })
+}
+
+async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
+  logVrameworkLogo()
+
+  const cliConfig = await getVrameworkCLIConfig(cliOptions.config)
+  validateCLIConfig(cliConfig, ['rootDir', 'routeDirectories', 'routesFile'])
 
   const startedAt = Date.now()
-  console.log(`
-Generating Route File:
-    - Route Directories: ${['', ...routeDirectories].join('\n\t- ')}
-    - Route Output:\n\t${routesOutputFile}
-    - Route Mapping Output:\n\t${routesMapOutputFile ? routesMapOutputFile : 'Not provided'}
-`)
-
-  const { routesMeta, typesImportMap, filesWithRoutes } = await extractVrameworkInformation(rootDir, routeDirectories)
-
-  routesOutputFile = join(rootDir, routesOutputFile)
-  const parts = routesOutputFile.split('/')
-  parts.pop()
-  await promises.mkdir(parts.join('/'), { recursive: true })
-  const content = [
-    serializeRoutes(
-      routesOutputFile,
-      filesWithRoutes,
-      packageMappings
-    ),
-    // serializeInterface(typesImportMap, routesMeta),
-    serializeRouteMeta(routesMeta),
-    serializeTypedRoutesMap(routesOutputFile, packageMappings, typesImportMap, routesMeta),
-    serializeTypedRouteRunner(),
-  ]
-  await promises.writeFile(routesOutputFile, content.join('\n\n'), 'utf-8')
-
-  if (routesMapOutputFile) {
-    routesMapOutputFile = join(rootDir, routesMapOutputFile)
-    const parts = routesMapOutputFile.split('/')
-    parts.pop()
-    await promises.mkdir(parts.join('/'), { recursive: true })
-    await promises.writeFile(routesMapOutputFile, serializeTypedRoutesMap(routesMapOutputFile, packageMappings, typesImportMap, routesMeta), 'utf-8')
-  }
-
+  const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+  await vrameworkRoutes(cliConfig, visitState)
   console.log(`Routes generated in ${Date.now() - startedAt}ms.`)
 }
 

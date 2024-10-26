@@ -2,15 +2,20 @@ import { join, dirname, resolve } from 'path'
 import { readdir } from 'fs/promises'
 
 export interface VrameworkCLIConfig {
+  extends?: string
+
   rootDir: string
   routeDirectories: string[]
-  routesOutputFile: string
-  schemaOutputDirectory: string
-  tsconfig: string
-  vrameworkNextFile?: string
-  routesMapOutputFile?: string
-  packageMappings?: Record<string, string>
+  packageMappings: Record<string, string>
+
   configDir: string
+  tsconfig: string
+
+  routesFile: string
+  typesFile: string
+  schemaDirectory: string
+  vrameworkNextFile?: string
+  routesMapFile?: string
 }
 
 export const getVrameworkCLIConfig = async (
@@ -36,15 +41,44 @@ export const getVrameworkCLIConfig = async (
   try {
     const config: VrameworkCLIConfig = await import(configFile)
     const configDir = dirname(configFile)
-    // TODO: Validate config
+    if (config.extends) {
+      const extendedConfig = await getVrameworkCLIConfig(
+        resolve(configDir, config.extends),
+        exitProcess
+      )
+      return {
+        ...extendedConfig,
+        ...config,
+        configDir,
+        packageMappings: {
+          ...extendedConfig.packageMappings,
+          ...config.packageMappings,
+        },
+      }
+    }
     return {
       ...config,
       configDir,
+      packageMappings: config.packageMappings || {},
       rootDir: config.rootDir ? resolve(configDir, config.rootDir) : configDir,
     }
   } catch (e: any) {
     console.error(e)
     console.error(`Config file not found: ${configFile}`)
+    process.exit(1)
+  }
+}
+
+export const validateCLIConfig = (cliConfig: VrameworkCLIConfig, required: Array<keyof VrameworkCLIConfig>) => {
+  let errors: string[] = []
+  for (const key of required) {
+    if (!cliConfig[key]) {
+      errors.push(key)
+    }
+  }
+
+  if (errors.length > 0) {
+    console.error(`${errors.join(', ')} ${errors.length === 1 ? 'is' : 'are'} required in vramework.config.json`)
     process.exit(1)
   }
 }

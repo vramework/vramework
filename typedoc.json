@@ -8,7 +8,8 @@
   "out": ".typedocs",
   "compilerOptions": {
     "skipLibCheck": true, 
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
   },
   "exclude": ["**/node_modules/**/*", "**/dist/**/*", "**/*.spec.ts", "**/*.d.ts"]
 }

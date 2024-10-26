@@ -5,7 +5,8 @@
     "module": "NodeNext",
     "outDir": "dist/esm",
     "target": "esnext",
-    "declaration": true
+    "declaration": true,
+    "resolveJsonModule": true,
   },
   "include": [
     "bin/**/*.ts",

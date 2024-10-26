@@ -1,67 +1,63 @@
 import { Command } from 'commander'
-import * as promises from 'fs/promises'
-import {
-  serializeRouteMeta,
-  serializeRoutes,
-  serializeTypedRouteRunner,
-  serializeTypedRoutesMap,
-} from '../src/routes-serializers.js'
-import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
 import { join } from 'path'
-import { getVrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { getVrameworkCLIConfig, validateCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { VisitState } from '../src/inspector/visit.js'
+import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { getFileImportRelativePath, getVrameworkFilesAndMethods, logCommandInfoAndTime, logVrameworkLogo, VrameworkCLIOptions, writeFileInDir } from '../src/utils.js'
+import { serializeVrameworkTypes } from '../src/serializer/serialize-vramework-types.js'
+import { vrameworkRoutes } from './vramework-routes.js'
 
-async function action({ configFile }: { configFile?: string }): Promise<void> {
-  let { rootDir, routeDirectories, routesOutputFile, routesMapOutputFile, packageMappings = {} } = await getVrameworkCLIConfig(configFile)
+export const vrameworkTypes = async ({ rootDir, typesFile, packageMappings }: VrameworkCLIConfig, options: VrameworkCLIOptions, visitState: VisitState) => {
+  await logCommandInfoAndTime('Creating api types', 'Created api types', async () => {
+    typesFile = join(rootDir, typesFile)
 
-  if (!rootDir || !routeDirectories || !routesOutputFile) {
-    console.error(
-      'rootDir, routeDirectories and routesOutputFile are required in vramework.config.json'
+    const {
+      userSessionType,
+      sessionServicesType
+    } = await getVrameworkFilesAndMethods(
+      visitState,
+      packageMappings,
+      typesFile,
+      options
     )
-    process.exit(1)
-  }
+    const content = serializeVrameworkTypes(
+      `import { type ${userSessionType.type} } from '${getFileImportRelativePath(typesFile, userSessionType.typePath, packageMappings)}'`,
+      userSessionType.type,
+      `import { type ${sessionServicesType.type} } from '${getFileImportRelativePath(typesFile, sessionServicesType.typePath, packageMappings)}'`,
+      sessionServicesType.type
+    )
+    await writeFileInDir(typesFile, content)
+  })
+}
+
+async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
+  logVrameworkLogo()
+  
+  const cliConfig = await getVrameworkCLIConfig(cliOptions.config)
+  validateCLIConfig(cliConfig, ['rootDir', 'routeDirectories', 'typesFile'])
 
   const startedAt = Date.now()
-  console.log(`
-Generating Route File:
-    - Route Directories: ${['', ...routeDirectories].join('\n\t- ')}
-    - Route Output:\n\t${routesOutputFile}
-    - Route Mapping Output:\n\t${routesMapOutputFile ? routesMapOutputFile : 'Not provided'}
-`)
-
-  const { routesMeta, typesImportMap, filesWithRoutes } = await extractVrameworkInformation(rootDir, routeDirectories)
-
-  routesOutputFile = join(rootDir, routesOutputFile)
-  const parts = routesOutputFile.split('/')
-  parts.pop()
-  await promises.mkdir(parts.join('/'), { recursive: true })
-  const content = [
-    serializeRoutes(
-      routesOutputFile,
-      filesWithRoutes,
-      packageMappings
-    ),
-    // serializeInterface(typesImportMap, routesMeta),
-    serializeRouteMeta(routesMeta),
-    serializeTypedRoutesMap(routesOutputFile, packageMappings, typesImportMap, routesMeta),
-    serializeTypedRouteRunner(),
-  ]
-  await promises.writeFile(routesOutputFile, content.join('\n\n'), 'utf-8')
-
-  if (routesMapOutputFile) {
-    routesMapOutputFile = join(rootDir, routesMapOutputFile)
-    const parts = routesMapOutputFile.split('/')
-    parts.pop()
-    await promises.mkdir(parts.join('/'), { recursive: true })
-    await promises.writeFile(routesMapOutputFile, serializeTypedRoutesMap(routesMapOutputFile, packageMappings, typesImportMap, routesMeta), 'utf-8')
-  }
-
-  console.log(`Types generated in ${Date.now() - startedAt}ms.`)
+  const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+  await vrameworkRoutes(cliConfig, visitState)
+  console.log(`Routes generated in ${Date.now() - startedAt}ms.`)
 }
 
 export const types = (program: Command): void => {
   program
     .command('types')
-    .description('generate vramework types')
+    .description('generate types')
+    .option(
+      '-ct | --vramework-config-type',
+      'The type of your vramework config object'
+    )
+    .option(
+      '-ss | --singleton-services-factory-type',
+      'The type of your singleton services factory'
+    )
+    .option(
+      '-se | --session-services-factory-type',
+      'The type of your session services factory'
+    )
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }

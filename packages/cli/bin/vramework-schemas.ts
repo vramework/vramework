@@ -2,34 +2,30 @@ import { Command } from 'commander'
 import { generateSchemas } from '../src/schema-generator.js'
 
 import { join } from 'path'
-import { extractVrameworkInformation } from '../src/extract-vramework-information.js'
-import { getVrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { getVrameworkCLIConfig, validateCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { VisitState } from '../src/inspector/visit.js'
+import { logCommandInfoAndTime, logVrameworkLogo } from '../src/utils.js'
+
+export const vrameworkSchemas = async ({ rootDir, tsconfig, schemaDirectory }: VrameworkCLIConfig, { routesMeta }: VisitState) => {
+  await logCommandInfoAndTime('Creating schemas', 'Created schemas', async () => {
+    await generateSchemas(
+      join(rootDir, tsconfig),
+      join(rootDir, schemaDirectory),
+      routesMeta
+    )
+  })
+}
 
 async function action({ configFile }: { configFile?: string }): Promise<void> {
-  const { schemaOutputDirectory, routeDirectories, tsconfig, rootDir, routesOutputFile } = await getVrameworkCLIConfig(configFile)
-
-  if (!rootDir || !routesOutputFile || !schemaOutputDirectory || !tsconfig) {
-    console.error(
-      'rootDir, routesOutputFile, tsconfig file and schema directory are required in vramework.config.json'
-    )
-    process.exit(1)
-  }
+  logVrameworkLogo()
+  
+  const cliConfig = await getVrameworkCLIConfig(configFile)
+  validateCLIConfig(cliConfig, ['rootDir', 'routesFile', 'schemaDirectory', 'tsconfig'])
 
   const startedAt = Date.now()
-  console.log(`
-Generating schemas:
-    - TSConfig:\n\t${tsconfig}
-    - Output Directory:\n\t${schemaOutputDirectory}
-    - Route Meta:\n\t${routesOutputFile}
-`)
-
-  const { routesMeta } = await extractVrameworkInformation(rootDir, routeDirectories)
-
-  await generateSchemas(
-    join(rootDir, tsconfig),
-    join(rootDir, schemaOutputDirectory),
-    routesMeta
-  )
+  const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+  await vrameworkSchemas(cliConfig, visitState)
 
   console.log(`Schemas generated in ${Date.now() - startedAt}ms.`)
 }

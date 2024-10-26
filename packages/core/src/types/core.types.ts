@@ -44,9 +44,7 @@ export interface CoreSingletonServices {
   logger: Logger
 }
 
-export interface CoreServices extends CoreSingletonServices {}
-
-export interface CoreHTTPServices extends CoreServices {
+export type CoreServices<SingletonServices = CoreSingletonServices> = SingletonServices & {
   request: VrameworkRequest
   response: VrameworkResponse
 }
@@ -59,12 +57,9 @@ export type CreateSingletonServices<
 export type CreateSessionServices<
   SingletonServices extends CoreSingletonServices,
   UserSession extends CoreUserSession,
-  Services extends CoreServices,
+  Services extends CoreServices<SingletonServices>,
 > = (
-  services: SingletonServices & {
-    request: VrameworkRequest
-    response: VrameworkResponse
-  },
+  services: Services,
   session: UserSession | undefined
 ) => Promise<Services>
 

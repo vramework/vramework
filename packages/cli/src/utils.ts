@@ -1,7 +1,7 @@
+import { version } from '../../../package.json'
 import { relative, dirname } from 'path'
-import { extractVrameworkInformation } from './extract-vramework-information.js'
-import { VrameworkCLIConfig } from './vramework-cli-config.js'
-import { PathToNameAndType } from './inspector/visit.js'
+import { PathToNameAndType, VisitState } from './inspector/visit.js'
+import { mkdir, writeFile } from 'fs/promises'
 
 export const getFileImportRelativePath = (
   from: string,
@@ -21,91 +21,80 @@ export const getFileImportRelativePath = (
   return filePath.replace('.ts', '')
 }
 
-interface FilesAndMethods {
-  vrameworkConfigFile: string
-  vrameworkConfigVariable: string
-  singletonServicesFactoryFile: string
-  singletonServicesFactoryVariable: string
-  sessionServicesFactoryFile: string
-  sessionServicesFactoryVariable: string
+interface Meta {
+  file: string
+  variable: string
+  type: string
+  typePath: string
+}
+
+export type FilesAndMethods = {
+  vrameworkConfig: Meta
+  userSessionType: Meta
+  sessionServicesType: Meta
+  singletonServicesFactory: Meta
+  sessionServicesFactory: Meta
+}
+
+export interface VrameworkCLIOptions {
+  config?: string
+  configFileType?: string
+  userSessionType?: string
+  singletonServicesFactoryType?: string
+  sessionServicesFactoryType?: string
+}
+
+const getMetaTypes = (type: string, errors: Map<string, PathToNameAndType>, map: PathToNameAndType, desiredType?: string) => {
+  if (desiredType) {
+    const entries = Object.entries(map)
+    for (const [file, meta] of entries) {
+      for (const { type, variable, typePath } of meta) {
+        if (type === desiredType) {
+          return { file, variable, type, typePath }
+        }
+      }
+    }
+    errors.set(`No ${desiredType} found that extends ${type}`, map)
+    return undefined
+  }
+
+  const totalValues = Object.values(map).flat()
+  if (totalValues.length === 0) {
+    errors.set(`No ${type} found`, map)
+  } else if (totalValues.length > 1) {
+    errors.set(`More than one ${type} found`, map)
+  } else {
+    const [file, [{ type, variable, typePath }]] = Object.entries(map)[0]
+    return { file, type, variable, typePath }
+  }
+
+  return undefined
 }
 
 export const getVrameworkFilesAndMethods = async (
-  { rootDir, routeDirectories, packageMappings = {} }: VrameworkCLIConfig,
-  outputFile: string,
-  filesAndMethods: Partial<FilesAndMethods>
-): Promise<FilesAndMethods> => {
-  let {
-    vrameworkConfigFile,
-    vrameworkConfigVariable = 'vrameworkConfig',
-    singletonServicesFactoryFile,
-    singletonServicesFactoryVariable = 'createSingletonServices',
-    sessionServicesFactoryFile,
-    sessionServicesFactoryVariable = 'createSessionServices',
-  } = filesAndMethods
-
-  const {
+  {
     vrameworkConfigs,
+    sessionServicesTypeImportMap: httpSessionServicesTypeImportMap,
+    userSessionTypeImportMap,
     sessionServicesFactories,
     singletonServicesFactories,
-  } = await extractVrameworkInformation(rootDir, routeDirectories)
-
+  }: VisitState,
+  packageMappings: Record<string, string>,
+  outputFile: string,
+  { configFileType, singletonServicesFactoryType, sessionServicesFactoryType }: VrameworkCLIOptions
+): Promise<FilesAndMethods> => {
   let errors = new Map<string, PathToNameAndType>()
 
-  if (!vrameworkConfigFile) {
-    let totalValues = Object.values(vrameworkConfigs).flat()
-    if (totalValues.length === 0) {
-      errors.set('No VrameworkConfig object found', vrameworkConfigs)
-    } else if (totalValues.length > 1) {
-      errors.set('More than one VrameworkConfig found', vrameworkConfigs)
-    } else {
-      vrameworkConfigFile = Object.keys(vrameworkConfigs)[0]
-      vrameworkConfigVariable = Object.values(vrameworkConfigs)[0][0].variable
-    }
-  }
-
-  if (!singletonServicesFactoryFile) {
-    let totalValues = Object.values(singletonServicesFactories).flat()
-    if (totalValues.length === 0) {
-      errors.set(
-        'No CreateSingletonServices function found',
-        singletonServicesFactories
-      )
-    } else if (totalValues.length > 1) {
-      errors.set(
-        'More than one CreateSingletonServices function found',
-        singletonServicesFactories
-      )
-    } else {
-      singletonServicesFactoryFile = Object.keys(singletonServicesFactories)[0]
-      singletonServicesFactoryVariable = Object.values(
-        singletonServicesFactories
-      )[0][0].variable
-    }
-  }
-  if (!sessionServicesFactoryFile) {
-    let totalValues = Object.values(sessionServicesFactories).flat()
-    if (totalValues.length === 0) {
-      errors.set(
-        'No CreateSessionServices object function found',
-        sessionServicesFactories
-      )
-    } else if (totalValues.length > 1) {
-      errors.set(
-        'More than one CreateSingletonService function found',
-        sessionServicesFactories
-      )
-    } else {
-      sessionServicesFactoryFile = Object.keys(sessionServicesFactories)[0]
-      sessionServicesFactoryVariable = Object.values(
-        sessionServicesFactories
-      )[0][0].variable
-    }
+  const result: Partial<FilesAndMethods> = {
+    vrameworkConfig: getMetaTypes('CoreConfig', errors, vrameworkConfigs, configFileType),
+    userSessionType: getMetaTypes('CoreUserSession', errors, userSessionTypeImportMap, configFileType),
+    sessionServicesType: getMetaTypes('CoreServices', errors, httpSessionServicesTypeImportMap),
+    singletonServicesFactory: getMetaTypes('CreateSingletonServices', errors, singletonServicesFactories, singletonServicesFactoryType),
+    sessionServicesFactory: getMetaTypes('CreateSessionServices', errors, sessionServicesFactories, sessionServicesFactoryType),
   }
 
   if (errors.size > 0) {
     const result: string[] = ['Found errors:']
-
     errors.forEach((filesAndMethods, message) => {
       result.push(`- ${message}`)
       for (const [file, methods] of Object.entries(filesAndMethods)) {
@@ -117,15 +106,35 @@ export const getVrameworkFilesAndMethods = async (
     })
 
     console.error(result.join('\n'))
-    throw new Error("Can't find required the require files and methods")
+    process.exit(1)
   }
 
-  return {
-    vrameworkConfigFile,
-    vrameworkConfigVariable,
-    singletonServicesFactoryFile,
-    singletonServicesFactoryVariable,
-    sessionServicesFactoryFile,
-    sessionServicesFactoryVariable,
-  } as FilesAndMethods
+  return result as FilesAndMethods
 }
+
+export const writeFileInDir = async (path: string, content: string) => {
+  if (content.startsWith('use server')) {
+    content = content.replace('use server', `'use server'\n\n${DO_NOT_MODIFY_COMMENT}`)
+  } else {
+    content = `${DO_NOT_MODIFY_COMMENT}${content}`
+  }
+
+  await mkdir(dirname(path), { recursive: true })
+  await writeFile(path, content, 'utf-8')
+}
+
+export const logCommandInfoAndTime = async (commandStart: string, commandEnd: string, callback: (...args: any[]) => Promise<void>) => {
+  const start = Date.now()
+  console.log(`\x1b[34m• ${commandStart}...\x1b[0m`)
+  const result = await callback()
+  console.log(`\x1b[32m✓ ${commandEnd} in ${Date.now() - start}ms.\x1b[0m`)
+  return result
+}
+
+export const logVrameworkLogo = () => {
+  console.log(`\x1b[33m⚙️ VRAMEWORK CLI ⚙️\n-------------------\x1b[0m`)
+}
+
+export const DO_NOT_MODIFY_COMMENT = `/**
+* This file is generated by @vramework/cli@${version} on ${new Date().toISOString()}
+*/\n\n`

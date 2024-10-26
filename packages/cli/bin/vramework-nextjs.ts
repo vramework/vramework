@@ -1,111 +1,73 @@
 import { Command } from 'commander'
-import * as promises from 'fs/promises'
 import * as path from 'path'
-import { generateNextJsWrapper } from '../src/nextjs-wrapper-generator.js'
+import { serializeNextJsWrapper } from '../src/serializer/serialize-nextjs-wrapper.js'
 import {
   getFileImportRelativePath,
   getVrameworkFilesAndMethods,
+  logCommandInfoAndTime,
+  logVrameworkLogo,
+  VrameworkCLIOptions,
+  writeFileInDir,
 } from '../src/utils.js'
-import { getVrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { getVrameworkCLIConfig, validateCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import { VisitState } from '../src/inspector/visit.js'
+import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 
-interface VrameworkNextJSCliOptions {
-  configFile?: string
-  vrameworkConfigFile?: string
-  vrameworkConfigVariable?: string
-  configImport?: string
-  singletonServicesFactoryFile?: string
-  singletonServicesFactoryVariable?: string
-  sessionServicesFactoryFile?: string
-  sessionServicesFactoryVariable?: string
-}
+export const vrameworkNext = async ({ configDir, vrameworkNextFile, rootDir, routesFile, schemaDirectory, packageMappings }: VrameworkCLIConfig, visitState: VisitState, options: VrameworkCLIOptions) => {
+  await logCommandInfoAndTime('Generating nextjs wrapper', 'Generated nextjs wrapper', async () => {
+    if (!vrameworkNextFile) {
+      throw new Error('vrameworkNextFile is required in vramework config')
+    }
 
-export const action = async (
-  options: VrameworkNextJSCliOptions
-): Promise<void> => {
-  const { configFile } = options
-  const vrameworkConfig = await getVrameworkCLIConfig(configFile, true)
-  let {
-    vrameworkNextFile,
-    rootDir,
-    routesOutputFile,
-    configDir,
-    packageMappings = {},
-    schemaOutputDirectory,
-  } = vrameworkConfig
+    const nextOutputFile = path.join(configDir, vrameworkNextFile)
 
-  if (
-    !configDir ||
-    !rootDir ||
-    !routesOutputFile ||
-    !vrameworkNextFile ||
-    !schemaOutputDirectory
-  ) {
-    console.error(
-      'rootDir, vrameworkNextFile, routesOutputFile and schemaOutputDirectory are required in vramework.config.json'
-    )
-    process.exit(1)
-  }
-
-  const startedAt = Date.now()
-
-  const _nextOutputFile = path.join(configDir, vrameworkNextFile).split('/')
-  _nextOutputFile.pop()
-  const nextOutputDirectory = _nextOutputFile.join('/')
-  const nextOutputFile = path.join(configDir, vrameworkNextFile)
-
-  try {
     const {
-      vrameworkConfigFile,
-      vrameworkConfigVariable,
-      singletonServicesFactoryFile,
-      singletonServicesFactoryVariable,
-      sessionServicesFactoryFile,
-      sessionServicesFactoryVariable,
-    } = await getVrameworkFilesAndMethods(
       vrameworkConfig,
+      singletonServicesFactory,
+      sessionServicesFactory
+    } = await getVrameworkFilesAndMethods(
+      visitState,
+      packageMappings,
       nextOutputFile,
       options
     )
-    const vrameworkConfigImport = `import { ${vrameworkConfigVariable} as config } from '${getFileImportRelativePath(nextOutputFile, vrameworkConfigFile!, packageMappings)}'`
-    const singletonServicesImport = `import { ${singletonServicesFactoryVariable} as createSingletonServices } from '${getFileImportRelativePath(nextOutputFile, singletonServicesFactoryFile!, packageMappings)}'`
-    const sessionServicesImport = `import { ${sessionServicesFactoryVariable} as createSessionServices } from '${getFileImportRelativePath(nextOutputFile, sessionServicesFactoryFile!, packageMappings)}'`
+
+    const vrameworkConfigImport = `import { ${vrameworkConfig.variable} as config } from '${getFileImportRelativePath(nextOutputFile, vrameworkConfig.file, packageMappings)}'`
+    const singletonServicesImport = `import { ${singletonServicesFactory.variable} as createSingletonServices } from '${getFileImportRelativePath(nextOutputFile, singletonServicesFactory.file, packageMappings)}'`
+    const sessionServicesImport = `import { ${sessionServicesFactory.variable} as createSessionServices } from '${getFileImportRelativePath(nextOutputFile, sessionServicesFactory.file, packageMappings)}'`
 
     const routesPath = getFileImportRelativePath(
       path.join(configDir, vrameworkNextFile),
-      path.join(rootDir, routesOutputFile),
+      path.join(rootDir, routesFile),
       packageMappings
     )
     const schemasPath = getFileImportRelativePath(
       path.join(configDir, vrameworkNextFile),
-      path.join(rootDir, schemaOutputDirectory, 'schemas.ts'),
+      path.join(rootDir, schemaDirectory, 'schemas.ts'),
       packageMappings
     )
 
-    console.log(`
-      Generating Vramework NextJS File:
-          - VrameworkNextJSFile: \n\t\t${nextOutputFile}
-          - Route Output:\n\t\t${routesPath}
-          - Schemas directory:\n\t\t${schemasPath}
-          - Vramework Config import: \n\t\t${vrameworkConfigImport}
-          - Singleton Services import: \n\t\t${singletonServicesImport}
-          - Session Services import: \n\t\t${sessionServicesImport}
-      `)
-
-    const content = generateNextJsWrapper(
+    const content = serializeNextJsWrapper(
       routesPath,
       schemasPath,
       vrameworkConfigImport,
       singletonServicesImport,
       sessionServicesImport
     )
-    await promises.mkdir(nextOutputDirectory, { recursive: true })
-    await promises.writeFile(nextOutputFile, content, 'utf-8')
+    await writeFileInDir(nextOutputFile, content)
+  })
+}
 
-    console.log(`NextJSWrapper generated in ${Date.now() - startedAt}ms.`)
-  } catch {
-    // Do nothing, error should be logged
-    process.exit(1)
-  }
+export const action = async (
+  options: VrameworkCLIOptions
+): Promise<void> => {
+  logVrameworkLogo()
+
+  const cliConfig = await getVrameworkCLIConfig(options.config, true)
+  validateCLIConfig(cliConfig, ['rootDir', 'schemaDirectory', 'configDir', 'vrameworkNextFile'])
+
+  const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+  await vrameworkNext(cliConfig, visitState, options)
 }
 
 export const nextjs = (program: Command): void => {
@@ -113,16 +75,16 @@ export const nextjs = (program: Command): void => {
     .command('nextjs')
     .description('generate nextjs wrapper')
     .option(
-      '-vc | --vramework-config-file',
-      'The path to the vramework config file with an object called config with type VrameworkConfig'
+      '-ct | --vramework-config-type',
+      'The type of your vramework config object'
     )
     .option(
-      '-si | --singleton-services-factory-file',
-      'The path to the application config file with a function called createSingletonServices with type CreateSingletonServices'
+      '-ss | --singleton-services-factory-type',
+      'The type of your singleton services factory'
     )
     .option(
-      '-sef | --session-services-factory-file',
-      'The path to the services file'
+      '-se | --session-services-factory-type',
+      'The type of your session services factory'
     )
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
