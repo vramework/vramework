@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.4
+
+### Patch Changes
+
+- 8065e48: refactor: large cli refactor for a better dev experience
+- Updated dependencies [8065e48]
+  - @vramework/core@0.5.3
+
 ## 0.5.3
 
 ### Patch Changes
