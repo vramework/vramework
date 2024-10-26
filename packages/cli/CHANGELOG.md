@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.8
+
+### Patch Changes
+
+- 2841fce: fix: create empty schema directory
+
 ## 0.5.7
 
 ### Patch Changes
