@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.5
+
+### Patch Changes
+
+- 6cac8ab: feat: adding a do not edit to cli generated files
+- Updated dependencies [6cac8ab]
+  - @vramework/core@0.5.4
+
 ## 0.5.4
 
 ### Patch Changes

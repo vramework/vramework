@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.4
+
+### Patch Changes
+
+- 6cac8ab: feat: adding a do not edit to cli generated files
+
 ## 0.5.3
 
 ### Patch Changes
