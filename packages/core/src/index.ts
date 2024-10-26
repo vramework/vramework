@@ -3,7 +3,7 @@ export {
   runRoute,
   getRoutes,
   addRouteMeta,
-  addCoreRoute,
+  addRoute,
   type AssertRouteParams,
   type RunRouteOptions
 } from './route-runner.js'

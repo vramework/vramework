@@ -113,8 +113,8 @@ export const getVrameworkFilesAndMethods = async (
 }
 
 export const writeFileInDir = async (path: string, content: string) => {
-  if (content.startsWith('use server')) {
-    content = content.replace('use server', `'use server'\n\n${DO_NOT_MODIFY_COMMENT}`)
+  if (content.includes('server-only')) {
+    content = content.replace('\'server-only\'', `'use server'\n\n${DO_NOT_MODIFY_COMMENT}`)
   } else {
     content = `${DO_NOT_MODIFY_COMMENT}${content}`
   }

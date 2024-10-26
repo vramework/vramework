@@ -12,7 +12,7 @@ import {
   getUserSession,
   runRoute,
   clearRoutes,
-  addCoreRoute,
+  addRoute,
 } from './route-runner.js'
 
 class VrameworkTestRequest extends VrameworkRequest {
@@ -81,7 +81,7 @@ describe('runRoute', () => {
     const apiRoute = '/test'
     const apiType = 'get'
     const routeFunc = sinon.stub().resolves({ success: true })
-    addCoreRoute({
+    addRoute({
       route: 'test',
       method: 'get',
       func: routeFunc,
@@ -106,7 +106,7 @@ describe('runRoute', () => {
     const apiType = 'get'
     const permissions = { test: sinon.stub().resolves(true) }
     const routeFunc = sinon.stub().resolves({ success: true })
-    addCoreRoute({
+    addRoute({
       route: 'test',
       method: 'get',
       func: routeFunc,
@@ -126,7 +126,7 @@ describe('runRoute', () => {
     const apiType = 'get'
     const error = new Error('Test error')
     const routeFunc = sinon.stub().rejects(error)
-    addCoreRoute({
+    addRoute({
       route: 'test',
       method: 'get',
       func: routeFunc,

@@ -6,21 +6,19 @@ export const serializeNextJsWrapper = (
   sessionServicesImport: string
 ) => {
   return `'server-only'
-
 /**
  * This provides a wrapper around the VrameworkNextJS class to allow for methods to be type checked against your routes
  */
-
 import { VrameworkNextJS } from '@vramework/next'
-import { IncomingMessage, ServerResponse } from 'http'
-import { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils'
-import { APIRouteMethod } from '@vramework/core'
+import type { IncomingMessage, ServerResponse } from 'http'
+import type { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils'
+import type { APIRouteMethod } from '@vramework/core/types/routes.types'
+import type { RoutesMap, RouteHandlerOf } from '${routesPath}'
 
 ${configImport}
 ${singleServicesFactoryImport}
 ${sessionServicesImport}
 
-import { RoutesMap, RouteHandlerOf } from '${routesPath}'
 import '${routesPath}'
 import '${schemasPath}'
 

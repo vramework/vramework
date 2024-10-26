@@ -21,9 +21,9 @@ export const vrameworkTypes = async ({ rootDir, typesFile, packageMappings }: Vr
       options
     )
     const content = serializeVrameworkTypes(
-      `import { type ${userSessionType.type} } from '${getFileImportRelativePath(typesFile, userSessionType.typePath, packageMappings)}'`,
+      `import type { ${userSessionType.type} } from '${getFileImportRelativePath(typesFile, userSessionType.typePath, packageMappings)}'`,
       userSessionType.type,
-      `import { type ${sessionServicesType.type} } from '${getFileImportRelativePath(typesFile, sessionServicesType.typePath, packageMappings)}'`,
+      `import type { ${sessionServicesType.type} } from '${getFileImportRelativePath(typesFile, sessionServicesType.typePath, packageMappings)}'`,
       sessionServicesType.type
     )
     await writeFileInDir(typesFile, content)

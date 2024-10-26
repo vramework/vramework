@@ -35,7 +35,7 @@ export type RunRouteOptions = Partial<{
 let routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
 
-export const addCoreRoute = <
+export const addRoute = <
   In,
   Out,
   Route extends string,
