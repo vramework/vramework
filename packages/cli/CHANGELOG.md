@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.6
+
+### Patch Changes
+
+- 58a510a: refactor: moving routes map into a declaration file
+
 ## 0.5.5
 
 ### Patch Changes
