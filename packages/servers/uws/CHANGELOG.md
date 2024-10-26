@@ -1,5 +1,11 @@
 # @vramework/uws
 
+## 0.5.2
+
+### Patch Changes
+
+- 0e1f01c: refactor: removing cli config from servers entirely'
+
 ## 0.5.1
 
 ### Patch Changes
