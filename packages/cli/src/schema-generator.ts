@@ -1,6 +1,6 @@
 import { createGenerator } from 'ts-json-schema-generator'
 import { writeFileInDir } from './utils.js'
-import { writeFile } from 'fs/promises'
+import { mkdir, writeFile } from 'fs/promises'
 
 export async function generateSchemas(
   tsconfig: string,
@@ -25,6 +25,7 @@ export async function generateSchemas(
   )
 
   const generator = createGenerator({ tsconfig, skipTypeCheck: true})
+  await mkdir(`${schemaParentDir}/schemas`, { recursive: true })
   await Promise.all(
     schemas.map(async (schema) => {
       await writeFile(
