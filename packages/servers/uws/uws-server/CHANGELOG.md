@@ -1,5 +1,11 @@
 # @vramework/uws
 
+## 0.5.3
+
+### Patch Changes
+
+- 4fb28f2: refactor: pulling uws handler into seperate package
+
 ## 0.5.2
 
 ### Patch Changes
