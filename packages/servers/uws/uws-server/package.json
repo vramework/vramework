@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "@types/qs": "^6",
+    "@vramework/uws-handler": "^0.5.2",
     "qs": "^6.13.0",
-    "query-string": "^9.1.1",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.49.0"
   },
   "devDependencies": {

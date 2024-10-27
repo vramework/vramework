@@ -8,12 +8,12 @@
     "moduleResolution": "node",
     "paths": {
       "@vramework/core/*": [
-        "../../core/dist/cjs/*" 
+        "../../../core/dist/cjs/*" 
       ]
     }
   },
   "references": [    {
-    "path": "../../core/tsconfig.cjs.json"
+    "path": "../../../core/tsconfig.cjs.json"
   }],
   "exclude": [
     "node_modules",

@@ -5,8 +5,8 @@
     "module": "NodeNext",
     "outDir": "dist/esm",
     "target": "esnext",
-    "declaration": true
-    
+    "declaration": true,
+    "composite": true
   },
   "include": [
     "bin/**/*.ts",
@@ -18,7 +18,7 @@
   ],
   "references": [
     {
-      "path": "../../core/tsconfig.json"
+      "path": "../../../core/tsconfig.json"
     }
   ]
 }

@@ -5,12 +5,8 @@ import {
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
-import { runRoute } from '@vramework/core/route-runner'
 
-import { VrameworkUWSRequest } from './vramework-uws-request.js'
-import { VrameworkUWSResponse } from './vramework-uws-response.js'
-import { logRoutes } from '@vramework/core/log-routes'
-import { validateAllSchemasLoaded } from '@vramework/core/schema'
+import { vrameworkHandler } from '@vramework/uws-handler'
 
 export class VrameworkUWSServer {
   public app = uWS.App()
@@ -30,36 +26,15 @@ export class VrameworkUWSServer {
   }
 
   public async init() {
-    logRoutes(this.singletonServices.logger)
-    validateAllSchemasLoaded(this.singletonServices.logger)
-
     this.app.get(this.config.healthCheckPath || '/health-check', async (res) => {
       res.writeStatus('200').end()
     })
 
-    this.app.any('/*', async (res, req) => {
-      try {
-        await runRoute(
-          new VrameworkUWSRequest(req, res),
-          new VrameworkUWSResponse(res),
-          this.singletonServices,
-          this.createSessionServices,
-          {
-            method: req.getMethod() as any,
-            route: req.getUrl() as string,
-          }
-        )
-      } catch {
-        // Error should have already been handled by runRoute
-      }
-
-
-      // TODO: Find out how we can handle this case, or if it's needed
-      if (false) {
-        this.singletonServices.logger.error('Route did not send a response')
-        res.writeStatus('500').end()
-      }
-    })
+    this.app.any('/*', vrameworkHandler({
+      logRoutes: true,
+      singletonServices: this.singletonServices,
+      createSessionServices: this.createSessionServices,
+    }))
   }
 
   public async start() {
