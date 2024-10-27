@@ -1,17 +1,26 @@
-import { CoreSingletonServices, CreateSessionServices, runRoute, RunRouteOptions } from '@vramework/core'
+import { CoreSingletonServices, CreateSessionServices, runRoute, RunRouteOptions, validateAllSchemasLoaded } from '@vramework/core'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 import { VrameworkFastifyRequest } from './vramework-fastify-request.js'
 import { VrameworkFastifyResponse } from './vramework-fastify-response.js'
+import { logRoutes } from '@vramework/core/log-routes'
 
 export type VrameworkFastifyPluginOptions = {
     vramework: {
         singletonServices: CoreSingletonServices
         createSessionServices: CreateSessionServices<any, any, any>
+        logRoutes?: boolean
+        validateSchemas?: boolean
     } & RunRouteOptions
 }
 
 const vrameworkPlugin: FastifyPluginAsync<VrameworkFastifyPluginOptions> = async (fastify, { vramework }) => {
+    if (vramework.logRoutes) {
+        logRoutes(vramework.singletonServices.logger)
+    }
+    if (vramework.validateSchemas) {
+        validateAllSchemasLoaded(vramework.singletonServices.logger)
+    }
     fastify.all('/*', async (req, res) => {
         try {
             await runRoute(
@@ -22,7 +31,7 @@ const vrameworkPlugin: FastifyPluginAsync<VrameworkFastifyPluginOptions> = async
                 {
                     method: req.method as any,
                     route: req.url as string,
-                    set404Status: vramework.set404Status
+                    respondWith404: vramework.respondWith404
                 }
             )
         } catch {

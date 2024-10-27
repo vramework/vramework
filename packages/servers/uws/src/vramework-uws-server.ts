@@ -6,10 +6,11 @@ import {
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
 import { runRoute } from '@vramework/core/route-runner'
-import { initializeVrameworkCore } from '@vramework/core/initialize'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
+import { logRoutes } from '@vramework/core/log-routes'
+import { validateAllSchemasLoaded } from '@vramework/core/schema'
 
 export class VrameworkUWSServer {
   public app = uWS.App()
@@ -29,7 +30,8 @@ export class VrameworkUWSServer {
   }
 
   public async init() {
-    await initializeVrameworkCore(this.singletonServices.logger)
+    logRoutes(this.singletonServices.logger)
+    validateAllSchemasLoaded(this.singletonServices.logger)
 
     this.app.get(this.config.healthCheckPath || '/health-check', async (res) => {
       res.writeStatus('200').end()

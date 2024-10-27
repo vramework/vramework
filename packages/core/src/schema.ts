@@ -6,7 +6,7 @@ import { ValidateFunction } from 'ajv'
 
 import { Logger } from './services/logger.js'
 import { InvalidParametersError } from './errors.js'
-import { RoutesMeta } from './types/routes.types.js'
+import { getRoutes } from './route-runner.js'
 
 const ajv = new Ajv({
   removeAdditional: false,
@@ -31,11 +31,14 @@ const getSchemas = () => {
 }
 
 /**
+ * Validate all the schemas have been loaded.
  */
-export const validateAllSchemasLoaded = async (logger: Logger, routeMeta: RoutesMeta) => {
+export const validateAllSchemasLoaded = (logger: Logger) => {
+  const { routesMeta } = getRoutes()
+
   const missingSchemas: string[] = []
 
-  for (const route of routeMeta) {
+  for (const route of routesMeta) {
       if (!route.input || validators.has(route.input)) {
         continue
       }

@@ -15,7 +15,6 @@ import {
   CreateSessionServices,
   CoreServerConfig,
 } from '@vramework/core/types/core.types'
-import { initializeVrameworkCore } from '@vramework/core/initialize'
 import { vrameworkMiddleware } from '@vramework/express-middleware'
 
 export class VrameworkExpressServer {
@@ -66,10 +65,10 @@ export class VrameworkExpressServer {
   }
 
   public async init() {
-    await initializeVrameworkCore(this.singletonServices.logger)
-
     this.app.use(vrameworkMiddleware(this.singletonServices, this.createSessionServices, {
-      set404Status: false,
+      respondWith404: false,
+      logRoutes: true,
+      validateSchemas: true
     }))
   }
 

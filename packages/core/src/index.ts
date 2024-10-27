@@ -1,4 +1,3 @@
-export { initializeVrameworkCore } from './initialize.js'
 export {
   runRoute,
   getRoutes,

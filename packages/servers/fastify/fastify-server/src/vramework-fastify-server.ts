@@ -5,7 +5,6 @@ import {
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
-import { initializeVrameworkCore } from '@vramework/core/initialize'
 import vrameworkFastifyPlugin from '@vramework/fastify-plugin'
 
 export class VrameworkFastifyServer {
@@ -25,8 +24,6 @@ export class VrameworkFastifyServer {
   }
 
   public async init() {
-    await initializeVrameworkCore(this.singletonServices.logger)
-
     this.app.get(this.config.healthCheckPath || '/health-check', async () => {
       return { status: 'ok' }
     })
@@ -35,7 +32,9 @@ export class VrameworkFastifyServer {
       vramework: {
         singletonServices: this.singletonServices,
         createSessionServices: this.createSessionServices,
-        set404Status: true
+        respondWith404: true,
+        logRoutes: true,
+        validateSchemas: true
       }
     })
   }
