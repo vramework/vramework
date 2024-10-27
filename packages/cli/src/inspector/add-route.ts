@@ -4,6 +4,18 @@ import { getPropertyValue } from "./get-property-value.js"
 import { pathToRegexp } from "path-to-regexp"
 import { APIRouteMethod } from "@vramework/core"
 
+const nullifyTypes = (type: string | null) => {
+    if (
+        type === 'void' ||
+        type === 'undefined' ||
+        type === 'unknown' ||
+        type === 'any'
+    ) {
+        return null
+    }
+    return type
+}
+
 export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitState) => {
     if (!ts.isCallExpression(node)) {
         return
@@ -29,9 +41,7 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
     let outputType: string | null = null
     let routeValue: string | null = null
 
-
     state.filesWithRoutes.add(node.getSourceFile().fileName)
-
 
     // Check if the first argument is an object literal
     if (ts.isObjectLiteralExpression(firstArg)) {
@@ -72,15 +82,16 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
                 const parameters = signature.getParameters()
                 const returnType = checker.getReturnTypeOfSignature(signature)
 
-                parameters.forEach((param) => {
+                for (const param of parameters) {
                     const paramType = checker.getTypeOfSymbolAtLocation(
                         param,
                         param.valueDeclaration!
                     )
+
                     if (param.name === 'data') {
                         inputType = checker.typeToString(paramType)
                     }
-                })
+                }
 
                 outputType = checker
                     .typeToString(returnType)
@@ -88,19 +99,9 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
                     .replace('>', '')
             }
         }
-    }
 
-    if (routeValue) {
-        const nullifyTypes = (type: string | null) => {
-            if (
-                type === 'void' ||
-                type === 'undefined' ||
-                type === 'unknown' ||
-                type === 'any'
-            ) {
-                return null
-            }
-            return type
+        if (!routeValue) {
+            return
         }
 
         state.routesMeta.push({
@@ -115,6 +116,7 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
         if (inputType) {
             state.inputTypes.add(inputType)
         }
+
         if (outputType) {
             state.outputTypes.add(outputType)
         }

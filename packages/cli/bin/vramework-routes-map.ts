@@ -7,13 +7,8 @@ import { serializeTypedRoutesMap } from '../src/serializer/serialize-typed-route
 
 export const vrameworkRoutesMap = async ({ routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig, visitState: VisitState) => {
   return await logCommandInfoAndTime('Creating routes map', 'Created routes map', async () => {
-    const { routesMeta, functionTypesImportMap } = visitState
-
-    const content = [
-      serializeTypedRoutesMap(routesMapDeclarationFile, packageMappings, functionTypesImportMap, routesMeta),
-    ]
-
-    await writeFileInDir(routesMapDeclarationFile, content.join('\n\n'))
+    const content = serializeTypedRoutesMap(routesMapDeclarationFile, packageMappings, visitState.functionTypesImportMap, visitState.routesMeta)
+    await writeFileInDir(routesMapDeclarationFile, content)
   })
 }
 

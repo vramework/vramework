@@ -7,16 +7,15 @@ import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import { getFileImportRelativePath, logCommandInfoAndTime, logVrameworkLogo, VrameworkCLIOptions, writeFileInDir } from '../src/utils.js'
 
-export const vrameworkRoutes = async ({ routesMapDeclarationFile, routesFile, packageMappings }: VrameworkCLIConfig, visitState: VisitState) => {
+export const vrameworkRoutes = async (cliConfig: VrameworkCLIConfig, visitState: VisitState) => {
   return await logCommandInfoAndTime('Finding routes', 'Found routes', async () => {
+    const { routesMapDeclarationFile, routesFile, packageMappings } = cliConfig
     const { filesWithRoutes, routesMeta } = visitState
-
     const content = [
       serializeRoutes(routesFile, filesWithRoutes, packageMappings),
       serializeRouteMeta(routesMeta),
       serializeTypedRouteRunner(getFileImportRelativePath(routesFile, routesMapDeclarationFile, packageMappings)),
     ]
-
     await writeFileInDir(routesFile, content.join('\n\n'))
   })
 }
