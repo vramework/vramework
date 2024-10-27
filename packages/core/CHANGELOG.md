@@ -1,5 +1,12 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.5
+
+### Patch Changes
+
+- f188ce2: fix: changing CreateSessionService signature
+  refactor: removing initialize vramework function
+
 ## 0.5.4
 
 ### Patch Changes
