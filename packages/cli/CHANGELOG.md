@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.10
+
+### Patch Changes
+
+- 2c0e940: fix: reinspecting after type file is created
+
 ## 0.5.9
 
 ### Patch Changes
