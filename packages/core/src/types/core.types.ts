@@ -44,10 +44,12 @@ export interface CoreSingletonServices {
   logger: Logger
 }
 
-export type CoreServices<SingletonServices = CoreSingletonServices> = SingletonServices & {
+export interface VrameworkInteraction {
   request: VrameworkRequest
   response: VrameworkResponse
 }
+
+export type CoreServices<SingletonServices = CoreSingletonServices> = SingletonServices & VrameworkInteraction
 
 export type CreateSingletonServices<
   Config extends CoreConfig,
@@ -59,9 +61,10 @@ export type CreateSessionServices<
   UserSession extends CoreUserSession,
   Services extends CoreServices<SingletonServices>,
 > = (
-  services: Services,
+  services: SingletonServices,
+  interaction: VrameworkInteraction,
   session: UserSession | undefined
-) => Promise<Services>
+) => Promise<Omit<Services, keyof SingletonServices | keyof VrameworkInteraction>>
 
 export type VrameworkQuery<T = unknown> = Record<
   string,

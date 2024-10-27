@@ -128,6 +128,8 @@ export const runRoute = async <In, Out>(
     respondWith404 = true,
   }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> & RunRouteOptions
 ): Promise<Out> => {
+  let sessionServices: CoreServices | undefined
+
   try {
     let session: CoreUserSession | undefined
 
@@ -172,20 +174,18 @@ export const runRoute = async <In, Out>(
     }
 
     const sessionServices = await createSessionServices(
-      {
-        ...services,
-        request,
-        response,
-      },
+      services,
+      { request, response },
       session
     )
+    const allServices = { ...services, request, response, ...sessionServices }
 
     if (route.permissions) {
-      await verifyPermissions(route.permissions, sessionServices, data, session)
+      await verifyPermissions(route.permissions, allServices, data, session)
     }
 
     const result: any = (await route.func(
-      sessionServices,
+      allServices,
       data,
       session!
     )) as unknown as Out
@@ -227,5 +227,17 @@ export const runRoute = async <In, Out>(
     }
 
     throw e
+  } finally {
+    if (sessionServices) {
+      await Promise.all(Object.values(sessionServices).map(async (service) => {
+        if (service?.close) {
+          try {
+            await service.close()
+          } catch (e) {
+            services.logger.error(e)
+          }
+        }
+      }))
+    }
   }
 }
