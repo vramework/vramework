@@ -1,5 +1,13 @@
 # @vramework/express
 
+## 0.5.3
+
+### Patch Changes
+
+- 3b51762: refactor: not using initialize call to core
+- Updated dependencies [3b51762]
+  - @vramework/express-middleware@0.5.3
+
 ## 0.5.2
 
 ### Patch Changes

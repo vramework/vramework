@@ -1,5 +1,11 @@
 # @vramework/express-middleware
 
+## 0.5.3
+
+### Patch Changes
+
+- 3b51762: refactor: not using initialize call to core
+
 ## 0.5.2
 
 ### Patch Changes

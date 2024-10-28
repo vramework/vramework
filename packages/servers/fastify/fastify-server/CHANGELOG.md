@@ -1,5 +1,13 @@
 # @vramework/fastify
 
+## 0.5.3
+
+### Patch Changes
+
+- 3b51762: refactor: not using initialize call to core
+- Updated dependencies [3b51762]
+  - @vramework/fastify-plugin@0.5.3
+
 ## 0.5.2
 
 ### Patch Changes
