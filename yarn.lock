@@ -5,6 +5,17 @@ __metadata:
   version: 8
   cacheKey: 10
 
+"@apidevtools/json-schema-ref-parser@npm:^11.1.0, @apidevtools/json-schema-ref-parser@npm:^11.6.2":
+  version: 11.7.2
+  resolution: "@apidevtools/json-schema-ref-parser@npm:11.7.2"
+  dependencies:
+    "@jsdevtools/ono": "npm:^7.1.3"
+    "@types/json-schema": "npm:^7.0.15"
+    js-yaml: "npm:^4.1.0"
+  checksum: 10/8e80207c28aad234d3710fcfcf307691000bfbda40edb2ea4fdaf8158d026eb2b15a6471076490c2f40304df5b7bdd4be33d9979acef6cbfaf459b8bd1d79bf2
+  languageName: node
+  linkType: hard
+
 "@aws-crypto/crc32@npm:5.2.0":
   version: 5.2.0
   resolution: "@aws-crypto/crc32@npm:5.2.0"
@@ -1101,6 +1112,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jsdevtools/ono@npm:^7.1.3":
+  version: 7.1.3
+  resolution: "@jsdevtools/ono@npm:7.1.3"
+  checksum: 10/d4a036ccb9d2b21b7e4cec077c59a5a83fad58adacbce89e7e6b77a703050481ff5b6d813aef7f5ff0a8347a85a0eedf599e2e6bb5784a971a93e53e43b10157
+  languageName: node
+  linkType: hard
+
 "@manypkg/find-root@npm:^1.1.0":
   version: 1.1.0
   resolution: "@manypkg/find-root@npm:1.1.0"
@@ -1243,6 +1261,20 @@ __metadata:
   dependencies:
     semver: "npm:^7.3.5"
   checksum: 10/1e0e04087049b24b38bc0b30d87a9388ee3ca1d3fdfc347c2f77d84fcfe6a51f250bc57ba2c1f614d7e4285c6c62bf8c769bc19aa0949ea39e5b043ee023b0bd
+  languageName: node
+  linkType: hard
+
+"@openapi-contrib/json-schema-to-openapi-schema@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@openapi-contrib/json-schema-to-openapi-schema@npm:3.0.2"
+  dependencies:
+    "@apidevtools/json-schema-ref-parser": "npm:^11.6.2"
+    json-schema-walker: "npm:^2.0.0"
+    openapi-types: "npm:^12.1.3"
+    yargs: "npm:^17.7.2"
+  bin:
+    json-schema-to-openapi-schema: bin/json-schema-to-openapi-schema.js
+  checksum: 10/0aa1093768150e7f91ceb3219f0662c9ae9fa482e8953c6faa0be6089bf4835a5244768e0fd3d1463ac0a380c5de698b06f1606c032d1aa32986acd3ba57eb63
   languageName: node
   linkType: hard
 
@@ -2278,6 +2310,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/cli@workspace:packages/cli"
   dependencies:
+    "@openapi-contrib/json-schema-to-openapi-schema": "npm:^3.0.2"
     "@types/chai-as-promised": "npm:^8"
     "@types/cookie": "npm:^0.6.0"
     "@types/mocha": "npm:^10.0.9"
@@ -3011,6 +3044,24 @@ __metadata:
     strip-ansi: "npm:^6.0.0"
     wrap-ansi: "npm:^7.0.0"
   checksum: 10/db858c49af9d59a32d603987e6fddaca2ce716cd4602ba5a2bb3a5af1351eebe82aba8dff3ef3e1b331f7fa9d40ca66e67bdf8e7c327ce0ea959747ead65c0ef
+  languageName: node
+  linkType: hard
+
+"cliui@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "cliui@npm:8.0.1"
+  dependencies:
+    string-width: "npm:^4.2.0"
+    strip-ansi: "npm:^6.0.1"
+    wrap-ansi: "npm:^7.0.0"
+  checksum: 10/eaa5561aeb3135c2cddf7a3b3f562fc4238ff3b3fc666869ef2adf264be0f372136702f16add9299087fb1907c2e4ec5dbfe83bd24bce815c70a80c6c1a2e950
+  languageName: node
+  linkType: hard
+
+"clone@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "clone@npm:2.1.2"
+  checksum: 10/d9c79efba655f0bf601ab299c57eb54cbaa9860fb011aee9d89ed5ac0d12df1660ab7642fddaabb9a26b7eff0e117d4520512cb70798319ff5d30a111b5310c2
   languageName: node
   linkType: hard
 
@@ -4355,6 +4406,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-schema-walker@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "json-schema-walker@npm:2.0.0"
+  dependencies:
+    "@apidevtools/json-schema-ref-parser": "npm:^11.1.0"
+    clone: "npm:^2.1.2"
+  checksum: 10/4b26aa732918f6c458646aeeb757f6b6b82329ac20c758fc6bba178129c1b41f07db0cac8d56d6d3fcaa6202f0931de4b632ad240d1f1699dc631bee7f0c9d92
+  languageName: node
+  linkType: hard
+
 "json5@npm:^2.2.3":
   version: 2.2.3
   resolution: "json5@npm:2.2.3"
@@ -5020,6 +5081,13 @@ __metadata:
   dependencies:
     regex: "npm:^4.3.2"
   checksum: 10/af64a77f4e428c2652387014596138c51bd61d67b0bbe957cd10ff73b4ec14567701ff9286342ab804cfa00486a9a0ff189da8391721c21c898ea8e26b62e74f
+  languageName: node
+  linkType: hard
+
+"openapi-types@npm:^12.1.3":
+  version: 12.1.3
+  resolution: "openapi-types@npm:12.1.3"
+  checksum: 10/9d1d7ed848622b63d0a4c3f881689161b99427133054e46b8e3241e137f1c78bb0031c5d80b420ee79ac2e91d2e727ffd6fc13c553d1b0488ddc8ad389dcbef8
   languageName: node
   linkType: hard
 
@@ -5848,7 +5916,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width-cjs@npm:string-width@^4.2.0, string-width@npm:^4.1.0, string-width@npm:^4.2.0":
+"string-width-cjs@npm:string-width@^4.2.0, string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.3":
   version: 4.2.3
   resolution: "string-width@npm:4.2.3"
   dependencies:
@@ -6495,6 +6563,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"yargs-parser@npm:^21.1.1":
+  version: 21.1.1
+  resolution: "yargs-parser@npm:21.1.1"
+  checksum: 10/9dc2c217ea3bf8d858041252d43e074f7166b53f3d010a8c711275e09cd3d62a002969a39858b92bbda2a6a63a585c7127014534a560b9c69ed2d923d113406e
+  languageName: node
+  linkType: hard
+
 "yargs-unparser@npm:^2.0.0":
   version: 2.0.0
   resolution: "yargs-unparser@npm:2.0.0"
@@ -6519,6 +6594,21 @@ __metadata:
     y18n: "npm:^5.0.5"
     yargs-parser: "npm:^20.2.2"
   checksum: 10/807fa21211d2117135d557f95fcd3c3d390530cda2eca0c840f1d95f0f40209dcfeb5ec18c785a1f3425896e623e3b2681e8bb7b6600060eda1c3f4804e7957e
+  languageName: node
+  linkType: hard
+
+"yargs@npm:^17.7.2":
+  version: 17.7.2
+  resolution: "yargs@npm:17.7.2"
+  dependencies:
+    cliui: "npm:^8.0.1"
+    escalade: "npm:^3.1.1"
+    get-caller-file: "npm:^2.0.5"
+    require-directory: "npm:^2.1.1"
+    string-width: "npm:^4.2.3"
+    y18n: "npm:^5.0.5"
+    yargs-parser: "npm:^21.1.1"
+  checksum: 10/abb3e37678d6e38ea85485ed86ebe0d1e3464c640d7d9069805ea0da12f69d5a32df8e5625e370f9c96dd1c2dc088ab2d0a4dd32af18222ef3c4224a19471576
   languageName: node
   linkType: hard
 

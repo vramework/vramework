@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { generateSchemas } from '../src/schema-generator.js'
+import { generateAndSaveSchemas, generateSchemas } from '../src/schema-generator.js'
 
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
@@ -7,19 +7,20 @@ import { VisitState } from '../src/inspector/visit.js'
 import { logCommandInfoAndTime, logVrameworkLogo } from '../src/utils.js'
 
 export const vrameworkSchemas = async ({ tsconfig, schemaDirectory }: VrameworkCLIConfig, { routesMeta }: VisitState) => {
-  await logCommandInfoAndTime('Creating schemas', 'Created schemas', async () => {
-    await generateSchemas(
+  return await logCommandInfoAndTime('Creating schemas', 'Created schemas', async () => {
+    const schemas = await generateSchemas(
       tsconfig,
-      schemaDirectory,
       routesMeta
     )
+    await generateAndSaveSchemas(schemaDirectory, schemas)
+    return schemas
   })
 }
 
-async function action({ configFile }: { configFile?: string }): Promise<void> {
+async function action({ config }: { config?: string }): Promise<void> {
   logVrameworkLogo()
   
-  const cliConfig = await getVrameworkCLIConfig(configFile, ['rootDir', 'routesFile', 'schemaDirectory', 'tsconfig'])
+  const cliConfig = await getVrameworkCLIConfig(config, ['routeDirectories', 'schemaDirectory', 'tsconfig'])
   const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
   await vrameworkSchemas(cliConfig, visitState)
 }

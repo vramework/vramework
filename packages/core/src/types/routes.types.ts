@@ -86,4 +86,7 @@ export type RoutesMeta = Array<{
   query?: string[]
   input: string | null
   output: string | null
+  summary?: string
+  description?: string
+  tags?: string[]
 }>
