@@ -112,18 +112,18 @@ export const getVrameworkFilesAndMethods = async (
   return result as FilesAndMethods
 }
 
-export const writeFileInDir = async (path: string, content: string) => {
+export const writeFileInDir = async (path: string, content: string, ignoreModifyComment: boolean = false) => {
   if (content.includes('server-only')) {
-    content = content.replace('\'server-only\'', `'server-only'\n\n${DO_NOT_MODIFY_COMMENT}`)
+    content = content.replace('\'server-only\'', `'server-only'\n\n${ignoreModifyComment ? '' : DO_NOT_MODIFY_COMMENT}`)
   } else {
-    content = `${DO_NOT_MODIFY_COMMENT}${content}`
+    content = `${ignoreModifyComment ? '' : DO_NOT_MODIFY_COMMENT}${content}`
   }
 
   await mkdir(dirname(path), { recursive: true })
   await writeFile(path, content, 'utf-8')
 }
 
-export const logCommandInfoAndTime = async (commandStart: string, commandEnd: string, callback: (...args: any[]) => Promise<void>) => {
+export const logCommandInfoAndTime = async <ReturnType = void>(commandStart: string, commandEnd: string, callback: (...args: any[]) => Promise<ReturnType>) => {
   const start = Date.now()
   console.log(`\x1b[34m• ${commandStart}...\x1b[0m`)
   const result = await callback()

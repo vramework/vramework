@@ -8,6 +8,7 @@ import { vrameworkNext } from './vramework-nextjs.js'
 import { vrameworkFunctionTypes } from './vramework-function-types.js'
 import { vrameworkRoutesMap } from './vramework-routes-map.js'
 import { existsSync } from 'fs'
+import { vrameworkOpenAPI } from './vramework-openapi.js'
 
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
@@ -35,6 +36,10 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   
   if (cliConfig.nextDeclarationFile) {
     await vrameworkNext(cliConfig, visitState, options)
+  }
+
+  if (cliConfig.openAPI) {
+    await vrameworkOpenAPI(cliConfig, visitState)
   }
 
   const bootstrapImports: string[] = []

@@ -1,0 +1,212 @@
+{
+  "$ref": "#/definitions/VrameworkCLIConfig",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "OpenAPISpecInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "externalDocs": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url"
+          ],
+          "type": "object"
+        },
+        "info": {
+          "additionalProperties": false,
+          "properties": {
+            "contact": {
+              "additionalProperties": false,
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "description": {
+              "type": "string"
+            },
+            "license": {
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object"
+            },
+            "termsOfService": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "version",
+            "description"
+          ],
+          "type": "object"
+        },
+        "security": {
+          "items": {
+            "additionalProperties": {
+              "items": {},
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "securitySchemes": {
+          "type": "object"
+        },
+        "servers": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "info",
+        "servers"
+      ],
+      "type": "object"
+    },
+    "VrameworkCLIConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "bootstrapFile": {
+          "type": "string"
+        },
+        "configDir": {
+          "type": "string"
+        },
+        "extends": {
+          "type": "string"
+        },
+        "nextDeclarationFile": {
+          "type": "string"
+        },
+        "openAPI": {
+          "additionalProperties": false,
+          "properties": {
+            "additionalInfo": {
+              "$ref": "#/definitions/OpenAPISpecInfo"
+            },
+            "outputFile": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "outputFile",
+            "additionalInfo"
+          ],
+          "type": "object"
+        },
+        "outDir": {
+          "type": "string"
+        },
+        "packageMappings": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "rootDir": {
+          "type": "string"
+        },
+        "routeDirectories": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "routesFile": {
+          "type": "string"
+        },
+        "routesMapDeclarationFile": {
+          "type": "string"
+        },
+        "schemaDirectory": {
+          "type": "string"
+        },
+        "tsconfig": {
+          "type": "string"
+        },
+        "typesDeclarationFile": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "bootstrapFile",
+        "configDir",
+        "packageMappings",
+        "rootDir",
+        "routeDirectories",
+        "routesFile",
+        "routesMapDeclarationFile",
+        "schemaDirectory",
+        "tsconfig",
+        "typesDeclarationFile"
+      ],
+      "type": "object"
+    }
+  }
+}

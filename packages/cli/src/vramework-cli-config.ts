@@ -1,7 +1,8 @@
 import { join, dirname, resolve } from 'path'
 import { readdir } from 'fs/promises'
+import { OpenAPISpecInfo } from './openapi-spec-generator.js'
 
-type VrameworkCLICoreOutputFiles = {
+export interface VrameworkCLICoreOutputFiles {
   outDir?: string
   routesFile: string
   schemaDirectory: string
@@ -21,6 +22,10 @@ export type VrameworkCLIConfig = {
   tsconfig: string
 
   nextDeclarationFile?: string
+  openAPI?: {
+    outputFile: string
+    additionalInfo: OpenAPISpecInfo
+  }
 } & VrameworkCLICoreOutputFiles
 
 export const getVrameworkCLIConfig = async (
@@ -31,7 +36,7 @@ export const getVrameworkCLIConfig = async (
   if (!configFile) {
     let execDirectory = process.cwd()
     const files = await readdir(execDirectory)
-    const file = files.find((file) => file.endsWith('vramework.config.json'))
+    const file = files.find((file) => /vramework\.config\.(ts|js|json)$/.test(file));
     if (!file) {
       const errorMessage =
         '\nConfig file vramework.config.json not found\nExiting...'
