@@ -1,5 +1,12 @@
 # @vramework/cli
 
+## 0.5.12
+
+### Patch Changes
+
+- 473ac6a: fix: correcting name of schema root file
+  refactor: removing time change in generated files
+
 ## 0.5.11
 
 ### Patch Changes
