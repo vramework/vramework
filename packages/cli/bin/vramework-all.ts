@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { logVrameworkLogo, VrameworkCLIOptions } from '../src/utils.js'
+import { getFileImportRelativePath, logVrameworkLogo, VrameworkCLIOptions, writeFileInDir } from '../src/utils.js'
 import { getVrameworkCLIConfig } from '../src/vramework-cli-config.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import { vrameworkRoutes } from './vramework-routes.js'
@@ -36,12 +36,17 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   if (cliConfig.nextDeclarationFile) {
     await vrameworkNext(cliConfig, visitState, options)
   }
+
+  const bootstrapImports: string[] = []
+  bootstrapImports.push(`import '${getFileImportRelativePath(cliConfig.bootstrapFile, `${cliConfig.schemaDirectory}/register.ts`, cliConfig.packageMappings)}.js'`)
+  bootstrapImports.push(`import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings)}.js'`)
+  await writeFileInDir(cliConfig.bootstrapFile, bootstrapImports.join('\n'))
 }
 
 export const all = (program: Command): void => {
   program
     .command('all', { isDefault: true })
-    .description('Setup all vramework commands per config')
+    .description('Generate all the files used by vramework')
     .option(
       '-ct | --vramework-config-type',
       'The type of your vramework config object'

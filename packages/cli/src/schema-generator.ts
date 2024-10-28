@@ -20,7 +20,7 @@ export async function generateSchemas(
   const schemas = Array.from(schemasSet)
 
   await writeFileInDir(
-    `${schemaParentDir}/schemas.ts`,
+    `${schemaParentDir}/register.ts`,
     'export const empty = null;',
   )
 
@@ -37,7 +37,7 @@ export async function generateSchemas(
   )
 
   await writeFileInDir(
-    `${schemaParentDir}/schemas.ts`,
+    `${schemaParentDir}/register.ts`,
     `
 import { addSchema } from '@vramework/core'
 ` +

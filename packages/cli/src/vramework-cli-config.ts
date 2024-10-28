@@ -1,7 +1,16 @@
 import { join, dirname, resolve } from 'path'
 import { readdir } from 'fs/promises'
 
-export interface VrameworkCLIConfig {
+type VrameworkCLICoreOutputFiles = {
+  outDir?: string
+  routesFile: string
+  schemaDirectory: string
+  typesDeclarationFile: string
+  routesMapDeclarationFile: string
+  bootstrapFile: string
+}
+
+export type VrameworkCLIConfig = {
   extends?: string
 
   rootDir: string
@@ -11,13 +20,8 @@ export interface VrameworkCLIConfig {
   configDir: string
   tsconfig: string
 
-  routesFile: string
-  schemaDirectory: string
-
-  typesDeclarationFile: string
-  routesMapDeclarationFile: string
   nextDeclarationFile?: string
-}
+} & VrameworkCLICoreOutputFiles
 
 export const getVrameworkCLIConfig = async (
   configFile: string | undefined = undefined,
@@ -65,6 +69,24 @@ export const getVrameworkCLIConfig = async (
         configDir,
         packageMappings: config.packageMappings || {},
         rootDir: config.rootDir ? resolve(configDir, config.rootDir) : configDir,
+      }
+    }
+
+    if (result.outDir) {
+      if (!result.schemaDirectory) {
+        result.schemaDirectory = join(result.outDir, 'vramework-schemas')
+      }
+      if (!result.routesFile) {
+        result.routesFile = join(result.outDir, 'vramework-routes.ts')
+      }
+      if (!result.typesDeclarationFile) {
+        result.typesDeclarationFile = join(result.outDir, 'vramework-types.d.ts')
+      }
+      if (!result.routesMapDeclarationFile) {
+        result.routesMapDeclarationFile = join(result.outDir, 'vramework-routes-map.d.ts')
+      }
+      if (!result.bootstrapFile) {
+        result.bootstrapFile = join(result.outDir, 'vramework-bootstrap.ts')
       }
     }
 
