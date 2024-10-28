@@ -45,7 +45,7 @@ export const vrameworkNext = async ({ nextDeclarationFile, routesFile, routesMap
     )
     const schemasPath = getFileImportRelativePath(
       nextDeclarationFile,
-      `${schemaDirectory}/schemas.ts`,
+      `${schemaDirectory}/register.ts`,
       packageMappings
     )
 
