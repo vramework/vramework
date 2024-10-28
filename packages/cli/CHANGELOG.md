@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.11
+
+### Patch Changes
+
+- b3dcfc4: feat: adding a bootstrap file to simplify usage
+
 ## 0.5.10
 
 ### Patch Changes
