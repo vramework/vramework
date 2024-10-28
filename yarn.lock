@@ -2325,7 +2325,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/express-middleware@npm:^0.5.1, @vramework/express-middleware@workspace:packages/servers/express/express-middleware":
+"@vramework/express-middleware@npm:^0.5.3, @vramework/express-middleware@workspace:packages/servers/express/express-middleware":
   version: 0.0.0-use.local
   resolution: "@vramework/express-middleware@workspace:packages/servers/express/express-middleware"
   dependencies:
@@ -2351,7 +2351,7 @@ __metadata:
     "@types/cors": "npm:^2.8.17"
     "@types/express": "npm:^5"
     "@types/express-serve-static-core": "npm:^5.0.0"
-    "@vramework/express-middleware": "npm:^0.5.1"
+    "@vramework/express-middleware": "npm:^0.5.3"
     body-parser: "npm:^1.20.3"
     cookie: "npm:^1.0.1"
     cookie-parser: "npm:^1.4.7"
@@ -2363,7 +2363,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/fastify-plugin@npm:^0.5.1, @vramework/fastify-plugin@workspace:packages/servers/fastify/fastify-plugin":
+"@vramework/fastify-plugin@npm:^0.5.3, @vramework/fastify-plugin@workspace:packages/servers/fastify/fastify-plugin":
   version: 0.0.0-use.local
   resolution: "@vramework/fastify-plugin@workspace:packages/servers/fastify/fastify-plugin"
   dependencies:
@@ -2379,7 +2379,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/fastify@workspace:packages/servers/fastify/fastify-server"
   dependencies:
-    "@vramework/fastify-plugin": "npm:^0.5.1"
+    "@vramework/fastify-plugin": "npm:^0.5.3"
     fastify: "npm:^5.0.0"
     typescript: "npm:^5.6.3"
   peerDependencies:

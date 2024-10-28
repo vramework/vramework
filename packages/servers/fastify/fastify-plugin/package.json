@@ -1,6 +1,6 @@
 {
   "name": "@vramework/fastify-plugin",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "The vramework fastify plugin",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",

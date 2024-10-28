@@ -1,6 +1,6 @@
 {
   "name": "@vramework/express",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "The vramework express server ",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -39,7 +39,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5",
     "@types/express-serve-static-core": "^5.0.0",
-    "@vramework/express-middleware": "^0.5.1",
+    "@vramework/express-middleware": "^0.5.3",
     "body-parser": "^1.20.3",
     "cookie": "^1.0.1",
     "cookie-parser": "^1.4.7",
