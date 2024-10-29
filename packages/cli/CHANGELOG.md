@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.13
+
+### Patch Changes
+
+- 93b80a3: feat: adding a beta openapi standard
+- Updated dependencies [93b80a3]
+  - @vramework/core@0.5.5
+
 ## 0.5.12
 
 ### Patch Changes

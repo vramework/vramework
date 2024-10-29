@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.5
+
+### Patch Changes
+
+- 93b80a3: feat: adding a beta openapi standard
+
 ## 0.5.4
 
 ### Patch Changes
