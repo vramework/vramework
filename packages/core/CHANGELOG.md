@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.6
+
+### Patch Changes
+
+- 0883f00: fix: schema generation error
+
 ## 0.5.5
 
 ### Patch Changes
