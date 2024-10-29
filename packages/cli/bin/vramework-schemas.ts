@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { generateAndSaveSchemas, generateSchemas } from '../src/schema-generator.js'
+import { saveSchemas, generateSchemas } from '../src/schema-generator.js'
 
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
@@ -12,7 +12,7 @@ export const vrameworkSchemas = async ({ tsconfig, schemaDirectory }: VrameworkC
       tsconfig,
       routesMeta
     )
-    await generateAndSaveSchemas(schemaDirectory, schemas)
+    await saveSchemas(schemaDirectory, schemas, routesMeta)
     return schemas
   })
 }
