@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.15
+
+### Patch Changes
+
+- 707b26a: feat: save openapi as yml if needed
+
 ## 0.5.14
 
 ### Patch Changes
