@@ -1,5 +1,5 @@
 import * as AjvImp from 'ajv'
-const Ajv = 'default' in AjvImp ? AjvImp.default : AjvImp as any
+const Ajv = 'default' in AjvImp ? AjvImp.default : (AjvImp as any)
 
 import addFormats from 'ajv-formats'
 import { ValidateFunction } from 'ajv'
@@ -39,14 +39,16 @@ export const validateAllSchemasLoaded = (logger: Logger) => {
   const missingSchemas: string[] = []
 
   for (const route of routesMeta) {
-      if (!route.input || validators.has(route.input)) {
-        continue
-      }
-      missingSchemas.push(route.input)
+    if (!route.input || validators.has(route.input)) {
+      continue
+    }
+    missingSchemas.push(route.input)
   }
 
   if (missingSchemas.length > 0) {
-    logger.error(`Error: Failed to load schemas:\n.${missingSchemas.join('\n')}`)
+    logger.error(
+      `Error: Failed to load schemas:\n.${missingSchemas.join('\n')}`
+    )
     logger.error('\tHave you run the schema generation?')
     logger.error('\tnpx @vramework/cli schemas')
   } else {

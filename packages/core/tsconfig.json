@@ -6,7 +6,7 @@
     "module": "NodeNext",
     "outDir": "dist/esm",
     "target": "esnext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "NodeNext"
   },
   "exclude": ["node_modules", "dist"],
   "references": []

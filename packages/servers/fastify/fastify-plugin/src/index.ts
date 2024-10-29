@@ -1,2 +1,2 @@
-import vrameworkFastifyPlugin from "./vramework-fastify-plugin.js" 
+import vrameworkFastifyPlugin from './vramework-fastify-plugin.js'
 export default vrameworkFastifyPlugin

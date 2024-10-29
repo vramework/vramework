@@ -28,7 +28,7 @@ export const inspector = (routeFiles: string[]): VisitState => {
     filesWithRoutes: new Set<string>(),
     singletonServicesFactories: new Map(),
     sessionServicesFactories: new Map(),
-    vrameworkConfigs: new Map()
+    vrameworkConfigs: new Map(),
   }
 
   for (const sourceFile of sourceFiles) {
@@ -36,7 +36,10 @@ export const inspector = (routeFiles: string[]): VisitState => {
   }
 
   // Looks for and adds all the input/out schema types
-  addFilesWithSymbols(program, checker, state.functionTypesImportMap, [...state.inputTypes, ...state.outputTypes])
+  addFilesWithSymbols(program, checker, state.functionTypesImportMap, [
+    ...state.inputTypes,
+    ...state.outputTypes,
+  ])
 
   return state
 }

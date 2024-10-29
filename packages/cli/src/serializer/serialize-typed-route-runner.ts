@@ -1,5 +1,5 @@
 export const serializeTypedRouteRunner = (routesMapImport: string) => {
-    return `/**
+  return `/**
 * This is used to provide a route runner that is aware of the routes within your application
 */
 import { runRoute, CoreSingletonServices, CreateSessionServices, CoreServices, CoreUserSession, VrameworkRequest, VrameworkResponse } from '@vramework/core'

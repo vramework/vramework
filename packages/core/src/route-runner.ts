@@ -1,6 +1,10 @@
 import { getErrorResponse } from './error-handler.js'
 import { verifyPermissions } from './permissions.js'
-import { CoreAPIRoute, CoreAPIRoutes, RoutesMeta } from './types/routes.types.js'
+import {
+  CoreAPIRoute,
+  CoreAPIRoutes,
+  RoutesMeta,
+} from './types/routes.types.js'
 import { loadSchema, validateJson } from './schema.js'
 import {
   CoreServices,
@@ -17,18 +21,18 @@ import { RouteNotFoundError, NotImplementedError } from './errors.js'
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
-  ? Param | ExtractRouteParams<`/${Rest}`>
-  : S extends `${string}:${infer Param}`
-  ? Param
-  : never
+    ? Param | ExtractRouteParams<`/${Rest}`>
+    : S extends `${string}:${infer Param}`
+      ? Param
+      : never
 
 export type AssertRouteParams<In, Route extends string> =
   ExtractRouteParams<Route> extends keyof In
-  ? unknown
-  : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
+    ? unknown
+    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
 
 export type RunRouteOptions = Partial<{
-  skipUserSession: boolean,
+  skipUserSession: boolean
   respondWith404: boolean
 }>
 
@@ -126,7 +130,8 @@ export const runRoute = async <In, Out>(
     method: apiType,
     skipUserSession = false,
     respondWith404 = true,
-  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> & RunRouteOptions
+  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> &
+    RunRouteOptions
 ): Promise<Out> => {
   let sessionServices: CoreServices | undefined
 
@@ -229,15 +234,17 @@ export const runRoute = async <In, Out>(
     throw e
   } finally {
     if (sessionServices) {
-      await Promise.all(Object.values(sessionServices).map(async (service) => {
-        if (service?.close) {
-          try {
-            await service.close()
-          } catch (e) {
-            services.logger.error(e)
+      await Promise.all(
+        Object.values(sessionServices).map(async (service) => {
+          if (service?.close) {
+            try {
+              await service.close()
+            } catch (e) {
+              services.logger.error(e)
+            }
           }
-        }
-      }))
+        })
+      )
     }
   }
 }

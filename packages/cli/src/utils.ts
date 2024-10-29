@@ -44,7 +44,12 @@ export interface VrameworkCLIOptions {
   sessionServicesFactoryType?: string
 }
 
-const getMetaTypes = (type: string, errors: Map<string, PathToNameAndType>, map: PathToNameAndType, desiredType?: string) => {
+const getMetaTypes = (
+  type: string,
+  errors: Map<string, PathToNameAndType>,
+  map: PathToNameAndType,
+  desiredType?: string
+) => {
   if (desiredType) {
     const entries = Object.entries(map)
     for (const [file, meta] of entries) {
@@ -81,16 +86,44 @@ export const getVrameworkFilesAndMethods = async (
   }: VisitState,
   packageMappings: Record<string, string>,
   outputFile: string,
-  { configFileType, singletonServicesFactoryType, sessionServicesFactoryType }: VrameworkCLIOptions
+  {
+    configFileType,
+    singletonServicesFactoryType,
+    sessionServicesFactoryType,
+  }: VrameworkCLIOptions
 ): Promise<FilesAndMethods> => {
   let errors = new Map<string, PathToNameAndType>()
 
   const result: Partial<FilesAndMethods> = {
-    vrameworkConfig: getMetaTypes('CoreConfig', errors, vrameworkConfigs, configFileType),
-    userSessionType: getMetaTypes('CoreUserSession', errors, userSessionTypeImportMap, configFileType),
-    sessionServicesType: getMetaTypes('CoreServices', errors, httpSessionServicesTypeImportMap),
-    singletonServicesFactory: getMetaTypes('CreateSingletonServices', errors, singletonServicesFactories, singletonServicesFactoryType),
-    sessionServicesFactory: getMetaTypes('CreateSessionServices', errors, sessionServicesFactories, sessionServicesFactoryType),
+    vrameworkConfig: getMetaTypes(
+      'CoreConfig',
+      errors,
+      vrameworkConfigs,
+      configFileType
+    ),
+    userSessionType: getMetaTypes(
+      'CoreUserSession',
+      errors,
+      userSessionTypeImportMap,
+      configFileType
+    ),
+    sessionServicesType: getMetaTypes(
+      'CoreServices',
+      errors,
+      httpSessionServicesTypeImportMap
+    ),
+    singletonServicesFactory: getMetaTypes(
+      'CreateSingletonServices',
+      errors,
+      singletonServicesFactories,
+      singletonServicesFactoryType
+    ),
+    sessionServicesFactory: getMetaTypes(
+      'CreateSessionServices',
+      errors,
+      sessionServicesFactories,
+      sessionServicesFactoryType
+    ),
   }
 
   if (errors.size > 0) {
@@ -101,7 +134,9 @@ export const getVrameworkFilesAndMethods = async (
         result.push(
           `\t* file: ${getFileImportRelativePath(outputFile, file, packageMappings)}`
         )
-        result.push(`\t* methods: ${methods.map(({ variable, type }) => `${variable}: ${type}`).join(', ')}`)
+        result.push(
+          `\t* methods: ${methods.map(({ variable, type }) => `${variable}: ${type}`).join(', ')}`
+        )
       }
     })
 
@@ -112,9 +147,16 @@ export const getVrameworkFilesAndMethods = async (
   return result as FilesAndMethods
 }
 
-export const writeFileInDir = async (path: string, content: string, ignoreModifyComment: boolean = false) => {
+export const writeFileInDir = async (
+  path: string,
+  content: string,
+  ignoreModifyComment: boolean = false
+) => {
   if (content.includes('server-only')) {
-    content = content.replace('\'server-only\'', `'server-only'\n\n${ignoreModifyComment ? '' : DO_NOT_MODIFY_COMMENT}`)
+    content = content.replace(
+      "'server-only'",
+      `'server-only'\n\n${ignoreModifyComment ? '' : DO_NOT_MODIFY_COMMENT}`
+    )
   } else {
     content = `${ignoreModifyComment ? '' : DO_NOT_MODIFY_COMMENT}${content}`
   }
@@ -123,7 +165,11 @@ export const writeFileInDir = async (path: string, content: string, ignoreModify
   await writeFile(path, content, 'utf-8')
 }
 
-export const logCommandInfoAndTime = async <ReturnType = void>(commandStart: string, commandEnd: string, callback: (...args: any[]) => Promise<ReturnType>) => {
+export const logCommandInfoAndTime = async <ReturnType = void>(
+  commandStart: string,
+  commandEnd: string,
+  callback: (...args: any[]) => Promise<ReturnType>
+) => {
   const start = Date.now()
   console.log(`\x1b[34m• ${commandStart}...\x1b[0m`)
   const result = await callback()

@@ -1,38 +1,61 @@
 import { Command } from 'commander'
-import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import {
+  getVrameworkCLIConfig,
+  VrameworkCLIConfig,
+} from '../src/vramework-cli-config.js'
 import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
-import { getFileImportRelativePath, getVrameworkFilesAndMethods, logCommandInfoAndTime, logVrameworkLogo, VrameworkCLIOptions, writeFileInDir } from '../src/utils.js'
+import {
+  getFileImportRelativePath,
+  getVrameworkFilesAndMethods,
+  logCommandInfoAndTime,
+  logVrameworkLogo,
+  VrameworkCLIOptions,
+  writeFileInDir,
+} from '../src/utils.js'
 import { serializeVrameworkTypes } from '../src/serializer/serialize-vramework-types.js'
 import { vrameworkRoutes } from './vramework-routes.js'
 
-export const vrameworkFunctionTypes = async ({ typesDeclarationFile: typesFile, packageMappings }: VrameworkCLIConfig, options: VrameworkCLIOptions, visitState: VisitState) => {
-  await logCommandInfoAndTime('Creating api types', 'Created api types', async () => {
-    const {
-      userSessionType,
-      sessionServicesType
-    } = await getVrameworkFilesAndMethods(
-      visitState,
-      packageMappings,
-      typesFile,
-      options
-    )
-    const content = serializeVrameworkTypes(
-      `import type { ${userSessionType.type} } from '${getFileImportRelativePath(typesFile, userSessionType.typePath, packageMappings)}'`,
-      userSessionType.type,
-      `import type { ${sessionServicesType.type} } from '${getFileImportRelativePath(typesFile, sessionServicesType.typePath, packageMappings)}'`,
-      sessionServicesType.type
-    )
-    await writeFileInDir(typesFile, content)
-  })
+export const vrameworkFunctionTypes = async (
+  { typesDeclarationFile: typesFile, packageMappings }: VrameworkCLIConfig,
+  options: VrameworkCLIOptions,
+  visitState: VisitState
+) => {
+  await logCommandInfoAndTime(
+    'Creating api types',
+    'Created api types',
+    async () => {
+      const { userSessionType, sessionServicesType } =
+        await getVrameworkFilesAndMethods(
+          visitState,
+          packageMappings,
+          typesFile,
+          options
+        )
+      const content = serializeVrameworkTypes(
+        `import type { ${userSessionType.type} } from '${getFileImportRelativePath(typesFile, userSessionType.typePath, packageMappings)}'`,
+        userSessionType.type,
+        `import type { ${sessionServicesType.type} } from '${getFileImportRelativePath(typesFile, sessionServicesType.typePath, packageMappings)}'`,
+        sessionServicesType.type
+      )
+      await writeFileInDir(typesFile, content)
+    }
+  )
 }
 
 async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
   logVrameworkLogo()
-  
-  const cliConfig = await getVrameworkCLIConfig(cliOptions.config, ['rootDir', 'routeDirectories', 'typesDeclarationFile'])
 
-  const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+  const cliConfig = await getVrameworkCLIConfig(cliOptions.config, [
+    'rootDir',
+    'routeDirectories',
+    'typesDeclarationFile',
+  ])
+
+  const visitState = await inspectorGlob(
+    cliConfig.rootDir,
+    cliConfig.routeDirectories
+  )
   await vrameworkRoutes(cliConfig, visitState)
 }
 

@@ -1,7 +1,12 @@
 import * as ts from 'typescript'
 import { ImportMap } from './inspector.js'
 
-export const addFilesWithSymbols = (program: ts.Program, checker: ts.TypeChecker, functionTypesImportMap: ImportMap, symbolNames: string[]): string | null => {
+export const addFilesWithSymbols = (
+  program: ts.Program,
+  checker: ts.TypeChecker,
+  functionTypesImportMap: ImportMap,
+  symbolNames: string[]
+): string | null => {
   for (const sourceFile of program.getSourceFiles()) {
     if (sourceFile.isDeclarationFile) {
       continue
@@ -9,9 +14,9 @@ export const addFilesWithSymbols = (program: ts.Program, checker: ts.TypeChecker
     const symbols = checker.getSymbolsInScope(
       sourceFile,
       ts.SymbolFlags.Function |
-      ts.SymbolFlags.TypeAlias |
-      ts.SymbolFlags.Interface |
-      ts.SymbolFlags.Class
+        ts.SymbolFlags.TypeAlias |
+        ts.SymbolFlags.Interface |
+        ts.SymbolFlags.Class
     )
     for (const symbol of symbols) {
       if (symbolNames.includes(symbol.getName())) {

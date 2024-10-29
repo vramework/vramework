@@ -1,4 +1,4 @@
-import { SecretService } from "./secret-service.js"
+import { SecretService } from './secret-service.js'
 
 /**
  * Service for retrieving secrets from environment variables.

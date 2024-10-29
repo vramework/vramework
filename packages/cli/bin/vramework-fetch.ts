@@ -6,33 +6,44 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import {
+  getVrameworkCLIConfig,
+  VrameworkCLIConfig,
+} from '../src/vramework-cli-config.js'
 import { serializeFetchWrapper } from '../src/serializer/serialize-fetch-wrapper.js'
 
-export const vrameworkFetch = async ({ fetchFile, routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig) => {
-  await logCommandInfoAndTime('Generating fetch wrapper', 'Generated fetch wrapper', async () => {
-    if (!fetchFile) {
-      throw new Error('fetchFile is required in vramework config')
+export const vrameworkFetch = async ({
+  fetchFile,
+  routesMapDeclarationFile,
+  packageMappings,
+}: VrameworkCLIConfig) => {
+  await logCommandInfoAndTime(
+    'Generating fetch wrapper',
+    'Generated fetch wrapper',
+    async () => {
+      if (!fetchFile) {
+        throw new Error('fetchFile is required in vramework config')
+      }
+
+      const routesMapDeclarationPath = getFileImportRelativePath(
+        fetchFile,
+        routesMapDeclarationFile,
+        packageMappings
+      )
+
+      const content = [serializeFetchWrapper(routesMapDeclarationPath)]
+      await writeFileInDir(fetchFile, content.join('\n'))
     }
-
-    const routesMapDeclarationPath = getFileImportRelativePath(
-      fetchFile,
-      routesMapDeclarationFile,
-      packageMappings
-    )
-
-    const content = [
-        serializeFetchWrapper(routesMapDeclarationPath)
-    ]
-    await writeFileInDir(fetchFile, content.join('\n'))
-  })
+  )
 }
 
-export const action = async (
-  options: VrameworkCLIOptions
-): Promise<void> => {
+export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
-  const cliConfig = await getVrameworkCLIConfig(options.config, ['rootDir', 'schemaDirectory', 'configDir', 'nextDeclarationFile'], true)
+  const cliConfig = await getVrameworkCLIConfig(
+    options.config,
+    ['rootDir', 'schemaDirectory', 'configDir', 'nextDeclarationFile'],
+    true
+  )
   await vrameworkFetch(cliConfig)
 }
 

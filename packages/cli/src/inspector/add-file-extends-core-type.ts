@@ -1,5 +1,5 @@
-import * as ts from "typescript"
-import { PathToNameAndType } from "./visit.js"
+import * as ts from 'typescript'
+import { PathToNameAndType } from './visit.js'
 
 // const VRAMEWORK_TYPES = ['CoreConfig', 'CoreService', 'CoreServices', 'CoreSingletonService', 'CoreSessionService']
 
@@ -20,12 +20,16 @@ export const addFileExtendsCoreType = (
           for (const type of clause.types) {
             const extendedTypeName = type.expression.getText()
             let extendedTypeDeclarationPath: string | null = null
-            
+
             // Check if the extended type matches the expected type name
             if (extendedTypeName === expectedTypeName) {
               // Retrieve the symbol of the extended type
               const typeSymbol = checker.getSymbolAtLocation(type.expression)
-              if (typeSymbol && typeSymbol.declarations && typeSymbol.declarations.length > 0) {
+              if (
+                typeSymbol &&
+                typeSymbol.declarations &&
+                typeSymbol.declarations.length > 0
+              ) {
                 const declaration = typeSymbol.declarations[0]
 
                 const sourceFile = declaration.getSourceFile()
@@ -36,7 +40,7 @@ export const addFileExtendsCoreType = (
               variables.push({
                 variable: undefined,
                 type: typeName,
-                typePath: extendedTypeDeclarationPath
+                typePath: extendedTypeDeclarationPath,
               })
               methods[fileName] = variables
             }

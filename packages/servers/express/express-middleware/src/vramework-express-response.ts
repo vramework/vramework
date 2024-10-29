@@ -31,7 +31,7 @@ export class VrameworkExpressResponse extends VrameworkResponse {
     this.response.clearCookie(name)
   }
 
-  public end (): void {
+  public end(): void {
     this.response.end()
   }
 }

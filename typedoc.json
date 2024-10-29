@@ -4,13 +4,18 @@
     "packages/fetch/src/*.ts",
     "packages/servers/**/src/*.ts",
     "packages/cloud/**/src/*.ts",
-    "packages/services/**/src/*.ts",
+    "packages/services/**/src/*.ts"
   ],
   "out": ".typedocs",
   "compilerOptions": {
-    "skipLibCheck": true, 
+    "skipLibCheck": true,
     "noImplicitAny": false,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
-  "exclude": ["**/node_modules/**/*", "**/dist/**/*", "**/*.spec.ts", "**/*.d.ts"]
+  "exclude": [
+    "**/node_modules/**/*",
+    "**/dist/**/*",
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ]
 }

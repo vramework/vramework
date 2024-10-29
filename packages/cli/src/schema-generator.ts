@@ -3,17 +3,33 @@ import { writeFileInDir } from './utils.js'
 import { mkdir, writeFile } from 'fs/promises'
 import { JSONValue, RoutesMeta } from '@vramework/core'
 
-export async function generateSchemas(tsconfig: string, routesMeta: RoutesMeta): Promise<Record<string, JSONValue>> {
+export async function generateSchemas(
+  tsconfig: string,
+  routesMeta: RoutesMeta
+): Promise<Record<string, JSONValue>> {
   const schemasSet = new Set(
     routesMeta
-      .map<Array<string | undefined | null>>(({ input, output, inputTypes }) => [input, output, inputTypes?.body, inputTypes?.query, inputTypes?.params])
+      .map<Array<string | undefined | null>>(
+        ({ input, output, inputTypes }) => [
+          input,
+          output,
+          inputTypes?.body,
+          inputTypes?.query,
+          inputTypes?.params,
+        ]
+      )
       .flat()
-      .filter(s => !!s) as string[]
+      .filter((s) => !!s) as string[]
   )
 
-  const generator = createGenerator({ tsconfig, skipTypeCheck: true, topRef: false, discriminatorType: 'open-api' })
+  const generator = createGenerator({
+    tsconfig,
+    skipTypeCheck: true,
+    topRef: false,
+    discriminatorType: 'open-api',
+  })
   const schemas: Record<string, JSONValue> = {}
-  schemasSet.forEach(schema => {
+  schemasSet.forEach((schema) => {
     try {
       schemas[schema] = generator.createSchema(schema) as JSONValue
     } catch (e) {
@@ -35,10 +51,15 @@ export async function saveSchemas(
 ) {
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,
-    'export const empty = null;',
+    'export const empty = null;'
   )
 
-  const desiredSchemas = new Set(routesMeta.map(({ input, output }) => [input, output]).flat().filter(s => !!s && !['boolean', 'string', 'number'].includes(s)))
+  const desiredSchemas = new Set(
+    routesMeta
+      .map(({ input, output }) => [input, output])
+      .flat()
+      .filter((s) => !!s && !['boolean', 'string', 'number'].includes(s))
+  )
 
   await mkdir(`${schemaParentDir}/schemas`, { recursive: true })
   await Promise.all(
@@ -53,10 +74,14 @@ export async function saveSchemas(
     })
   )
 
-  const schemaImports = Array.from(desiredSchemas).map(schema => `
+  const schemaImports = Array.from(desiredSchemas)
+    .map(
+      (schema) => `
 import * as ${schema} from './schemas/${schema}.schema.json'
 addSchema('${schema}', ${schema})
-`).join('\n')
+`
+    )
+    .join('\n')
 
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,

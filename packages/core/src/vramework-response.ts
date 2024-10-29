@@ -73,6 +73,5 @@ export abstract class VrameworkResponse {
    * Informs the response that it has ended, useful for when setting
    * a status without a body or response.
    */
-  public end() {
-  }
+  public end() {}
 }

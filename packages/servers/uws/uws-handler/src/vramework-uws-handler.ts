@@ -18,7 +18,12 @@ export type VrameworkuWSHandlerOptions = {
   validateSchemas?: boolean
 } & RunRouteOptions
 
-export const vrameworkHandler = ({ logRoutes, singletonServices, createSessionServices, validateSchemas }: VrameworkuWSHandlerOptions) => {
+export const vrameworkHandler = ({
+  logRoutes,
+  singletonServices,
+  createSessionServices,
+  validateSchemas,
+}: VrameworkuWSHandlerOptions) => {
   if (logRoutes) {
     logRegisterRoutes(singletonServices.logger)
   }

@@ -54,7 +54,7 @@ const generalHandler = async (
     )
     response.setHeader(
       'Access-Control-Allow-Methods',
-      'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT',
+      'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'
     )
     response.setStatus(200)
     response.setJson({})

@@ -36,7 +36,7 @@ export class VrameworkUWSResponse extends VrameworkResponse {
     )
   }
 
-  public end () {
+  public end() {
     this.response.endWithoutBody()
   }
 }

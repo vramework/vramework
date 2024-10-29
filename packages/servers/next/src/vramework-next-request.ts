@@ -7,13 +7,12 @@ export class VrameworkNextRequest extends VrameworkRequest {
   }
 
   public getCookies() {
-    return this.request.cookies.getAll().reduce<Record<string, string>>(
-      (acc, cookie) => {
+    return this.request.cookies
+      .getAll()
+      .reduce<Record<string, string>>((acc, cookie) => {
         acc[cookie.name] = cookie.value
         return acc
-      },
-      {}
-    )
+      }, {})
   }
 
   public getHeader(headerName: string): string | undefined {

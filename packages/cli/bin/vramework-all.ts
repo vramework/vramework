@@ -1,5 +1,10 @@
 import { Command } from 'commander'
-import { getFileImportRelativePath, logVrameworkLogo, VrameworkCLIOptions, writeFileInDir } from '../src/utils.js'
+import {
+  getFileImportRelativePath,
+  logVrameworkLogo,
+  VrameworkCLIOptions,
+  writeFileInDir,
+} from '../src/utils.js'
 import { getVrameworkCLIConfig } from '../src/vramework-cli-config.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import { vrameworkRoutes } from './vramework-routes.js'
@@ -15,9 +20,12 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
 
   const cliConfig = await getVrameworkCLIConfig(options.config, [], true)
-  
+
   let typesDeclarationFileExists = true
-  let visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+  let visitState = await inspectorGlob(
+    cliConfig.rootDir,
+    cliConfig.routeDirectories
+  )
   if (!existsSync(cliConfig.typesDeclarationFile)) {
     typesDeclarationFileExists = false
   }
@@ -26,15 +34,18 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   // This is needed since the addRoutes function will add the routes to the visitState
   if (!typesDeclarationFileExists) {
     console.log(`\x1b[34m• Type file first created, inspecting again...\x1b[0m`)
-    visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+    visitState = await inspectorGlob(
+      cliConfig.rootDir,
+      cliConfig.routeDirectories
+    )
   }
 
   await vrameworkRoutes(cliConfig, visitState)
 
   await vrameworkRoutesMap(cliConfig, visitState)
-  
+
   await vrameworkSchemas(cliConfig, visitState)
-  
+
   if (cliConfig.nextDeclarationFile) {
     await vrameworkNext(cliConfig, visitState, options)
   }
@@ -44,14 +55,23 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   }
 
   if (cliConfig.openAPI) {
-    console.log(`\x1b[34m• OpenAPI requires a reinspection to pickup new generated types..\x1b[0m`)
-    visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+    console.log(
+      `\x1b[34m• OpenAPI requires a reinspection to pickup new generated types..\x1b[0m`
+    )
+    visitState = await inspectorGlob(
+      cliConfig.rootDir,
+      cliConfig.routeDirectories
+    )
     await vrameworkOpenAPI(cliConfig, visitState)
   }
 
   const bootstrapImports: string[] = []
-  bootstrapImports.push(`import '${getFileImportRelativePath(cliConfig.bootstrapFile, `${cliConfig.schemaDirectory}/register.ts`, cliConfig.packageMappings)}'`)
-  bootstrapImports.push(`import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings)}'`)
+  bootstrapImports.push(
+    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, `${cliConfig.schemaDirectory}/register.ts`, cliConfig.packageMappings)}'`
+  )
+  bootstrapImports.push(
+    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings)}'`
+  )
   await writeFileInDir(cliConfig.bootstrapFile, bootstrapImports.join('\n'))
 }
 

@@ -26,22 +26,30 @@ export class VrameworkUWSServer {
   }
 
   public async init() {
-    this.app.get(this.config.healthCheckPath || '/health-check', async (res) => {
-      res.writeStatus('200').end()
-    })
+    this.app.get(
+      this.config.healthCheckPath || '/health-check',
+      async (res) => {
+        res.writeStatus('200').end()
+      }
+    )
 
-    this.app.any('/*', vrameworkHandler({
-      logRoutes: true,
-      singletonServices: this.singletonServices,
-      createSessionServices: this.createSessionServices,
-    }))
+    this.app.any(
+      '/*',
+      vrameworkHandler({
+        logRoutes: true,
+        singletonServices: this.singletonServices,
+        createSessionServices: this.createSessionServices,
+      })
+    )
   }
 
   public async start() {
     return await new Promise<void>((resolve) => {
       this.app.listen(this.config.hostname, this.config.port, (token) => {
         this.listenSocket = token
-        this.singletonServices.logger.info(`listening on port ${this.config.port} and host: ${this.config.hostname}`)
+        this.singletonServices.logger.info(
+          `listening on port ${this.config.port} and host: ${this.config.hostname}`
+        )
         resolve()
       })
     })

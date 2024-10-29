@@ -1,10 +1,14 @@
 import * as expressImp from 'express'
-const express = 'default' in expressImp ? (expressImp.default as any) : expressImp
+const express =
+  'default' in expressImp ? (expressImp.default as any) : expressImp
 import * as core from 'express-serve-static-core'
 import { Server } from 'http'
 import { json, text } from 'body-parser'
 import * as cookieParserImp from 'cookie-parser'
-const cookieParser = 'default' in cookieParserImp ? (cookieParserImp.default as any) : cookieParserImp
+const cookieParser =
+  'default' in cookieParserImp
+    ? (cookieParserImp.default as any)
+    : cookieParserImp
 import * as bodyParser from 'body-parser'
 import * as corsImp from 'cors'
 const cors = 'default' in corsImp ? (corsImp.default as any) : corsImp
@@ -65,19 +69,27 @@ export class VrameworkExpressServer {
   }
 
   public async init() {
-    this.app.use(vrameworkMiddleware(this.singletonServices, this.createSessionServices, {
-      respondWith404: false,
-      logRoutes: true,
-      validateSchemas: true
-    }))
+    this.app.use(
+      vrameworkMiddleware(this.singletonServices, this.createSessionServices, {
+        respondWith404: false,
+        logRoutes: true,
+        validateSchemas: true,
+      })
+    )
   }
 
   public async start() {
     return await new Promise<void>((resolve) => {
-      this.server = this.app.listen(this.config.port, this.config.hostname, () => {
-        this.singletonServices.logger.info(`listening on port ${this.config.port} and host: ${this.config.hostname}`)
-        resolve()
-      })
+      this.server = this.app.listen(
+        this.config.port,
+        this.config.hostname,
+        () => {
+          this.singletonServices.logger.info(
+            `listening on port ${this.config.port} and host: ${this.config.hostname}`
+          )
+          resolve()
+        }
+      )
     })
   }
 

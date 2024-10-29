@@ -1,21 +1,49 @@
 import { Command } from 'commander'
-import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
+import {
+  getVrameworkCLIConfig,
+  VrameworkCLIConfig,
+} from '../src/vramework-cli-config.js'
 import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
-import { logCommandInfoAndTime, logVrameworkLogo, VrameworkCLIOptions, writeFileInDir } from '../src/utils.js'
+import {
+  logCommandInfoAndTime,
+  logVrameworkLogo,
+  VrameworkCLIOptions,
+  writeFileInDir,
+} from '../src/utils.js'
 import { serializeTypedRoutesMap } from '../src/serializer/serialize-typed-route-map.js'
 
-export const vrameworkRoutesMap = async ({ routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig, visitState: VisitState) => {
-  return await logCommandInfoAndTime('Creating routes map', 'Created routes map', async () => {
-    const content = serializeTypedRoutesMap(routesMapDeclarationFile, packageMappings, visitState.functionTypesImportMap, visitState.routesMeta, visitState.metaInputTypes)
-    await writeFileInDir(routesMapDeclarationFile, content)
-  })
+export const vrameworkRoutesMap = async (
+  { routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig,
+  visitState: VisitState
+) => {
+  return await logCommandInfoAndTime(
+    'Creating routes map',
+    'Created routes map',
+    async () => {
+      const content = serializeTypedRoutesMap(
+        routesMapDeclarationFile,
+        packageMappings,
+        visitState.functionTypesImportMap,
+        visitState.routesMeta,
+        visitState.metaInputTypes
+      )
+      await writeFileInDir(routesMapDeclarationFile, content)
+    }
+  )
 }
 
 async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
   logVrameworkLogo()
-  const cliConfig = await getVrameworkCLIConfig(cliOptions.config, ['rootDir', 'routeDirectories', 'routesFile'])
-  const visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
+  const cliConfig = await getVrameworkCLIConfig(cliOptions.config, [
+    'rootDir',
+    'routeDirectories',
+    'routesFile',
+  ])
+  const visitState = await inspectorGlob(
+    cliConfig.rootDir,
+    cliConfig.routeDirectories
+  )
   await vrameworkRoutesMap(cliConfig, visitState)
 }
 

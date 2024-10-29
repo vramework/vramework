@@ -1,7 +1,12 @@
 /**
- * 
+ *
  */
-export const serializeVrameworkTypes = (userSessionTypeImport: string, userSessionTypeName: string, sessionServicesTypeImport: string, servicesTypeName: string) => {
+export const serializeVrameworkTypes = (
+  userSessionTypeImport: string,
+  userSessionTypeName: string,
+  sessionServicesTypeImport: string,
+  servicesTypeName: string
+) => {
   return `/**
 * This is used to provide the application types in the typescript project
 */
@@ -23,5 +28,4 @@ declare module "@vramework/core" {
   ): void;
 }
 `
-
 }

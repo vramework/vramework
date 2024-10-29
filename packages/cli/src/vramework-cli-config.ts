@@ -40,7 +40,9 @@ export const getVrameworkCLIConfig = async (
   if (!configFile) {
     let execDirectory = process.cwd()
     const files = await readdir(execDirectory)
-    const file = files.find((file) => /vramework\.config\.(ts|js|json)$/.test(file));
+    const file = files.find((file) =>
+      /vramework\.config\.(ts|js|json)$/.test(file)
+    )
     if (!file) {
       const errorMessage =
         '\nConfig file vramework.config.json not found\nExiting...'
@@ -77,7 +79,9 @@ export const getVrameworkCLIConfig = async (
         ...config,
         configDir,
         packageMappings: config.packageMappings || {},
-        rootDir: config.rootDir ? resolve(configDir, config.rootDir) : configDir,
+        rootDir: config.rootDir
+          ? resolve(configDir, config.rootDir)
+          : configDir,
       }
     }
 
@@ -89,10 +93,16 @@ export const getVrameworkCLIConfig = async (
         result.routesFile = join(result.outDir, 'vramework-routes.ts')
       }
       if (!result.typesDeclarationFile) {
-        result.typesDeclarationFile = join(result.outDir, 'vramework-types.d.ts')
+        result.typesDeclarationFile = join(
+          result.outDir,
+          'vramework-types.d.ts'
+        )
       }
       if (!result.routesMapDeclarationFile) {
-        result.routesMapDeclarationFile = join(result.outDir, 'vramework-routes-map.d.ts')
+        result.routesMapDeclarationFile = join(
+          result.outDir,
+          'vramework-routes-map.d.ts'
+        )
       }
       if (!result.bootstrapFile) {
         result.bootstrapFile = join(result.outDir, 'vramework-bootstrap.ts')
@@ -105,7 +115,10 @@ export const getVrameworkCLIConfig = async (
 
     for (const objectKey of Object.keys(result)) {
       if (objectKey.endsWith('File') || objectKey.endsWith('Directory')) {
-        const relativeTo = objectKey === 'nextDeclarationFile' ? result.configDir : result.rootDir
+        const relativeTo =
+          objectKey === 'nextDeclarationFile'
+            ? result.configDir
+            : result.rootDir
         if (result[objectKey]) {
           result[objectKey] = join(relativeTo, result[objectKey])
         }
@@ -122,7 +135,10 @@ export const getVrameworkCLIConfig = async (
   }
 }
 
-export const validateCLIConfig = (cliConfig: VrameworkCLIConfig, required: Array<keyof VrameworkCLIConfig>) => {
+export const validateCLIConfig = (
+  cliConfig: VrameworkCLIConfig,
+  required: Array<keyof VrameworkCLIConfig>
+) => {
   let errors: string[] = []
   for (const key of required) {
     if (!cliConfig[key]) {
@@ -131,7 +147,9 @@ export const validateCLIConfig = (cliConfig: VrameworkCLIConfig, required: Array
   }
 
   if (errors.length > 0) {
-    console.error(`${errors.join(', ')} ${errors.length === 1 ? 'is' : 'are'} required in vramework.config.json`)
+    console.error(
+      `${errors.join(', ')} ${errors.length === 1 ? 'is' : 'are'} required in vramework.config.json`
+    )
     process.exit(1)
   }
 }

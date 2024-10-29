@@ -7,7 +7,7 @@ import { CoreServices, CoreUserSession } from './types/core.types.js'
  * @param services - The core services required for permission validation.
  * @param data - The data to be used in the permission validation functions.
  * @param session - An optional user session for permission validation.
- * @returns A promise that resolves to void. 
+ * @returns A promise that resolves to void.
  */
 export const verifyPermissions = async (
   permissions: Record<

@@ -1,7 +1,8 @@
 import { VrameworkRequest } from '@vramework/core/vramework-request'
 import { Request } from 'express-serve-static-core'
 import * as getRawBodyImp from 'raw-body'
-const getRawBody = 'default' in getRawBodyImp ? (getRawBodyImp.default as any) : getRawBodyImp
+const getRawBody =
+  'default' in getRawBodyImp ? (getRawBodyImp.default as any) : getRawBodyImp
 
 export class VrameworkExpressRequest extends VrameworkRequest {
   constructor(private request: Request) {

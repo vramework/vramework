@@ -49,7 +49,8 @@ export interface VrameworkInteraction {
   response: VrameworkResponse
 }
 
-export type CoreServices<SingletonServices = CoreSingletonServices> = SingletonServices & VrameworkInteraction
+export type CoreServices<SingletonServices = CoreSingletonServices> =
+  SingletonServices & VrameworkInteraction
 
 export type CreateSingletonServices<
   Config extends CoreConfig,
@@ -64,7 +65,9 @@ export type CreateSessionServices<
   services: SingletonServices,
   interaction: VrameworkInteraction,
   session: UserSession | undefined
-) => Promise<Omit<Services, keyof SingletonServices | keyof VrameworkInteraction>>
+) => Promise<
+  Omit<Services, keyof SingletonServices | keyof VrameworkInteraction>
+>
 
 export type VrameworkQuery<T = unknown> = Record<
   string,

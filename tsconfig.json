@@ -16,8 +16,8 @@
     "skipLibCheck": false,
     "paths": {
       "@vramework/core": ["./packages/core"],
-      "@vramework/core/*": ["./packages/core/*"],
+      "@vramework/core/*": ["./packages/core/*"]
     }
   },
-  "exclude": ["node_modules", "**/*.spec.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

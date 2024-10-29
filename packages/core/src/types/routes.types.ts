@@ -95,5 +95,5 @@ export type RoutesMeta = Array<{
   summary?: string
   description?: string
   tags?: string[]
-  inputTypes?: RoutesMetaInputTypes 
+  inputTypes?: RoutesMetaInputTypes
 }>
