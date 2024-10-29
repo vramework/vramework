@@ -79,6 +79,21 @@ export type CoreAPIRoute<
 
 export type CoreAPIRoutes = Array<CoreAPIRoute<any, any, string>>
 
+export type RoutesMetaInputTypes = {
+  params?: {
+    name: string
+    type: string
+  }
+  query?: {
+    name: string
+    type: string
+  }
+  body?: {
+    name: string
+    type: string
+  }
+}
+
 export type RoutesMeta = Array<{
   route: string
   method: APIRouteMethod
@@ -89,4 +104,5 @@ export type RoutesMeta = Array<{
   summary?: string
   description?: string
   tags?: string[]
+  inputTypes?: RoutesMetaInputTypes 
 }>

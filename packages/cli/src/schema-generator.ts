@@ -3,49 +3,52 @@ import { writeFileInDir } from './utils.js'
 import { mkdir, writeFile } from 'fs/promises'
 import { JSONValue, RoutesMeta } from '@vramework/core'
 
-export async function generateSchemas (tsconfig: string, routesMeta: RoutesMeta, filter: 'input' | 'output' | 'both' = 'input'): Promise<Record<string, JSONValue>> {
+export async function generateSchemas(tsconfig: string, routesMeta: RoutesMeta): Promise<Record<string, JSONValue>> {
   const schemasSet = new Set(
     routesMeta
-      .map<[string | undefined | null, string | undefined | null]>(({ input, output }) => [filter !== 'output' ? input : undefined, filter !== 'input' ? output : undefined])
+      .map<Array<string | undefined | null>>(({ input, output, inputTypes }) => [input, output, inputTypes?.body?.name, inputTypes?.query?.name, inputTypes?.params?.name])
       .flat()
       .filter(s => !!s) as string[]
   )
 
-  const generator = createGenerator({ tsconfig, skipTypeCheck: true, topRef: false })
+  const generator = createGenerator({ tsconfig, skipTypeCheck: true, topRef: false, discriminatorType: 'open-api' })
   const schemas: Record<string, JSONValue> = {}
-  await Promise.all(
-    Array.from(schemasSet).map(async (schema) => {
-      try {
-        schemas[schema] = generator.createSchema(schema) as JSONValue        
-      } catch (e) {
-        // Ignore rootless errors
-        if (e instanceof RootlessError) {
-          return
-        }
-        throw e
+  schemasSet.forEach(schema => {
+    try {
+      schemas[schema] = generator.createSchema(schema) as JSONValue
+    } catch (e) {
+      // Ignore rootless errors
+      if (e instanceof RootlessError) {
+        return
       }
-    })
-  )
+      throw e
+    }
+  })
+
   return schemas
 }
 
-export async function generateAndSaveSchemas(
+export async function saveSchemas(
   schemaParentDir: string,
-  schemas: Record<string, JSONValue>
+  schemas: Record<string, JSONValue>,
+  routesMeta: RoutesMeta
 ) {
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,
     'export const empty = null;',
   )
 
+  const desiredRoutes = new Set(routesMeta.map(({ input, output }) => [input, output]).flat().filter(s => !!s))
   await mkdir(`${schemaParentDir}/schemas`, { recursive: true })
   await Promise.all(
     Object.entries(schemas).map(async ([schemaName, schema]) => {
-      await writeFile(
-        `${schemaParentDir}/schemas/${schemaName}.schema.json`,
-        JSON.stringify(schema),
-        'utf-8'
-      )
+      if (desiredRoutes.has(schemaName)) {
+        await writeFile(
+          `${schemaParentDir}/schemas/${schemaName}.schema.json`,
+          JSON.stringify(schema),
+          'utf-8'
+        )
+      }
     })
   )
 

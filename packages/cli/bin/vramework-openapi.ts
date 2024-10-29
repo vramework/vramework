@@ -13,7 +13,7 @@ export const vrameworkOpenAPI = async ({ tsconfig, openAPI }: VrameworkCLIConfig
         if (!openAPI?.outputFile) {
             throw new Error('openAPI is required')
         }
-        const schemas = await generateSchemas(tsconfig, routesMeta, 'both')
+        const schemas = await generateSchemas(tsconfig, routesMeta)
         const openAPISpec = await generateOpenAPISpec(routesMeta, schemas, openAPI.additionalInfo)
         await writeFileInDir(openAPI.outputFile, JSON.stringify(openAPISpec, null, 2), true)
     })

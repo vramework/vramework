@@ -1,6 +1,7 @@
 import { RoutesMeta } from "@vramework/core";
 import { ImportMap } from "../inspector/inspector.js";
 import { serializeImportMap } from "./serialize-import-map.js";
+import { serializeMetaInputTypes } from "./serialize-meta-input-types.js";
 
 export const serializeTypedRoutesMap = (
     relativeToPath: string,
@@ -13,6 +14,8 @@ export const serializeTypedRoutesMap = (
  */
     
 ${serializeImportMap(relativeToPath, packageMappings, importMap)}
+
+${serializeMetaInputTypes(routesMeta)}
 
 interface RouteHandler<I, O> {
     input: I;
@@ -34,7 +37,7 @@ function generateRoutes(routesMeta: RoutesMeta): string {
         string,
         Record<
             string,
-            { input: string; output: string; inputType: string; outputType: string }
+            { inputType: string; outputType: string }
         >
     > = {}
 
@@ -46,18 +49,12 @@ function generateRoutes(routesMeta: RoutesMeta): string {
             routesObj[route] = {}
         }
 
-        // Prepare input and output strings
-        const inputStr = input ? `{} as ${input}` : 'null as null'
-        const outputStr = output ? `{} as ${output}` : 'null as null'
-
         // Store the input and output types separately for RouteHandler
         const inputType = input ? input : 'null'
         const outputType = output ? output : 'null'
 
         // Add method entry
         routesObj[route][method] = {
-            input: inputStr,
-            output: outputStr,
             inputType,
             outputType,
         }

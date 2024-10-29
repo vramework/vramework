@@ -4,6 +4,10 @@ import { getPropertyValue } from "./get-property-value.js"
 import { pathToRegexp } from "path-to-regexp"
 import { APIRouteMethod } from "@vramework/core"
 
+const extractTypeKeys = (type: ts.Type): string[] => {
+    return type.getProperties().map((symbol) => symbol.getName());
+}
+
 const nullifyTypes = (type: string | null) => {
     if (
         type === 'void' ||
@@ -14,6 +18,31 @@ const nullifyTypes = (type: string | null) => {
         return null
     }
     return type
+}
+
+const getInputTypes = (methodType: string, inputType: string | null, queryValues: string[], paramsValues: string[]) => {
+    if (!inputType) {
+        return undefined
+    }
+    const query = queryValues.length > 0 ? `Pick<${inputType}, '${queryValues.join('\' | \'')}'>` : undefined
+    const params = paramsValues.length > 0 ? `Pick<${inputType}, '${paramsValues.join('\' | \'')}'>` : undefined
+    const body = queryValues.length > 0 || paramsValues.length > 0 ? `Omit<${inputType}, '${[...new Set([...queryValues, ...paramsValues])].join('\' | \'')}'>` : inputType!
+    if (nullifyTypes(inputType)) {
+        return {
+            query: query ? {
+                name: `${inputType}Query`,
+                type: query
+            } : undefined,
+            params: params ? {
+                name: `${inputType}Params`,
+                type: params
+            } : undefined,
+            body: ['post', 'put', 'patch'].includes(methodType) && body ? {
+                name: `${inputType}Body`,
+                type: body
+            } : undefined
+        }
+    }
 }
 
 export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitState) => {
@@ -35,8 +64,8 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
     }
 
     let methodValue: string | null = null
-    let params: string[] | null = []
-    let queryValues: string[] | null = null
+    let paramsValues: string[] | null = []
+    let queryValues: string[] | [] = []
     let inputType: string | null = null
     let outputType: string | null = null
     let routeValue: string | null = null
@@ -50,7 +79,7 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
         routeValue = getPropertyValue(obj, 'route') as string | null
         if (routeValue) {
             const { keys } = pathToRegexp(routeValue)
-            params = keys.reduce((result, { type, name }) => {
+            paramsValues = keys.reduce((result, { type, name }) => {
                 if (type === 'param') {
                     result.push(name)
                 }
@@ -58,8 +87,8 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
             }, [] as string[])
         }
 
-        methodValue = getPropertyValue(obj, 'method') as string | null
-        queryValues = getPropertyValue(obj, 'query') as string[] | null
+        methodValue = getPropertyValue(obj, 'method') as string
+        queryValues = getPropertyValue(obj, 'query') as string[] || []
 
         // Find the 'func' property within the object
         const funcProperty = obj.properties.find(
@@ -90,6 +119,9 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
 
                     if (param.name === 'data') {
                         inputType = checker.typeToString(paramType)
+                        if (!['post', 'put', 'patch'].includes(methodValue)) {
+                            queryValues = [...new Set([...queryValues, ...extractTypeKeys(paramType)])].filter(query => !paramsValues?.includes(query) )
+                        }
                     }
                 }
 
@@ -104,13 +136,15 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
             return
         }
 
+        
         state.routesMeta.push({
             route: routeValue!,
             method: methodValue! as APIRouteMethod,
             input: nullifyTypes(inputType),
             output: nullifyTypes(outputType),
-            params: params.length > 0 ? params : undefined,
-            query: queryValues ? queryValues : undefined,
+            params: paramsValues.length > 0 ? paramsValues : undefined,
+            query: queryValues.length > 0 ? queryValues : undefined,
+            inputTypes: getInputTypes(methodValue, inputType, queryValues, paramsValues)
         })
 
         if (inputType) {

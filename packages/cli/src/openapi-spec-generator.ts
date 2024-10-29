@@ -64,14 +64,17 @@ export interface OpenAPISpecInfo {
     security?: { [key: string]: any[] }[];
 }
 
-const convertAllSchemas = async (schemas: Record<string, any>) => {
+const convertSchemasToBodyPayloads = async (routesMeta: RoutesMeta, schemas: Record<string, any>) => {
+    const requiredSchemas = new Set(routesMeta.map(({ inputTypes, output }) => [inputTypes?.body?.name, output]).flat().filter((schema) => !!schema))
     const convertedEntries = await Promise.all(
         Object.entries(schemas).map(async ([key, schema]) => {
-            const convertedSchema = await convertSchema(schema);
-            return [key, convertedSchema];
+            if (requiredSchemas.has(key)) {
+                const convertedSchema = await convertSchema(schema, { convertUnreferencedDefinitions: false,  dereference: { circular: 'ignore' }  });
+                return [key, convertedSchema];
+            }
         })
     );
-    return Object.fromEntries(convertedEntries)
+    return Object.fromEntries(convertedEntries.filter(s => !!s))
 }
 
 export async function generateOpenAPISpec(
@@ -82,7 +85,7 @@ export async function generateOpenAPISpec(
     const paths: Record<string, any> = {};
 
     routeMeta.forEach((meta) => {
-        const { route, method, input, output, params, query, description, tags } = meta;
+        const { route, method, inputTypes, output, params, query, description, tags } = meta;
         const path = route.replace(/:(\w+)/g, '{$1}'); // Convert ":param" to "{param}"
 
         if (!paths[path]) {
@@ -108,21 +111,18 @@ export async function generateOpenAPISpec(
             },
         };
 
-        if (input) {
-            if (method === 'post') {
-                operation.requestBody = {
-                    required: true,
-                    content: {
-                        'application/json': {
-                            schema: typeof input === 'string' && ['boolean', 'string', 'number'].includes(input)
-                                ? { type: input }
-                                : { $ref: `#/components/schemas/${input}` },
-                        },
+        const bodyType = inputTypes?.body?.name
+        if (bodyType) {
+            operation.requestBody = {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: typeof bodyType === 'string' && ['boolean', 'string', 'number'].includes(bodyType)
+                            ? { type: bodyType }
+                            : { $ref: `#/components/schemas/${bodyType}` },
                     },
-                };
-            } else {
-                
-            }
+                },
+            };
         }
 
         if (params) {
@@ -135,9 +135,8 @@ export async function generateOpenAPISpec(
         }
 
         if (query) {
-            operation.parameters = operation.parameters || [];
-            operation.parameters.push(...query.map((param) => ({
-                name: param,
+            operation.parameters.push(...query.map((query) => ({
+                name: query,
                 in: 'query',
                 required: false,
                 schema: { type: 'string' },
@@ -148,12 +147,12 @@ export async function generateOpenAPISpec(
     });
 
     return {
-        openapi: '3',
+        openapi: "3.1.0",
         info: additionalInfo.info,
         servers: additionalInfo.servers,
         paths,
         components: {
-            schemas: await convertAllSchemas(schemas),
+            schemas: await convertSchemasToBodyPayloads(routeMeta, schemas),
             responses: {},
             parameters: {},
             examples: {},
