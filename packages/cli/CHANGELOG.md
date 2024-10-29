@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.16
+
+### Patch Changes
+
+- 2654ef1: fix: testing relative files
+
 ## 0.5.15
 
 ### Patch Changes
