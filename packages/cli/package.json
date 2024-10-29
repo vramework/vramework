@@ -1,6 +1,6 @@
 {
   "name": "@vramework/cli",
-  "version": "0.5.12",
+  "version": "0.5.13",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
@@ -30,7 +30,7 @@
     "test": "mocha"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.4"
+    "@vramework/core": "^0.5.5"
   },
   "dependencies": {
     "@openapi-contrib/json-schema-to-openapi-schema": "^3.0.2",
