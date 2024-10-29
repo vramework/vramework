@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.7
+
+### Patch Changes
+
+- df62faf: fix: bumping up routes meta
+
 ## 0.5.6
 
 ### Patch Changes
