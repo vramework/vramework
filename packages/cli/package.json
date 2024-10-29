@@ -15,8 +15,8 @@
       "require": "./dist/cjs/*.js"
     },
     "./*.d.ts": {
-      "import": "./dist/types/*.d.ts",
-      "require": "./dist/types/*.d.ts"
+      "import": "./dist/esm/*.d.ts",
+      "require": "./dist/cjs/*.d.ts"
     }
   },
   "scripts": {

@@ -10,6 +10,7 @@
     "packages": [
       "packages/core",
       "packages/cli",
+      "packages/fetch",
       "packages/services/*",
       "packages/servers/*",
       "packages/servers/express/*",

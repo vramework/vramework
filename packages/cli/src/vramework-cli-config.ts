@@ -12,6 +12,8 @@ export interface VrameworkCLICoreOutputFiles {
 }
 
 export type VrameworkCLIConfig = {
+  $schema?: string
+
   extends?: string
 
   rootDir: string
@@ -22,6 +24,8 @@ export type VrameworkCLIConfig = {
   tsconfig: string
 
   nextDeclarationFile?: string
+  fetchFile?: string
+
   openAPI?: {
     outputFile: string
     additionalInfo: OpenAPISpecInfo

@@ -12,6 +12,7 @@ export interface VisitState {
   sessionServicesTypeImportMap: PathToNameAndType,
   userSessionTypeImportMap: PathToNameAndType,
   functionTypesImportMap: ImportMap,
+  metaInputTypes: Map<string, string>,
   routesMeta: RoutesMeta,
   inputTypes: Set<string>,
   outputTypes: Set<string>,

@@ -9,6 +9,7 @@ import { vrameworkFunctionTypes } from './vramework-function-types.js'
 import { vrameworkRoutesMap } from './vramework-routes-map.js'
 import { existsSync } from 'fs'
 import { vrameworkOpenAPI } from './vramework-openapi.js'
+import { vrameworkFetch } from './vramework-fetch.js'
 
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
@@ -36,6 +37,10 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   
   if (cliConfig.nextDeclarationFile) {
     await vrameworkNext(cliConfig, visitState, options)
+  }
+
+  if (cliConfig.fetchFile) {
+    await vrameworkFetch(cliConfig)
   }
 
   if (cliConfig.openAPI) {

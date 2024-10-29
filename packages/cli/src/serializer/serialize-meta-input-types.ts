@@ -1,6 +1,6 @@
 import { RoutesMeta } from "@vramework/core"
 
-export const serializeMetaInputTypes = (routesMeta: RoutesMeta) => {
+export const serializeMetaInputTypes = (routesMeta: RoutesMeta, metaTypes: Map<string, string>) => {
   const result = routesMeta.map(({ inputTypes }) => {
     if (!inputTypes) {
       return
@@ -8,7 +8,7 @@ export const serializeMetaInputTypes = (routesMeta: RoutesMeta) => {
 
     return Object.values(inputTypes)
       .filter(inputType => !!inputType)
-      .map(({ name, type }) => `export type ${name} = ${type}`)
+      .map(name => `export type ${name} = ${metaTypes.get(name)}`)
       .join('\n')
   })
 

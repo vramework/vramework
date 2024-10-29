@@ -20,7 +20,7 @@ const nullifyTypes = (type: string | null) => {
     return type
 }
 
-const getInputTypes = (methodType: string, inputType: string | null, queryValues: string[], paramsValues: string[]) => {
+const getInputTypes = (metaTypes: Map<string, string>, methodType: string, inputType: string | null, queryValues: string[], paramsValues: string[]) => {
     if (!inputType) {
         return undefined
     }
@@ -28,19 +28,28 @@ const getInputTypes = (methodType: string, inputType: string | null, queryValues
     const params = paramsValues.length > 0 ? `Pick<${inputType}, '${paramsValues.join('\' | \'')}'>` : undefined
     const body = queryValues.length > 0 || paramsValues.length > 0 ? `Omit<${inputType}, '${[...new Set([...queryValues, ...paramsValues])].join('\' | \'')}'>` : inputType!
     if (nullifyTypes(inputType)) {
+        let queryTypeName: string | undefined
+        if (query) {
+            queryTypeName = `${inputType}Query`
+            metaTypes.set(queryTypeName, query)
+        }
+
+        let paramsTypeName: string | undefined
+        if (params) {
+            paramsTypeName = `${inputType}Params`
+            metaTypes.set(paramsTypeName, params)
+        }
+
+        let bodyTypeName: string | undefined
+        if (body && ['post', 'put', 'patch'].includes(methodType)) {
+            bodyTypeName = `${inputType}Body`
+            metaTypes.set(bodyTypeName, body)
+        }
+
         return {
-            query: query ? {
-                name: `${inputType}Query`,
-                type: query
-            } : undefined,
-            params: params ? {
-                name: `${inputType}Params`,
-                type: params
-            } : undefined,
-            body: ['post', 'put', 'patch'].includes(methodType) && body ? {
-                name: `${inputType}Body`,
-                type: body
-            } : undefined
+            query: queryTypeName,
+            params: paramsTypeName,
+            body: bodyTypeName
         }
     }
 }
@@ -144,7 +153,7 @@ export const addRoute = (node: ts.Node, checker: ts.TypeChecker, state: VisitSta
             output: nullifyTypes(outputType),
             params: paramsValues.length > 0 ? paramsValues : undefined,
             query: queryValues.length > 0 ? queryValues : undefined,
-            inputTypes: getInputTypes(methodValue, inputType, queryValues, paramsValues)
+            inputTypes: getInputTypes(state.metaInputTypes, methodValue, inputType, queryValues, paramsValues)
         })
 
         if (inputType) {

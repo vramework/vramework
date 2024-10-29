@@ -1,6 +1,7 @@
 {
   "entryPoints": [
     "packages/core/src/*.ts",
+    "packages/fetch/src/*.ts",
     "packages/servers/**/src/*.ts",
     "packages/cloud/**/src/*.ts",
     "packages/services/**/src/*.ts",

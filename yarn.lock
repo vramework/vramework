@@ -2421,6 +2421,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@vramework/fetch@workspace:packages/fetch":
+  version: 0.0.0-use.local
+  resolution: "@vramework/fetch@workspace:packages/fetch"
+  dependencies:
+    typescript: "npm:^5.6"
+  languageName: unknown
+  linkType: soft
+
 "@vramework/jose@workspace:packages/services/jose":
   version: 0.0.0-use.local
   resolution: "@vramework/jose@workspace:packages/services/jose"

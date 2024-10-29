@@ -65,7 +65,7 @@ export interface OpenAPISpecInfo {
 }
 
 const convertSchemasToBodyPayloads = async (routesMeta: RoutesMeta, schemas: Record<string, any>) => {
-    const requiredSchemas = new Set(routesMeta.map(({ inputTypes, output }) => [inputTypes?.body?.name, output]).flat().filter((schema) => !!schema))
+    const requiredSchemas = new Set(routesMeta.map(({ inputTypes, output }) => [inputTypes?.body, output]).flat().filter((schema) => !!schema))
     const convertedEntries = await Promise.all(
         Object.entries(schemas).map(async ([key, schema]) => {
             if (requiredSchemas.has(key)) {
@@ -111,7 +111,7 @@ export async function generateOpenAPISpec(
             },
         };
 
-        const bodyType = inputTypes?.body?.name
+        const bodyType = inputTypes?.body
         if (bodyType) {
             operation.requestBody = {
                 required: true,

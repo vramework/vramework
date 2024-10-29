@@ -21,6 +21,7 @@ export const inspector = (routeFiles: string[]): VisitState => {
     sessionServicesTypeImportMap: new Map(),
     userSessionTypeImportMap: new Map(),
     functionTypesImportMap: new Map(),
+    metaInputTypes: new Map(),
     routesMeta: [],
     inputTypes: new Set<string>(),
     outputTypes: new Set<string>(),

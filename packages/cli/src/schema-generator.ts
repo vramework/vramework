@@ -6,7 +6,7 @@ import { JSONValue, RoutesMeta } from '@vramework/core'
 export async function generateSchemas(tsconfig: string, routesMeta: RoutesMeta): Promise<Record<string, JSONValue>> {
   const schemasSet = new Set(
     routesMeta
-      .map<Array<string | undefined | null>>(({ input, output, inputTypes }) => [input, output, inputTypes?.body?.name, inputTypes?.query?.name, inputTypes?.params?.name])
+      .map<Array<string | undefined | null>>(({ input, output, inputTypes }) => [input, output, inputTypes?.body, inputTypes?.query, inputTypes?.params])
       .flat()
       .filter(s => !!s) as string[]
   )

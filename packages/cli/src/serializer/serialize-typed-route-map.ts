@@ -8,6 +8,7 @@ export const serializeTypedRoutesMap = (
     packageMappings: Record<string, string>,
     importMap: ImportMap,
     routesMeta: RoutesMeta,
+    metaTypes: Map<string, string>
 ) => {
     return `/**
  * This provides the structure needed for typescript to be aware of routes and their return types
@@ -15,7 +16,7 @@ export const serializeTypedRoutesMap = (
     
 ${serializeImportMap(relativeToPath, packageMappings, importMap)}
 
-${serializeMetaInputTypes(routesMeta)}
+${serializeMetaInputTypes(routesMeta, metaTypes)}
 
 interface RouteHandler<I, O> {
     input: I;
