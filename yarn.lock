@@ -2317,6 +2317,7 @@ __metadata:
     "@types/node": "npm:^22.7.8"
     "@types/sinon": "npm:^17.0.3"
     "@types/uuid": "npm:^10.0.0"
+    "@vramework/core": "npm:^0.5.7"
     chai: "npm:^5"
     chai-as-promised: "npm:^8.0.0"
     commander: "npm:^12"
@@ -2327,14 +2328,12 @@ __metadata:
     ts-json-schema-generator: "npm:^2.3.0"
     typescript: "npm:^5.6"
     yaml: "npm:^2.6.0"
-  peerDependencies:
-    "@vramework/core": ^0.5.6
   bin:
     vramework: dist/cjs/bin/vramework.js
   languageName: unknown
   linkType: soft
 
-"@vramework/core@npm:^0.5.1, @vramework/core@workspace:packages/core":
+"@vramework/core@npm:^0.5.1, @vramework/core@npm:^0.5.7, @vramework/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@vramework/core@workspace:packages/core"
   dependencies:
