@@ -38,11 +38,12 @@ export async function saveSchemas(
     'export const empty = null;',
   )
 
-  const desiredRoutes = new Set(routesMeta.map(({ input, output }) => [input, output]).flat().filter(s => !!s))
+  const desiredSchemas = new Set(routesMeta.map(({ input, output }) => [input, output]).flat().filter(s => !!s && !['boolean', 'string', 'number'].includes(s)))
+
   await mkdir(`${schemaParentDir}/schemas`, { recursive: true })
   await Promise.all(
     Object.entries(schemas).map(async ([schemaName, schema]) => {
-      if (desiredRoutes.has(schemaName)) {
+      if (desiredSchemas.has(schemaName)) {
         await writeFile(
           `${schemaParentDir}/schemas/${schemaName}.schema.json`,
           JSON.stringify(schema),
@@ -52,17 +53,13 @@ export async function saveSchemas(
     })
   )
 
+  const schemaImports = Array.from(desiredSchemas).map(schema => `
+import * as ${schema} from './schemas/${schema}.schema.json'
+addSchema('${schema}', ${schema})
+`).join('\n')
+
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,
-    `
-import { addSchema } from '@vramework/core'
-` +
-    Object.keys(schemas)
-      .map(
-        (schema) => `
-import * as ${schema} from './schemas/${schema}.schema.json'
-addSchema('${schema}', ${schema})`
-      )
-      .join('\n')
+    `import { addSchema } from '@vramework/core'\n${schemaImports}`
   )
 }

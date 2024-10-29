@@ -39,6 +39,8 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   }
 
   if (cliConfig.openAPI) {
+    console.log(`\x1b[34m• OpenAPI requires a reinspection to pickup new generated types..\x1b[0m`)
+    visitState = await inspectorGlob(cliConfig.rootDir, cliConfig.routeDirectories)
     await vrameworkOpenAPI(cliConfig, visitState)
   }
 
