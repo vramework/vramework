@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.17
+
+### Patch Changes
+
+- 25c6637: fix: fixing a type import for meta types
+
 ## 0.5.16
 
 ### Patch Changes
