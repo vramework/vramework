@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.14
+
+### Patch Changes
+
+- 0883f00: fix: schema generation error
+- Updated dependencies [0883f00]
+  - @vramework/core@0.5.6
+
 ## 0.5.13
 
 ### Patch Changes
