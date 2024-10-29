@@ -7,6 +7,7 @@ import { generateOpenAPISpec } from '../src/openapi-spec-generator.js'
 import { VisitState } from '../src/inspector/visit.js'
 import { getVrameworkCLIConfig, VrameworkCLIConfig } from '../src/vramework-cli-config.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { stringify } from 'yaml'
 
 export const vrameworkOpenAPI = async ({ tsconfig, openAPI }: VrameworkCLIConfig, { routesMeta }: VisitState) => {
     await logCommandInfoAndTime('Creating OpenAPI spec', 'Created OpenAPI spec', async () => {
@@ -15,7 +16,11 @@ export const vrameworkOpenAPI = async ({ tsconfig, openAPI }: VrameworkCLIConfig
         }
         const schemas = await generateSchemas(tsconfig, routesMeta)
         const openAPISpec = await generateOpenAPISpec(routesMeta, schemas, openAPI.additionalInfo)
-        await writeFileInDir(openAPI.outputFile, JSON.stringify(openAPISpec, null, 2), true)
+        if (openAPI.outputFile.endsWith('.json')) {
+            await writeFileInDir(openAPI.outputFile, JSON.stringify(openAPISpec, null, 2), true)
+        } else if (openAPI.outputFile.endsWith('.yaml') || openAPI.outputFile.endsWith('.yml')) {
+            await writeFileInDir(openAPI.outputFile, stringify(openAPISpec), true)
+        }
     })
 }
 

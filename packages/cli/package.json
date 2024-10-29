@@ -40,7 +40,8 @@
     "glob": "^10",
     "path-to-regexp": "^8.2.0",
     "ts-json-schema-generator": "^2.3.0",
-    "typescript": "^5.6"
+    "typescript": "^5.6",
+    "yaml": "^2.6.0"
   },
   "devDependencies": {
     "@types/chai-as-promised": "^8",
