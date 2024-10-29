@@ -11,7 +11,7 @@ export const serializeVrameworkTypes = (
 * This is used to provide the application types in the typescript project
 */
   
-import { CoreAPIFunction, CoreAPIPermission, CoreAPIRoute, addRoute, AssertRouteParams } from '@vramework/core'
+import { CoreAPIFunction, CoreAPIPermission, CoreAPIRoute, AssertRouteParams } from '@vramework/core'
   
 ${userSessionTypeImport}
 ${sessionServicesTypeImport}

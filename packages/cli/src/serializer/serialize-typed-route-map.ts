@@ -1,7 +1,6 @@
 import { RoutesMeta } from '@vramework/core'
 import { ImportMap } from '../inspector/inspector.js'
 import { serializeImportMap } from './serialize-import-map.js'
-import { serializeMetaInputTypes } from './serialize-meta-input-types.js'
 
 export const serializeTypedRoutesMap = (
   relativeToPath: string,
@@ -16,7 +15,7 @@ export const serializeTypedRoutesMap = (
     
 ${serializeImportMap(relativeToPath, packageMappings, importMap)}
 
-${serializeMetaInputTypes(routesMeta, metaTypes)}
+${Array.from(metaTypes.entries()).map(([name, schema]) => `export type ${name} = ${schema}`).join('\n')}
 
 interface RouteHandler<I, O> {
     input: I;
