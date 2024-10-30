@@ -8,9 +8,6 @@ export const addFilesWithSymbols = (
   symbolNames: string[]
 ): string | null => {
   for (const sourceFile of program.getSourceFiles()) {
-    if (sourceFile.isDeclarationFile) {
-      continue
-    }
     const symbols = checker.getSymbolsInScope(
       sourceFile,
       ts.SymbolFlags.Function |
