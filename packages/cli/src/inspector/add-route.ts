@@ -116,7 +116,7 @@ export const addRoute = (
       }, [] as string[])
     }
 
-    routeDocs = getPropertyValue(obj, 'docs') as RouteDocs || undefined
+    routeDocs = (getPropertyValue(obj, 'docs') as RouteDocs) || undefined
     methodValue = getPropertyValue(obj, 'method') as string
     queryValues = (getPropertyValue(obj, 'query') as string[]) || []
 
@@ -182,7 +182,7 @@ export const addRoute = (
         queryValues,
         paramsValues
       ),
-      docs: routeDocs
+      docs: routeDocs,
     })
 
     if (inputType) {

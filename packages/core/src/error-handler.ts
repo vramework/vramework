@@ -9,7 +9,7 @@ export class EError extends Error {
    * @param errorId - An optional error ID.
    */
   constructor(
-    message: string = "An error occurred",
+    message: string = 'An error occurred',
     public errorId?: string
   ) {
     super(message)
@@ -35,7 +35,10 @@ const apiErrors = new Map<any, ErrorDetails>([])
  * @param error - The error to add.
  * @param details - The details of the error.
  */
-export const addError = (error: typeof EError, { status, message }: ErrorDetails) => {
+export const addError = (
+  error: typeof EError,
+  { status, message }: ErrorDetails
+) => {
   apiErrors.set(error, { status, message })
 }
 

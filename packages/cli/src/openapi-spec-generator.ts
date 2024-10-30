@@ -99,15 +99,7 @@ export async function generateOpenAPISpec(
   const paths: Record<string, any> = {}
 
   routeMeta.forEach((meta) => {
-    const {
-      route,
-      method,
-      inputTypes,
-      output,
-      params,
-      query,
-      docs,
-    } = meta
+    const { route, method, inputTypes, output, params, query, docs } = meta
     const path = route.replace(/:(\w+)/g, '{$1}') // Convert ":param" to "{param}"
 
     if (!paths[path]) {

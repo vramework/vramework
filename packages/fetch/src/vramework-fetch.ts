@@ -7,21 +7,21 @@ export const coreVrameworkFetch = async (
   let body: any | undefined
 
   if (data) {
-      data = JSON.parse(JSON.stringify(data))
+    data = JSON.parse(JSON.stringify(data))
 
-      const keys = Object.keys(data)
-      for (const key of keys) {
-        if (uri.includes(`:${key}`)) {
-          uri = uri.replace(`:${key}`, data[key])
-          delete data[key]
-        }
+    const keys = Object.keys(data)
+    for (const key of keys) {
+      if (uri.includes(`:${key}`)) {
+        uri = uri.replace(`:${key}`, data[key])
+        delete data[key]
       }
-      if (method === 'POST' || method === 'PATCH' || method === 'PUT') {
-        body = data
-      } else {
-        const queryString = new URLSearchParams(JSON.parse(JSON.stringify(data)))
-        uri = `${uri}?${queryString}`
-      }
+    }
+    if (method === 'POST' || method === 'PATCH' || method === 'PUT') {
+      body = data
+    } else {
+      const queryString = new URLSearchParams(JSON.parse(JSON.stringify(data)))
+      uri = `${uri}?${queryString}`
+    }
   }
 
   return await fetch(uri, {

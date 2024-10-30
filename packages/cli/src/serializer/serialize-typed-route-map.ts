@@ -15,7 +15,9 @@ export const serializeTypedRoutesMap = (
     
 ${serializeImportMap(relativeToPath, packageMappings, importMap)}
 
-${Array.from(metaTypes.entries()).map(([name, schema]) => `export type ${name} = ${schema}`).join('\n')}
+${Array.from(metaTypes.entries())
+  .map(([name, schema]) => `export type ${name} = ${schema}`)
+  .join('\n')}
 
 interface RouteHandler<I, O> {
     input: I;
