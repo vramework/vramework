@@ -1,5 +1,15 @@
 # @vramework/express
 
+## 0.5.4
+
+### Patch Changes
+
+- 8d85f7e: feat: load all schemas on start optionally instead of validating they were loaded
+- Updated dependencies [1876d7a]
+- Updated dependencies [8d85f7e]
+  - @vramework/core@0.5.8
+  - @vramework/express-middleware@0.5.4
+
 ## 0.5.3
 
 ### Patch Changes
