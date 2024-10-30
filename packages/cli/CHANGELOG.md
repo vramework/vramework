@@ -1,5 +1,16 @@
 # @vramework/cli
 
+## 0.5.18
+
+### Patch Changes
+
+- b237ace: feat: adding core errors to openapi error specs
+- 1876d7a: feat: add error return codes to doc generation
+- fda3869: fix: dont ignore decleration files when looking for types
+- Updated dependencies [1876d7a]
+- Updated dependencies [8d85f7e]
+  - @vramework/core@0.5.8
+
 ## 0.5.17
 
 ### Patch Changes

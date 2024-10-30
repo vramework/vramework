@@ -1,5 +1,12 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.8
+
+### Patch Changes
+
+- 1876d7a: feat: add error return codes to doc generation
+- 8d85f7e: feat: load all schemas on start optionally instead of validating they were loaded
+
 ## 0.5.7
 
 ### Patch Changes
