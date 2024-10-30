@@ -3,7 +3,7 @@ import {
   CreateSessionServices,
   runRoute,
   RunRouteOptions,
-  validateAllSchemasLoaded,
+  loadAllSchemas,
 } from '@vramework/core'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
@@ -16,7 +16,7 @@ export type VrameworkFastifyPluginOptions = {
     singletonServices: CoreSingletonServices
     createSessionServices: CreateSessionServices<any, any, any>
     logRoutes?: boolean
-    validateSchemas?: boolean
+    loadSchemas?: boolean
   } & RunRouteOptions
 }
 
@@ -26,8 +26,8 @@ const vrameworkPlugin: FastifyPluginAsync<
   if (vramework.logRoutes) {
     logRoutes(vramework.singletonServices.logger)
   }
-  if (vramework.validateSchemas) {
-    validateAllSchemasLoaded(vramework.singletonServices.logger)
+  if (vramework.loadSchemas) {
+    loadAllSchemas(vramework.singletonServices.logger)
   }
   fastify.all('/*', async (req, res) => {
     try {

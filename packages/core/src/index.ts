@@ -7,7 +7,7 @@ export {
   type RunRouteOptions,
 } from './route-runner.js'
 export { addError, addErrors, getErrorResponseForConstructorName} from './error-handler.js'
-export { addSchema, loadSchema, validateAllSchemasLoaded } from './schema.js'
+export { addSchema, loadSchema, loadAllSchemas } from './schema.js'
 export * from './errors.js'
 export * from './services/index.js'
 export * from './types/core.types.js'

@@ -33,7 +33,7 @@ const getSchemas = () => {
 /**
  * Validate all the schemas have been loaded.
  */
-export const validateAllSchemasLoaded = (logger: Logger) => {
+const validateAllSchemasLoaded = (logger: Logger) => {
   const { routesMeta } = getRoutes()
 
   const missingSchemas: string[] = []
@@ -82,6 +82,18 @@ export const loadSchema = (schema: string, logger: Logger): void => {
       throw e
     }
   }
+}
+
+/**
+ * Loads a schema and compiles it into a validator.
+ * @param schema - The name of the schema to load.
+ * @param logger - A logger for logging information.
+ */
+export const loadAllSchemas = (logger: Logger): void => {
+  for (const [name] of getSchemas()) {
+    loadSchema(name, logger)
+  }
+  validateAllSchemasLoaded(logger)
 }
 
 /**

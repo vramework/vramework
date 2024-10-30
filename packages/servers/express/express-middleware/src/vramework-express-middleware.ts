@@ -8,23 +8,23 @@ import { RequestHandler } from 'express'
 import { VrameworkExpressRequest } from './vramework-express-request.js'
 import { VrameworkExpressResponse } from './vramework-express-response.js'
 import { logRoutes as logRegisterRoutes } from '@vramework/core/log-routes'
-import { validateAllSchemasLoaded } from '@vramework/core/schema'
+import { loadAllSchemas } from '@vramework/core/schema'
 
 type VrameworkMiddlewareArgs = RunRouteOptions & {
   logRoutes?: boolean
-  validateSchemas?: boolean
+  loadSchemas?: boolean
 }
 
 export const vrameworkMiddleware = (
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<any, any, any>,
-  { respondWith404, logRoutes, validateSchemas }: VrameworkMiddlewareArgs
+  { respondWith404, logRoutes, loadSchemas }: VrameworkMiddlewareArgs
 ): RequestHandler => {
   if (logRoutes) {
     logRegisterRoutes(singletonServices.logger)
   }
-  if (validateSchemas) {
-    validateAllSchemasLoaded(singletonServices.logger)
+  if (loadSchemas) {
+    loadAllSchemas(singletonServices.logger)
   }
 
   return async (req, res, next) => {

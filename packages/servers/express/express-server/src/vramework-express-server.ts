@@ -73,7 +73,7 @@ export class VrameworkExpressServer {
       vrameworkMiddleware(this.singletonServices, this.createSessionServices, {
         respondWith404: false,
         logRoutes: true,
-        validateSchemas: true,
+        loadSchemas: true,
       })
     )
   }

@@ -9,26 +9,26 @@ import { runRoute, RunRouteOptions } from '@vramework/core/route-runner'
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
 import { logRoutes as logRegisterRoutes } from '@vramework/core/log-routes'
-import { validateAllSchemasLoaded } from '@vramework/core/schema'
+import { loadAllSchemas } from '@vramework/core/schema'
 
 export type VrameworkuWSHandlerOptions = {
   singletonServices: CoreSingletonServices
   createSessionServices: CreateSessionServices<any, any, any>
   logRoutes?: boolean
-  validateSchemas?: boolean
+  loadSchemas?: boolean
 } & RunRouteOptions
 
 export const vrameworkHandler = ({
   logRoutes,
   singletonServices,
   createSessionServices,
-  validateSchemas,
+  loadSchemas,
 }: VrameworkuWSHandlerOptions) => {
   if (logRoutes) {
     logRegisterRoutes(singletonServices.logger)
   }
-  if (validateSchemas) {
-    validateAllSchemasLoaded(singletonServices.logger)
+  if (loadSchemas) {
+    loadAllSchemas(singletonServices.logger)
   }
 
   return async (res: uWS.HttpResponse, req: uWS.HttpRequest): Promise<void> => {

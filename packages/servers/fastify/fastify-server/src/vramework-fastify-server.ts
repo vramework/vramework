@@ -34,7 +34,7 @@ export class VrameworkFastifyServer {
         createSessionServices: this.createSessionServices,
         respondWith404: true,
         logRoutes: true,
-        validateSchemas: true,
+        loadSchemas: true,
       },
     })
   }
