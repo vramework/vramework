@@ -1,4 +1,4 @@
-import { EError } from '../errors.js'
+import { EError } from '../error-handler.js'
 import { CoreUserSession, CoreServices } from './core.types.js'
 
 export type CoreAPIFunction<
@@ -30,10 +30,9 @@ type CoreFunctionlessAPIRoute = {
   returnsJSON?: false
   timeout?: number
   docs?: Partial<{
-    summary: string
     description: string
     response: string
-    errors: EError[]
+    errors: Array<typeof EError>
     tags: string[]
   }>
 }
@@ -85,6 +84,13 @@ export type RoutesMetaInputTypes = {
   body?: string
 }
 
+export type RouteDocs = {
+  summary?: string
+  description?: string
+  tags?: string[]
+  errors?: string[]
+}
+
 export type RoutesMeta = Array<{
   route: string
   method: APIRouteMethod
@@ -92,8 +98,6 @@ export type RoutesMeta = Array<{
   query?: string[]
   input: string | null
   output: string | null
-  summary?: string
-  description?: string
-  tags?: string[]
   inputTypes?: RoutesMetaInputTypes
+  docs?: RouteDocs
 }>

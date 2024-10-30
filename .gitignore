@@ -2,7 +2,6 @@
 .DS_Store
 
 *.js
-*.d.ts
 
 .yarn
 .dist

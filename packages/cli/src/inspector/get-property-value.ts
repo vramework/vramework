@@ -1,9 +1,10 @@
+import { RouteDocs } from '@vramework/core/types/routes.types'
 import * as ts from 'typescript'
 
 export const getPropertyValue = (
   obj: ts.ObjectLiteralExpression,
   propertyName: string
-): string | string[] | null => {
+): string | string[] | null | RouteDocs => {
   const property = obj.properties.find(
     (p) =>
       ts.isPropertyAssignment(p) &&
@@ -26,6 +27,42 @@ export const getPropertyValue = (
         .filter((item) => item !== null) as string[] // Filter non-null and assert type
 
       return stringArray.length > 0 ? stringArray : null
+    }
+
+    // Special handling for 'docs' -> expect RouteDocs
+    if (propertyName === 'docs' && ts.isObjectLiteralExpression(initializer)) {
+      const docs: RouteDocs = {}
+
+      initializer.properties.forEach((prop) => {
+        if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name)) {
+          const propName = prop.name.text
+
+          if (propName === 'summary' && ts.isStringLiteral(prop.initializer)) {
+            docs.summary = prop.initializer.text
+          } else if (
+            propName === 'description' &&
+            ts.isStringLiteral(prop.initializer)
+          ) {
+            docs.description = prop.initializer.text
+          } else if (
+            propName === 'tags' &&
+            ts.isArrayLiteralExpression(prop.initializer)
+          ) {
+            docs.tags = prop.initializer.elements
+              .filter(ts.isStringLiteral)
+              .map((element) => element.text)
+          } else if (
+            propName === 'errors' &&
+            ts.isArrayLiteralExpression(prop.initializer)
+          ) {
+            docs.errors = prop.initializer.elements
+              .filter(ts.isIdentifier)
+              .map((element) => element.text as unknown as string)
+          }
+        }
+      })
+
+      return docs
     }
 
     // Handle string literals for other properties

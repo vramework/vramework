@@ -1,4 +1,4 @@
-import { NotPermissionedError } from './errors.js'
+import { ForbiddenError } from './errors.js'
 import { CoreAPIPermission } from './types/routes.types.js'
 import { CoreServices, CoreUserSession } from './types/core.types.js'
 
@@ -40,5 +40,5 @@ export const verifyPermissions = async (
     }
   }
 
-  throw new NotPermissionedError()
+  throw new ForbiddenError()
 }

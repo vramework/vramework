@@ -5,7 +5,7 @@ import addFormats from 'ajv-formats'
 import { ValidateFunction } from 'ajv'
 
 import { Logger } from './services/logger.js'
-import { InvalidParametersError } from './errors.js'
+import { BadRequestError } from './errors.js'
 import { getRoutes } from './route-runner.js'
 
 const ajv = new Ajv({
@@ -88,7 +88,7 @@ export const loadSchema = (schema: string, logger: Logger): void => {
  * Validates JSON data against a schema.
  * @param schema - The name of the schema to validate against.
  * @param json - The JSON data to validate.
- * @throws {InvalidParametersError} If the JSON data is invalid.
+ * @throws {BadRequestError} If the JSON data is invalid.
  */
 export const validateJson = (schema: string, json: unknown): void => {
   const validator = validators.get(schema)
@@ -103,6 +103,6 @@ export const validateJson = (schema: string, json: unknown): void => {
       validator.errors
     )
     const errorText = ajv.errorsText(validator.errors)
-    throw new InvalidParametersError(errorText)
+    throw new BadRequestError(errorText)
   }
 }

@@ -1,4 +1,6 @@
-import { RoutesMeta } from '@vramework/core'
+import '@vramework/core/errors'
+
+import { RoutesMeta, getErrorResponseForConstructorName } from '@vramework/core'
 import _convertSchema from '@openapi-contrib/json-schema-to-openapi-schema'
 const convertSchema =
   'default' in _convertSchema ? (_convertSchema.default as any) : _convertSchema
@@ -104,8 +106,7 @@ export async function generateOpenAPISpec(
       output,
       params,
       query,
-      description,
-      tags,
+      docs,
     } = meta
     const path = route.replace(/:(\w+)/g, '{$1}') // Convert ":param" to "{param}"
 
@@ -113,12 +114,23 @@ export async function generateOpenAPISpec(
       paths[path] = {}
     }
 
+    const responses = {}
+    docs?.errors?.forEach((error) => {
+      const errorResponse = getErrorResponseForConstructorName(error)
+      if (errorResponse) {
+        responses[errorResponse.status] = {
+          description: errorResponse.message,
+        }
+      }
+    })
+
     const operation: any = {
       description:
-        description ||
+        docs?.description ||
         `This endpoint handles the ${method.toUpperCase()} request for the route ${route}.`,
-      tags: tags || [route.split('/')[1] || 'default'],
+      tags: docs?.tags || [route.split('/')[1] || 'default'],
       responses: {
+        ...responses,
         '200': {
           description: 'Successful response',
           content: output

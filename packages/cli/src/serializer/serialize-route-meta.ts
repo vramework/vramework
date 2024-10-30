@@ -1,4 +1,4 @@
-import { RoutesMeta } from '@vramework/core'
+import type { RoutesMeta } from '@vramework/core'
 
 export const serializeRouteMeta = (routesMeta: RoutesMeta) => {
   const serializedOutput: string[] = []

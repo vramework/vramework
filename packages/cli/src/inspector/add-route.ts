@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
-import { APIRouteMethod } from '@vramework/core'
+import { APIRouteMethod, RouteDocs } from '@vramework/core'
 
 const extractTypeKeys = (type: ts.Type): string[] => {
   return type.getProperties().map((symbol) => symbol.getName())
@@ -91,6 +91,7 @@ export const addRoute = (
     return
   }
 
+  let routeDocs: RouteDocs | undefined
   let methodValue: string | null = null
   let paramsValues: string[] | null = []
   let queryValues: string[] | [] = []
@@ -115,6 +116,7 @@ export const addRoute = (
       }, [] as string[])
     }
 
+    routeDocs = getPropertyValue(obj, 'docs') as RouteDocs || undefined
     methodValue = getPropertyValue(obj, 'method') as string
     queryValues = (getPropertyValue(obj, 'query') as string[]) || []
 
@@ -180,6 +182,7 @@ export const addRoute = (
         queryValues,
         paramsValues
       ),
+      docs: routeDocs
     })
 
     if (inputType) {

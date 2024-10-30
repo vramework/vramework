@@ -7,7 +7,7 @@ chai.use(
 )
 
 import { verifyPermissions } from './permissions.js'
-import { NotPermissionedError } from './errors.js'
+import { ForbiddenError } from './errors.js'
 
 describe('verifyPermissions', () => {
   let services: any, data: any, session: any
@@ -56,7 +56,7 @@ describe('verifyPermissions', () => {
 
     await expect(
       verifyPermissions(permissions, services, data, session)
-    ).to.be.rejectedWith(NotPermissionedError)
+    ).to.be.rejectedWith(ForbiddenError)
   })
 
   it('should fail when any permission function in an array returns false', async () => {
@@ -66,7 +66,7 @@ describe('verifyPermissions', () => {
 
     await expect(
       verifyPermissions(permissions, services, data, session)
-    ).to.be.rejectedWith(NotPermissionedError)
+    ).to.be.rejectedWith(ForbiddenError)
   })
 
   it('should pass if any permission group returns true', async () => {
@@ -87,6 +87,6 @@ describe('verifyPermissions', () => {
 
     await expect(
       verifyPermissions(permissions, services, data, session)
-    ).to.be.rejectedWith(NotPermissionedError)
+    ).to.be.rejectedWith(ForbiddenError)
   })
 })

@@ -1,14 +1,21 @@
-import {
-  InvalidParametersError,
-  NotFoundError,
-  NotImplementedError,
-  InvalidOriginError,
-  AccessDeniedError,
-  NotPermissionedError,
-  MissingSessionError,
-  InvalidSessionError,
-  MaxComputeTimeReachedError,
-} from './errors.js'
+/**
+ * Base class for custom errors.
+ * @extends {Error}
+ */
+export class EError extends Error {
+  /**
+   * Creates an instance of EError.
+   * @param message - The error message.
+   * @param errorId - An optional error ID.
+   */
+  constructor(
+    message: string = "An error occurred",
+    public errorId?: string
+  ) {
+    super(message)
+    Object.setPrototypeOf(this, new.target.prototype)
+  }
+}
 
 /**
  * Interface for error details.
@@ -21,27 +28,14 @@ export interface ErrorDetails {
 /**
  * Map of API errors to their details.
  */
-const apiErrors = new Map<any, ErrorDetails>([
-  [InvalidParametersError, { status: 422, message: 'Invalid Parameters' }],
-  [NotFoundError, { status: 404, message: 'Not Found' }],
-  [NotImplementedError, { status: 501, message: 'Not Found' }],
-  [InvalidOriginError, { status: 400, message: 'Invalid Origin' }],
-  [AccessDeniedError, { status: 403, message: 'Access Denied' }],
-  [NotPermissionedError, { status: 403, message: 'Not permissioned' }],
-  [MissingSessionError, { status: 401, message: 'Missing Session' }],
-  [InvalidSessionError, { status: 401, message: 'Invalid Session' }],
-  [
-    MaxComputeTimeReachedError,
-    { status: 408, message: 'Max compute time reached' },
-  ],
-])
+const apiErrors = new Map<any, ErrorDetails>([])
 
 /**
  * Adds an error to the API errors map.
  * @param error - The error to add.
  * @param details - The details of the error.
  */
-export const addError = (error: any, { status, message }: ErrorDetails) => {
+export const addError = (error: typeof EError, { status, message }: ErrorDetails) => {
   apiErrors.set(error, { status, message })
 }
 
@@ -72,4 +66,13 @@ export const getErrorResponse = (
     return foundError[1]
   }
   return apiErrors.get(error)
+}
+
+export const getErrorResponseForConstructorName = (constructorName: string) => {
+  const foundError = Array.from(apiErrors.entries()).find(
+    ([e]) => e.name === constructorName
+  )
+  if (foundError) {
+    return foundError[1]
+  }
 }
