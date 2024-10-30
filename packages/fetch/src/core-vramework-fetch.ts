@@ -12,22 +12,12 @@ export type CoreVrameworkFetchOptions = {
   transformDate?: boolean
   serverUrl?: string
   authHeaders?: AuthHeaders
-  mode: 'cors' | 'no-cors' | 'same-origin'
-  credentials: 'omit' | 'same-origin' | 'include'
-  cache:
-    | 'default'
-    | 'no-store'
-    | 'reload'
-    | 'no-cache'
-    | 'force-cache'
-    | 'only-if-cached'
-}
+} & Pick<RequestInit, 'cache' | 'credentials' | 'mode'>
 
 export class CoreVrameworkFetch {
-  private apiPrefix: string = ''
   private authHeaders: AuthHeaders = { jwt: undefined, apiKey: undefined }
 
-  constructor(private options: CoreVrameworkFetchOptions) {
+  constructor(private options: CoreVrameworkFetchOptions = {}) {
     this.authHeaders = options.authHeaders || {}
   }
 
@@ -80,20 +70,21 @@ export class CoreVrameworkFetch {
     data: any,
     options?: RequestInit
   ) {
-    this.verifyAPIPrefixSet()
-    uri = `${this.apiPrefix}/${uri}`
+    this.verifyServerUrlSet()
+    uri = `${this.options.serverUrl}/${uri}`
 
     return await coreVrameworkFetch(uri, data, {
       ...options,
+      method,
       mode: this.options.mode,
       credentials: this.options.credentials,
       headers: { ...this.getHeaders(), ...options?.headers },
     })
   }
 
-  private verifyAPIPrefixSet() {
-    if (!this.apiPrefix) {
-      throw new Error('API prefix is not set')
+  private verifyServerUrlSet() {
+    if (!this.options.serverUrl) {
+      throw new Error('Server url is not set')
     }
   }
 

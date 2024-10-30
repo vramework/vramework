@@ -1,11 +1,11 @@
 export const serializeFetchWrapper = (routesMapPath: string) => {
-  return `import { CoreVrameworkFetch, HTTPMethod, CoreVrameworkFetchOptions } from '@vramework/fetch/index'
+  return `import { CoreVrameworkFetch, HTTPMethod, CoreVrameworkFetchOptions } from '@vramework/fetch'
 
 import type { RoutesMap, RouteHandlerOf } from '${routesMapPath}'
 
 export class VrameworkFetch {
     private client: CoreVrameworkFetch;
-    constructor(options: CoreVrameworkFetchOptions) {
+    constructor(options?: CoreVrameworkFetchOptions) {
         this.client = new CoreVrameworkFetch(options)
     }
 
@@ -25,7 +25,7 @@ export class VrameworkFetch {
         Route extends keyof RoutesMap,
         Method extends keyof RoutesMap[Route]
     >(route: Route, method: Method, data: RouteHandlerOf<Route, Method>['input'], options?: Omit<RequestInit, 'body'>): Promise<RouteHandlerOf<Route, Method>['output']> {
-        return this.client.fetch(route, method as unknown as HTTPMethod, data, options)
+        return this.client.api(route, method as unknown as HTTPMethod, data, options)
     }
 
     public async fetch<

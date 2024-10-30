@@ -129,6 +129,7 @@ export async function generateOpenAPISpec(
         docs?.description ||
         `This endpoint handles the ${method.toUpperCase()} request for the route ${route}.`,
       tags: docs?.tags || [route.split('/')[1] || 'default'],
+      parameters: [],
       responses: {
         ...responses,
         '200': {

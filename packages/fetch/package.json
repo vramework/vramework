@@ -7,13 +7,9 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "exports": {
-    "./*": {
-      "import": "./dist/esm/*.js",
-      "require": "./dist/cjs/*.js"
-    },
-    "./*.d.ts": {
-      "import": "./dist/*.d.ts",
-      "require": "./dist/*.d.ts"
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     }
   },
   "scripts": {

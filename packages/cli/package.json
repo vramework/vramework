@@ -9,16 +9,6 @@
   "type": "module",
   "main": "dist/cjs/bin/vramework.js",
   "module": "dist/esm/bin/vramework.js",
-  "exports": {
-    "./*": {
-      "import": "./dist/esm/*.js",
-      "require": "./dist/cjs/*.js"
-    },
-    "./*.d.ts": {
-      "import": "./dist/esm/*.d.ts",
-      "require": "./dist/cjs/*.d.ts"
-    }
-  },
   "scripts": {
     "tsc": "tsc",
     "build:esm": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
