@@ -41,7 +41,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
   const cliConfig = await getVrameworkCLIConfig(
     options.config,
-    ['rootDir', 'schemaDirectory', 'configDir', 'nextDeclarationFile'],
+    ['rootDir', 'schemaDirectory', 'configDir', 'fetchFile'],
     true
   )
   await vrameworkFetch(cliConfig)

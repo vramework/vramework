@@ -163,6 +163,7 @@ export const writeFileInDir = async (
 
   await mkdir(dirname(path), { recursive: true })
   await writeFile(path, content, 'utf-8')
+  console.log(`\x1b[32m✓ File written to ${path}\x1b[0m`)
 }
 
 export const logCommandInfoAndTime = async <ReturnType = void>(

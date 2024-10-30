@@ -1,4 +1,4 @@
-import { join, dirname, resolve } from 'path'
+import { join, dirname, resolve, isAbsolute } from 'path'
 import { readdir } from 'fs/promises'
 import { OpenAPISpecInfo } from './openapi-spec-generator.js'
 
@@ -32,7 +32,18 @@ export type VrameworkCLIConfig = {
   }
 } & VrameworkCLICoreOutputFiles
 
+const CONFIG_DIR_FILES = ['nextDeclarationFile', 'fetchFile']
+
 export const getVrameworkCLIConfig = async (
+  configFile: string | undefined = undefined,
+  requiredFields: Array<keyof VrameworkCLIConfig>,
+  exitProcess: boolean = false
+): Promise<VrameworkCLIConfig> => {
+  const config = await _getVrameworkCLIConfig(configFile, requiredFields, exitProcess)
+  return config
+}
+
+const _getVrameworkCLIConfig = async (
   configFile: string | undefined = undefined,
   requiredFields: Array<keyof VrameworkCLIConfig>,
   exitProcess: boolean = false
@@ -116,7 +127,7 @@ export const getVrameworkCLIConfig = async (
     for (const objectKey of Object.keys(result)) {
       if (objectKey.endsWith('File') || objectKey.endsWith('Directory')) {
         const relativeTo =
-          objectKey === 'nextDeclarationFile'
+          CONFIG_DIR_FILES.includes(objectKey)
             ? result.configDir
             : result.rootDir
         if (result[objectKey]) {
@@ -125,7 +136,9 @@ export const getVrameworkCLIConfig = async (
       }
     }
 
-    result.tsconfig = join(result.rootDir, result.tsconfig)
+    if (!isAbsolute(result.tsconfig)) {
+      result.tsconfig = join(result.rootDir, result.tsconfig)
+    }
 
     return result
   } catch (e: any) {
