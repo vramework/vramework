@@ -1,5 +1,13 @@
 # @vramework/fastify-plugin
 
+## 0.5.6
+
+### Patch Changes
+
+- effbb4c: doc: adding readme to all packages
+- Updated dependencies [effbb4c]
+  - @vramework/core@0.5.10
+
 ## 0.5.5
 
 ### Patch Changes
