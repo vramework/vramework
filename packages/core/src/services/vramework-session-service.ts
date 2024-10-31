@@ -3,9 +3,22 @@ import { JWTService } from './jwt-service.js'
 import { InvalidSessionError, MissingSessionError } from '../errors.js'
 import { VrameworkRequest } from '../vramework-request.js'
 
+/**
+ * The `VrameworkSessionService` class provides session management capabilities, including handling JWT-based sessions,
+ * cookie-based sessions, and API key-based sessions. It allows for retrieving and transforming user sessions based on different
+ * authentication mechanisms.
+ *
+ * @template UserSession - The type representing a user session.
+ */
 export class VrameworkSessionService<UserSession>
   implements SessionService<UserSession>
 {
+  /**
+   * Constructs a new instance of the `VrameworkSessionService` class.
+   *
+   * @param jwtService - The service for handling JWT operations.
+   * @param options - Options for configuring the session service.
+   */
   constructor(
     private jwtService: JWTService<UserSession>,
     private options: {
@@ -19,6 +32,12 @@ export class VrameworkSessionService<UserSession>
     }
   ) {}
 
+  /**
+   * Retrieves a session from cookies if available.
+   *
+   * @param request - The request object containing cookies.
+   * @returns A promise that resolves to the user session, or `undefined` if no session is found.
+   */
   private async getCookieSession(
     request: VrameworkRequest
   ): Promise<UserSession | undefined> {
@@ -52,6 +71,15 @@ export class VrameworkSessionService<UserSession>
     return await this.options.getSessionForCookieValue(cookieValue, cookieName)
   }
 
+  /**
+   * Retrieves the user session based on available credentials (JWT, API key, or cookies).
+   *
+   * @param credentialsRequired - Whether credentials are required to proceed.
+   * @param request - The request object containing headers and cookies.
+   * @param debugJWTDecode - Whether to enable debugging for JWT decoding.
+   * @returns A promise that resolves to the user session, or `undefined` if no session is found and credentials are not required.
+   * @throws {MissingSessionError} - Throws an error if credentials are required but no session is found.
+   */
   public async getUserSession(
     credentialsRequired: boolean,
     request: VrameworkRequest,

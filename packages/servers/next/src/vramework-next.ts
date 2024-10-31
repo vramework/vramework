@@ -1,113 +1,188 @@
-import * as uWS from 'uWebSockets.js'
+import { compile } from 'path-to-regexp'
+import { IncomingMessage, ServerResponse } from 'http'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { EventEmitter } from 'eventemitter3'
+
+import { VrameworkSSRNextRequest } from './vramework-ssr-next-request.js'
+import { VrameworkSSRNextResponse } from './vramework-ssr-next-response.js'
+import { VrameworkAPINextRequest } from './vramework-api-next-request.js'
+import { VrameworkAPINextResponse } from './vramework-api-next-response.js'
+import { VrameworkActionNextRequest } from './vramework-action-next-request.js'
+import { VrameworkActionNextResponse } from './vramework-action-next-response.js'
+import { VrameworkActionStaticNextRequest } from './vramework-action-static-next-request.js'
 
 import {
-  CoreServerConfig,
+  CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
+import { APIRouteMethod } from '@vramework/core/types/routes.types'
+import { runRoute } from '@vramework/core/route-runner'
 
-import { vrameworkHandler } from '@vramework/uws-handler'
+const injectIntoUrl = (route: string, keys: Record<string, string>) => {
+  const path = compile(route)
+  return path(keys)
+}
 
 /**
- * Class representing a uWebSockets.js-based server for Vramework.
- * This class is intended for quickly creating a uWebSockets server with the vramework handler, useful for prototyping.
- * For production systems, it is expected that the uWS handler will be used directly or this file will be used as a template to add extra handlers (e.g., CORS).
+ * The `VrameworkNextJS` class provides methods to interact with the Vramework framework in a Next.js environment,
+ * including support for SSR requests, API requests, and action requests.
  */
-export class VrameworkUWSServer {
-  /** The uWebSockets app instance */
-  public app = uWS.App()
-  /** The socket used for listening, or null if not listening */
-  private listenSocket: boolean | uWS.us_listen_socket | null = null
+export class VrameworkNextJS {
+  private readyEmitter = new EventEmitter()
+  private singletonServices: CoreSingletonServices | undefined
 
   /**
-   * Constructs a new VrameworkUWSServer.
+   * Constructs a new instance of the `VrameworkNextJS` class.
    *
-   * @param config - The configuration for the server.
-   * @param singletonServices - The singleton services used by the server.
-   * @param createSessionServices - Function to create session services for each request.
+   * @param config - The core configuration for the application.
+   * @param createSingletonServices - A function that creates singleton services for the application.
+   * @param createSessionServices - A function that creates session-specific services for each request.
    */
   constructor(
-    private readonly config: CoreServerConfig,
-    private readonly singletonServices: CoreSingletonServices,
+    private readonly config: CoreConfig,
+    private readonly createSingletonServices: (
+      config: CoreConfig
+    ) => Promise<CoreSingletonServices>,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {}
 
   /**
-   * Placeholder for enabling CORS.
+   * Handles an action request, routing it to the appropriate handler.
    *
-   * @param _options - The options to configure CORS.
-   * @throws Method not implemented.
+   * @param route - The route to handle.
+   * @param method - The HTTP method for the request.
+   * @param data - The data to be sent with the request.
+   * @returns A promise that resolves to the response data.
    */
-  public enableCors(_options: any) {
-    throw new Error('Method not implemented.')
-  }
-
-  /**
-   * Initializes the server by setting up health check and request handling routes.
-   */
-  public async init() {
-    this.app.get(
-      this.config.healthCheckPath || '/health-check',
-      async (res) => {
-        res.writeStatus('200').end()
+  public async actionRequest<In extends Record<string, any>, Out>(
+    route: unknown,
+    method: unknown,
+    data: In
+  ): Promise<Out> {
+    const singletonServices = await this.getSingletonServices()
+    return await runRoute<In, Out>(
+      new VrameworkActionNextRequest(data),
+      new VrameworkActionNextResponse(),
+      singletonServices,
+      this.createSessionServices,
+      {
+        route: injectIntoUrl(route as string, data),
+        method: method as APIRouteMethod,
       }
     )
+  }
 
-    this.app.any(
-      '/*',
-      vrameworkHandler({
-        logRoutes: true,
-        singletonServices: this.singletonServices,
-        createSessionServices: this.createSessionServices,
-      })
+  /**
+   * Handles a static action request, routing it to the appropriate handler with user session skipping.
+   *
+   * @param route - The route to handle.
+   * @param method - The HTTP method for the request.
+   * @param data - The data to be sent with the request.
+   * @returns A promise that resolves to the response data.
+   */
+  public async staticActionRequest<In extends Record<string, any>, Out>(
+    route: unknown,
+    method: unknown,
+    data: In
+  ): Promise<Out> {
+    const singletonServices = await this.getSingletonServices()
+    return await runRoute<In, Out>(
+      new VrameworkActionStaticNextRequest(data),
+      new VrameworkActionNextResponse(),
+      singletonServices,
+      this.createSessionServices,
+      {
+        route: injectIntoUrl(route as string, data),
+        method: method as APIRouteMethod,
+        skipUserSession: true,
+      }
     )
   }
 
   /**
-   * Starts the server and begins listening on the configured hostname and port.
+   * Handles an SSR request, routing it to the appropriate handler.
    *
-   * @returns A promise that resolves when the server has started.
+   * @param request - The incoming message request object.
+   * @param response - The server response object.
+   * @param route - The route to handle.
+   * @param method - The HTTP method for the request.
+   * @param data - The data to be sent with the request.
+   * @returns A promise that resolves to the response data.
    */
-  public async start() {
-    return await new Promise<void>((resolve) => {
-      this.app.listen(this.config.hostname, this.config.port, (token) => {
-        this.listenSocket = token
-        this.singletonServices.logger.info(
-          `listening on port ${this.config.port} and host: ${this.config.hostname}`
-        )
-        resolve()
-      })
-    })
-  }
-
-  /**
-   * Stops the server by closing the listening socket.
-   *
-   * @returns A promise that resolves when the server has stopped.
-   * @throws An error if the server was not correctly started.
-   */
-  public async stop(): Promise<void> {
-    return await new Promise<void>((resolve) => {
-      if (this.listenSocket == null) {
-        throw 'Unable to stop server as it hasn`t been correctly started'
+  public async ssrRequest<In extends Record<string, any>, Out>(
+    request: IncomingMessage & {
+      cookies: Partial<{ [key: string]: string }>
+    },
+    response: ServerResponse<IncomingMessage>,
+    route: string,
+    method: APIRouteMethod,
+    data: In
+  ): Promise<Out> {
+    const singletonServices = await this.getSingletonServices()
+    return await runRoute<In, Out>(
+      new VrameworkSSRNextRequest(request, data),
+      new VrameworkSSRNextResponse(response),
+      singletonServices,
+      this.createSessionServices,
+      {
+        route: injectIntoUrl(route, data),
+        method,
       }
-      uWS.us_listen_socket_close(this.listenSocket)
-      this.listenSocket = null
-
-      // Wait for 2 seconds to allow all connections to close
-      setTimeout(resolve, 2000)
-    })
+    )
   }
 
   /**
-   * Enables the server to exit gracefully when a SIGINT signal is received.
+   * Handles an API request, routing it to the appropriate handler.
+   *
+   * @param request - The Next.js API request object.
+   * @param response - The Next.js API response object.
+   * @param route - The route to handle.
+   * @param method - The HTTP method for the request.
    */
-  public async enableExitOnSigInt() {
-    process.removeAllListeners('SIGINT').on('SIGINT', async () => {
-      this.singletonServices.logger.info('Stopping server...')
-      await this.stop()
-      this.singletonServices.logger.info('Server stopped')
-      process.exit(0)
+  public async apiRequest<In extends Record<string, any>, Out>(
+    request: NextApiRequest,
+    response: NextApiResponse,
+    route: string,
+    method: APIRouteMethod
+  ): Promise<void> {
+    const singletonServices = await this.getSingletonServices()
+    const vrameworkRequest = new VrameworkAPINextRequest(request)
+    const vrameworkResponse = new VrameworkAPINextResponse(response)
+    const data = await vrameworkRequest.getData()
+    await runRoute<In, Out>(
+      vrameworkRequest,
+      vrameworkResponse,
+      singletonServices,
+      this.createSessionServices,
+      {
+        route: injectIntoUrl(route, data),
+        method,
+      }
+    )
+  }
+
+  /**
+   * Retrieves the singleton services, ensuring they are only created once.
+   *
+   * @returns A promise that resolves to the singleton services.
+   */
+  private async getSingletonServices(): Promise<CoreSingletonServices> {
+    if (this.singletonServices) {
+      return this.singletonServices
+    }
+
+    if (this.readyEmitter.listenerCount('ready') === 0) {
+      this.createSingletonServices(this.config).then((singletonServices) => {
+        this.singletonServices = singletonServices
+        this.readyEmitter.emit('ready')
+      })
+    }
+
+    return new Promise((resolve) => {
+      this.readyEmitter.once('ready', async () => {
+        resolve(this.singletonServices as CoreSingletonServices)
+      })
     })
   }
 }

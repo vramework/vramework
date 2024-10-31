@@ -1,7 +1,6 @@
 {
   "entryPoints": ["./**/index.ts"],
   "entryPointStrategy": "expand",
-  "categorizeByGroup": false,
   "excludeInternal": true,
   "out": ".typedocs",
   "compilerOptions": {

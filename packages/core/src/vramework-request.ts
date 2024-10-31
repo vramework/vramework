@@ -4,6 +4,7 @@ import { VrameworkQuery } from './types/core.types.js'
 /**
  * Abstract class representing a vramework request.
  * @template In - The type of the request body.
+ * @group RequestResponse
  */
 export abstract class VrameworkRequest<In = any> {
   private params: Partial<Record<string, string | string[]>> = {}

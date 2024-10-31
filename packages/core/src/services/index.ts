@@ -1,3 +1,7 @@
+/**
+ * @module @vramework/core
+ */
+
 // Interfaces
 export * from './content-service.js'
 export * from './jwt-service.js'
@@ -10,4 +14,3 @@ export * from './secret-service.js'
 // Local implementations
 export * from './vramework-session-service.js'
 export * from './local-secrets.js'
-export * from './local-content.js'
