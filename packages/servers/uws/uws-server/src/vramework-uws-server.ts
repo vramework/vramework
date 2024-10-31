@@ -8,10 +8,24 @@ import {
 
 import { vrameworkHandler } from '@vramework/uws-handler'
 
+/**
+ * Class representing a uWebSockets.js-based server for Vramework.
+ * This class is intended for quickly creating a uWebSockets server with the vramework handler, useful for prototyping.
+ * For production systems, it is expected that the uWS handler will be used directly or this file will be used as a template to add extra handlers (e.g., CORS).
+ */
 export class VrameworkUWSServer {
+  /** The uWebSockets app instance */
   public app = uWS.App()
+  /** The socket used for listening, or null if not listening */
   private listenSocket: boolean | uWS.us_listen_socket | null = null
 
+  /**
+   * Constructs a new VrameworkUWSServer.
+   *
+   * @param config - The configuration for the server.
+   * @param singletonServices - The singleton services used by the server.
+   * @param createSessionServices - Function to create session services for each request.
+   */
   constructor(
     private readonly config: CoreServerConfig,
     private readonly singletonServices: CoreSingletonServices,
@@ -19,12 +33,18 @@ export class VrameworkUWSServer {
   ) {}
 
   /**
-   * Placeholder for enabling CORS
+   * Placeholder for enabling CORS.
+   *
+   * @param _options - The options to configure CORS.
+   * @throws Method not implemented.
    */
   public enableCors(_options: any) {
     throw new Error('Method not implemented.')
   }
 
+  /**
+   * Initializes the server by setting up health check and request handling routes.
+   */
   public async init() {
     this.app.get(
       this.config.healthCheckPath || '/health-check',
@@ -43,6 +63,11 @@ export class VrameworkUWSServer {
     )
   }
 
+  /**
+   * Starts the server and begins listening on the configured hostname and port.
+   *
+   * @returns A promise that resolves when the server has started.
+   */
   public async start() {
     return await new Promise<void>((resolve) => {
       this.app.listen(this.config.hostname, this.config.port, (token) => {
@@ -55,6 +80,12 @@ export class VrameworkUWSServer {
     })
   }
 
+  /**
+   * Stops the server by closing the listening socket.
+   *
+   * @returns A promise that resolves when the server has stopped.
+   * @throws An error if the server was not correctly started.
+   */
   public async stop(): Promise<void> {
     return await new Promise<void>((resolve) => {
       if (this.listenSocket == null) {
@@ -68,6 +99,9 @@ export class VrameworkUWSServer {
     })
   }
 
+  /**
+   * Enables the server to exit gracefully when a SIGINT signal is received.
+   */
   public async enableExitOnSigInt() {
     process.removeAllListeners('SIGINT').on('SIGINT', async () => {
       this.singletonServices.logger.info('Stopping server...')

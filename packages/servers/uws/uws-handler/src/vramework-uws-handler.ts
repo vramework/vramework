@@ -1,10 +1,3 @@
-/**
- * The `JoseJWTService` class provides functionality for handling JSON Web Tokens (JWTs) using the `jose` library. 
- * It implements the `JWTService` interface from the `@vramework/core` module, allowing for secure encoding, decoding, and verification of JWTs.
- *
- * @module @vramework/uws-handler
- */
-
 import * as uWS from 'uWebSockets.js'
 
 import {
