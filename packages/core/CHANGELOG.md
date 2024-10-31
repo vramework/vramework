@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.10
+
+### Patch Changes
+
+- effbb4c: doc: adding readme to all packages
+
 ## 0.5.9
 
 ### Patch Changes

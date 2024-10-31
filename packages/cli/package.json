@@ -1,6 +1,6 @@
 {
   "name": "@vramework/cli",
-  "version": "0.5.19",
+  "version": "0.5.20",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
@@ -23,7 +23,7 @@
     "@openapi-contrib/json-schema-to-openapi-schema": "^3.0.2",
     "@types/cookie": "^0.6.0",
     "@types/uuid": "^10.0.0",
-    "@vramework/core": "^0.5.9",
+    "@vramework/core": "^0.5.10",
     "commander": "^12",
     "glob": "^10",
     "path-to-regexp": "^8.2.0",

@@ -1,5 +1,13 @@
 ## 0.0.8 - 26.06.2022
 
+## 0.5.2
+
+### Patch Changes
+
+- effbb4c: doc: adding readme to all packages
+- Updated dependencies [effbb4c]
+  - @vramework/core@0.5.10
+
 ## 0.5.1
 
 ### Patch Changes
