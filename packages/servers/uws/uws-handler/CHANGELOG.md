@@ -1,5 +1,14 @@
 # @vramework/uws-handler
 
+## 0.5.4
+
+### Patch Changes
+
+- 725723d: docs: adding typedocs
+- Updated dependencies [3541ab7]
+- Updated dependencies [725723d]
+  - @vramework/core@0.5.9
+
 ## 0.5.3
 
 ### Patch Changes

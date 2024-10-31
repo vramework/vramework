@@ -1,5 +1,12 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.9
+
+### Patch Changes
+
+- 3541ab7: refactor: rename nextDeclarationFile to nextJSFile
+- 725723d: docs: adding typedocs
+
 ## 0.5.8
 
 ### Patch Changes

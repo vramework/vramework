@@ -1,5 +1,15 @@
 # @vramework/express
 
+## 0.5.5
+
+### Patch Changes
+
+- 725723d: docs: adding typedocs
+- Updated dependencies [3541ab7]
+- Updated dependencies [725723d]
+  - @vramework/core@0.5.9
+  - @vramework/express-middleware@0.5.5
+
 ## 0.5.4
 
 ### Patch Changes

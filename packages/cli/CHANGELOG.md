@@ -1,5 +1,15 @@
 # @vramework/cli
 
+## 0.5.19
+
+### Patch Changes
+
+- 3541ab7: refactor: rename nextDeclarationFile to nextJSFile
+- 725723d: docs: adding typedocs
+- Updated dependencies [3541ab7]
+- Updated dependencies [725723d]
+  - @vramework/core@0.5.9
+
 ## 0.5.18
 
 ### Patch Changes
