@@ -23,10 +23,22 @@ const injectIntoUrl = (route: string, keys: Record<string, string>) => {
   const path = compile(route)
   return path(keys)
 }
+
+/**
+ * The `VrameworkNextJS` class provides methods to interact with the Vramework framework in a Next.js environment,
+ * including support for SSR requests, API requests, and action requests.
+ */
 export class VrameworkNextJS {
   private readyEmitter = new EventEmitter()
   private singletonServices: CoreSingletonServices | undefined
 
+  /**
+   * Constructs a new instance of the `VrameworkNextJS` class.
+   *
+   * @param config - The core configuration for the application.
+   * @param createSingletonServices - A function that creates singleton services for the application.
+   * @param createSessionServices - A function that creates session-specific services for each request.
+   */
   constructor(
     private readonly config: CoreConfig,
     private readonly createSingletonServices: (
@@ -35,6 +47,14 @@ export class VrameworkNextJS {
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {}
 
+  /**
+   * Handles an action request, routing it to the appropriate handler.
+   *
+   * @param route - The route to handle.
+   * @param method - The HTTP method for the request.
+   * @param data - The data to be sent with the request.
+   * @returns A promise that resolves to the response data.
+   */
   public async actionRequest<In extends Record<string, any>, Out>(
     route: unknown,
     method: unknown,
@@ -53,6 +73,14 @@ export class VrameworkNextJS {
     )
   }
 
+  /**
+   * Handles a static action request, routing it to the appropriate handler with user session skipping.
+   *
+   * @param route - The route to handle.
+   * @param method - The HTTP method for the request.
+   * @param data - The data to be sent with the request.
+   * @returns A promise that resolves to the response data.
+   */
   public async staticActionRequest<In extends Record<string, any>, Out>(
     route: unknown,
     method: unknown,
@@ -72,6 +100,16 @@ export class VrameworkNextJS {
     )
   }
 
+  /**
+   * Handles an SSR request, routing it to the appropriate handler.
+   *
+   * @param request - The incoming message request object.
+   * @param response - The server response object.
+   * @param route - The route to handle.
+   * @param method - The HTTP method for the request.
+   * @param data - The data to be sent with the request.
+   * @returns A promise that resolves to the response data.
+   */
   public async ssrRequest<In extends Record<string, any>, Out>(
     request: IncomingMessage & {
       cookies: Partial<{ [key: string]: string }>
@@ -94,6 +132,14 @@ export class VrameworkNextJS {
     )
   }
 
+  /**
+   * Handles an API request, routing it to the appropriate handler.
+   *
+   * @param request - The Next.js API request object.
+   * @param response - The Next.js API response object.
+   * @param route - The route to handle.
+   * @param method - The HTTP method for the request.
+   */
   public async apiRequest<In extends Record<string, any>, Out>(
     request: NextApiRequest,
     response: NextApiResponse,
@@ -116,6 +162,11 @@ export class VrameworkNextJS {
     )
   }
 
+  /**
+   * Retrieves the singleton services, ensuring they are only created once.
+   *
+   * @returns A promise that resolves to the singleton services.
+   */
   private async getSingletonServices(): Promise<CoreSingletonServices> {
     if (this.singletonServices) {
       return this.singletonServices

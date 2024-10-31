@@ -60,6 +60,7 @@ const validateAllSchemasLoaded = (logger: Logger) => {
  * Adds a schema to the global schemas map.
  * @param name - The name of the schema.
  * @param value - The schema value.
+ * @ignore
  */
 export const addSchema = (name: string, value: any) => {
   getSchemas().set(name, value)

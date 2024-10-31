@@ -1,7 +1,11 @@
+/**
+ * The server cannot or will not process the request due to client error (e.g., malformed request syntax).
+ */
 import { addError, EError } from './error-handler.js'
 
 /**
  * The server cannot or will not process the request due to client error (e.g., malformed request syntax).
+ * @group Error
  */
 export class BadRequestError extends EError {}
 addError(BadRequestError, {
@@ -12,9 +16,18 @@ addError(BadRequestError, {
 
 /**
  * Authentication is required and has failed or has not yet been provided.
+ * @group Error
  */
 export class UnauthorizedError extends EError {}
+/**
+ * More specific error to why it's unauthorized.
+ * @group Error
+ */
 export class MissingSessionError extends EError {}
+/**
+ * More specific error to why it's unauthorized.
+ * @group Error
+ */
 export class InvalidSessionError extends EError {}
 
 addError(UnauthorizedError, {
@@ -30,6 +43,7 @@ addError(InvalidSessionError, {
 
 /**
  * Reserved for future use, often related to digital payment or subscription services.
+ * @group Error
  */
 export class PaymentRequiredError extends EError {}
 addError(PaymentRequiredError, {
@@ -40,6 +54,7 @@ addError(PaymentRequiredError, {
 
 /**
  * The client does not have permission to access the requested resource.
+ * @group Error
  */
 export class ForbiddenError extends EError {}
 addError(ForbiddenError, {
@@ -50,6 +65,7 @@ addError(ForbiddenError, {
 
 /**
  * The request was made from an origin that is not permitted to access this resource.
+ * @group Error
  */
 export class InvalidOriginError extends EError {}
 addError(InvalidOriginError, {
@@ -60,8 +76,13 @@ addError(InvalidOriginError, {
 
 /**
  * The server cannot find the requested resource.
+ * @group Error
  */
 export class NotFoundError extends EError {}
+/**
+ * The server cannot find the requested route.
+ * @group Error
+ */
 export class RouteNotFoundError extends EError {}
 addError(NotFoundError, {
   status: 404,
@@ -74,6 +95,7 @@ addError(RouteNotFoundError, {
 
 /**
  * The request method is known by the server but is not supported by the resource.
+ * @group Error
  */
 export class MethodNotAllowedError extends EError {}
 addError(MethodNotAllowedError, {
@@ -84,6 +106,7 @@ addError(MethodNotAllowedError, {
 
 /**
  * The requested resource cannot produce a response matching the list of acceptable values in the request's headers.
+ * @group Error
  */
 export class NotAcceptableError extends EError {}
 addError(NotAcceptableError, {
@@ -94,6 +117,7 @@ addError(NotAcceptableError, {
 
 /**
  * The client must authenticate itself to get the requested response.
+ * @group Error
  */
 export class ProxyAuthenticationRequiredError extends EError {}
 addError(ProxyAuthenticationRequiredError, {
@@ -103,6 +127,7 @@ addError(ProxyAuthenticationRequiredError, {
 
 /**
  * The server did not receive a timely response from an upstream server.
+ * @group Error
  */
 export class RequestTimeoutError extends EError {}
 addError(RequestTimeoutError, {
@@ -113,6 +138,7 @@ addError(RequestTimeoutError, {
 
 /**
  * The request could not be completed due to a conflict with the current state of the target resource.
+ * @group Error
  */
 export class ConflictError extends EError {}
 addError(ConflictError, {
@@ -123,6 +149,7 @@ addError(ConflictError, {
 
 /**
  * The resource that is being accessed is no longer available and will not be available again.
+ * @group Error
  */
 export class GoneError extends EError {}
 addError(GoneError, {
@@ -133,6 +160,7 @@ addError(GoneError, {
 
 /**
  * The request did not specify the length of its content, which is required by the requested resource.
+ * @group Error
  */
 export class LengthRequiredError extends EError {}
 addError(LengthRequiredError, {
@@ -143,6 +171,7 @@ addError(LengthRequiredError, {
 
 /**
  * The server does not meet one of the preconditions that the requester put on the request.
+ * @group Error
  */
 export class PreconditionFailedError extends EError {}
 addError(PreconditionFailedError, {
@@ -153,6 +182,7 @@ addError(PreconditionFailedError, {
 
 /**
  * The request is larger than the server is willing or able to process.
+ * @group Error
  */
 export class PayloadTooLargeError extends EError {}
 addError(PayloadTooLargeError, {
@@ -163,6 +193,7 @@ addError(PayloadTooLargeError, {
 
 /**
  * The URI requested by the client is longer than the server is willing to interpret.
+ * @group Error
  */
 export class URITooLongError extends EError {}
 addError(URITooLongError, {
@@ -173,6 +204,7 @@ addError(URITooLongError, {
 
 /**
  * The server does not support the media format of the requested data.
+ * @group Error
  */
 export class UnsupportedMediaTypeError extends EError {}
 addError(UnsupportedMediaTypeError, {
@@ -183,6 +215,7 @@ addError(UnsupportedMediaTypeError, {
 
 /**
  * The client has asked for a portion of the file, but the server cannot supply that portion.
+ * @group Error
  */
 export class RangeNotSatisfiableError extends EError {}
 addError(RangeNotSatisfiableError, {
@@ -193,6 +226,7 @@ addError(RangeNotSatisfiableError, {
 
 /**
  * The server cannot meet the requirements of the Expect request-header field.
+ * @group Error
  */
 export class ExpectationFailedError extends EError {}
 addError(ExpectationFailedError, {
@@ -203,6 +237,7 @@ addError(ExpectationFailedError, {
 
 /**
  * The user has sent too many requests in a given amount of time ("rate limiting").
+ * @group Error
  */
 export class TooManyRequestsError extends EError {}
 addError(TooManyRequestsError, {
@@ -213,6 +248,7 @@ addError(TooManyRequestsError, {
 
 /**
  * A generic error message, given when no more specific message is suitable.
+ * @group Error
  */
 export class InternalServerError extends EError {}
 addError(InternalServerError, {
@@ -223,6 +259,7 @@ addError(InternalServerError, {
 
 /**
  * The server does not recognize the request method and cannot support it.
+ * @group Error
  */
 export class NotImplementedError extends EError {}
 addError(NotImplementedError, {
@@ -233,6 +270,7 @@ addError(NotImplementedError, {
 
 /**
  * The server was acting as a gateway or proxy and received an invalid response from the upstream server.
+ * @group Error
  */
 export class BadGatewayError extends EError {}
 addError(BadGatewayError, {
@@ -243,6 +281,7 @@ addError(BadGatewayError, {
 
 /**
  * The server is currently unavailable (overloaded or down).
+ * @group Error
  */
 export class ServiceUnavailableError extends EError {}
 addError(ServiceUnavailableError, {
@@ -252,6 +291,7 @@ addError(ServiceUnavailableError, {
 
 /**
  * The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.
+ * @group Error
  */
 export class GatewayTimeoutError extends EError {}
 addError(GatewayTimeoutError, {
@@ -262,6 +302,7 @@ addError(GatewayTimeoutError, {
 
 /**
  * The server does not support the HTTP protocol version used in the request.
+ * @group Error
  */
 export class HTTPVersionNotSupportedError extends EError {}
 addError(HTTPVersionNotSupportedError, {
@@ -272,6 +313,7 @@ addError(HTTPVersionNotSupportedError, {
 
 /**
  * The server took too long to complete the request, reaching the maximum compute time allowed.
+ * @group Error
  */
 export class MaxComputeTimeReachedError extends EError {}
 addError(MaxComputeTimeReachedError, {

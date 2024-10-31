@@ -11,6 +11,16 @@ import { VrameworkUWSResponse } from './vramework-uws-response.js'
 import { logRoutes as logRegisterRoutes } from '@vramework/core/log-routes'
 import { loadAllSchemas } from '@vramework/core/schema'
 
+/**
+ * Options for configuring the `vrameworkHandler`.
+ *
+ * @typedef {Object} VrameworkuWSHandlerOptions
+ * @property {CoreSingletonServices} singletonServices - The singleton services used by the handler.
+ * @property {CreateSessionServices<any, any, any>} createSessionServices - A function to create session services.
+ * @property {boolean} [logRoutes] - Whether to log the routes.
+ * @property {boolean} [loadSchemas] - Whether to load all schemas.
+ * @property {RunRouteOptions} - Additional options for running the route.
+ */
 export type VrameworkuWSHandlerOptions = {
   singletonServices: CoreSingletonServices
   createSessionServices: CreateSessionServices<any, any, any>
@@ -18,6 +28,12 @@ export type VrameworkuWSHandlerOptions = {
   loadSchemas?: boolean
 } & RunRouteOptions
 
+/**
+ * Creates a uWebSockets handler for handling requests using the `@vramework/core` framework.
+ *
+ * @param {VrameworkuWSHandlerOptions} options - The options to configure the handler.
+ * @returns {Function} - The request handler function.
+ */
 export const vrameworkHandler = ({
   logRoutes,
   singletonServices,

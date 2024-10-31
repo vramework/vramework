@@ -63,10 +63,17 @@ export const clearRoutes = () => {
   routes = []
 }
 
+/**
+ * @ignore
+ */
 export const addRouteMeta = (_routeMeta: RoutesMeta) => {
   routesMeta = _routeMeta
 }
 
+/**
+ * Returns all the registered routes and associated metadata.
+ * @internal
+ */
 export const getRoutes = () => {
   return {
     routes,
@@ -116,6 +123,9 @@ export const getUserSession = async <UserSession extends CoreUserSession>(
   return undefined
 }
 
+/**
+ * @ignore
+ */
 export const runRoute = async <In, Out>(
   request: VrameworkRequest<In>,
   response: VrameworkResponse,
