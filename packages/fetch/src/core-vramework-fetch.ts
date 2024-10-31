@@ -8,19 +8,45 @@ type AuthHeaders = {
 
 export type HTTPMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'HEAD' | 'PUT'
 
+/**
+ * Options for configuring the `CoreVrameworkFetch` utility.
+ *
+ * @typedef {Object} CoreVrameworkFetchOptions
+ * @property {boolean} [transformDate] - Whether to transform date-like strings in the response to `Date` objects.
+ * @property {string} [serverUrl] - The base server URL for requests.
+ * @property {AuthHeaders} [authHeaders] - Authorization headers, including JWT or API key.
+ * @property {RequestInit['cache']} [cache] - The cache mode for the request.
+ * @property {RequestInit['credentials']} [credentials] - The credentials mode for the request.
+ * @property {RequestInit['mode']} [mode] - The mode for the request.
+ */
 export type CoreVrameworkFetchOptions = {
   transformDate?: boolean
   serverUrl?: string
   authHeaders?: AuthHeaders
 } & Pick<RequestInit, 'cache' | 'credentials' | 'mode'>
 
+/**
+ * The `CoreVrameworkFetch` class provides a utility for making HTTP requests, including handling authorization,
+ * transforming dates in responses, and managing server URLs. This class is designed to simplify API interactions
+ * with configurable options and support for JWT and API key-based authentication.
+ */
 export class CoreVrameworkFetch {
   private authHeaders: AuthHeaders = { jwt: undefined, apiKey: undefined }
 
+  /**
+   * Constructs a new instance of the `CoreVrameworkFetch` class.
+   *
+   * @param {CoreVrameworkFetchOptions} options - Optional configuration for the fetch utility.
+   */
   constructor(private options: CoreVrameworkFetchOptions = {}) {
     this.authHeaders = options.authHeaders || {}
   }
 
+  /**
+   * Generates the headers for the request, including authorization headers if set.
+   *
+   * @returns {Record<string, string>} - The headers for the request.
+   */
   private getHeaders(): Record<string, string> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -33,18 +59,43 @@ export class CoreVrameworkFetch {
     return headers
   }
 
+  /**
+   * Sets the server URL for subsequent requests.
+   *
+   * @param {string} serverUrl - The server URL to be set.
+   */
   public async setServerUrl(serverUrl: string): Promise<void> {
     this.options.serverUrl = serverUrl
   }
 
+  /**
+   * Sets the JWT for authorization.
+   *
+   * @param {string} jwt - The JWT to be used for authorization.
+   */
   public setAuthorizationJWT(jwt: string): void {
     this.authHeaders.jwt = jwt
   }
 
+  /**
+   * Sets the API key for authorization.
+   *
+   * @param {string} [apiKey] - The API key to be used for authorization.
+   */
   public setAPIKey(apiKey?: string): void {
     this.authHeaders.apiKey = apiKey
   }
 
+  /**
+   * Makes an API request with the specified URI, method, and data, and optionally transforms dates in the response.
+   *
+   * @param {string} uri - The endpoint URI for the request.
+   * @param {HTTPMethod} method - The HTTP method for the request.
+   * @param {any} data - The data to be sent with the request.
+   * @param {RequestInit} [options] - Additional options for the request.
+   * @returns {Promise<any>} - A promise that resolves to the response data.
+   * @throws {Response} - Throws the response if the status code is greater than 400.
+   */
   public async api(
     uri: string,
     method: HTTPMethod,
@@ -64,6 +115,15 @@ export class CoreVrameworkFetch {
     }
   }
 
+  /**
+   * Makes a raw fetch request with the specified URI, method, and data.
+   *
+   * @param {string} uri - The endpoint URI for the request.
+   * @param {HTTPMethod} method - The HTTP method for the request.
+   * @param {any} data - The data to be sent with the request.
+   * @param {RequestInit} [options] - Additional options for the request.
+   * @returns {Promise<Response>} - A promise that resolves to the fetch response.
+   */
   public async fetch(
     uri: string,
     method: HTTPMethod,
@@ -82,12 +142,23 @@ export class CoreVrameworkFetch {
     })
   }
 
+  /**
+   * Verifies that the server URL is set before making a request.
+   *
+   * @throws {Error} - Throws an error if the server URL is not set.
+   */
   private verifyServerUrlSet() {
     if (!this.options.serverUrl) {
       throw new Error('Server url is not set')
     }
   }
 
+  /**
+   * Transforms date-like strings in the response data into `Date` objects if the `transformDate` option is set.
+   *
+   * @param {any} data - The data to transform.
+   * @returns {any} - The transformed data.
+   */
   private transformDates(data: any): any {
     if (!this.options.transformDate) {
       return data

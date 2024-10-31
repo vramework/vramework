@@ -21,7 +21,8 @@ import { logRoutes } from '@vramework/core/log-routes'
  * @property {CreateSessionServices<any, any, any>} vramework.createSessionServices - A function to create session services for each request.
  * @property {boolean} [vramework.logRoutes] - Whether to log the routes.
  * @property {boolean} [vramework.loadSchemas] - Whether to load all schemas.
- * @property {RunRouteOptions} vramework - Additional options for running the route.
+ * @property {boolean} [vramework.skipUserSession] - Whether to skip user session creation for this route.
+ * @property {boolean} [vramework.respondWith404] - Whether to respond with a 404 status if the route is not found.
  */
 export type VrameworkFastifyPluginOptions = {
   vramework: {

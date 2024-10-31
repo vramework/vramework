@@ -1,3 +1,12 @@
+/**
+ * The `coreVrameworkFetch` function is a utility for making HTTP requests with dynamic URI and data handling.
+ * It can automatically replace URI parameters, append query strings for GET requests, and set the request body for POST, PATCH, or PUT requests.
+ *
+ * @param {string} uri - The endpoint URI for the request. URI parameters can be specified using `:param` syntax.
+ * @param {any} data - The data to be included in the request, either as query parameters or as the request body.
+ * @param {Omit<RequestInit, 'body'>} [options] - Optional configuration options for the fetch request, excluding the body.
+ * @returns {Promise<Response>} - A promise that resolves to the response of the fetch request.
+ */
 export const coreVrameworkFetch = async (
   uri: string,
   data: any,
