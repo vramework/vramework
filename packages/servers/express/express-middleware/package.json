@@ -1,6 +1,6 @@
 {
   "name": "@vramework/express-middleware",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "The vramework express middleware",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -33,13 +33,13 @@
   "peerDependencies": {
     "@types/express": "^5",
     "@types/express-serve-static-core": "^5.0.0",
-    "@vramework/core": "^0.5.8",
+    "@vramework/core": "^0.5.9",
     "express": "^5"
   },
   "devDependencies": {
     "@types/express": "^5",
     "@types/express-serve-static-core": "^5.0.0",
-    "@vramework/core": "^0.5.8",
+    "@vramework/core": "^0.5.9",
     "express": "^5",
     "typescript": "^5.6.3"
   },
