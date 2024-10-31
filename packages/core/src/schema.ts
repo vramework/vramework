@@ -87,7 +87,6 @@ export const loadSchema = (schema: string, logger: Logger): void => {
 
 /**
  * Loads a schema and compiles it into a validator.
- * @param schema - The name of the schema to load.
  * @param logger - A logger for logging information.
  */
 export const loadAllSchemas = (logger: Logger): void => {

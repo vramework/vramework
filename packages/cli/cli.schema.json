@@ -147,7 +147,7 @@
         "fetchFile": {
           "type": "string"
         },
-        "nextDeclarationFile": {
+        "nextJSfile": {
           "type": "string"
         },
         "openAPI": {

@@ -17,7 +17,7 @@ import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 
 export const vrameworkNext = async (
   {
-    nextDeclarationFile,
+    nextJSfile,
     routesFile,
     routesMapDeclarationFile,
     schemaDirectory,
@@ -30,8 +30,8 @@ export const vrameworkNext = async (
     'Generating nextjs wrapper',
     'Generated nextjs wrapper',
     async () => {
-      if (!nextDeclarationFile) {
-        throw new Error('vrameworkNextFile is required in vramework config')
+      if (!nextJSfile) {
+        throw new Error('nextJSfile is required in vramework config')
       }
 
       const {
@@ -41,26 +41,26 @@ export const vrameworkNext = async (
       } = await getVrameworkFilesAndMethods(
         visitState,
         packageMappings,
-        nextDeclarationFile,
+        nextJSfile,
         options
       )
 
-      const vrameworkConfigImport = `import { ${vrameworkConfig.variable} as config } from '${getFileImportRelativePath(nextDeclarationFile, vrameworkConfig.file, packageMappings)}'`
-      const singletonServicesImport = `import { ${singletonServicesFactory.variable} as createSingletonServices } from '${getFileImportRelativePath(nextDeclarationFile, singletonServicesFactory.file, packageMappings)}'`
-      const sessionServicesImport = `import { ${sessionServicesFactory.variable} as createSessionServices } from '${getFileImportRelativePath(nextDeclarationFile, sessionServicesFactory.file, packageMappings)}'`
+      const vrameworkConfigImport = `import { ${vrameworkConfig.variable} as config } from '${getFileImportRelativePath(nextJSfile, vrameworkConfig.file, packageMappings)}'`
+      const singletonServicesImport = `import { ${singletonServicesFactory.variable} as createSingletonServices } from '${getFileImportRelativePath(nextJSfile, singletonServicesFactory.file, packageMappings)}'`
+      const sessionServicesImport = `import { ${sessionServicesFactory.variable} as createSessionServices } from '${getFileImportRelativePath(nextJSfile, sessionServicesFactory.file, packageMappings)}'`
 
       const routesPath = getFileImportRelativePath(
-        nextDeclarationFile,
+        nextJSfile,
         routesFile,
         packageMappings
       )
       const routesMapDeclarationPath = getFileImportRelativePath(
-        nextDeclarationFile,
+        nextJSfile,
         routesMapDeclarationFile,
         packageMappings
       )
       const schemasPath = getFileImportRelativePath(
-        nextDeclarationFile,
+        nextJSfile,
         `${schemaDirectory}/register.ts`,
         packageMappings
       )
@@ -73,7 +73,7 @@ export const vrameworkNext = async (
         singletonServicesImport,
         sessionServicesImport
       )
-      await writeFileInDir(nextDeclarationFile, content)
+      await writeFileInDir(nextJSfile, content)
     }
   )
 }
@@ -82,7 +82,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
   const cliConfig = await getVrameworkCLIConfig(
     options.config,
-    ['rootDir', 'schemaDirectory', 'configDir', 'nextDeclarationFile'],
+    ['rootDir', 'schemaDirectory', 'configDir', 'nextJSfile'],
     true
   )
   const visitState = await inspectorGlob(

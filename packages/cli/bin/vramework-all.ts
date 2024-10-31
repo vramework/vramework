@@ -46,7 +46,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
 
   await vrameworkSchemas(cliConfig, visitState)
 
-  if (cliConfig.nextDeclarationFile) {
+  if (cliConfig.nextJSfile) {
     await vrameworkNext(cliConfig, visitState, options)
   }
 

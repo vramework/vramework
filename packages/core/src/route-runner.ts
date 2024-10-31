@@ -13,11 +13,12 @@ import {
   CreateSessionServices,
 } from './types/core.types.js'
 import { match } from 'path-to-regexp'
-import { v4 as uuid } from 'uuid'
 import { VrameworkRequest } from './vramework-request.js'
 import { VrameworkResponse } from './vramework-response.js'
 import { SessionService } from './services/index.js'
 import { RouteNotFoundError, NotImplementedError } from './errors.js'
+import * as cryptoImp from 'crypto'
+const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
@@ -220,8 +221,8 @@ export const runRoute = async <In, Out>(
       }
       throw e
     }
-
-    const errorId = e.errorId || uuid()
+ 
+    const errorId: string = e.errorId || crypto.randomUUID().toString()
     const errorResponse = getErrorResponse(e)
 
     if (errorResponse != null) {

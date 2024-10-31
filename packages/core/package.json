@@ -35,9 +35,7 @@
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "cookie": "^1.0.1",
-    "eventemitter3": "^5.0.1",
-    "path-to-regexp": "^8.2.0",
-    "uuid": "^10.0.0"
+    "path-to-regexp": "^8.2.0"
   },
   "devDependencies": {
     "@types/chai-as-promised": "^8",

@@ -23,7 +23,7 @@ export type VrameworkCLIConfig = {
   configDir: string
   tsconfig: string
 
-  nextDeclarationFile?: string
+  nextJSfile?: string
   fetchFile?: string
 
   openAPI?: {
@@ -32,7 +32,7 @@ export type VrameworkCLIConfig = {
   }
 } & VrameworkCLICoreOutputFiles
 
-const CONFIG_DIR_FILES = ['nextDeclarationFile', 'fetchFile']
+const CONFIG_DIR_FILES = ['nextJSfile', 'fetchFile']
 
 export const getVrameworkCLIConfig = async (
   configFile: string | undefined = undefined,

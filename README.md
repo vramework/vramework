@@ -8,4 +8,4 @@
 - Attach permissions logic to and/or different scenarios.
 - Deploy via serverless, express or even within nextJS (coming soon).
 
-See the documentation [here](https://vramework.io)
+See the documentation [here](https://vramework.dev)
