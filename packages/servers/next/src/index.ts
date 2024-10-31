@@ -1,3 +1,7 @@
+/**
+ * @module @vramework/next
+ */
+
 export * from './vramework-action-next-request.js'
 export * from './vramework-action-next-response.js'
 export * from './vramework-api-next-request.js'

@@ -1,3 +1,7 @@
+/**
+ * @module @vramework/fetch
+ */
+
 export {
   CoreVrameworkFetch,
   CoreVrameworkFetchOptions,
