@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.24
+
+### Patch Changes
+
+- 2307831: fix: removing unused import
+
 ## 0.5.23
 
 ### Patch Changes
