@@ -25,14 +25,16 @@ export class VrameworkFetch {
         Route extends keyof RoutesMap,
         Method extends keyof RoutesMap[Route]
     >(route: Route, method: Method, data: RouteHandlerOf<Route, Method>['input'], options?: Omit<RequestInit, 'body'>): Promise<RouteHandlerOf<Route, Method>['output']> {
-        return this.client.api(route, method as unknown as HTTPMethod, data, options)
+        // Using patch lower case seems to not work sometimes in certain tests
+        // But uppercasing does
+        return this.client.api(route, (method.toString()).toUpperCase() as any, data, options)
     }
 
     public async fetch<
         Route extends keyof RoutesMap,
         Method extends keyof RoutesMap[Route]
     >(route: Route, method: Method, data: RouteHandlerOf<Route, Method>['input'], options?: Omit<RequestInit, 'body'>): Promise<Response> {
-        return this.client.fetch(route, method as unknown as HTTPMethod, data, options)
+        return this.client.fetch(route, (method.toString()).toUpperCase() as any, data, options)
     }
 }
 

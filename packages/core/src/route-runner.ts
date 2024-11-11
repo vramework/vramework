@@ -159,7 +159,7 @@ export const runRoute = async <In, Out>(
     request.setParams(params)
 
     services.logger.info(
-      `Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${(!!route.auth).toString()}`
+      `Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${(!(route.auth === false)).toString()}`
     )
 
     if (skipUserSession && route.auth !== false) {
