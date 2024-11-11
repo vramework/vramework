@@ -34,7 +34,8 @@ export type AssertRouteParams<In, Route extends string> =
 
 export type RunRouteOptions = Partial<{
   skipUserSession: boolean
-  respondWith404: boolean
+  respondWith404: boolean,
+  logWarningsForStatusCodes: number[]
 }>
 
 let routes: CoreAPIRoutes = []
@@ -141,6 +142,7 @@ export const runRoute = async <In, Out>(
     method: apiType,
     skipUserSession = false,
     respondWith404 = true,
+    logWarningsForStatusCodes = [],  
   }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> &
     RunRouteOptions
 ): Promise<Out> => {
@@ -222,24 +224,29 @@ export const runRoute = async <In, Out>(
       throw e
     }
  
-    const errorId: string = e.errorId || crypto.randomUUID().toString()
     const errorResponse = getErrorResponse(e)
+    const trackerId: string = e.errorId || crypto.randomUUID().toString()
 
     if (errorResponse != null) {
+
+
       response.setStatus(errorResponse.status)
 
       response.setJson({
         message: errorResponse.message,
         payload: (e as any).payload,
-        errorId,
+        traceId: trackerId
       })
 
-      services.logger.warn(`Warning id: ${errorId}`)
-      services.logger.warn(e)
+      if (logWarningsForStatusCodes.includes(errorResponse.status)) {
+        services.logger.warn(`Warning id: ${trackerId}`)
+        services.logger.warn(e)
+      }
     } else {
+      services.logger.warn(`Error id: ${trackerId}`)
       services.logger.error(e)
       response.setStatus(500)
-      response.setJson({ errorId })
+      response.setJson({ errorId: trackerId })
     }
 
     throw e

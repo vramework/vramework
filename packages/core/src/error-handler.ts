@@ -36,7 +36,7 @@ const apiErrors = new Map<any, ErrorDetails>([])
  * @param details - The details of the error.
  */
 export const addError = (
-  error: typeof Error | typeof EError,
+  error: any,
   { status, message }: ErrorDetails
 ) => {
   apiErrors.set(error, { status, message })
