@@ -1,5 +1,5 @@
 export const serializeFetchWrapper = (routesMapPath: string) => {
-  return `import { CoreVrameworkFetch, HTTPMethod, CoreVrameworkFetchOptions } from '@vramework/fetch'
+  return `import { CoreVrameworkFetch, CoreVrameworkFetchOptions } from '@vramework/fetch'
 
 import type { RoutesMap, RouteHandlerOf } from '${routesMapPath}'
 
