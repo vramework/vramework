@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.13
+
+### Patch Changes
+
+- 30b46aa: fix: looks like using patch lowercase breaks the node fetch client sometimes
+
 ## 0.5.12
 
 ### Patch Changes

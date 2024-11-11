@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.23
+
+### Patch Changes
+
+- 30b46aa: fix: looks like using patch lowercase breaks the node fetch client sometimes
+- Updated dependencies [30b46aa]
+  - @vramework/core@0.5.13
+
 ## 0.5.22
 
 ### Patch Changes
