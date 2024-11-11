@@ -45,20 +45,6 @@ export interface CoreConfig {
 }
 
 /**
- * Interface for server-specific configuration settings that extend `CoreConfig`.
- */
-export type CoreServerConfig = CoreConfig & {
-    /** The port on which the server should listen. */
-    port: number;
-    /** The hostname for the server. */
-    hostname: string;
-    /** The path for health checks (optional). */
-    healthCheckPath?: string;
-    /** Limits for the server, e.g., memory or request limits (optional). */
-    limits?: Partial<Record<string, string>>;
-};
-
-/**
  * Represents a core user session, which can be extended for more specific session information.
  */
 export interface CoreUserSession {}
@@ -108,7 +94,7 @@ export type CreateSessionServices<SingletonServices extends CoreSingletonService
 /**
  * Defines a function type for creating config.
  */
-export type CreateConfig<Config extends CoreServerConfig> = () => Promise<Config>;
+export type CreateConfig<Config extends CoreConfig> = () => Promise<Config>;
 
 /**
  * Represents a query object for Vramework, where each key can be a string, a value, or an array of values.

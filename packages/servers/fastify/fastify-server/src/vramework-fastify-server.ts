@@ -1,11 +1,20 @@
 import Fastify from 'fastify'
 
 import {
-  CoreServerConfig,
+  CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
 import vrameworkFastifyPlugin from '@vramework/fastify-plugin'
+
+export type FastifyCoreConfig = CoreConfig & {
+  /** The port on which the server should listen. */
+  port: number;
+  /** The hostname for the server. */
+  hostname: string;
+  /** The path for health checks (optional). */
+  healthCheckPath?: string;
+};
 
 /**
  * The `VrameworkFastifyServer` class provides a Fastify server integrated with the Vramework framework.
@@ -24,7 +33,7 @@ export class VrameworkFastifyServer {
    * @param createSessionServices - Function to create session services for each request.
    */
   constructor(
-    private readonly config: CoreServerConfig,
+    private readonly config: FastifyCoreConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {}

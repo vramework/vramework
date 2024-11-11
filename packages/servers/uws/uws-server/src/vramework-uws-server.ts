@@ -1,12 +1,21 @@
 import * as uWS from 'uWebSockets.js'
 
 import {
-  CoreServerConfig,
+  CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
 
 import { vrameworkHandler } from '@vramework/uws-handler'
+
+export type UWSCoreConfig = CoreConfig & {
+  /** The port on which the server should listen. */
+  port: number;
+  /** The hostname for the server. */
+  hostname: string;
+  /** The path for health checks (optional). */
+  healthCheckPath?: string;
+};
 
 /**
  * Class representing a uWebSockets.js-based server for Vramework.
@@ -27,7 +36,7 @@ export class VrameworkUWSServer {
    * @param createSessionServices - Function to create session services for each request.
    */
   constructor(
-    private readonly config: CoreServerConfig,
+    private readonly config: UWSCoreConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {}

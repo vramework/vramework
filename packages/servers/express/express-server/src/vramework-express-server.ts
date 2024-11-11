@@ -15,18 +15,32 @@ const cors = 'default' in corsImp ? (corsImp.default as any) : corsImp
 import { CorsOptions, CorsOptionsDelegate } from 'cors'
 
 import {
+  CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
-  CoreServerConfig,
 } from '@vramework/core/types/core.types'
 import { vrameworkMiddleware } from '@vramework/express-middleware'
+
+/**
+ * Interface for server-specific configuration settings that extend `CoreConfig`.
+ */
+export type ExpressCoreConfig = CoreConfig & {
+  /** The port on which the server should listen. */
+  port: number;
+  /** The hostname for the server. */
+  hostname: string;
+  /** The path for health checks (optional). */
+  healthCheckPath?: string;
+  /** Limits for the server, e.g., memory or request limits (optional). */
+  limits?: Partial<Record<string, string>>;
+};
 
 export class VrameworkExpressServer {
   public app: core.Express = express()
   private server: Server | undefined
 
   constructor(
-    private readonly config: CoreServerConfig,
+    private readonly config: ExpressCoreConfig,
     private readonly singletonServices: CoreSingletonServices,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {
