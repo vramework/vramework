@@ -35,5 +35,7 @@ export class VrameworkFetch {
         return this.client.fetch(route, method as unknown as HTTPMethod, data, options)
     }
 }
+
+export const vrameworkFetch = new VrameworkFetch()
 `
 }
