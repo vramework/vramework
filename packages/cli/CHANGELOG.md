@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.22
+
+### Patch Changes
+
+- f8aa99f: feat: export vrameworkFetch instance to avoid needing a singleton class
+- Updated dependencies [ff8a563]
+  - @vramework/core@0.5.12
+
 ## 0.5.21
 
 ### Patch Changes

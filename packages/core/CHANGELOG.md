@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.12
+
+### Patch Changes
+
+- ff8a563: feat: only log warning errors for status codes we care about
+
 ## 0.5.11
 
 ### Patch Changes
