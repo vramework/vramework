@@ -10,7 +10,7 @@ import { getRoutes } from './route-runner.js'
 
 const ajv = new Ajv({
   removeAdditional: false,
-  coerceTypes: false,
+  coerceTypes: true,
 })
 addFormats.default(ajv as any)
 
