@@ -18,12 +18,12 @@ export type JSONValue = JSONPrimitive | JSONValue[] | {
 /**
  * Utility type for making certain keys required and leaving the rest as optional.
  */
-export type PickRequired<T, K extends keyof T> = Pick<T, K> & Partial<T>;
+export type PickRequired<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
 /**
  * Utility type for making certain keys optional while keeping the rest required.
  */
-export type PickOptional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
+export type PickOptional<T, K extends keyof T> = Partial<T> & Pick<T, K>;
 
 /**
  * Utility type that ensures at least one key in the given type `T` is required.
@@ -101,9 +101,14 @@ export type CoreServices<SingletonServices = CoreSingletonServices> = SingletonS
 export type CreateSingletonServices<Config extends CoreConfig, SingletonServices extends CoreSingletonServices> = (config: Config, ...args: any[]) => Promise<SingletonServices>;
 
 /**
- * Defines a function type for creating session-specific services, excluding certain services from the core services.
+ * Defines a function type for creating session-specific services.
  */
 export type CreateSessionServices<SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices<SingletonServices>> = (services: SingletonServices, interaction: VrameworkInteraction, session: UserSession | undefined) => Promise<Omit<Services, keyof SingletonServices | keyof VrameworkInteraction>>;
+
+/**
+ * Defines a function type for creating config.
+ */
+export type CreateConfig<Config extends CoreServerConfig> = () => Promise<Config>;
 
 /**
  * Represents a query object for Vramework, where each key can be a string, a value, or an array of values.

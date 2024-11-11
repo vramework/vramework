@@ -1,5 +1,4 @@
 import * as ts from 'typescript'
-import { addFileWithConfig } from './add-file-with-config.js'
 import { addFileWithFactory } from './add-file-with-factory.js'
 import { ImportMap } from './inspector.js'
 import { addFileExtendsCoreType } from './add-file-extends-core-type.js'
@@ -22,7 +21,7 @@ export interface VisitState {
   filesWithRoutes: Set<string>
   singletonServicesFactories: PathToNameAndType
   sessionServicesFactories: PathToNameAndType
-  vrameworkConfigs: PathToNameAndType
+  configFactories: PathToNameAndType
 }
 
 export const visit = (
@@ -44,8 +43,6 @@ export const visit = (
     'CoreUserSession'
   )
 
-  addFileWithConfig(node, checker, state.vrameworkConfigs)
-
   addFileWithFactory(
     node,
     checker,
@@ -58,6 +55,13 @@ export const visit = (
     checker,
     state.sessionServicesFactories,
     'CreateSessionServices'
+  )
+
+  addFileWithFactory(
+    node,
+    checker,
+    state.configFactories,
+    'CreateConfig'
   )
 
   addRoute(node, checker, state)

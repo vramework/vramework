@@ -28,7 +28,7 @@ export const inspector = (routeFiles: string[]): VisitState => {
     filesWithRoutes: new Set<string>(),
     singletonServicesFactories: new Map(),
     sessionServicesFactories: new Map(),
-    vrameworkConfigs: new Map(),
+    configFactories: new Map(),
   }
 
   for (const sourceFile of sourceFiles) {

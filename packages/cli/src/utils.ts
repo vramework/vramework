@@ -78,11 +78,11 @@ const getMetaTypes = (
 
 export const getVrameworkFilesAndMethods = async (
   {
-    vrameworkConfigs,
     sessionServicesTypeImportMap: httpSessionServicesTypeImportMap,
     userSessionTypeImportMap,
     sessionServicesFactories,
     singletonServicesFactories,
+    configFactories,
   }: VisitState,
   packageMappings: Record<string, string>,
   outputFile: string,
@@ -98,7 +98,7 @@ export const getVrameworkFilesAndMethods = async (
     vrameworkConfig: getMetaTypes(
       'CoreConfig',
       errors,
-      vrameworkConfigs,
+      configFactories,
       configFileType
     ),
     userSessionType: getMetaTypes(
