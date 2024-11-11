@@ -1,5 +1,13 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.11
+
+### Patch Changes
+
+- be68efb: fix: allow error handler to use errors other than EError
+- 5295380: refactor: changing config object a getConfig function
+- f24a653: feat: coerce types in ajv for correct validation / usage later on
+
 ## 0.5.10
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @vramework/cli
 
+## 0.5.21
+
+### Patch Changes
+
+- 5295380: refactor: changing config object a getConfig function
+- f24a653: feat: coerce types in ajv for correct validation / usage later on
+- Updated dependencies [be68efb]
+- Updated dependencies [5295380]
+- Updated dependencies [f24a653]
+  - @vramework/core@0.5.11
+
 ## 0.5.20
 
 ### Patch Changes
