@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.15
+
+### Patch Changes
+
+- 816eaaa: fix: don't throw an error if auth isnt required for a route
+
 ## 0.5.14
 
 ### Patch Changes
