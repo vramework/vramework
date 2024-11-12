@@ -30,3 +30,5 @@ export * from './types/routes.types.js'
 export * from './vramework-request.js'
 
 export * from './vramework-response.js'
+
+export * from './log-routes.js'
