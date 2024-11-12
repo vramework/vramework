@@ -131,7 +131,11 @@ export class CoreVrameworkFetch {
     options?: RequestInit
   ) {
     this.verifyServerUrlSet()
-    uri = `${this.options.serverUrl}/${uri}`
+    if (uri.startsWith('/')) {
+      uri = `${this.options.serverUrl}${uri}`
+    } else {
+      uri = `${this.options.serverUrl}${uri}`
+    }
 
     return await coreVrameworkFetch(uri, data, {
       ...options,
