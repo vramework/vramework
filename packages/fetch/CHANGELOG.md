@@ -1,5 +1,11 @@
 # @vramework/fetch
 
+## 0.5.4
+
+### Patch Changes
+
+- 78a17e8: fix: avoid // when concatenating serverUrl and uri
+
 ## 0.5.3
 
 ### Patch Changes
