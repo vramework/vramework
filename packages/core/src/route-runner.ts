@@ -157,12 +157,13 @@ export const runRoute = async <In, Out>(
       apiRoute
     )
     request.setParams(params)
+    const requiresSession = route.auth !== false
 
     services.logger.info(
-      `Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${(!(route.auth === false)).toString()}`
+      `Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${requiresSession.toString()}`
     )
 
-    if (skipUserSession && route.auth !== false) {
+    if (skipUserSession && requiresSession) {
       throw new Error(
         "Can't skip trying to get user session if auth is required"
       )
@@ -172,16 +173,18 @@ export const runRoute = async <In, Out>(
       try {
         session = await getUserSession(
           services.sessionService,
-          route.auth !== false,
+          requiresSession,
           request
         )
       } catch (e: any) {
-        services.logger.info({
-          action: 'Rejecting route (invalid session)',
-          path: matchedPath,
-          route,
-        })
-        throw e
+        if (requiresSession) {
+          services.logger.info({
+            action: 'Rejecting route (invalid session)',
+            path: matchedPath,
+            route,
+          })
+          throw e
+        }
       }
     }
 
