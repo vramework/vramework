@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.14
+
+### Patch Changes
+
+- 8531c5e: fix: export log routes in index since bundler can't find it
+
 ## 0.5.13
 
 ### Patch Changes
