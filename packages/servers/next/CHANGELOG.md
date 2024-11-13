@@ -1,5 +1,11 @@
 # @vramework/next
 
+## 0.5.5
+
+### Patch Changes
+
+- 69d388d: refactor: switching to use config async creator
+
 ## 0.5.4
 
 ### Patch Changes
