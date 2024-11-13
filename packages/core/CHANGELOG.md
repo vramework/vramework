@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.16
+
+### Patch Changes
+
+- 4046a85: feat: adding more error types
+
 ## 0.5.15
 
 ### Patch Changes
