@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.26
+
+### Patch Changes
+
+- b7b78bb: fix: add '& {}' to openapi interfaces as a workaround for not directly refering to a type since it confuses typescript
+
 ## 0.5.25
 
 ### Patch Changes
