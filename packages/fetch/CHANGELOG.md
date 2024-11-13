@@ -1,5 +1,11 @@
 # @vramework/fetch
 
+## 0.5.5
+
+### Patch Changes
+
+- 35d1a49: fix: server url shouldn't with a /, bug with //
+
 ## 0.5.4
 
 ### Patch Changes
