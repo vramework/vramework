@@ -15,8 +15,9 @@ export const serializeTypedRoutesMap = (
     
 ${serializeImportMap(relativeToPath, packageMappings, importMap)}
 
+// The '& {}' is a workaround for not directly refering to a type since it confuses typescript
 ${Array.from(metaTypes.entries())
-  .map(([name, schema]) => `export type ${name} = ${schema}`)
+  .map(([name, schema]) => `export type ${name} = ${schema} & {}`)
   .join('\n')}
 
 interface RouteHandler<I, O> {
