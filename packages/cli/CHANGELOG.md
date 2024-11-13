@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.25
+
+### Patch Changes
+
+- 69d388d: refactor: switching to use config async creator
+
 ## 0.5.24
 
 ### Patch Changes
