@@ -89,6 +89,9 @@ const getMatchingRoute = (
   requestPath: string
 ) => {
   for (const route of routes) {
+    // TODO: This is a performance improvement, but we could 
+    // run against all routes if we want to return a 405 method.
+    // Probably want a cache to support.
     if (route.method !== requestType.toLowerCase()) {
       continue
     }
@@ -98,6 +101,7 @@ const getMatchingRoute = (
     const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
 
     if (matchedPath) {
+      // TODO: Cache this loop as a performance improvement
       const schema = routesMeta.find(
         (routeMeta) =>
           routeMeta.method === route.method && routeMeta.route === route.route

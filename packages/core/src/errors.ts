@@ -236,6 +236,29 @@ addError(ExpectationFailedError, {
 })
 
 /**
+ * Indicates that the server understood the content type of the request content, and the syntax of the request content was correct, but it was unable to process the contained instructions.
+ * @group Error
+ */
+export class UnprocessableContentError extends EError {}
+addError(UnprocessableContentError, {
+  status: 422,
+  message:
+    'The server understood the content type of the request content, and the syntax of the request content was correct, but it was unable to process the contained instructions..',
+})
+
+
+/**
+ * Indicates that the server understood the content type of the request content, and the syntax of the request content was correct, but it was unable to process the contained instructions.
+ * @group Error
+ */
+export class LockedError extends EError {}
+addError(LockedError, {
+  status: 423,
+  message:
+    'The resource is locked, meaning it can\'t be accessed. Its response body should contain information in WebDAV\'s XML format.',
+})
+
+/**
  * The user has sent too many requests in a given amount of time ("rate limiting").
  * @group Error
  */
