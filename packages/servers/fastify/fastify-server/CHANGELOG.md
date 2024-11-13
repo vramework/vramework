@@ -1,5 +1,11 @@
 # @vramework/fastify
 
+## 0.5.7
+
+### Patch Changes
+
+- 1031878: fix: publish cjs files for fastify
+
 ## 0.5.6
 
 ### Patch Changes
