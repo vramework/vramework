@@ -14,6 +14,7 @@ import { VrameworkActionStaticNextRequest } from './vramework-action-static-next
 import {
   CoreConfig,
   CoreSingletonServices,
+  CreateConfig,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
 import { APIRouteMethod } from '@vramework/core/types/routes.types'
@@ -35,12 +36,12 @@ export class VrameworkNextJS {
   /**
    * Constructs a new instance of the `VrameworkNextJS` class.
    *
-   * @param config - The core configuration for the application.
+   * @param createConfig - A function that creates/gets the config used in vramework for the application.
    * @param createSingletonServices - A function that creates singleton services for the application.
    * @param createSessionServices - A function that creates session-specific services for each request.
    */
   constructor(
-    private readonly config: CoreConfig,
+    private readonly createConfig: CreateConfig<CoreConfig>,
     private readonly createSingletonServices: (
       config: CoreConfig
     ) => Promise<CoreSingletonServices>,
@@ -173,7 +174,8 @@ export class VrameworkNextJS {
     }
 
     if (this.readyEmitter.listenerCount('ready') === 0) {
-      this.createSingletonServices(this.config).then((singletonServices) => {
+      const config = await this.createConfig()
+      this.createSingletonServices(config).then((singletonServices) => {
         this.singletonServices = singletonServices
         this.readyEmitter.emit('ready')
       })

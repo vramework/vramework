@@ -35,7 +35,7 @@ let _vramework: VrameworkNextJS | undefined
 export const vramework = () => {
   if (!_vramework) {
     _vramework = new VrameworkNextJS(
-      createConfig(),
+      createConfig as any,
       createSingletonServices as any,
       createSessionServices
     )
