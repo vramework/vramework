@@ -65,6 +65,10 @@ export class CoreVrameworkFetch {
    * @param {string} serverUrl - The server URL to be set.
    */
   public async setServerUrl(serverUrl: string): Promise<void> {
+    if (serverUrl.endsWith('/')) {
+      console.warn('Server URL should not end with a slash, removing.')
+      serverUrl = serverUrl.slice(0, -1)
+    }
     this.options.serverUrl = serverUrl
   }
 
@@ -134,7 +138,7 @@ export class CoreVrameworkFetch {
     if (uri.startsWith('/')) {
       uri = `${this.options.serverUrl}${uri}`
     } else {
-      uri = `${this.options.serverUrl}${uri}`
+      uri = `${this.options.serverUrl}/${uri}`
     }
 
     return await coreVrameworkFetch(uri, data, {
