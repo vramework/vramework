@@ -1,5 +1,12 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.18
+
+### Patch Changes
+
+- bed9ab4: revert: reverting ajv array transformation
+- d4dd093: feat: coerce top level strings to arrays
+
 ## 0.5.17
 
 ### Patch Changes
