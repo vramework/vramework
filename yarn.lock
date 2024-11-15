@@ -2364,6 +2364,7 @@ __metadata:
     "@types/express-serve-static-core": "npm:^5.0.0"
     "@vramework/core": "npm:^0.5.10"
     express: "npm:^5"
+    raw-body: "npm:^3.0.0"
     typescript: "npm:^5.6.3"
   peerDependencies:
     "@types/express": ^5
