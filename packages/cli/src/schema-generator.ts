@@ -76,15 +76,14 @@ export async function saveSchemas(
 
   const schemaImports = Array.from(desiredSchemas)
     .map(
-      (schema) => `
-import * as ${schema} from './schemas/${schema}.schema.json'
-addSchema('${schema}', ${schema})
-`
-    )
-    .join('\n')
+      (schema) => [
+        `import * as ${schema} from './schemas/${schema}.schema.json'`,
+        `addSchema('${schema}', ${schema} as JSONSchema7)`
+        ].join('\n')
+    ).join('\n\n')
 
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,
-    `import { addSchema } from '@vramework/core'\n${schemaImports}`
+    `import { addSchema, JSONSchema7 } from '@vramework/core'\n${schemaImports}`
   )
 }

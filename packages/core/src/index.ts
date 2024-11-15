@@ -19,6 +19,8 @@ export {
 
 export { addSchema, loadSchema, loadAllSchemas } from './schema.js'
 
+export { JSONSchema7 } from 'json-schema'
+
 export * from './errors.js'
 
 export * from './services/index.js'

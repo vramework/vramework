@@ -1,5 +1,4 @@
-import * as AjvImp from 'ajv'
-const Ajv = 'default' in AjvImp ? AjvImp.default : (AjvImp as any)
+import { Ajv } from 'ajv'
 
 import addFormats from 'ajv-formats'
 import { ValidateFunction } from 'ajv'
@@ -7,6 +6,8 @@ import { ValidateFunction } from 'ajv'
 import { Logger } from './services/logger.js'
 import { BadRequestError } from './errors.js'
 import { getRoutes } from './route-runner.js'
+
+import { JSONSchema7 } from 'json-schema'
 
 const ajv = new Ajv({
   removeAdditional: false,
@@ -22,9 +23,22 @@ const validators = new Map<string, ValidateFunction>()
  */
 const getSchemas = () => {
   if (!global.schemas) {
-    global.schemas = new Map<string, any>()
+    global.schemas = new Map<string, JSONSchema7>()
   }
   return global.schemas
+}
+
+/**
+ * Retrieves a schema from the schemas map.
+ * @returns A schema.
+ */
+export const getSchema = (schemaName: string): JSONSchema7 => {
+  const schemas = getSchemas()
+  const schema = schemas.get(schemaName)
+  if (!schema) {
+    throw new Error(`Schema not found: ${schemaName}`)
+  }
+  return schema
 }
 
 /**
@@ -59,7 +73,7 @@ const validateAllSchemasLoaded = (logger: Logger) => {
  * @param value - The schema value.
  * @ignore
  */
-export const addSchema = (name: string, value: any) => {
+export const addSchema = (name: string, value: JSONSchema7) => {
   getSchemas().set(name, value)
 }
 
@@ -68,18 +82,19 @@ export const addSchema = (name: string, value: any) => {
  * @param schema - The name of the schema to load.
  * @param logger - A logger for logging information.
  */
-export const loadSchema = (schema: string, logger: Logger): void => {
+export const loadSchema = (schema: string, logger: Logger): JSONSchema7 => {
+  let json = getSchema(schema)
   if (!validators.has(schema)) {
     logger.debug(`Adding json schema for ${schema}`)
-    const json = getSchemas().get(schema)
     try {
-      const validator = ajv.compile(json)
+      const validator = ajv.compile(json!)
       validators.set(schema, validator)
     } catch (e: any) {
       console.error(e.name, schema, json)
       throw e
     }
   }
+  return json
 }
 
 /**
