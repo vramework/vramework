@@ -10,7 +10,7 @@ import { getRoutes } from './route-runner.js'
 
 const ajv = new Ajv({
   removeAdditional: false,
-  coerceTypes: true,
+  coerceTypes: "array",
 })
 addFormats.default(ajv as any)
 
@@ -21,12 +21,9 @@ const validators = new Map<string, ValidateFunction>()
  * @returns A map of schemas.
  */
 const getSchemas = () => {
-  // @ts-ignore
   if (!global.schemas) {
-    // @ts-ignore
     global.schemas = new Map<string, any>()
   }
-  // @ts-ignore
   return global.schemas
 }
 
