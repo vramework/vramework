@@ -1,5 +1,15 @@
 # @vramework/express-middleware
 
+## 0.5.7
+
+### Patch Changes
+
+- bed9ab4: fix: adding raw-body dependency
+- d4dd093: feat: coerce top level strings to arrays
+- Updated dependencies [bed9ab4]
+- Updated dependencies [d4dd093]
+  - @vramework/core@0.5.18
+
 ## 0.5.6
 
 ### Patch Changes

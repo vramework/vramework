@@ -2333,7 +2333,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/core@npm:^0.5.10, @vramework/core@npm:^0.5.13, @vramework/core@workspace:packages/core":
+"@vramework/core@npm:^0.5.13, @vramework/core@npm:^0.5.18, @vramework/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@vramework/core@workspace:packages/core"
   dependencies:
@@ -2362,14 +2362,14 @@ __metadata:
   dependencies:
     "@types/express": "npm:^5"
     "@types/express-serve-static-core": "npm:^5.0.0"
-    "@vramework/core": "npm:^0.5.10"
+    "@vramework/core": "npm:^0.5.18"
     express: "npm:^5"
     raw-body: "npm:^3.0.0"
     typescript: "npm:^5.6.3"
   peerDependencies:
     "@types/express": ^5
     "@types/express-serve-static-core": ^5.0.0
-    "@vramework/core": ^0.5.10
+    "@vramework/core": ^0.5.18
     express: ^5
   languageName: unknown
   linkType: soft
