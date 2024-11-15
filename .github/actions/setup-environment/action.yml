@@ -1,0 +1,16 @@
+name: "Setup Environment"
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+    - run: corepack enable
+      shell: bash
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: yarn
+    - run: yarn install
+      shell: bash
+    - run: yarn build
+      shell: bash

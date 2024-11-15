@@ -1,0 +1,3 @@
+[submodule "examples/workspace-starter"]
+	path = examples/workspace-starter
+	url = https://github.com/vramework/workspace-starter

@@ -11,15 +11,36 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - run: corepack enable
-        shell: bash
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: yarn
-      - run: yarn install
-      - run: yarn build
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
       - run: yarn test
       - run: yarn prettier
       - run: yarn lint
       - run: yarn typedoc
+  
+  workspace-test:
+    needs: main
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: todos
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
+      - run: cd examples/workspace-starter
+      - run: yarn install 
+      - run: yarn link -A ../..
+      - run: yarn prebuild
