@@ -5,7 +5,7 @@ import {
   CoreAPIRoutes,
   RoutesMeta,
 } from './types/routes.types.js'
-import { loadSchema, validateJson } from './schema.js'
+import { coerceStringToArray, loadSchema, validateJson } from './schema.js'
 import {
   CoreServices,
   CoreSingletonServices,
@@ -36,6 +36,7 @@ export type RunRouteOptions = Partial<{
   skipUserSession: boolean
   respondWith404: boolean,
   logWarningsForStatusCodes: number[]
+  coerceToArray: boolean
 }>
 
 let routes: CoreAPIRoutes = []
@@ -102,14 +103,14 @@ const getMatchingRoute = (
 
     if (matchedPath) {
       // TODO: Cache this loop as a performance improvement
-      const schema = routesMeta.find(
+      const schemaName = routesMeta.find(
         (routeMeta) =>
           routeMeta.method === route.method && routeMeta.route === route.route
       )?.input
-      if (schema) {
-        loadSchema(schema, logger)
+      if (schemaName) {
+        loadSchema(schemaName, logger)
       }
-      return { matchedPath, params: matchedPath.params, route, schema }
+      return { matchedPath, params: matchedPath.params, route, schemaName }
     }
   }
   logger.info({ message: 'Invalid route', requestPath, requestType })
@@ -146,7 +147,8 @@ export const runRoute = async <In, Out>(
     method: apiType,
     skipUserSession = false,
     respondWith404 = true,
-    logWarningsForStatusCodes = [],  
+    logWarningsForStatusCodes = [],
+    coerceToArray = false
   }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> &
     RunRouteOptions
 ): Promise<Out> => {
@@ -155,7 +157,7 @@ export const runRoute = async <In, Out>(
   try {
     let session: CoreUserSession | undefined
 
-    const { matchedPath, params, route, schema } = getMatchingRoute(
+    const { matchedPath, params, route, schemaName } = getMatchingRoute(
       services.logger,
       apiType,
       apiRoute
@@ -193,9 +195,12 @@ export const runRoute = async <In, Out>(
     }
 
     const data = await request.getData()
-
-    if (schema) {
-      validateJson(schema, data)
+    
+    if (schemaName) {
+      if (coerceToArray) {
+        coerceStringToArray(schemaName, data)
+      }
+      validateJson(schemaName, data)
     }
 
     const sessionServices = await createSessionServices(

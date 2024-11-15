@@ -22,6 +22,7 @@ import { loadAllSchemas } from '@vramework/core/schema'
 type VrameworkMiddlewareArgs = RunRouteOptions & {
   logRoutes?: boolean
   loadSchemas?: boolean
+  coerceToArray?: boolean
 }
 
 /**
@@ -35,7 +36,7 @@ type VrameworkMiddlewareArgs = RunRouteOptions & {
 export const vrameworkMiddleware = (
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<any, any, any>,
-  { respondWith404, logRoutes, loadSchemas }: VrameworkMiddlewareArgs
+  { respondWith404, logRoutes, loadSchemas, coerceToArray }: VrameworkMiddlewareArgs
 ): RequestHandler => {
   if (logRoutes) {
     logRegisterRoutes(singletonServices.logger)
@@ -55,6 +56,7 @@ export const vrameworkMiddleware = (
           method: req.method.toLowerCase() as any,
           route: req.path,
           respondWith404,
+          coerceToArray
         }
       )
     } catch {

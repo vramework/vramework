@@ -31,6 +31,19 @@ const getSchemas = () => {
 }
 
 /**
+ * Retrieves a schema from the schemas map.
+ * @returns A schema.
+ */
+const getSchema = (schemaName: string): any => {
+  const schemas = getSchemas()
+  const schema = schemas.get(schemaName)
+  if (!schema) {
+    throw new Error(`Schema not found: ${schemaName}`)
+  }
+  return schema
+}
+
+/**
  * Validate all the schemas have been loaded.
  */
 const validateAllSchemasLoaded = (logger: Logger) => {
@@ -116,5 +129,22 @@ export const validateJson = (schema: string, json: unknown): void => {
     )
     const errorText = ajv.errorsText(validator.errors)
     throw new BadRequestError(errorText)
+  }
+}
+
+export const coerceStringToArray = (schemaName: string, data: any) => {
+  const schema = getSchema(schemaName)
+  for (const key in schema.properties) {
+    const property = schema.properties[key]
+    if (typeof property === 'boolean') {
+      continue
+    }
+    const type = property.type
+    if (typeof type === 'boolean') {
+      continue
+    }
+    if (type === 'array' && typeof data[key] === 'string') {
+      data[key] = data[key].split(',')
+    }
   }
 }
