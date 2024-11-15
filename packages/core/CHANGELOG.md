@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.17
+
+### Patch Changes
+
+- 2f77f5f: feat: coerce array types if needed via ajv validation
+
 ## 0.5.16
 
 ### Patch Changes
