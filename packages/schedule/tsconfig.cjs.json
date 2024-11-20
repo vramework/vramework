@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "module": "Node16",
+    "outDir": "dist/cjs",
+    "target": "es2015",
+    "moduleResolution": "node16",
+    "esModuleInterop": true,
+    "paths": {
+      "@vramework/core/*": ["../core/dist/cjs/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "../core/tsconfig.cjs.json"
+    }
+  ],
+  "exclude": ["node_modules", "dist"]
+}
