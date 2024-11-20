@@ -46,7 +46,7 @@ export class VrameworkNextJS {
       config: CoreConfig
     ) => Promise<CoreSingletonServices>,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
-  ) {}
+  ) { }
 
   /**
    * Handles an action request, routing it to the appropriate handler.
@@ -62,16 +62,14 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
-    return await runRoute<In, Out>(
-      new VrameworkActionNextRequest(data),
-      new VrameworkActionNextResponse(),
+    return await runRoute<In, Out>({
+      request: new VrameworkActionNextRequest(data),
+      response: new VrameworkActionNextResponse(),
       singletonServices,
-      this.createSessionServices,
-      {
-        route: injectIntoUrl(route as string, data),
-        method: method as APIRouteMethod,
-      }
-    )
+      createSessionServices: this.createSessionServices,
+      route: injectIntoUrl(route as string, data),
+      method: method as APIRouteMethod,
+    })
   }
 
   /**
@@ -88,17 +86,15 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
-    return await runRoute<In, Out>(
-      new VrameworkActionStaticNextRequest(data),
-      new VrameworkActionNextResponse(),
+    return await runRoute<In, Out>({
+      request: new VrameworkActionStaticNextRequest(data),
+      response: new VrameworkActionNextResponse(),
       singletonServices,
-      this.createSessionServices,
-      {
-        route: injectIntoUrl(route as string, data),
-        method: method as APIRouteMethod,
-        skipUserSession: true,
-      }
-    )
+      createSessionServices: this.createSessionServices,
+      route: injectIntoUrl(route as string, data),
+      method: method as APIRouteMethod,
+      skipUserSession: true,
+    })
   }
 
   /**
@@ -121,16 +117,14 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
-    return await runRoute<In, Out>(
-      new VrameworkSSRNextRequest(request, data),
-      new VrameworkSSRNextResponse(response),
+    return await runRoute<In, Out>({
+      request: new VrameworkSSRNextRequest(request, data),
+      response: new VrameworkSSRNextResponse(response),
       singletonServices,
-      this.createSessionServices,
-      {
-        route: injectIntoUrl(route, data),
-        method,
-      }
-    )
+      createSessionServices: this.createSessionServices,
+      route: injectIntoUrl(route, data),
+      method,
+    })
   }
 
   /**
@@ -151,16 +145,14 @@ export class VrameworkNextJS {
     const vrameworkRequest = new VrameworkAPINextRequest(request)
     const vrameworkResponse = new VrameworkAPINextResponse(response)
     const data = await vrameworkRequest.getData()
-    await runRoute<In, Out>(
-      vrameworkRequest,
-      vrameworkResponse,
+    await runRoute<In, Out>({
+      request: vrameworkRequest,
+      response: vrameworkResponse,
       singletonServices,
-      this.createSessionServices,
-      {
-        route: injectIntoUrl(route, data),
-        method,
-      }
-    )
+      createSessionServices: this.createSessionServices,
+      route: injectIntoUrl(route, data),
+      method,
+    })
   }
 
   /**

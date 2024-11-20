@@ -27,8 +27,8 @@ export * from './types/core.types.js'
 
 export * from './types/routes.types.js'
 
-export * from './vramework-request.js'
+export * from './vramework-http-request.js'
 
-export * from './vramework-response.js'
+export * from './vramework-http-response.js'
 
 export * from './log-routes.js'

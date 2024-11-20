@@ -1,13 +1,13 @@
 import { NextApiResponse } from 'next'
 import * as cookie from 'cookie'
-import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { VrameworkHTTPResponse } from '@vramework/core/vramework-http-response'
 import { JSONValue } from '@vramework/core/types/core.types'
 
 /**
- * The `VrameworkAPINextResponse` class is an extension of the `VrameworkResponse` class,
+ * The `VrameworkAPINextResponse` class is an extension of the `VrameworkHTTPResponse` class,
  * specifically designed for handling API responses in a Next.js environment.
  */
-export class VrameworkAPINextResponse extends VrameworkResponse {
+export class VrameworkAPINextResponse extends VrameworkHTTPResponse {
   /**
    * Constructs a new instance of the `VrameworkAPINextResponse` class.
    *

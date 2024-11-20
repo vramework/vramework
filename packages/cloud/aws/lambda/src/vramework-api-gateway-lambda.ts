@@ -10,9 +10,8 @@ import {
 import { CoreAPIRoutes, RoutesMeta } from '@vramework/core/types/routes.types'
 import { runRoute } from '@vramework/core/route-runner'
 import { Logger } from '@vramework/core/services/logger'
-
-import { VrameworkLambdaRequest } from './vramework-lambda-request.js'
-import { VrameworkLambdaResponse } from './vramework-lambda-response.js'
+import { VrameworkAPIGatewayLambdaRequest } from './vramework-api-gateway-lambda-request.js'
+import { VrameworkAPIGatewayLambdaResponse } from './vramework-api-gateway-lambda-response.js'
 
 const validateOrigin = (
   allowsOrigins: string[],
@@ -36,7 +35,7 @@ CORS Error
 }
 
 const generalHandler = async (
-  services: CoreSingletonServices,
+  singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
@@ -44,8 +43,8 @@ const generalHandler = async (
   >,
   routes: CoreAPIRoutes,
   routesMeta: RoutesMeta,
-  request: VrameworkLambdaRequest,
-  response: VrameworkLambdaResponse
+  request: VrameworkAPIGatewayLambdaRequest,
+  response: VrameworkAPIGatewayLambdaResponse
 ): Promise<APIGatewayProxyResult> => {
   if (request.getMethod() === 'options') {
     response.setHeader(
@@ -67,7 +66,11 @@ const generalHandler = async (
   }
 
   try {
-    await runRoute(request, response, services, createSessionServices, {
+    await runRoute({
+      request, 
+      response, 
+      singletonServices, 
+      createSessionServices,
       route: request.getPath(),
       method: request.getMethod() as any,
     })
@@ -90,8 +93,8 @@ export const processCorsless = async (
     CoreServices
   >
 ) => {
-  const request = new VrameworkLambdaRequest(event)
-  const response = new VrameworkLambdaResponse()
+  const request = new VrameworkAPIGatewayLambdaRequest(event)
+  const response = new VrameworkAPIGatewayLambdaResponse()
   return await generalHandler(
     singletonServices,
     createSessionServices,
@@ -113,8 +116,8 @@ export const processFromAnywhereCors = async (
     CoreServices
   >
 ) => {
-  const request = new VrameworkLambdaRequest(event)
-  const response = new VrameworkLambdaResponse()
+  const request = new VrameworkAPIGatewayLambdaRequest(event)
+  const response = new VrameworkAPIGatewayLambdaResponse()
   if (event.headers.origin) {
     response.setHeader(
       'Access-Control-Allow-Origin',
@@ -144,8 +147,8 @@ export const processCors = async (
     CoreServices
   >
 ) => {
-  const request = new VrameworkLambdaRequest(event)
-  const response = new VrameworkLambdaResponse()
+  const request = new VrameworkAPIGatewayLambdaRequest(event)
+  const response = new VrameworkAPIGatewayLambdaResponse()
 
   let origin: string | false = false
   try {

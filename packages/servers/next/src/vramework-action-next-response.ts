@@ -1,12 +1,12 @@
-import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { VrameworkHTTPResponse } from '@vramework/core/vramework-http-response'
 import type { SerializeOptions } from 'cookie'
 import { cookies } from 'next/headers.js'
 
 /**
- * The `VrameworkActionNextResponse` class is an extension of the `VrameworkResponse` class,
+ * The `VrameworkActionNextResponse` class is an extension of the `VrameworkHTTPResponse` class,
  * specifically designed for handling action responses in a Next.js environment.
  */
-export class VrameworkActionNextResponse extends VrameworkResponse {
+export class VrameworkActionNextResponse extends VrameworkHTTPResponse {
   /**
    * Constructs a new instance of the `VrameworkActionNextResponse` class.
    */

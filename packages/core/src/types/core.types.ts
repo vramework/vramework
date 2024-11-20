@@ -1,7 +1,7 @@
 import { Logger, LogLevel } from '../services/logger.js';
 import { PermissionService, SessionService } from '../services/index.js';
-import { VrameworkRequest } from '../vramework-request.js';
-import { VrameworkResponse } from '../vramework-response.js';
+import { VrameworkHTTPRequest } from '../vramework-http-request.js';
+import { VrameworkHTTPResponse } from '../vramework-http-response.js';
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.
@@ -71,15 +71,22 @@ export interface CoreSingletonServices {
 /**
  * Represents an interaction within Vramework, including a request and response.
  */
-export interface VrameworkInteraction {
-    request: VrameworkRequest;
-    response: VrameworkResponse;
+export interface VrameworkHTTPInteraction {
+    request: VrameworkHTTPRequest;
+    response: VrameworkHTTPResponse;
+}
+
+/**
+ * Represents an interaction within Vramework, including a request and response.
+ */
+export interface VrameworkInteractions {
+    http: VrameworkHTTPInteraction;
 }
 
 /**
  * Represents the core services used by Vramework, including singleton services and the request/response interaction.
  */
-export type CoreServices<SingletonServices = CoreSingletonServices> = SingletonServices & VrameworkInteraction;
+export type CoreServices<SingletonServices = CoreSingletonServices> = SingletonServices & VrameworkInteractions;
 
 /**
  * Defines a function type for creating singleton services from the given configuration.
@@ -89,7 +96,7 @@ export type CreateSingletonServices<Config extends CoreConfig, SingletonServices
 /**
  * Defines a function type for creating session-specific services.
  */
-export type CreateSessionServices<SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices<SingletonServices>> = (services: SingletonServices, interaction: VrameworkInteraction, session: UserSession | undefined) => Promise<Omit<Services, keyof SingletonServices | keyof VrameworkInteraction>>;
+export type CreateSessionServices<SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices<SingletonServices>> = (services: SingletonServices, interaction: { http?: VrameworkHTTPInteraction }, session: UserSession | undefined) => Promise<Omit<Services, keyof SingletonServices | keyof VrameworkHTTPInteraction>>;
 
 /**
  * Defines a function type for creating config.

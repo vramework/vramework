@@ -1,5 +1,5 @@
 import { CoreUserSession } from '../types/core.types.js'
-import { VrameworkRequest } from '../vramework-request.js'
+import { VrameworkHTTPRequest } from '../vramework-http-request.js'
 
 /**
  * Interface for handling user sessions.
@@ -14,6 +14,6 @@ export interface SessionService<UserSession = CoreUserSession> {
    */
   getUserSession: (
     credentialsRequired: boolean,
-    vrameworkRequest: VrameworkRequest
+    vrameworkRequest: VrameworkHTTPRequest
   ) => Promise<UserSession | undefined>
 }

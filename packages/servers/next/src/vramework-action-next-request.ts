@@ -1,11 +1,11 @@
-import { VrameworkRequest } from '@vramework/core/vramework-request'
+import { VrameworkHTTPRequest } from '@vramework/core/vramework-http-request'
 import { cookies, headers } from 'next/headers.js'
 
 /**
- * The `VrameworkActionNextRequest` class is an extension of the `VrameworkRequest` class,
+ * The `VrameworkActionNextRequest` class is an extension of the `VrameworkHTTPRequest` class,
  * specifically designed for handling action requests in a Next.js environment.
  */
-export class VrameworkActionNextRequest extends VrameworkRequest {
+export class VrameworkActionNextRequest extends VrameworkHTTPRequest {
   private body: any
 
   /**

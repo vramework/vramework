@@ -1,10 +1,10 @@
-import { VrameworkRequest } from '@vramework/core/vramework-request'
+import { VrameworkHTTPRequest } from '@vramework/core/vramework-http-request'
 import { Request } from 'express-serve-static-core'
 import * as getRawBodyImp from 'raw-body'
 const getRawBody =
   'default' in getRawBodyImp ? (getRawBodyImp.default as any) : getRawBodyImp
 
-export class VrameworkExpressRequest extends VrameworkRequest {
+export class VrameworkExpressRequest extends VrameworkHTTPRequest {
   constructor(private request: Request) {
     super()
   }

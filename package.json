@@ -16,7 +16,8 @@
       "packages/servers/express/*",
       "packages/servers/fastify/*",
       "packages/servers/uws/*",
-      "packages/cloud/aws/*"
+      "packages/cloud/aws/*",
+      "packages/cloud/azure/*"
     ]
   },
   "scripts": {
@@ -38,6 +39,7 @@
     "typedoc": "^0.26.7"
   },
   "dependencies": {
+    "@azure/functions": "^4.6.0",
     "@changesets/cli": "^2.27.9",
     "typescript": "^5.6"
   },

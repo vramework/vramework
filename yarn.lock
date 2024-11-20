@@ -786,6 +786,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure/functions@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "@azure/functions@npm:4.6.0"
+  dependencies:
+    cookie: "npm:^0.7.0"
+    long: "npm:^4.0.0"
+    undici: "npm:^5.13.0"
+  checksum: 10/6f0a9c6a38b501c0ad9b76cdba1c3d4d28d1ef063e47706679ef54faebb6eef5b91aa360a32bd0e2309e9b34e04750b73fc945c38c219c219f51da7edaf9e1ed
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.5.5":
   version: 7.25.9
   resolution: "@babel/runtime@npm:7.25.9"
@@ -1046,6 +1057,13 @@ __metadata:
     ajv-formats: "npm:^3.0.1"
     fast-uri: "npm:^3.0.0"
   checksum: 10/ba1348cb5c4bd9c921a53e509ac6acb8696d542198f3bc7674a15b9b6b1af158b2859e738d754eb2929c4059bfa354a743f71c32aa8de6df42531a32647eeee0
+  languageName: node
+  linkType: hard
+
+"@fastify/busboy@npm:^2.0.0":
+  version: 2.1.1
+  resolution: "@fastify/busboy@npm:2.1.1"
+  checksum: 10/2bb8a7eca8289ed14c9eb15239bc1019797454624e769b39a0b90ed204d032403adc0f8ed0d2aef8a18c772205fa7808cf5a1b91f21c7bfc7b6032150b1062c5
   languageName: node
   linkType: hard
 
@@ -2306,6 +2324,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@vramework/azure-functions@workspace:packages/cloud/azure/functions":
+  version: 0.0.0-use.local
+  resolution: "@vramework/azure-functions@workspace:packages/cloud/azure/functions"
+  dependencies:
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@vramework/core": ^0.5.10
+  languageName: unknown
+  linkType: soft
+
 "@vramework/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@vramework/cli@workspace:packages/cli"
@@ -2456,6 +2484,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/mono@workspace:."
   dependencies:
+    "@azure/functions": "npm:^4.6.0"
     "@changesets/cli": "npm:^2.27.9"
     "@types/node": "npm:^20.11.30"
     prettier: "npm:3.3.3"
@@ -4513,6 +4542,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"long@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "long@npm:4.0.0"
+  checksum: 10/8296e2ba7bab30f9cfabb81ebccff89c819af6a7a78b4bb5a70ea411aa764ee0532f7441381549dfa6a1a98d72abe9138bfcf99f4fa41238629849bc035b845b
+  languageName: node
+  linkType: hard
+
 "loose-envify@npm:^1.1.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
@@ -6250,6 +6286,15 @@ __metadata:
   version: 6.19.8
   resolution: "undici-types@npm:6.19.8"
   checksum: 10/cf0b48ed4fc99baf56584afa91aaffa5010c268b8842f62e02f752df209e3dea138b372a60a963b3b2576ed932f32329ce7ddb9cb5f27a6c83040d8cd74b7a70
+  languageName: node
+  linkType: hard
+
+"undici@npm:^5.13.0":
+  version: 5.28.4
+  resolution: "undici@npm:5.28.4"
+  dependencies:
+    "@fastify/busboy": "npm:^2.0.0"
+  checksum: 10/a666a9f5ac4270c659fafc33d78b6b5039a0adbae3e28f934774c85dcc66ea91da907896f12b414bd6f578508b44d5dc206fa636afa0e49a4e1c9e99831ff065
   languageName: node
   linkType: hard
 

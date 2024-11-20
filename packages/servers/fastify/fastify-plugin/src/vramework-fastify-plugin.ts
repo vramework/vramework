@@ -51,16 +51,15 @@ const vrameworkPlugin: FastifyPluginAsync<
   }
   fastify.all('/*', async (req, res) => {
     try {
-      await runRoute(
-        new VrameworkFastifyRequest(req),
-        new VrameworkFastifyResponse(res),
-        vramework.singletonServices,
-        vramework.createSessionServices,
-        {
-          method: req.method as any,
-          route: req.url as string,
-          respondWith404: vramework.respondWith404,
-        }
+      await runRoute({
+        request: new VrameworkFastifyRequest(req),
+        response: new VrameworkFastifyResponse(res),
+        singletonServices: vramework.singletonServices,
+        createSessionServices: vramework.createSessionServices,
+        method: req.method as any,
+        route: req.url as string,
+        respondWith404: vramework.respondWith404,
+      }
       )
     } catch {
       // Error should have already been handled by runRoute

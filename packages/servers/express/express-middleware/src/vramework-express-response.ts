@@ -1,8 +1,8 @@
 import { JSONValue } from '@vramework/core/types/core.types'
-import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { VrameworkHTTPResponse } from '@vramework/core/vramework-http-response'
 import { Response, CookieOptions } from 'express-serve-static-core'
 
-export class VrameworkExpressResponse extends VrameworkResponse {
+export class VrameworkExpressResponse extends VrameworkHTTPResponse {
   constructor(protected response: Response) {
     super()
   }

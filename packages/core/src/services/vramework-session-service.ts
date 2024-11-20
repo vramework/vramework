@@ -1,7 +1,7 @@
 import { SessionService } from './session-service.js'
 import { JWTService } from './jwt-service.js'
 import { InvalidSessionError, MissingSessionError } from '../errors.js'
-import { VrameworkRequest } from '../vramework-request.js'
+import { VrameworkHTTPRequest } from '../vramework-http-request.js'
 
 /**
  * The `VrameworkSessionService` class provides session management capabilities, including handling JWT-based sessions,
@@ -39,7 +39,7 @@ export class VrameworkSessionService<UserSession>
    * @returns A promise that resolves to the user session, or `undefined` if no session is found.
    */
   private async getCookieSession(
-    request: VrameworkRequest
+    request: VrameworkHTTPRequest
   ): Promise<UserSession | undefined> {
     const cookies = request.getCookies()
     if (!cookies) {
@@ -82,7 +82,7 @@ export class VrameworkSessionService<UserSession>
    */
   public async getUserSession(
     credentialsRequired: boolean,
-    request: VrameworkRequest,
+    request: VrameworkHTTPRequest,
     debugJWTDecode?: boolean
   ): Promise<UserSession | undefined> {
     let userSession: UserSession | undefined

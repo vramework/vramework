@@ -7,8 +7,8 @@ chai.use(
 )
 
 import { NotImplementedError, RouteNotFoundError } from './errors.js'
-import { VrameworkRequest } from './vramework-request.js'
-import { VrameworkResponse } from './vramework-response.js'
+import { VrameworkHTTPRequest } from './vramework-http-request.js'
+import { VrameworkHTTPResponse } from './vramework-http-response.js'
 import { JSONValue } from './types/core.types.js'
 import {
   getUserSession,
@@ -17,13 +17,13 @@ import {
   addRoute,
 } from './route-runner.js'
 
-class VrameworkTestRequest extends VrameworkRequest {
+class VrameworkTestRequest extends VrameworkHTTPRequest {
   public getHeader(_headerName: string): string | undefined {
     throw new Error('Method not implemented.')
   }
 }
 
-class VrameworkTestResponse extends VrameworkResponse {
+class VrameworkTestResponse extends VrameworkHTTPResponse {
   public setStatus(_status: number): void {
     throw new Error('Method not implemented.')
   }
@@ -36,12 +36,12 @@ class VrameworkTestResponse extends VrameworkResponse {
 }
 
 describe('runRoute', () => {
-  let services, createSessionServices, request, response
+  let singletonServices, createSessionServices, request, response
 
   beforeEach(() => {
     clearRoutes()
 
-    services = {
+    singletonServices = {
       logger: {
         info: sinon.stub(),
         warn: sinon.stub(),
@@ -72,7 +72,11 @@ describe('runRoute', () => {
     const apiType = 'get'
 
     await expect(
-      runRoute(request, response, services, createSessionServices, {
+      runRoute({
+        request, 
+        response, 
+        singletonServices, 
+        createSessionServices,
         route: apiRoute,
         method: apiType,
       })
@@ -89,13 +93,13 @@ describe('runRoute', () => {
       func: routeFunc,
     })
 
-    const result = await runRoute(
+    const result = await runRoute({
       request,
       response,
-      services,
+      singletonServices,
       createSessionServices,
-      { route: apiRoute, method: apiType }
-    )
+      route: apiRoute, method: apiType
+    })
 
     expect(result).to.deep.equal({ success: true })
     expect(routeFunc.calledOnce).to.be.true
@@ -115,7 +119,11 @@ describe('runRoute', () => {
       permissions,
     })
 
-    await runRoute(request, response, services, createSessionServices, {
+    await runRoute({
+      request, 
+      response, 
+      singletonServices, 
+      createSessionServices,
       route: apiRoute,
       method: apiType,
     })
@@ -135,7 +143,11 @@ describe('runRoute', () => {
     })
 
     await expect(
-      runRoute(request, response, services, createSessionServices, {
+      runRoute({
+        request, 
+        response, 
+        singletonServices, 
+        createSessionServices,
         route: apiRoute,
         method: apiType,
       })
@@ -143,7 +155,7 @@ describe('runRoute', () => {
 
     expect(response.setStatus.calledWith(500)).to.be.true
     expect(response.setJson.calledOnce).to.be.true
-    expect(services.logger.error.calledOnce).to.be.true
+    expect(singletonServices.logger.error.calledOnce).to.be.true
   })
 })
 

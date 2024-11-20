@@ -1,11 +1,11 @@
-import { VrameworkResponse } from '@vramework/core/vramework-response'
+import { VrameworkHTTPResponse } from '@vramework/core/vramework-http-response'
 import { IncomingMessage, ServerResponse } from 'http'
 
 /**
- * The `VrameworkSSRNextResponse` class is an extension of the `VrameworkResponse` class,
+ * The `VrameworkSSRNextResponse` class is an extension of the `VrameworkHTTPResponse` class,
  * specifically for handling server-side rendering (SSR) responses in a Next.js environment.
  */
-export class VrameworkSSRNextResponse extends VrameworkResponse {
+export class VrameworkSSRNextResponse extends VrameworkHTTPResponse {
   /**
    * Constructs a new instance of the `VrameworkSSRNextResponse` class.
    *

@@ -132,7 +132,7 @@ export const validateJson = (schema: string, json: unknown): void => {
   }
 }
 
-export const coerceStringToArray = (schemaName: string, data: any) => {
+export const coerceQueryStringToArray = (schemaName: string, data: any) => {
   const schema = getSchema(schemaName)
   for (const key in schema.properties) {
     const property = schema.properties[key]
