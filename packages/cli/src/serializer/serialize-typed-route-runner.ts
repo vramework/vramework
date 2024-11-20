@@ -11,11 +11,17 @@ export const runTypedRoute = async <
 >(
   request: VrameworkHTTPRequest<RouteHandlerOf<Route, Method>['input']>,
   response: VrameworkHTTPResponse,
-  services: CoreSingletonServices,
+  singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
   route: { route: Route; method: Method }
 ): Promise<RouteHandlerOf<Route, Method>['output']> => {
-  return runRoute(request, response, services, createSessionServices, route as any)
+  return runRoute({
+    request, 
+    response, 
+    singletonServices, 
+    createSessionServices, 
+    ...route as any
+  })
 };
   `
 }

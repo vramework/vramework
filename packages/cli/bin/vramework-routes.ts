@@ -15,6 +15,7 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
+import { serializeSchedulers } from '../src/serializer/serialize-schedulers.js'
 
 export const vrameworkRoutes = async (
   cliConfig: VrameworkCLIConfig,
@@ -26,9 +27,10 @@ export const vrameworkRoutes = async (
     async () => {
       const { routesMapDeclarationFile, routesFile, packageMappings } =
         cliConfig
-      const { filesWithRoutes, routesMeta } = visitState
+      const { filesWithRoutes, filesWithScheduledTasks, routesMeta } = visitState
       const content = [
         serializeRoutes(routesFile, filesWithRoutes, packageMappings),
+        serializeSchedulers(routesFile, filesWithScheduledTasks, packageMappings),
         serializeRouteMeta(routesMeta),
         serializeTypedRouteRunner(
           getFileImportRelativePath(
@@ -65,3 +67,4 @@ export const routes = (program: Command): void => {
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }
+

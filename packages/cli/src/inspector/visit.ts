@@ -3,7 +3,9 @@ import { addFileWithFactory } from './add-file-with-factory.js'
 import { ImportMap } from './inspector.js'
 import { addFileExtendsCoreType } from './add-file-extends-core-type.js'
 import { RoutesMeta } from '@vramework/core/types/routes.types'
+import { ScheduledTasksMeta } from '@vramework/core/types/schedule.types'
 import { addRoute } from './add-route.js'
+import { addSchedule } from './add-schedule.js'
 
 export type PathToNameAndType = Map<
   string,
@@ -16,9 +18,11 @@ export interface VisitState {
   functionTypesImportMap: ImportMap
   metaInputTypes: Map<string, string>
   routesMeta: RoutesMeta
+  scheduledTasksMeta: ScheduledTasksMeta
   inputTypes: Set<string>
   outputTypes: Set<string>
   filesWithRoutes: Set<string>
+  filesWithScheduledTasks: Set<string>
   singletonServicesFactories: PathToNameAndType
   sessionServicesFactories: PathToNameAndType
   configFactories: PathToNameAndType
@@ -65,6 +69,7 @@ export const visit = (
   )
 
   addRoute(node, checker, state)
+  addSchedule(node, checker, state)
 
   ts.forEachChild(node, (child) => visit(checker, child, state))
 }

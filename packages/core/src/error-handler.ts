@@ -6,12 +6,8 @@ export class EError extends Error {
   /**
    * Creates an instance of EError.
    * @param message - The error message.
-   * @param errorId - An optional error ID.
    */
-  constructor(
-    message: string = 'An error occurred',
-    public errorId?: string
-  ) {
+  constructor(message: string = 'An error occurred') {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
   }

@@ -1,48 +1,6 @@
 import { EError } from '../error-handler.js'
-import { CoreUserSession, CoreServices } from './core.types.js'
-
-/**
- * Represents a core API function that performs an operation using core services and a user session.
- *
- * @template In - The input type.
- * @template Out - The output type.
- * @template Services - The services type, defaults to `CoreServices`.
- * @template Session - The session type, defaults to `CoreUserSession`.
- */
-export type CoreAPIFunction<
-  In,
-  Out,
-  Services = CoreServices,
-  Session = CoreUserSession,
-> = (services: Services, data: In, session: Session) => Promise<Out>
-
-/**
- * Represents a core API function that can be used without a session.
- *
- * @template In - The input type.
- * @template Out - The output type.
- * @template Services - The services type, defaults to `CoreServices`.
- * @template Session - The session type, defaults to `CoreUserSession`.
- */
-export type CoreAPIFunctionSessionless<
-  In,
-  Out,
-  Services = CoreServices,
-  Session = CoreUserSession,
-> = (services: Services, data: In, session?: Session) => Promise<Out>
-
-/**
- * Represents a function that checks permissions for a given API operation.
- *
- * @template In - The input type.
- * @template Services - The services type, defaults to `CoreServices`.
- * @template Session - The session type, defaults to `CoreUserSession`.
- */
-export type CoreAPIPermission<
-  In = any,
-  Services = CoreServices,
-  Session = CoreUserSession,
-> = (services: Services, data: In, session?: Session) => Promise<boolean>
+import { APIDocs } from './core.types.js'
+import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission } from './functions.types.js'
 
 /**
  * Represents the HTTP methods supported for API routes.
@@ -130,16 +88,6 @@ export type RoutesMetaInputTypes = {
 }
 
 /**
- * Represents the documentation for a route, including summary, description, tags, and errors.
- */
-export type RouteDocs = {
-  summary?: string
-  description?: string
-  tags?: string[]
-  errors?: string[]
-}
-
-/**
  * Represents metadata for a set of routes, including route details, methods, input/output types, and documentation.
  */
 export type RoutesMeta = Array<{
@@ -150,5 +98,6 @@ export type RoutesMeta = Array<{
   input: string | null
   output: string | null
   inputTypes?: RoutesMetaInputTypes
-  docs?: RouteDocs
+  docs?: APIDocs
 }>
+

@@ -11,7 +11,7 @@ export const serializeVrameworkTypes = (
 * This is used to provide the application types in the typescript project
 */
   
-import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission, CoreAPIRoute, AssertRouteParams } from '@vramework/core'
+import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission, CoreAPIRoute, CoreScheduledTask, AssertRouteParams } from '@vramework/core'
   
 ${userSessionTypeImport}
 ${sessionServicesTypeImport}
@@ -21,11 +21,14 @@ export type APIFunction<In, Out, RequiredServices = ${servicesTypeName}> = CoreA
 export type APIPermission<In, RequiredServices = ${servicesTypeName}> = CoreAPIPermission<In, RequiredServices, ${userSessionTypeName}>
 
 type APIRoute<In, Out, Route extends string> = CoreAPIRoute<In, Out, Route, APIFunction<In, Out>, APIFunctionSessionless<In, Out>, APIPermission<In>>
+type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>>
 
 declare module "@vramework/core" {
-  export function addRoute<In, Out, Route extends string>(
+  function addRoute<In, Out, Route extends string>(
     route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
   ): void;
+
+  function addScheduledTask(task: ScheduledTask): void;
 }
 `
 }

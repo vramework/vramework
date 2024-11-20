@@ -8,9 +8,9 @@
   "type": "module",
   "scripts": {
     "tsc": "tsc",
-    "build:mjs": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
+    "build:esm": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
     "build:cjs": "tsc -b tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
-    "build": "rm -rf dist && yarn build:mjs && yarn build:cjs",
+    "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
     "ncu": "ncu",
     "release": "npm run build && npm test",
     "test": "mocha"

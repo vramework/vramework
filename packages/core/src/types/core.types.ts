@@ -80,7 +80,7 @@ export interface VrameworkHTTPInteraction {
  * Represents an interaction within Vramework, including a request and response.
  */
 export interface VrameworkInteractions {
-    http: VrameworkHTTPInteraction;
+    http?: VrameworkHTTPInteraction;
 }
 
 /**
@@ -96,7 +96,7 @@ export type CreateSingletonServices<Config extends CoreConfig, SingletonServices
 /**
  * Defines a function type for creating session-specific services.
  */
-export type CreateSessionServices<SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices<SingletonServices>> = (services: SingletonServices, interaction: { http?: VrameworkHTTPInteraction }, session: UserSession | undefined) => Promise<Omit<Services, keyof SingletonServices | keyof VrameworkHTTPInteraction>>;
+export type CreateSessionServices<SingletonServices extends CoreSingletonServices, UserSession extends CoreUserSession, Services extends CoreServices<SingletonServices>> = (services: SingletonServices, interaction: VrameworkInteractions, session: UserSession | undefined) => Promise<Omit<Services, keyof SingletonServices | keyof VrameworkInteractions>>;
 
 /**
  * Defines a function type for creating config.
@@ -107,3 +107,13 @@ export type CreateConfig<Config extends CoreConfig> = () => Promise<Config>;
  * Represents a query object for Vramework, where each key can be a string, a value, or an array of values.
  */
 export type VrameworkQuery<T = unknown> = Record<string, string | T | null | Array<T | null>>;
+
+/**
+ * Represents the documentation for a route, including summary, description, tags, and errors.
+ */
+export type APIDocs = {
+    summary?: string
+    description?: string
+    tags?: string[]
+    errors?: string[]
+  }

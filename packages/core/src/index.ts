@@ -12,6 +12,12 @@ export {
 } from './route-runner.js'
 
 export {
+  runScheduledTask,
+  getScheduledTasks,
+  addScheduledTask,
+} from './schedule-runner.js'
+
+export {
   addError,
   addErrors,
   getErrorResponseForConstructorName,
@@ -24,6 +30,10 @@ export * from './errors.js'
 export * from './services/index.js'
 
 export * from './types/core.types.js'
+
+export * from './types/functions.types.js'
+
+export * from './types/schedule.types.js'
 
 export * from './types/routes.types.js'
 

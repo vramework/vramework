@@ -164,6 +164,7 @@ export const runRoute = async<In, Out>(
 ): Promise<Out> => {
   let sessionServices: CoreServices | undefined
   const http: VrameworkHTTPInteraction | undefined = request instanceof VrameworkHTTPRequest && response instanceof VrameworkHTTPResponse  ? { request, response } : undefined
+  const trackerId: string = crypto.randomUUID().toString()
 
   try {
     let session: CoreUserSession | undefined
@@ -228,7 +229,7 @@ export const runRoute = async<In, Out>(
       { http },
       session
     )
-    const allServices = { ...singletonServices, request, response, ...sessionServices }
+    const allServices = { ...singletonServices, ...sessionServices }
 
     if (route.permissions) {
       await verifyPermissions(route.permissions, allServices, data, session)
@@ -257,7 +258,6 @@ export const runRoute = async<In, Out>(
     }
 
     const errorResponse = getErrorResponse(e)
-    const trackerId: string = e.errorId || crypto.randomUUID().toString()
 
     if (errorResponse != null) {
       http?.response.setStatus(errorResponse.status)

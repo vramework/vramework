@@ -1,6 +1,6 @@
 import { ForbiddenError } from './errors.js'
-import { CoreAPIPermission } from './types/routes.types.js'
 import { CoreServices, CoreUserSession } from './types/core.types.js'
+import { CoreAPIPermission } from './types/functions.types.js'
 
 /**
  * This function validates permissions by iterating over permission groups and executing the corresponding permission functions. If all functions in at least one group return true, the permission is considered valid.
