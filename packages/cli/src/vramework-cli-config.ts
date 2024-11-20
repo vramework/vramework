@@ -14,6 +14,7 @@ export interface VrameworkCLICoreOutputFiles {
 export type VrameworkCLIConfig = {
   $schema?: string
 
+  esm: boolean
   extends?: string
 
   rootDir: string
@@ -90,6 +91,7 @@ const _getVrameworkCLIConfig = async (
         ...config,
         configDir,
         packageMappings: config.packageMappings || {},
+        esm: config.esm === false ? false : true,
         rootDir: config.rootDir
           ? resolve(configDir, config.rootDir)
           : configDir,
@@ -124,13 +126,15 @@ const _getVrameworkCLIConfig = async (
       validateCLIConfig(result, requiredFields)
     }
 
-    for (const objectKey of Object.keys(result)) {
+    for (const o of Object.keys(result)) {
+      const objectKey = o as keyof VrameworkCLIConfig
       if (objectKey.endsWith('File') || objectKey.endsWith('Directory')) {
         const relativeTo =
           CONFIG_DIR_FILES.includes(objectKey)
             ? result.configDir
             : result.rootDir
         if (result[objectKey]) {
+          // @ts-ignore
           result[objectKey] = join(relativeTo, result[objectKey])
         }
       }

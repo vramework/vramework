@@ -35,13 +35,13 @@ export const addFileWithConfig = (
           typeDeclarationPath = sourceFile.fileName // Get the path of the file where the type was declared
         }
 
-        const variables = configs[fileName] || []
+        const variables = configs.get(fileName) || []
         variables.push({
           variable: variableName,
           type: variableTypeText || null,
           typePath: typeDeclarationPath,
         })
-        configs[fileName] = variables
+        configs.set(fileName, variables)
       }
     }
   }

@@ -25,18 +25,19 @@ export const vrameworkRoutes = async (
     'Finding routes',
     'Found routes',
     async () => {
-      const { routesMapDeclarationFile, routesFile, packageMappings } =
+      const { routesMapDeclarationFile, routesFile, packageMappings, esm } =
         cliConfig
       const { filesWithRoutes, filesWithScheduledTasks, routesMeta } = visitState
       const content = [
-        serializeRoutes(routesFile, filesWithRoutes, packageMappings),
-        serializeSchedulers(routesFile, filesWithScheduledTasks, packageMappings),
+        serializeRoutes(routesFile, filesWithRoutes, packageMappings, esm),
+        serializeSchedulers(routesFile, filesWithScheduledTasks, packageMappings, esm),
         serializeRouteMeta(routesMeta),
         serializeTypedRouteRunner(
           getFileImportRelativePath(
             routesFile,
             routesMapDeclarationFile,
-            packageMappings
+            packageMappings,
+            cliConfig.esm
           )
         ),
       ]

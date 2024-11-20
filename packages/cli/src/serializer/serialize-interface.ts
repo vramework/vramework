@@ -6,11 +6,12 @@ export const serializeInterface = (
   relativeTo: string,
   importMap: ImportMap,
   routesMeta: RoutesMeta,
-  packageMappings: Record<string, string>
+  packageMappings: Record<string, string>,
+  esm: boolean
 ) => {
   const serializedOutput: string[] = []
   serializedOutput.push(
-    serializeImportMap(relativeTo, packageMappings, importMap)
+    serializeImportMap(relativeTo, packageMappings, esm, importMap)
   )
 
   let routesInterface = 'export type RoutesInterface = '

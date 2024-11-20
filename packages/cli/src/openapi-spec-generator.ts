@@ -106,7 +106,7 @@ export async function generateOpenAPISpec(
       paths[path] = {}
     }
 
-    const responses = {}
+    const responses: Record<string, any> = {}
     docs?.errors?.forEach((error) => {
       const errorResponse = getErrorResponseForConstructorName(error)
       if (errorResponse) {

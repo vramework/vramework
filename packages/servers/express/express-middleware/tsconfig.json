@@ -3,12 +3,12 @@
   "compilerOptions": {
     "rootDir": "./src",
     "module": "NodeNext",
-    "outDir": "dist/esm",
+    "outDir": "dist",
     "target": "esnext",
     "declaration": true,
-    "composite": true
+    "composite": true,
   },
-  "include": ["bin/**/*.ts", "src/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "bin/dist"],
   "references": [
     {

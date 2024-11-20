@@ -13,7 +13,7 @@ export class TimerTaskScheduler<SingletonServices extends CoreSingletonServices,
 
     public scheduleAllTasks () {
         const { scheduledTasks } = getScheduledTasks()
-        scheduledTasks.forEach(this.scheduleTask)
+        scheduledTasks.forEach(this.scheduleTask as any)
     }
 
     public startTasks (names: string[]) {
@@ -42,7 +42,7 @@ export class TimerTaskScheduler<SingletonServices extends CoreSingletonServices,
         }
     }
 
-    private scheduleTask(task: CoreScheduledTask<CoreAPIFunctionSessionless<void, void>>) {
+    private scheduleTask(task: CoreScheduledTask<CoreAPIFunctionSessionless<void, void>, any>) {
         const cron = parseCronExpression(task.schedule)
         const handle = scheduler.setInterval(cron, () => {
             runScheduledTask({

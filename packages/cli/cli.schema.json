@@ -141,6 +141,9 @@
         "configDir": {
           "type": "string"
         },
+        "esm": {
+          "type": "boolean"
+        },
         "extends": {
           "type": "string"
         },
@@ -203,6 +206,7 @@
       "required": [
         "bootstrapFile",
         "configDir",
+        "esm",
         "packageMappings",
         "rootDir",
         "routeDirectories",

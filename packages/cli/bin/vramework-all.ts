@@ -67,10 +67,10 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
 
   const bootstrapImports: string[] = []
   bootstrapImports.push(
-    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, `${cliConfig.schemaDirectory}/register.ts`, cliConfig.packageMappings)}'`
+    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, `${cliConfig.schemaDirectory}/register.ts`, cliConfig.packageMappings, cliConfig.esm)}'`
   )
   bootstrapImports.push(
-    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings)}'`
+    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings, cliConfig.esm)}'`
   )
   await writeFileInDir(cliConfig.bootstrapFile, bootstrapImports.join('\n'))
 }

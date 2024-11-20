@@ -19,7 +19,7 @@ export class IntervalTaskScheduler<SingletonServices extends CoreSingletonServic
 
     public scheduleAllTasks () {
         const { scheduledTasks } = getScheduledTasks()
-        scheduledTasks.forEach(this.scheduleTask)
+        scheduledTasks.forEach(this.scheduleTask as any)
     }
 
     public startTasks (names: string[]) {
@@ -48,7 +48,7 @@ export class IntervalTaskScheduler<SingletonServices extends CoreSingletonServic
         }
     }
 
-    private scheduleTask(task: CoreScheduledTask<CoreAPIFunctionSessionless<void, void>>) {
+    private scheduleTask(task: CoreScheduledTask<CoreAPIFunctionSessionless<void, void>, any>) {
         const cron = parseCronExpression(task.schedule)
         const handle = this.scheduler.registerTask(cron, () => {
             runScheduledTask({

@@ -8,6 +8,7 @@
     "importHelpers": true,
     "removeComments": false,
     "noLib": false,
+    "noEmit": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "useUnknownInCatchVariables": false,

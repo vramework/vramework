@@ -4,6 +4,7 @@ import { getFileImportRelativePath } from '../utils.js'
 export const serializeImportMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,
+  esm: boolean,
   importMap: ImportMap,
   filterTypes?: string[]
 ) => {
@@ -15,7 +16,7 @@ export const serializeImportMap = (
         )
       : Array.from(variableNames)
     imports.push(
-      `import type { ${variables.join(', ')} } from '${getFileImportRelativePath(relativeToPath, importPath, packageMappings)}'`
+      `import type { ${variables.join(', ')} } from '${getFileImportRelativePath(relativeToPath, importPath, packageMappings, esm)}'`
     )
   }
   return imports.join('\n')

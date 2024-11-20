@@ -5,6 +5,7 @@ import { serializeImportMap } from './serialize-import-map.js'
 export const serializeTypedRoutesMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,
+  esm: boolean,
   importMap: ImportMap,
   routesMeta: RoutesMeta,
   metaTypes: Map<string, string>
@@ -13,7 +14,7 @@ export const serializeTypedRoutesMap = (
  * This provides the structure needed for typescript to be aware of routes and their return types
  */
     
-${serializeImportMap(relativeToPath, packageMappings, importMap)}
+${serializeImportMap(relativeToPath, packageMappings, esm, importMap)}
 
 // The '& {}' is a workaround for not directly refering to a type since it confuses typescript
 ${Array.from(metaTypes.entries())

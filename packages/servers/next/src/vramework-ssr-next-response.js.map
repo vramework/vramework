@@ -1,0 +1,1 @@
+{"version":3,"file":"vramework-ssr-next-response.js","sourceRoot":"","sources":["vramework-ssr-next-response.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,qBAAqB,EAAE,MAAM,yCAAyC,CAAA;AAO/E,MAAM,OAAO,wBAAyB,SAAQ,qBAAqB;IAMjE,YAAsB,QAAyC;QAC7D,KAAK,EAAE,CAAA;QADa,aAAQ,GAAR,QAAQ,CAAiC;IAE/D,CAAC;IAQM,SAAS,KAAI,CAAC;IAQd,OAAO,KAAI,CAAC;IAQZ,WAAW,KAAI,CAAC;CACxB"}

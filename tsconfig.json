@@ -13,7 +13,9 @@
     "useUnknownInCatchVariables": false,
     "sourceMap": true,
     "allowJs": false,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
     "paths": {
       "@vramework/core": ["./packages/core"],
       "@vramework/core/*": ["./packages/core/*"]

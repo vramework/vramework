@@ -7,7 +7,7 @@
  * @param {any} data - The input data that may contain date strings. It can be an object, array, or primitive value.
  * @returns {any} - The transformed data with date strings converted to `Date` objects.
  */
-export const transformDates = (data: any) => {
+export const transformDates = (data: any): any => {
   if (data === null) return null
   if (Array.isArray(data)) return data.map(transformDates.bind(this))
   if (typeof data === 'object') {

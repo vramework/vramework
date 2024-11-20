@@ -1,0 +1,1 @@
+{"version":3,"file":"vramework-request.js","sourceRoot":"","sources":["vramework-request.ts"],"names":[],"mappings":"AAKA,MAAM,OAAgB,gBAAgB;IAClC,YAAoB,IAAS;QAAT,SAAI,GAAJ,IAAI,CAAK;IAE7B,CAAC;IAMM,KAAK,CAAC,OAAO;QAChB,IAAI,CAAC,IAAI,CAAC,IAAI,EAAE,CAAC;YACb,MAAM,IAAI,KAAK,CAAC,gBAAgB,CAAC,CAAA;QACrC,CAAC;QACD,OAAO,IAAI,CAAC,IAAI,CAAA;IACpB,CAAC;CACJ"}

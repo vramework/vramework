@@ -17,7 +17,7 @@ import { serializeVrameworkTypes } from '../src/serializer/serialize-vramework-t
 import { vrameworkRoutes } from './vramework-routes.js'
 
 export const vrameworkFunctionTypes = async (
-  { typesDeclarationFile: typesFile, packageMappings }: VrameworkCLIConfig,
+  { typesDeclarationFile: typesFile, packageMappings, esm }: VrameworkCLIConfig,
   options: VrameworkCLIOptions,
   visitState: VisitState
 ) => {
@@ -29,13 +29,14 @@ export const vrameworkFunctionTypes = async (
         await getVrameworkFilesAndMethods(
           visitState,
           packageMappings,
+          esm,
           typesFile,
           options
         )
       const content = serializeVrameworkTypes(
-        `import type { ${userSessionType.type} } from '${getFileImportRelativePath(typesFile, userSessionType.typePath, packageMappings)}'`,
+        `import type { ${userSessionType.type} } from '${getFileImportRelativePath(typesFile, userSessionType.typePath, packageMappings, esm)}'`,
         userSessionType.type,
-        `import type { ${sessionServicesType.type} } from '${getFileImportRelativePath(typesFile, sessionServicesType.typePath, packageMappings)}'`,
+        `import type { ${sessionServicesType.type} } from '${getFileImportRelativePath(typesFile, sessionServicesType.typePath, packageMappings, esm)}'`,
         sessionServicesType.type
       )
       await writeFileInDir(typesFile, content)

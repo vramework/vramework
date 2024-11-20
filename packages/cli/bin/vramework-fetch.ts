@@ -16,6 +16,7 @@ export const vrameworkFetch = async ({
   fetchFile,
   routesMapDeclarationFile,
   packageMappings,
+  esm
 }: VrameworkCLIConfig) => {
   await logCommandInfoAndTime(
     'Generating fetch wrapper',
@@ -28,7 +29,8 @@ export const vrameworkFetch = async ({
       const routesMapDeclarationPath = getFileImportRelativePath(
         fetchFile,
         routesMapDeclarationFile,
-        packageMappings
+        packageMappings,
+        esm
       )
 
       const content = [serializeFetchWrapper(routesMapDeclarationPath)]

@@ -22,6 +22,7 @@ export const vrameworkNext = async (
     routesMapDeclarationFile,
     schemaDirectory,
     packageMappings,
+    esm
   }: VrameworkCLIConfig,
   visitState: VisitState,
   options: VrameworkCLIOptions
@@ -41,28 +42,32 @@ export const vrameworkNext = async (
       } = await getVrameworkFilesAndMethods(
         visitState,
         packageMappings,
+        esm,
         nextJSfile,
         options
       )
 
-      const vrameworkConfigImport = `import { ${vrameworkConfig.variable} as createConfig } from '${getFileImportRelativePath(nextJSfile, vrameworkConfig.file, packageMappings)}'`
-      const singletonServicesImport = `import { ${singletonServicesFactory.variable} as createSingletonServices } from '${getFileImportRelativePath(nextJSfile, singletonServicesFactory.file, packageMappings)}'`
-      const sessionServicesImport = `import { ${sessionServicesFactory.variable} as createSessionServices } from '${getFileImportRelativePath(nextJSfile, sessionServicesFactory.file, packageMappings)}'`
+      const vrameworkConfigImport = `import { ${vrameworkConfig.variable} as createConfig } from '${getFileImportRelativePath(nextJSfile, vrameworkConfig.file, packageMappings, esm)}'`
+      const singletonServicesImport = `import { ${singletonServicesFactory.variable} as createSingletonServices } from '${getFileImportRelativePath(nextJSfile, singletonServicesFactory.file, packageMappings, esm)}'`
+      const sessionServicesImport = `import { ${sessionServicesFactory.variable} as createSessionServices } from '${getFileImportRelativePath(nextJSfile, sessionServicesFactory.file, packageMappings, esm)}'`
 
       const routesPath = getFileImportRelativePath(
         nextJSfile,
         routesFile,
-        packageMappings
+        packageMappings,
+        esm
       )
       const routesMapDeclarationPath = getFileImportRelativePath(
         nextJSfile,
         routesMapDeclarationFile,
-        packageMappings
+        packageMappings,
+        esm
       )
       const schemasPath = getFileImportRelativePath(
         nextJSfile,
         `${schemaDirectory}/register.ts`,
-        packageMappings
+        packageMappings,
+        esm
       )
 
       const content = serializeNextJsWrapper(

@@ -14,7 +14,7 @@ import {
 import { serializeTypedRoutesMap } from '../src/serializer/serialize-typed-route-map.js'
 
 export const vrameworkRoutesMap = async (
-  { routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig,
+  { routesMapDeclarationFile, packageMappings, esm }: VrameworkCLIConfig,
   visitState: VisitState
 ) => {
   return await logCommandInfoAndTime(
@@ -24,6 +24,7 @@ export const vrameworkRoutesMap = async (
       const content = serializeTypedRoutesMap(
         routesMapDeclarationFile,
         packageMappings,
+        esm,
         visitState.functionTypesImportMap,
         visitState.routesMeta,
         visitState.metaInputTypes

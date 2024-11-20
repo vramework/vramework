@@ -9,7 +9,7 @@ import { addSchedule } from './add-schedule.js'
 
 export type PathToNameAndType = Map<
   string,
-  { variable: string; type: string | null; typePath: string | null }[]
+  { variable?: string; type?: string | null; typePath: string | null }[]
 >
 
 export interface VisitState {
