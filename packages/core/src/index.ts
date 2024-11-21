@@ -15,6 +15,7 @@ export {
   runScheduledTask,
   getScheduledTasks,
   addScheduledTask,
+  clearScheduledTasks,
 } from './schedule-runner.js'
 
 export {

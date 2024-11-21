@@ -8,7 +8,6 @@ export class VrameworkTaskScheduler<SingletonServices extends CoreSingletonServi
 
     public startAll() {
         const { scheduledTasks } = getScheduledTasks()
-        console.log(scheduledTasks)
         scheduledTasks.forEach(task => this.startJobSchedule(task))
     }
 
@@ -38,12 +37,13 @@ export class VrameworkTaskScheduler<SingletonServices extends CoreSingletonServi
         const job = new CronJob(
             task.schedule,
             async () => {
-                console.log(`Running scheduled task: ${task.name}`)
+                this.singletonServices.logger.info(`Running scheduled task: ${task.name}`)
                 await runScheduledTask({
                     singletonServices: this.singletonServices,
                     createSessionServices: this.createSessionServices as any,
                     name: task.name,
                 })
+                this.singletonServices.logger.debug(`Completed scheduled task: ${task.name}`)
             },
             null,
             true,

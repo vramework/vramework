@@ -14,7 +14,7 @@
     "ncu": "ncu",
     "release": "npm run build && npm test"
   },
-"exports": {
+  "exports": {
     ".": {
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"

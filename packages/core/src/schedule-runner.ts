@@ -37,7 +37,7 @@ export const addScheduledTask = <APIFunction extends CoreAPIFunctionSessionless<
   scheduledTasks.push(scheduledTask as any)
 }
 
-export const clearCronJobs = () => {
+export const clearScheduledTasks = () => {
   scheduledTasks = []
 }
 

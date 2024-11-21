@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node", "mocha"],
+    "types": ["node"],
     "declaration": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
