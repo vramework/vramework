@@ -25,13 +25,8 @@ export const addFileExtendsCoreType = (
             if (extendedTypeName === expectedTypeName) {
               // Retrieve the symbol of the extended type
               const typeSymbol = checker.getSymbolAtLocation(type.expression)
-              if (
-                typeSymbol &&
-                typeSymbol.declarations &&
-                typeSymbol.declarations.length > 0
-              ) {
-                const declaration = typeSymbol.declarations[0]
-
+              const declaration = typeSymbol && typeSymbol.declarations && typeSymbol.declarations[0]
+              if (declaration) {
                 const sourceFile = declaration.getSourceFile()
                 extendedTypeDeclarationPath = sourceFile.fileName // Get the path of the file where the extended type was declared
               }

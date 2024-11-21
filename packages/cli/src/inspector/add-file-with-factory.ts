@@ -23,12 +23,8 @@ export const addFileWithFactory = (
         typeNameNode.text === expectedTypeName
       ) {
         const typeSymbol = checker.getSymbolAtLocation(typeNameNode)
-        if (
-          typeSymbol &&
-          typeSymbol.declarations &&
-          typeSymbol.declarations.length > 0
-        ) {
-          const declaration = typeSymbol.declarations[0]
+        const declaration = typeSymbol && typeSymbol.declarations && typeSymbol.declarations[0]
+        if (declaration) {
           const sourceFile = declaration.getSourceFile()
           typeDeclarationPath = sourceFile.fileName // Get the path of the file where the type was declared
         }
@@ -47,12 +43,8 @@ export const addFileWithFactory = (
         const lastName = typeNameNode.right.text
         if (lastName === expectedTypeName) {
           const typeSymbol = checker.getSymbolAtLocation(typeNameNode.right)
-          if (
-            typeSymbol &&
-            typeSymbol.declarations &&
-            typeSymbol.declarations.length > 0
-          ) {
-            const declaration = typeSymbol.declarations[0]
+          const declaration = typeSymbol && typeSymbol.declarations && typeSymbol.declarations[0]
+          if (declaration) {
             const sourceFile = declaration.getSourceFile()
             typeDeclarationPath = sourceFile.fileName // Get the path of the file where the type was declared
           }

@@ -68,6 +68,7 @@ const getInputTypes = (
       body: bodyTypeName,
     }
   }
+  return undefined
 }
 
 export const addRoute = (
@@ -88,7 +89,7 @@ export const addRoute = (
     return
   }
 
-  if (args.length === 0) {
+  if (!firstArg) {
     return
   }
 

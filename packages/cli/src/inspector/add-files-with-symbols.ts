@@ -18,8 +18,9 @@ export const addFilesWithSymbols = (
     for (const symbol of symbols) {
       if (symbolNames.includes(symbol.getName())) {
         const declarations = symbol.getDeclarations()
-        if (declarations && declarations.length > 0) {
-          let filePath = declarations[0].getSourceFile().fileName
+        const declaration = declarations && declarations[0]
+        if (declaration) {
+          let filePath = declaration.getSourceFile().fileName
           const importInfo = functionTypesImportMap.get(filePath) || {
             importPath: filePath,
             variableNames: new Set(),

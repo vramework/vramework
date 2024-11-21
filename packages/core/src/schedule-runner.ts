@@ -111,7 +111,7 @@ export const runScheduledTask = async ({
           if (service?.close) {
             try {
               await service.close()
-            } catch (e) {
+            } catch (e: any) {
               singletonServices.logger.error(e)
             }
           }

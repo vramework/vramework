@@ -86,6 +86,7 @@ const convertSchemasToBodyPayloads = async (
         })
         return [key, convertedSchema]
       }
+      return
     })
   )
   return Object.fromEntries(convertedEntries.filter((s) => !!s))

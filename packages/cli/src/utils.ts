@@ -69,8 +69,11 @@ const getMetaTypes = (
   } else if (totalValues.length > 1) {
     errors.set(`More than one ${type} found`, map)
   } else {
-    const [file, [{ type, variable, typePath }]] = Object.entries(map)[0]
-    return { file, type, variable, typePath }
+    const entry = Object.entries(map)[0]
+    if (entry) {
+      const [file, [{ type, variable, typePath }]] = entry
+      return { file, type, variable, typePath }
+    }
   }
 
   return undefined

@@ -74,4 +74,5 @@ export const getErrorResponseForConstructorName = (constructorName: string) => {
   if (foundError) {
     return foundError[1]
   }
+  return undefined
 }

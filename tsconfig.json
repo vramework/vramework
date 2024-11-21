@@ -19,7 +19,7 @@
     "sourceMap": true,                  // Keeps source maps for debugging
     "allowJs": false,                   // Keep JavaScript disallowed
     "skipLibCheck": false,              // Don't skip library type checks for maximum safety
-    "exactOptionalPropertyTypes": true, // Ensures exact handling of optional properties
+    "exactOptionalPropertyTypes": false, // Ensures exact handling of optional properties
     "noImplicitReturns": true,          // Ensures all code paths in a function return a value
     "noFallthroughCasesInSwitch": true, // Prevents unintentional fallthrough in switch statements
     "noUncheckedIndexedAccess": true,   // Ensures index access is checked

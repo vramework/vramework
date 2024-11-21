@@ -25,7 +25,7 @@ test('VrameworkSessionService: Handles API key-based sessions', async () => {
   const mockJWTService: any = { decode: async () => undefined };
   const mockOptions = {
     getSessionForAPIKey: async (apiKey) => {
-      if (apiKey === 'validAPIKey') return { id: 2, name: 'API User' };
+      return apiKey === 'validAPIKey' ? { id: 2, name: 'API User' } : undefined
     },
   };
 
@@ -44,7 +44,10 @@ test('VrameworkSessionService: Handles cookie-based sessions', async () => {
   const mockOptions = {
     cookieNames: ['session'],
     getSessionForCookieValue: async (cookieValue, cookieName) => {
-      if (cookieValue === 'validCookie' && cookieName === 'session') return { id: 3, name: 'Cookie User' };
+      if (cookieValue === 'validCookie' && cookieName === 'session') {
+        return { id: 3, name: 'Cookie User' };
+      }
+      return undefined
     },
   };
 

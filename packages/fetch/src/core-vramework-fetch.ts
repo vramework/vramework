@@ -31,7 +31,7 @@ export type CoreVrameworkFetchOptions = {
  * with configurable options and support for JWT and API key-based authentication.
  */
 export class CoreVrameworkFetch {
-  private authHeaders: AuthHeaders = { jwt: undefined, apiKey: undefined }
+  private authHeaders: AuthHeaders = {}
 
   /**
    * Constructs a new instance of the `CoreVrameworkFetch` class.
@@ -77,8 +77,12 @@ export class CoreVrameworkFetch {
    *
    * @param {string} jwt - The JWT to be used for authorization.
    */
-  public setAuthorizationJWT(jwt: string): void {
-    this.authHeaders.jwt = jwt
+  public setAuthorizationJWT(jwt: string | null): void {
+    if (jwt) {
+      this.authHeaders.jwt = jwt
+    } else {
+      delete this.authHeaders.jwt
+    }
   }
 
   /**
@@ -86,8 +90,12 @@ export class CoreVrameworkFetch {
    *
    * @param {string} [apiKey] - The API key to be used for authorization.
    */
-  public setAPIKey(apiKey?: string): void {
-    this.authHeaders.apiKey = apiKey
+  public setAPIKey(apiKey: string | null): void {
+    if (apiKey) {
+      this.authHeaders.apiKey = apiKey
+    } else {
+      delete this.authHeaders.apiKey
+    }
   }
 
   /**

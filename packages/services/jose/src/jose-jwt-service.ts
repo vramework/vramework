@@ -37,8 +37,9 @@ export class JoseJWTService<UserSession extends CoreUserSession>
     const secrets = await this.getSecrets()
     this.secrets = secrets.reduceRight(
       (result, secret) => {
-        result[secret.id] = new TextEncoder().encode(secret.value)
-        this.currentSecret = { id: secret.id, key: result[secret.id] }
+        const secretKey = new TextEncoder().encode(secret.value)
+        this.currentSecret = { id: secret.id, key: secretKey }
+        result[secret.id] = secretKey
         return result
       },
       {} as Record<string, Uint8Array>
@@ -120,6 +121,6 @@ export class JoseJWTService<UserSession extends CoreUserSession>
     if (!key) {
       throw new Error(`Missing secret for id: ${keyId}`)
     }
-    return this.secrets[keyId]
+    return key
   }
 }

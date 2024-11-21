@@ -45,7 +45,7 @@ export type RunRouteOptions = Partial<{
 export type RunRouteParams<In> = {
   singletonServices: CoreSingletonServices
   request: VrameworkRequest<In> | VrameworkHTTPRequest<In>
-  response?: VrameworkResponse | VrameworkHTTPResponse
+  response?: VrameworkResponse | VrameworkHTTPResponse | undefined
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
@@ -289,7 +289,7 @@ export const runRoute = async <In, Out>({
           if (service?.close) {
             try {
               await service.close()
-            } catch (e) {
+            } catch (e: any) {
               singletonServices.logger.error(e)
             }
           }

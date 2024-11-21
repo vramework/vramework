@@ -21,7 +21,7 @@ export const addSchedule = (
     return
   }
 
-  if (args.length === 0) {
+  if (!firstArg) {
     return
   }
 

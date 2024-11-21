@@ -90,11 +90,12 @@ export class VrameworkSessionService<UserSession>
     const authorization =
       request.getHeader('authorization') || request.getHeader('Authorization')
     if (authorization) {
-      if (authorization.split(' ')[0] !== 'Bearer') {
+      const [part1, part2] = authorization.split(' ')
+      if (part1 !== 'Bearer' || !part2) {
         throw new InvalidSessionError()
       }
       userSession = await this.jwtService.decode(
-        authorization.split(' ')[1],
+        part2,
         undefined,
         debugJWTDecode
       )
