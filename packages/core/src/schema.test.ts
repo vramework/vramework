@@ -1,6 +1,6 @@
-import { test, describe, before } from 'node:test';
-import assert from 'assert';
-import { coerceQueryStringToArray, addSchema } from './schema.js';
+import { test, describe, before } from 'node:test'
+import assert from 'assert'
+import { coerceQueryStringToArray, addSchema } from './schema.js'
 
 describe('Schema', () => {
   describe('coerceQueryStringToArray', () => {
@@ -12,46 +12,46 @@ describe('Schema', () => {
           count: { type: 'number' },
           name: { type: 'string' },
         },
-      });
+      })
 
       addSchema('booleanSchema', {
         properties: {
           isActive: true, // Invalid schema definition, but the function should handle it
           tags: { type: 'array' },
         },
-      });
-    });
+      })
+    })
 
     test('should split a string into an array for properties of type array', () => {
-      const data = { tags: 'a,b,c' };
-      coerceQueryStringToArray('testSchema', data);
-      assert.deepStrictEqual(data.tags, ['a', 'b', 'c']);
-    });
+      const data = { tags: 'a,b,c' }
+      coerceQueryStringToArray('testSchema', data)
+      assert.deepStrictEqual(data.tags, ['a', 'b', 'c'])
+    })
 
     test('should not modify properties of type array if they are already arrays', () => {
-      const data = { tags: ['a', 'b', 'c'] };
-      coerceQueryStringToArray('testSchema', data);
-      assert.deepStrictEqual(data.tags, ['a', 'b', 'c']);
-    });
+      const data = { tags: ['a', 'b', 'c'] }
+      coerceQueryStringToArray('testSchema', data)
+      assert.deepStrictEqual(data.tags, ['a', 'b', 'c'])
+    })
 
     test('should not modify properties that are not type array', () => {
-      const data = { count: 5, name: 'example' };
-      coerceQueryStringToArray('testSchema', data);
-      assert.strictEqual(data.count, 5);
-      assert.strictEqual(data.name, 'example');
-    });
+      const data = { count: 5, name: 'example' }
+      coerceQueryStringToArray('testSchema', data)
+      assert.strictEqual(data.count, 5)
+      assert.strictEqual(data.name, 'example')
+    })
 
     test('should handle cases where the data object does not have a key present in the schema', () => {
-      const data = { unknownKey: 'shouldRemain' };
-      coerceQueryStringToArray('testSchema', data);
-      assert.strictEqual(data.unknownKey, 'shouldRemain');
-    });
+      const data = { unknownKey: 'shouldRemain' }
+      coerceQueryStringToArray('testSchema', data)
+      assert.strictEqual(data.unknownKey, 'shouldRemain')
+    })
 
     test('should handle cases where schema properties contain boolean values', () => {
-      const data = { tags: 'a,b,c', isActive: 'true' };
-      coerceQueryStringToArray('booleanSchema', data);
-      assert.deepStrictEqual(data.tags, ['a', 'b', 'c']);
-      assert.strictEqual(data.isActive, 'true'); // No coercion should happen
-    });
-  });
-});
+      const data = { tags: 'a,b,c', isActive: 'true' }
+      coerceQueryStringToArray('booleanSchema', data)
+      assert.deepStrictEqual(data.tags, ['a', 'b', 'c'])
+      assert.strictEqual(data.isActive, 'true') // No coercion should happen
+    })
+  })
+})

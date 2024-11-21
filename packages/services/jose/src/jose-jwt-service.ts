@@ -1,5 +1,5 @@
 /**
- * The `JoseJWTService` class provides functionality for handling JSON Web Tokens (JWTs) using the `jose` library. 
+ * The `JoseJWTService` class provides functionality for handling JSON Web Tokens (JWTs) using the `jose` library.
  * It implements the `JWTService` interface from the `@vramework/core` module, allowing for secure encoding, decoding, and verification of JWTs.
  *
  * @module JoseJWTService
@@ -65,7 +65,6 @@ export class JoseJWTService<UserSession extends CoreUserSession>
       // .setAudience('urn:example:audience')
       .setExpirationTime(expiresIn)
       .sign(this.currentSecret!.key)
-
   }
 
   /**

@@ -7,7 +7,9 @@ import { VrameworkRequest } from './vramework-request.js'
  * @template In - The type of the request body.
  * @group RequestResponse
  */
-export abstract class VrameworkHTTPRequest<In = any> extends VrameworkRequest<In> {
+export abstract class VrameworkHTTPRequest<
+  In = any,
+> extends VrameworkRequest<In> {
   private params: Partial<Record<string, string | string[]>> = {}
 
   /**

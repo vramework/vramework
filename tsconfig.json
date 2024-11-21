@@ -2,22 +2,32 @@
   "compilerOptions": {
     "module": "NodeNext",
     "target": "ES2021",
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "removeComments": true,
-    "noLib": false,
-    "strict": true,
-    "strictNullChecks": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "useUnknownInCatchVariables": false,
-    "sourceMap": true,
-    "allowJs": false,
-    "skipLibCheck": false,
+    "noImplicitAny": true,              // Already strict
+    "noUnusedLocals": true,             // Already strict
+    "removeComments": true,             // Keeps the output clean
+    "noLib": false,                     // Leave as false unless you don't want any standard library
+    "strict": true,                     // Enables all strict options below
+    "strictNullChecks": true,           // Already included by "strict"
+    "strictBindCallApply": true,        // Ensures type safety for `bind`, `call`, and `apply`
+    "strictFunctionTypes": true,        // Ensures contravariance for function arguments
+    "strictPropertyInitialization": true, // Ensures properties are initialized in classes
+    "noImplicitThis": true,             // Disallows `this` of type `any`
+    "alwaysStrict": true,               // Ensures `use strict` in every file
+    "emitDecoratorMetadata": true,      // For decorator support (needed if using NestJS or similar)
+    "experimentalDecorators": true,     // For experimental decorators
+    "useUnknownInCatchVariables": true, // Stricter type for catch variables
+    "sourceMap": true,                  // Keeps source maps for debugging
+    "allowJs": false,                   // Keep JavaScript disallowed
+    "skipLibCheck": false,              // Don't skip library type checks for maximum safety
+    "exactOptionalPropertyTypes": true, // Ensures exact handling of optional properties
+    "noImplicitReturns": true,          // Ensures all code paths in a function return a value
+    "noFallthroughCasesInSwitch": true, // Prevents unintentional fallthrough in switch statements
+    "noUncheckedIndexedAccess": true,   // Ensures index access is checked
+    "forceConsistentCasingInFileNames": true, // Ensures case-sensitive imports
     "paths": {
       "@vramework/core": ["./packages/core"],
       "@vramework/core/*": ["./packages/core/*"]
     }
   },
-  "exclude": ["node_modules", "**/*.spec.ts", ".typedocs"]
+  "exclude": ["node_modules", ".typedocs"]
 }

@@ -4,18 +4,16 @@
  * @group RequestResponse
  */
 export abstract class VrameworkRequest<In = any> {
-    constructor(private data?: In) {
+  constructor(private data?: In) {}
 
+  /**
+   * Retrieves the data
+   * @returns A promise that resolves to an object containing the combined data.
+   */
+  public async getData(): Promise<In> {
+    if (!this.data) {
+      throw new Error('Data not found')
     }
-
-    /**
-     * Retrieves the data
-     * @returns A promise that resolves to an object containing the combined data.
-     */
-    public async getData(): Promise<In> {
-        if (!this.data) {
-            throw new Error('Data not found')
-        }
-        return this.data
-    }
+    return this.data
+  }
 }

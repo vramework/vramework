@@ -19,7 +19,9 @@
     "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
     "ncu": "ncu -x '/.*glob.*/'",
     "release": "yarn build && npm test",
-    "test": "echo 'Not Tests Yet'"
+    "test": "bash run-tests.sh",
+    "test:watch": "bash run-tests.sh --watch",
+    "test:coverage": "bash run-tests.sh --coverage"
   },
   "devDependencies": {
     "typescript": "^5.6"

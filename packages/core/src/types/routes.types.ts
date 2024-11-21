@@ -1,6 +1,10 @@
 import { EError } from '../error-handler.js'
 import { APIDocs } from './core.types.js'
-import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission } from './functions.types.js'
+import {
+  CoreAPIFunction,
+  CoreAPIFunctionSessionless,
+  CoreAPIPermission,
+} from './functions.types.js'
 
 /**
  * Represents the HTTP methods supported for API routes.
@@ -100,4 +104,3 @@ export type RoutesMeta = Array<{
   inputTypes?: RoutesMetaInputTypes
   docs?: APIDocs
 }>
-

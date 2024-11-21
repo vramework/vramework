@@ -39,7 +39,11 @@ export const getVrameworkCLIConfig = async (
   requiredFields: Array<keyof VrameworkCLIConfig>,
   exitProcess: boolean = false
 ): Promise<VrameworkCLIConfig> => {
-  const config = await _getVrameworkCLIConfig(configFile, requiredFields, exitProcess)
+  const config = await _getVrameworkCLIConfig(
+    configFile,
+    requiredFields,
+    exitProcess
+  )
   return config
 }
 
@@ -126,10 +130,9 @@ const _getVrameworkCLIConfig = async (
 
     for (const objectKey of Object.keys(result)) {
       if (objectKey.endsWith('File') || objectKey.endsWith('Directory')) {
-        const relativeTo =
-          CONFIG_DIR_FILES.includes(objectKey)
-            ? result.configDir
-            : result.rootDir
+        const relativeTo = CONFIG_DIR_FILES.includes(objectKey)
+          ? result.configDir
+          : result.rootDir
         if (result[objectKey]) {
           result[objectKey] = join(relativeTo, result[objectKey])
         }

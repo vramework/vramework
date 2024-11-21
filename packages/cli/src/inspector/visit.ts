@@ -61,12 +61,7 @@ export const visit = (
     'CreateSessionServices'
   )
 
-  addFileWithFactory(
-    node,
-    checker,
-    state.configFactories,
-    'CreateConfig'
-  )
+  addFileWithFactory(node, checker, state.configFactories, 'CreateConfig')
 
   addRoute(node, checker, state)
   addSchedule(node, checker, state)

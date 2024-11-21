@@ -8,6 +8,6 @@
     "target": "esnext",
     "moduleResolution": "NodeNext"
   },
-  "exclude": ["node_modules", "dist"],
+  "exclude": ["**/*.test.ts", "node_modules", "dist"],
   "references": []
 }

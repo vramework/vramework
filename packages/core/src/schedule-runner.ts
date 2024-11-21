@@ -5,13 +5,17 @@ import {
   CoreUserSession,
   CreateSessionServices,
 } from './types/core.types.js'
-import { CoreScheduledTask, CoreScheduledTasks, ScheduledTasksMeta } from './types/schedule.types.js'
+import {
+  CoreScheduledTask,
+  CoreScheduledTasks,
+  ScheduledTasksMeta,
+} from './types/schedule.types.js'
 import { CoreAPIFunctionSessionless } from './types/functions.types.js'
 
 export type RunScheduledTasksParams = {
-  name: string,
-  session?: CoreUserSession,
-  singletonServices: CoreSingletonServices,
+  name: string
+  session?: CoreUserSession
+  singletonServices: CoreSingletonServices
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
@@ -20,7 +24,7 @@ export type RunScheduledTasksParams = {
 }
 
 export type RunCronParams = {
-  singletonServices: CoreSingletonServices,
+  singletonServices: CoreSingletonServices
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
@@ -31,7 +35,9 @@ export type RunCronParams = {
 let scheduledTasks: CoreScheduledTasks = []
 let scheduledTasksMeta: ScheduledTasksMeta = []
 
-export const addScheduledTask = <APIFunction extends CoreAPIFunctionSessionless<void, void>>(
+export const addScheduledTask = <
+  APIFunction extends CoreAPIFunctionSessionless<void, void>,
+>(
   scheduledTask: CoreScheduledTask<APIFunction>
 ) => {
   scheduledTasks.push(scheduledTask as any)
@@ -61,14 +67,12 @@ class ScheduledTaskNotFoundError extends Error {
 /**
  * @ignore
  */
-export const runScheduledTask = async (
-  {
-    name,
-    session,
-    singletonServices,
-    createSessionServices,
-  }: RunScheduledTasksParams
-): Promise<void> => {
+export const runScheduledTask = async ({
+  name,
+  session,
+  singletonServices,
+  createSessionServices,
+}: RunScheduledTasksParams): Promise<void> => {
   let sessionServices: CoreServices | undefined
   const trackerId: string = crypto.randomUUID().toString()
 
@@ -79,7 +83,9 @@ export const runScheduledTask = async (
       throw new ScheduledTaskNotFoundError(`Scheduled task not found: ${name}`)
     }
 
-    singletonServices.logger.info(`Running schedule task: ${name} | schedule: ${task.schedule}}`)
+    singletonServices.logger.info(
+      `Running schedule task: ${name} | schedule: ${task.schedule}}`
+    )
 
     const sessionServices = await createSessionServices(
       singletonServices,
@@ -88,11 +94,7 @@ export const runScheduledTask = async (
     )
     const allServices = { ...singletonServices, ...sessionServices }
 
-    await task.func(
-      allServices,
-      undefined,
-      session!
-    )
+    await task.func(allServices, undefined, session!)
   } catch (e: any) {
     const errorResponse = getErrorResponse(e)
 

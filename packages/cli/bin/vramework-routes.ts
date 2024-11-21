@@ -27,10 +27,15 @@ export const vrameworkRoutes = async (
     async () => {
       const { routesMapDeclarationFile, routesFile, packageMappings } =
         cliConfig
-      const { filesWithRoutes, filesWithScheduledTasks, routesMeta } = visitState
+      const { filesWithRoutes, filesWithScheduledTasks, routesMeta } =
+        visitState
       const content = [
         serializeRoutes(routesFile, filesWithRoutes, packageMappings),
-        serializeSchedulers(routesFile, filesWithScheduledTasks, packageMappings),
+        serializeSchedulers(
+          routesFile,
+          filesWithScheduledTasks,
+          packageMappings
+        ),
         serializeRouteMeta(routesMeta),
         serializeTypedRouteRunner(
           getFileImportRelativePath(
@@ -67,4 +72,3 @@ export const routes = (program: Command): void => {
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }
-

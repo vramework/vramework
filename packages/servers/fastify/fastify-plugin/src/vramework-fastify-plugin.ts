@@ -59,8 +59,7 @@ const vrameworkPlugin: FastifyPluginAsync<
         method: req.method as any,
         route: req.url as string,
         respondWith404: vramework.respondWith404,
-      }
-      )
+      })
     } catch {
       // Error should have already been handled by runRoute
     }

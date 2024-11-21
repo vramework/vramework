@@ -10,12 +10,12 @@ import { vrameworkHandler } from '@vramework/uws-handler'
 
 export type UWSCoreConfig = CoreConfig & {
   /** The port on which the server should listen. */
-  port: number;
+  port: number
   /** The hostname for the server. */
-  hostname: string;
+  hostname: string
   /** The path for health checks (optional). */
-  healthCheckPath?: string;
-};
+  healthCheckPath?: string
+}
 
 /**
  * Class representing a uWebSockets.js-based server for Vramework.

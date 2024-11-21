@@ -246,7 +246,6 @@ addError(UnprocessableContentError, {
     'The server understood the content type of the request content, and the syntax of the request content was correct, but it was unable to process the contained instructions..',
 })
 
-
 /**
  * Indicates that the server understood the content type of the request content, and the syntax of the request content was correct, but it was unable to process the contained instructions.
  * @group Error
@@ -255,7 +254,7 @@ export class LockedError extends EError {}
 addError(LockedError, {
   status: 423,
   message:
-    'The resource is locked, meaning it can\'t be accessed. Its response body should contain information in WebDAV\'s XML format.',
+    "The resource is locked, meaning it can't be accessed. Its response body should contain information in WebDAV's XML format.",
 })
 
 /**

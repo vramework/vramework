@@ -13,7 +13,9 @@
     "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
     "release": "npm run build && npm test",
     "ncu": "ncu",
-    "test": "echo 'No tests'"
+    "test": "bash run-tests.sh",
+    "test:watch": "bash run-tests.sh --watch",
+    "test:coverage": "bash run-tests.sh --coverage"
   },
   "exports": {
     ".": {

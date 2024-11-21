@@ -67,9 +67,9 @@ const generalHandler = async (
 
   try {
     await runRoute({
-      request, 
-      response, 
-      singletonServices, 
+      request,
+      response,
+      singletonServices,
       createSessionServices,
       route: request.getPath(),
       method: request.getMethod() as any,

@@ -18,5 +18,5 @@
       "path": "../express-middleware/tsconfig.cjs.json"
     }
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["**/*.test.ts", "node_modules", "dist"]
 }

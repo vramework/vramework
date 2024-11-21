@@ -36,7 +36,12 @@ type VrameworkMiddlewareArgs = RunRouteOptions & {
 export const vrameworkMiddleware = (
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<any, any, any>,
-  { respondWith404, logRoutes, loadSchemas, coerceToArray }: VrameworkMiddlewareArgs
+  {
+    respondWith404,
+    logRoutes,
+    loadSchemas,
+    coerceToArray,
+  }: VrameworkMiddlewareArgs
 ): RequestHandler => {
   if (logRoutes) {
     logRegisterRoutes(singletonServices.logger)
@@ -55,7 +60,7 @@ export const vrameworkMiddleware = (
         method: req.method.toLowerCase() as any,
         route: req.path,
         respondWith404,
-        coerceToArray
+        coerceToArray,
       })
     } catch {
       // Error should have already been handled by runRoute

@@ -9,12 +9,12 @@ import vrameworkFastifyPlugin from '@vramework/fastify-plugin'
 
 export type FastifyCoreConfig = CoreConfig & {
   /** The port on which the server should listen. */
-  port: number;
+  port: number
   /** The hostname for the server. */
-  hostname: string;
+  hostname: string
   /** The path for health checks (optional). */
-  healthCheckPath?: string;
-};
+  healthCheckPath?: string
+}
 
 /**
  * The `VrameworkFastifyServer` class provides a Fastify server integrated with the Vramework framework.

@@ -76,39 +76,39 @@
 //         assert(scheduler['jobs'].has('task2'));
 //     });
 
-    // test('stopAll should stop all running tasks and clear the jobs map', () => {
-    //     const jobMock = { stop: sandbox.stub() } as unknown as CronJob;
-    //     scheduler['jobs'].set('task1', jobMock);
-    //     scheduler['jobs'].set('task2', jobMock);
+// test('stopAll should stop all running tasks and clear the jobs map', () => {
+//     const jobMock = { stop: sandbox.stub() } as unknown as CronJob;
+//     scheduler['jobs'].set('task1', jobMock);
+//     scheduler['jobs'].set('task2', jobMock);
 
-    //     scheduler.stopAll();
+//     scheduler.stopAll();
 
-    //     assert.strictEqual((jobMock.stop as SinonStub).callCount, 2);
-    //     assert.strictEqual(scheduler['jobs'].size, 0);
-    // });
+//     assert.strictEqual((jobMock.stop as SinonStub).callCount, 2);
+//     assert.strictEqual(scheduler['jobs'].size, 0);
+// });
 
-    // test('start should only start specified tasks', () => {
-    //     addScheduledTask(task1);
-    //     addScheduledTask(task2);
+// test('start should only start specified tasks', () => {
+//     addScheduledTask(task1);
+//     addScheduledTask(task2);
 
-    //     scheduler.start(['task1']);
+//     scheduler.start(['task1']);
 
-    //     assert.strictEqual((CronJob.prototype.start as SinonStub).callCount, 1);
-    //     assert.strictEqual(scheduler['jobs'].size, 1);
-    //     assert(scheduler['jobs'].has('task1'));
-    //     assert(!scheduler['jobs'].has('task2'));
-    // });
+//     assert.strictEqual((CronJob.prototype.start as SinonStub).callCount, 1);
+//     assert.strictEqual(scheduler['jobs'].size, 1);
+//     assert(scheduler['jobs'].has('task1'));
+//     assert(!scheduler['jobs'].has('task2'));
+// });
 
-    // test('stop should only stop specified tasks', () => {
-    //     const jobMock = { stop: sandbox.stub() } as unknown as CronJob;
-    //     scheduler['jobs'].set('task1', jobMock);
-    //     scheduler['jobs'].set('task2', jobMock);
+// test('stop should only stop specified tasks', () => {
+//     const jobMock = { stop: sandbox.stub() } as unknown as CronJob;
+//     scheduler['jobs'].set('task1', jobMock);
+//     scheduler['jobs'].set('task2', jobMock);
 
-    //     scheduler.stop(['task1']);
+//     scheduler.stop(['task1']);
 
-    //     assert.strictEqual((jobMock.stop as SinonStub).callCount, 1);
-    //     assert.strictEqual(scheduler['jobs'].size, 1);
-    //     assert(scheduler['jobs'].has('task2'));
-    //     assert(!scheduler['jobs'].has('task1'));
-    // });
+//     assert.strictEqual((jobMock.stop as SinonStub).callCount, 1);
+//     assert.strictEqual(scheduler['jobs'].size, 1);
+//     assert(scheduler['jobs'].has('task2'));
+//     assert(!scheduler['jobs'].has('task1'));
+// });
 // });

@@ -26,14 +26,14 @@ import { vrameworkMiddleware } from '@vramework/express-middleware'
  */
 export type ExpressCoreConfig = CoreConfig & {
   /** The port on which the server should listen. */
-  port: number;
+  port: number
   /** The hostname for the server. */
-  hostname: string;
+  hostname: string
   /** The path for health checks (optional). */
-  healthCheckPath?: string;
+  healthCheckPath?: string
   /** Limits for the server, e.g., memory or request limits (optional). */
-  limits?: Partial<Record<string, string>>;
-};
+  limits?: Partial<Record<string, string>>
+}
 
 export class VrameworkExpressServer {
   public app: core.Express = express()

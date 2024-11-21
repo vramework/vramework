@@ -9,7 +9,7 @@
     "resolveJsonModule": true
   },
   "include": ["bin/**/*.ts", "src/**/*.ts"],
-  "exclude": ["node_modules", "bin/dist"],
+  "exclude": ["**/*.test.ts", "node_modules", "bin/dist"],
   "references": [
     {
       "path": "../core/tsconfig.json"

@@ -25,27 +25,27 @@ const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
-  ? Param | ExtractRouteParams<`/${Rest}`>
-  : S extends `${string}:${infer Param}`
-  ? Param
-  : never
+    ? Param | ExtractRouteParams<`/${Rest}`>
+    : S extends `${string}:${infer Param}`
+      ? Param
+      : never
 
 export type AssertRouteParams<In, Route extends string> =
   ExtractRouteParams<Route> extends keyof In
-  ? unknown
-  : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
+    ? unknown
+    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
 
 export type RunRouteOptions = Partial<{
   skipUserSession: boolean
-  respondWith404: boolean,
+  respondWith404: boolean
   logWarningsForStatusCodes: number[]
   coerceToArray: boolean
 }>
 
 export type RunRouteParams<In> = {
-  singletonServices: CoreSingletonServices,
-  request: VrameworkRequest<In> | VrameworkHTTPRequest<In>,
-  response?: VrameworkResponse | VrameworkHTTPResponse,
+  singletonServices: CoreSingletonServices
+  request: VrameworkRequest<In> | VrameworkHTTPRequest<In>
+  response?: VrameworkResponse | VrameworkHTTPResponse
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
@@ -104,7 +104,7 @@ const getMatchingRoute = (
   requestPath: string
 ) => {
   for (const route of routes) {
-    // TODO: This is a performance improvement, but we could 
+    // TODO: This is a performance improvement, but we could
     // run against all routes if we want to return a 405 method.
     // Probably want a cache to support.
     if (route.method !== requestType.toLowerCase()) {
@@ -147,23 +147,26 @@ export const getUserSession = async <UserSession extends CoreUserSession>(
 /**
  * @ignore
  */
-export const runRoute = async<In, Out>(
-  {
-    singletonServices,
-    request,
-    response,
-    createSessionServices,
-    route: apiRoute,
-    method: apiType,
-    skipUserSession = false,
-    respondWith404 = true,
-    logWarningsForStatusCodes = [],
-    coerceToArray = false
-  }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> &
-    RunRouteOptions & RunRouteParams<In>
-): Promise<Out> => {
+export const runRoute = async <In, Out>({
+  singletonServices,
+  request,
+  response,
+  createSessionServices,
+  route: apiRoute,
+  method: apiType,
+  skipUserSession = false,
+  respondWith404 = true,
+  logWarningsForStatusCodes = [],
+  coerceToArray = false,
+}: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> &
+  RunRouteOptions &
+  RunRouteParams<In>): Promise<Out> => {
   let sessionServices: CoreServices | undefined
-  const http: VrameworkHTTPInteraction | undefined = request instanceof VrameworkHTTPRequest && response instanceof VrameworkHTTPResponse  ? { request, response } : undefined
+  const http: VrameworkHTTPInteraction | undefined =
+    request instanceof VrameworkHTTPRequest &&
+    response instanceof VrameworkHTTPResponse
+      ? { request, response }
+      : undefined
   const trackerId: string = crypto.randomUUID().toString()
 
   try {
@@ -264,7 +267,7 @@ export const runRoute = async<In, Out>(
       http?.response.setJson({
         message: errorResponse.message,
         payload: (e as any).payload,
-        traceId: trackerId
+        traceId: trackerId,
       })
 
       if (logWarningsForStatusCodes.includes(errorResponse.status)) {

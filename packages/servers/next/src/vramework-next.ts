@@ -46,7 +46,7 @@ export class VrameworkNextJS {
       config: CoreConfig
     ) => Promise<CoreSingletonServices>,
     private readonly createSessionServices: CreateSessionServices<any, any, any>
-  ) { }
+  ) {}
 
   /**
    * Handles an action request, routing it to the appropriate handler.

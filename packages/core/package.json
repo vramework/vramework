@@ -13,7 +13,10 @@
     "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
     "ncu": "ncu",
     "release": "npm run build && npm test",
-    "test": "node --test --no-warnings --loader ts-node/esm \"src/*.test.ts\""
+    "test:prefix": "node --test --no-warnings --loader ts-node/esm",
+    "test": "bash run-tests.sh",
+    "test:watch": "bash run-tests.sh --watch",
+    "test:coverage": "bash run-tests.sh --coverage"
   },
   "exports": {
     ".": {

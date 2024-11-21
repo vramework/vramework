@@ -18,11 +18,11 @@ jobs:
         shell: bash
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: yarn
       - run: yarn install
       - run: yarn build
-      - run: yarn test
+      - run: yarn test:coverage
       - run: yarn prettier
       - run: yarn lint
       - run: yarn typedoc
@@ -36,3 +36,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2.3.4
