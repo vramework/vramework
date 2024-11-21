@@ -11,6 +11,7 @@ import {
   ScheduledTasksMeta,
 } from './types/schedule.types.js'
 import { CoreAPIFunctionSessionless } from './types/functions.types.js'
+import { closeServices } from './utils.js'
 
 export type RunScheduledTasksParams = {
   name: string
@@ -105,18 +106,6 @@ export const runScheduledTask = async ({
 
     throw e
   } finally {
-    if (sessionServices) {
-      await Promise.all(
-        Object.values(sessionServices).map(async (service) => {
-          if (service?.close) {
-            try {
-              await service.close()
-            } catch (e: any) {
-              singletonServices.logger.error(e)
-            }
-          }
-        })
-      )
-    }
+    await closeServices(singletonServices.logger, sessionServices)
   }
 }

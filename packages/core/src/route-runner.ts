@@ -16,11 +16,12 @@ import {
 import { match } from 'path-to-regexp'
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkHTTPResponse } from './vramework-http-response.js'
-import { SessionService } from './services/index.js'
+import { Logger, SessionService } from './services/index.js'
 import { RouteNotFoundError, NotImplementedError } from './errors.js'
 import * as cryptoImp from 'crypto'
 import { VrameworkRequest } from './vramework-request.js'
 import { VrameworkResponse } from './vramework-response.js'
+import { closeServices } from './utils.js'
 const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
 
 type ExtractRouteParams<S extends string> =
@@ -144,6 +145,52 @@ export const getUserSession = async <UserSession extends CoreUserSession>(
   return undefined
 }
 
+const loadUserSession = async (
+  skipUserSession: boolean, 
+  requiresSession: boolean, 
+  http: VrameworkHTTPInteraction | undefined, 
+  matchedPath: any,
+  route: CoreAPIRoute<unknown, unknown, any>,
+  logger: Logger,
+  sessionService: SessionService | undefined
+) => {
+  if (skipUserSession && requiresSession) {
+    throw new Error(
+      "Can't skip trying to get user session if auth is required"
+    )
+  }
+
+  if (skipUserSession === false) {
+      try {
+        if (http?.request) {
+          return await getUserSession(
+            sessionService,
+            requiresSession,
+            http.request
+          )
+        } else if (requiresSession) {
+          logger.error({
+            action: 'Can only get user session with HTTP request',
+            path: matchedPath,
+            route,
+          })
+          throw new Error('Can only get user session with HTTP request')
+        }
+      } catch (e: any) {
+        if (requiresSession) {
+          logger.info({
+            action: 'Rejecting route (invalid session)',
+            path: matchedPath,
+            route,
+          })
+          throw e
+        }
+      }
+    }
+    
+    return undefined
+}
+
 /**
  * @ignore
  */
@@ -161,63 +208,28 @@ export const runRoute = async <In, Out>({
 }: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> &
   RunRouteOptions &
   RunRouteParams<In>): Promise<Out> => {
-  let sessionServices: CoreServices | undefined
-  const http: VrameworkHTTPInteraction | undefined =
-    request instanceof VrameworkHTTPRequest &&
-    response instanceof VrameworkHTTPResponse
-      ? { request, response }
-      : undefined
+  let sessionServices: any | undefined
   const trackerId: string = crypto.randomUUID().toString()
-
+  
+  let http: VrameworkHTTPInteraction | undefined
+  if (request instanceof VrameworkHTTPRequest && response instanceof VrameworkHTTPResponse) {
+    http = { request, response }
+  }
+  
   try {
-    let session: CoreUserSession | undefined
-
     const { matchedPath, params, route, schemaName } = getMatchingRoute(
       singletonServices.logger,
       apiType,
       apiRoute
     )
-    http?.request.setParams(params)
     const requiresSession = route.auth !== false
-
+    http?.request.setParams(params)
+    
     singletonServices.logger.info(
       `Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${requiresSession.toString()}`
     )
 
-    if (skipUserSession && requiresSession) {
-      throw new Error(
-        "Can't skip trying to get user session if auth is required"
-      )
-    }
-
-    if (skipUserSession === false) {
-      try {
-        if (http?.request) {
-          session = await getUserSession(
-            singletonServices.sessionService,
-            requiresSession,
-            http.request
-          )
-        } else if (requiresSession) {
-          singletonServices.logger.error({
-            action: 'Can only get user session with HTTP request',
-            path: matchedPath,
-            route,
-          })
-          throw new Error('Can only get user session with HTTP request')
-        }
-      } catch (e: any) {
-        if (requiresSession) {
-          singletonServices.logger.info({
-            action: 'Rejecting route (invalid session)',
-            path: matchedPath,
-            route,
-          })
-          throw e
-        }
-      }
-    }
-
+    const session = await loadUserSession(skipUserSession, requiresSession, http, matchedPath, route, singletonServices.logger, singletonServices.sessionService)
     const data = await request.getData()
 
     if (schemaName) {
@@ -227,7 +239,7 @@ export const runRoute = async <In, Out>({
       validateJson(schemaName, data)
     }
 
-    const sessionServices = await createSessionServices(
+    sessionServices = await createSessionServices(
       singletonServices,
       { http },
       session
@@ -283,18 +295,6 @@ export const runRoute = async <In, Out>({
 
     throw e
   } finally {
-    if (sessionServices) {
-      await Promise.all(
-        Object.values(sessionServices).map(async (service) => {
-          if (service?.close) {
-            try {
-              await service.close()
-            } catch (e: any) {
-              singletonServices.logger.error(e)
-            }
-          }
-        })
-      )
-    }
+    await closeServices(singletonServices.logger, sessionServices)
   }
 }
