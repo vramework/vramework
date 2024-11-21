@@ -2511,6 +2511,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@vramework/pino@workspace:packages/services/pino":
+  version: 0.0.0-use.local
+  resolution: "@vramework/pino@workspace:packages/services/pino"
+  dependencies:
+    typescript: "npm:^5.6"
+  peerDependencies:
+    "@vramework/core": ^0.5.10
+    pino: ^9.5.0
+  languageName: unknown
+  linkType: soft
+
 "@vramework/uws-handler@npm:^0.5.5, @vramework/uws-handler@workspace:packages/servers/uws/uws-handler":
   version: 0.0.0-use.local
   resolution: "@vramework/uws-handler@workspace:packages/servers/uws/uws-handler"
