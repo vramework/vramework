@@ -24,7 +24,7 @@
     "tsc": "yarn workspaces foreach -A -p run tsc",
     "build:esm": "yarn workspaces foreach -p -A run build:esm",
     "build:cjs": "yarn workspaces foreach -p -A run build:cjs",
-    "build": "yarn build:esm && yarn build:cjs",
+    "build": "yarn build:esm && (yarn build:cjs || yarn build:cjs)",
     "release": "yarn build && npx changeset publish",
     "ncu": "yarn workspaces foreach -p -A run ncu",
     "test": "yarn workspaces foreach -p -A run test",
