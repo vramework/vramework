@@ -1,6 +1,6 @@
 {
   "name": "@vramework/cli",
-  "version": "0.5.26",
+  "version": "0.6.0",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
@@ -18,7 +18,7 @@
     "ncu": "ncu -x '/.*glob.*/'",
     "release": "yarn build && npm test",
     "test:prefix": "node --test --no-warnings --loader ts-node/esm",
-        "test": "bash run-tests.sh",
+    "test": "bash run-tests.sh",
     "test:watch": "bash run-tests.sh --watch",
     "test:coverage": "bash run-tests.sh --coverage"
   },
@@ -26,7 +26,7 @@
     "@openapi-contrib/json-schema-to-openapi-schema": "^3.0.2",
     "@types/cookie": "^0.6.0",
     "@types/uuid": "^10.0.0",
-    "@vramework/core": "^0.5.13",
+    "@vramework/core": "^0.6.0",
     "commander": "^12",
     "glob": "^10",
     "path-to-regexp": "^8.2.0",

@@ -1,5 +1,17 @@
 # @vramework/fastify-plugin
 
+## 1.0.0
+
+### Minor Changes
+
+- d58c440: refactor: making http requests explicit to support other types
+
+### Patch Changes
+
+- Updated dependencies [cbcc75b]
+- Updated dependencies [d58c440]
+  - @vramework/core@0.6.0
+
 ## 0.5.6
 
 ### Patch Changes

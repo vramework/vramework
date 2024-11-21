@@ -1,6 +1,6 @@
 {
   "name": "@vramework/fastify-plugin",
-  "version": "0.5.6",
+  "version": "1.0.0",
   "description": "The vramework fastify plugin",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -33,7 +33,7 @@
     }
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.10"
+    "@vramework/core": "^0.6.0"
   },
   "dependencies": {
     "fastify": "^5.0.0",
