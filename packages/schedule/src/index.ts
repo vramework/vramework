@@ -1,2 +1,1 @@
-export { IntervalTaskScheduler } from './interval-scheduler.js'
-export { TimerTaskScheduler } from './timer-scheduler.js'
+export { VrameworkTaskScheduler } from './vramework-task-scheduler.js'

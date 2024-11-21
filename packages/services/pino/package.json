@@ -3,8 +3,8 @@
   "version": "0.6.0",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "type": "module",
   "scripts": {
     "tsc": "tsc",
@@ -14,10 +14,19 @@
     "ncu": "ncu",
     "release": "npm run build && npm test"
   },
-  "exports": {
-    ".": "./dist/index.js",
-    "./*": "./dist/*.js",
-    "./*.d.ts": "./dist/esm/*.d.ts"
+"exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./*": {
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.js"
+    },
+    "./*.d.ts": {
+      "import": "./dist/esm/*.d.ts",
+      "require": "./dist/cjs/*.d.ts"
+    }
   },
   "peerDependencies": {
     "@vramework/core": "^0.5.10",

@@ -9,7 +9,7 @@ import { CoreScheduledTask, CoreScheduledTasks, ScheduledTasksMeta } from './typ
 import { CoreAPIFunctionSessionless } from './types/functions.types.js'
 
 export type RunScheduledTasksParams = {
-  title: string,
+  name: string,
   session?: CoreUserSession,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<
@@ -63,7 +63,7 @@ class ScheduledTaskNotFoundError extends Error {
  */
 export const runScheduledTask = async (
   {
-    title,
+    name,
     session,
     singletonServices,
     createSessionServices,
@@ -73,13 +73,13 @@ export const runScheduledTask = async (
   const trackerId: string = crypto.randomUUID().toString()
 
   try {
-    const task = scheduledTasks.find((task) => task.title === title)
+    const task = scheduledTasks.find((task) => task.name === name)
 
     if (!task) {
-      throw new ScheduledTaskNotFoundError(`Scheduled task not found: ${title}`)
+      throw new ScheduledTaskNotFoundError(`Scheduled task not found: ${name}`)
     }
 
-    singletonServices.logger.info(`Running schedule task: ${title} | schedule: ${task.schedule}}`)
+    singletonServices.logger.info(`Running schedule task: ${name} | schedule: ${task.schedule}}`)
 
     const sessionServices = await createSessionServices(
       singletonServices,

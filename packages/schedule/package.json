@@ -15,19 +15,17 @@
     "release": "npm run build && npm test",
     "test": "mocha"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
-    },
-    "./*": {
-      "import": "./dist/esm/*.js",
-      "require": "./dist/cjs/*.js"
-    },
-    "./*.d.ts": {
-      "import": "./dist/esm/*.d.ts",
-      "require": "./dist/cjs/*.d.ts"
-    }
+  ".": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js"
+  },
+  "./*": {
+    "import": "./dist/esm/*.js",
+    "require": "./dist/cjs/*.js"
+  },
+  "./*.d.ts": {
+    "import": "./dist/esm/*.d.ts",
+    "require": "./dist/cjs/*.d.ts"
   },
   "peerDependencies": {
     "@vramework/core": "^0.5.10"
@@ -47,6 +45,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "cron": "^3.2.1",
     "cron-schedule": "^5.0.4"
   }
 }

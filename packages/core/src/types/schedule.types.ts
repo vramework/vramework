@@ -14,11 +14,12 @@ export type ScheduledTasksMeta<UserSession extends CoreUserSession = any> = Arra
 /**
  * Represents a core scheduled task.
  */
-export type CoreScheduledTask<APIFunction extends CoreAPIFunctionSessionless<void, void>> = {
-    title: string
+export type CoreScheduledTask<APIFunction extends CoreAPIFunctionSessionless<void, void>, UserSession extends CoreUserSession = CoreUserSession> = {
+    name: string
     schedule: string
     func: APIFunction,
-    docs?: APIDocs
+    docs?: APIDocs,
+    session?: CoreUserSession
 }
 
 /**

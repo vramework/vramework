@@ -11,6 +11,7 @@
       "packages/core",
       "packages/cli",
       "packages/fetch",
+      "packages/schedule",
       "packages/services/*",
       "packages/servers/*",
       "packages/servers/express/*",
