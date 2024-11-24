@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { serializeNextJsWrapper } from '../src/serializer/serialize-nextjs-wrapper.js'
+import { serializeNextJsWrapper } from '../src/nextjs/serialize-nextjs-wrapper.js'
 import {
   getFileImportRelativePath,
   getVrameworkFilesAndMethods,

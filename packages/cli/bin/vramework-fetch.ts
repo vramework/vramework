@@ -10,7 +10,7 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { serializeFetchWrapper } from '../src/serializer/serialize-fetch-wrapper.js'
+import { serializeFetchWrapper } from '../src/fetch/serialize-fetch-wrapper.js'
 
 export const vrameworkFetch = async ({
   fetchFile,

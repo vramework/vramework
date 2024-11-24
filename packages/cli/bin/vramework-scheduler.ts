@@ -11,30 +11,33 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeTypedRoutesMap } from '../src/core/serialize-typed-route-map.js'
+import { serializeSchedulers } from '../src/scheduler/serialize-schedulers.js'
 
-export const vrameworkRoutesMap = async (
-  { routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig,
+export const vrameworkScheduler = async (
+  cliConfig: VrameworkCLIConfig,
   visitState: VisitState
 ) => {
   return await logCommandInfoAndTime(
-    'Creating routes map',
-    'Created routes map',
+    'Finding scheduled tasks',
+    'Found scheduled tasks',
     async () => {
-      const content = serializeTypedRoutesMap(
-        routesMapDeclarationFile,
-        packageMappings,
-        visitState.functionTypesImportMap,
-        visitState.routesMeta,
-        visitState.metaInputTypes
-      )
-      await writeFileInDir(routesMapDeclarationFile, content)
+      const { schedulersFile, packageMappings } = cliConfig
+      const { filesWithScheduledTasks } = visitState
+      const content = [
+        serializeSchedulers(
+            schedulersFile,
+          filesWithScheduledTasks,
+          packageMappings
+        ),
+      ]
+      await writeFileInDir(schedulersFile, content.join('\n\n'))
     }
   )
 }
 
 async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
   logVrameworkLogo()
+
   const cliConfig = await getVrameworkCLIConfig(cliOptions.config, [
     'rootDir',
     'routeDirectories',
@@ -44,13 +47,13 @@ async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
     cliConfig.rootDir,
     cliConfig.routeDirectories
   )
-  await vrameworkRoutesMap(cliConfig, visitState)
+  await vrameworkScheduler(cliConfig, visitState)
 }
 
-export const routesMap = (program: Command): void => {
+export const schedules = (program: Command): void => {
   program
-    .command('map')
-    .description('Generate a map of all routes to aid in type checking')
+    .command('scheduler')
+    .description('Find all scheduled tasks to import')
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }

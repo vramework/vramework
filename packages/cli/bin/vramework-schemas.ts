@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { saveSchemas, generateSchemas } from '../src/schema-generator.js'
+import { saveSchemas, generateSchemas } from '../src/schema/schema-generator.js'
 
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import {

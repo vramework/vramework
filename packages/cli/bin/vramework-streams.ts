@@ -11,30 +11,34 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeTypedRoutesMap } from '../src/core/serialize-typed-route-map.js'
+import { serializeStreams, serializeStreamMeta } from '../src/stream/serialize-schedulers.js'
 
-export const vrameworkRoutesMap = async (
-  { routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig,
+export const vrameworkStreams = async (
+  cliConfig: VrameworkCLIConfig,
   visitState: VisitState
 ) => {
   return await logCommandInfoAndTime(
-    'Creating routes map',
-    'Created routes map',
+    'Finding streams',
+    'Found streams',
     async () => {
-      const content = serializeTypedRoutesMap(
-        routesMapDeclarationFile,
-        packageMappings,
-        visitState.functionTypesImportMap,
-        visitState.routesMeta,
-        visitState.metaInputTypes
-      )
-      await writeFileInDir(routesMapDeclarationFile, content)
+      const { streamsFile, packageMappings } = cliConfig
+      const { filesWithStreams, streamsMeta } = visitState
+      const content = [
+        serializeStreams(
+          streamsFile,
+          filesWithStreams,
+          packageMappings
+        ),
+        serializeStreamMeta(streamsMeta),
+      ]
+      await writeFileInDir(streamsFile, content.join('\n\n'))
     }
   )
 }
 
 async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
   logVrameworkLogo()
+
   const cliConfig = await getVrameworkCLIConfig(cliOptions.config, [
     'rootDir',
     'routeDirectories',
@@ -44,13 +48,13 @@ async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
     cliConfig.rootDir,
     cliConfig.routeDirectories
   )
-  await vrameworkRoutesMap(cliConfig, visitState)
+  await vrameworkStreams(cliConfig, visitState)
 }
 
-export const routesMap = (program: Command): void => {
+export const streams = (program: Command): void => {
   program
-    .command('map')
-    .description('Generate a map of all routes to aid in type checking')
+    .command('streams')
+    .description('Find all streams to import')
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }

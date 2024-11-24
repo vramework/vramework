@@ -5,8 +5,8 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { generateSchemas } from '../src/schema-generator.js'
-import { generateOpenAPISpec } from '../src/openapi-spec-generator.js'
+import { generateSchemas } from '../src/schema/schema-generator.js'
+import { generateOpenAPISpec } from '../src/openapi/openapi-spec-generator.js'
 import { VisitState } from '../src/inspector/visit.js'
 import {
   getVrameworkCLIConfig,
