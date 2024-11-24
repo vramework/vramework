@@ -18,7 +18,7 @@
     "ncu": "ncu -x '/.*glob.*/'",
     "release": "yarn build && npm test",
     "test:prefix": "node --test --no-warnings --loader ts-node/esm",
-        "test": "bash run-tests.sh",
+    "test": "bash run-tests.sh",
     "test:watch": "bash run-tests.sh --watch",
     "test:coverage": "bash run-tests.sh --coverage"
   },
