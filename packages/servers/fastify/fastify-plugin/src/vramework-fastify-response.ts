@@ -1,5 +1,5 @@
 import { JSONValue } from '@vramework/core/types/core.types'
-import { VrameworkHTTPResponse } from '@vramework/core/vramework-http-response'
+import { VrameworkHTTPResponse } from '@vramework/core/http/vramework-http-response'
 import * as cookie from 'cookie'
 import { FastifyReply } from 'fastify'
 

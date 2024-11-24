@@ -1,4 +1,4 @@
-import { VrameworkHTTPRequest } from '@vramework/core/vramework-http-request'
+import { VrameworkHTTPRequest } from '@vramework/core/http/vramework-http-request'
 import * as cookie from 'cookie'
 import { FastifyRequest } from 'fastify'
 

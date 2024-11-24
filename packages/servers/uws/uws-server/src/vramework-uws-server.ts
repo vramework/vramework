@@ -6,7 +6,7 @@ import {
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
 
-import { vrameworkHandler } from '@vramework/uws-handler'
+import { vrameworkHTTPHandler, vrameworkWebsocketHandler } from '@vramework/uws-handler'
 
 export type UWSCoreConfig = CoreConfig & {
   /** The port on which the server should listen. */
@@ -42,16 +42,6 @@ export class VrameworkUWSServer {
   ) {}
 
   /**
-   * Placeholder for enabling CORS.
-   *
-   * @param _options - The options to configure CORS.
-   * @throws Method not implemented.
-   */
-  public enableCors(_options: any) {
-    throw new Error('Method not implemented.')
-  }
-
-  /**
    * Initializes the server by setting up health check and request handling routes.
    */
   public async init() {
@@ -64,7 +54,16 @@ export class VrameworkUWSServer {
 
     this.app.any(
       '/*',
-      vrameworkHandler({
+      vrameworkHTTPHandler({
+        logRoutes: true,
+        singletonServices: this.singletonServices,
+        createSessionServices: this.createSessionServices,
+      })
+    )
+
+    this.app.ws(
+      '/*',
+      vrameworkWebsocketHandler({
         logRoutes: true,
         singletonServices: this.singletonServices,
         createSessionServices: this.createSessionServices,

@@ -17,8 +17,8 @@ import {
   CreateConfig,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
-import { APIRouteMethod } from '@vramework/core/types/routes.types'
-import { runRoute } from '@vramework/core/route-runner'
+import { APIRouteMethod } from '@vramework/core/http/routes.types'
+import { runRoute } from '@vramework/core/http/route-runner'
 
 const injectIntoUrl = (route: string, keys: Record<string, string>) => {
   const path = compile(route)

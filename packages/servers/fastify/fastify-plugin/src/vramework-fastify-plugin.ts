@@ -9,7 +9,7 @@ import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 import { VrameworkFastifyRequest } from './vramework-fastify-request.js'
 import { VrameworkFastifyResponse } from './vramework-fastify-response.js'
-import { logRoutes } from '@vramework/core/log-routes'
+import { logRoutes } from '@vramework/core/http/log-routes'
 
 /**
  * The `VrameworkFastifyPlugin` is a Fastify plugin that integrates the Vramework framework with Fastify,
