@@ -1,3 +1,4 @@
+import { coerceQueryStringToArray, loadSchema, validateJson } from "./schema.js"
 import { Logger } from "./services/logger.js"
 import { CoreServices } from "./types/core.types.js"
 
@@ -14,5 +15,15 @@ export const closeServices = async (logger: Logger, sessionServices?: CoreServic
                 }
             })
         )
+    }
+}
+
+export const validateAndCoerce = (logger: Logger, schemaName: string | undefined | null, data: any, coerceToArray: boolean) => {
+    if (schemaName) {
+        loadSchema(schemaName, logger)
+        if (coerceToArray) {
+            coerceQueryStringToArray(schemaName, data)
+        }
+        validateJson(schemaName, data)
     }
 }

@@ -83,12 +83,7 @@ export class NotFoundError extends EError {}
  * The server cannot find the requested route.
  * @group Error
  */
-export class RouteNotFoundError extends EError {}
 addError(NotFoundError, {
-  status: 404,
-  message: 'The server cannot find the requested resource.',
-})
-addError(RouteNotFoundError, {
   status: 404,
   message: 'The server cannot find the requested resource.',
 })

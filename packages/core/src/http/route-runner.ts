@@ -4,55 +4,26 @@ import {
   CoreAPIRoute,
   CoreAPIRoutes,
   RoutesMeta,
+  RunRouteOptions,
+  RunRouteParams,
 } from './routes.types.js'
-import { coerceQueryStringToArray, loadSchema, validateJson } from '../schema.js'
+import { loadSchema } from '../schema.js'
 import {
-  CoreServices,
   CoreSingletonServices,
   CoreUserSession,
-  CreateSessionServices,
-  VrameworkHTTPInteraction,
+  VrameworkHTTP,
 } from '../types/core.types.js'
 import { match } from 'path-to-regexp'
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkHTTPResponse } from './vramework-http-response.js'
 import { Logger, SessionService } from '../services/index.js'
-import { RouteNotFoundError, NotImplementedError } from '../errors.js'
+import { NotFoundError, NotImplementedError } from '../errors.js'
 import * as cryptoImp from 'crypto'
+import { closeServices, validateAndCoerce } from '../utils.js'
+import { CoreAPIStream } from '../stream/stream.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
-import { closeServices } from '../utils.js'
 const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
-
-type ExtractRouteParams<S extends string> =
-  S extends `${string}:${infer Param}/${infer Rest}`
-    ? Param | ExtractRouteParams<`/${Rest}`>
-    : S extends `${string}:${infer Param}`
-      ? Param
-      : never
-
-export type AssertRouteParams<In, Route extends string> =
-  ExtractRouteParams<Route> extends keyof In
-    ? unknown
-    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
-
-export type RunRouteOptions = Partial<{
-  skipUserSession: boolean
-  respondWith404: boolean
-  logWarningsForStatusCodes: number[]
-  coerceToArray: boolean
-}>
-
-export type RunRouteParams<In> = {
-  singletonServices: CoreSingletonServices
-  request: VrameworkRequest<In> | VrameworkHTTPRequest<In>
-  response?: VrameworkResponse | VrameworkHTTPResponse | undefined
-  createSessionServices: CreateSessionServices<
-    CoreSingletonServices,
-    CoreUserSession,
-    CoreServices
-  >
-}
 
 let routes: CoreAPIRoutes = []
 let routesMeta: RoutesMeta = []
@@ -128,8 +99,7 @@ const getMatchingRoute = (
       return { matchedPath, params: matchedPath.params, route, schemaName }
     }
   }
-  logger.info({ message: 'Invalid route', requestPath, requestType })
-  throw new RouteNotFoundError()
+  return undefined
 }
 
 export const getUserSession = async <UserSession extends CoreUserSession>(
@@ -145,12 +115,12 @@ export const getUserSession = async <UserSession extends CoreUserSession>(
   return undefined
 }
 
-const loadUserSession = async (
-  skipUserSession: boolean, 
-  requiresSession: boolean, 
-  http: VrameworkHTTPInteraction | undefined, 
+export const loadUserSession = async (
+  skipUserSession: boolean,
+  requiresSession: boolean,
+  http: VrameworkHTTP | undefined,
   matchedPath: any,
-  route: CoreAPIRoute<unknown, unknown, any>,
+  route: CoreAPIRoute<unknown, unknown, any> | CoreAPIStream<unknown, any>,
   logger: Logger,
   sessionService: SessionService | undefined
 ) => {
@@ -161,34 +131,71 @@ const loadUserSession = async (
   }
 
   if (skipUserSession === false) {
-      try {
-        if (http?.request) {
-          return await getUserSession(
-            sessionService,
-            requiresSession,
-            http.request
-          )
-        } else if (requiresSession) {
-          logger.error({
-            action: 'Can only get user session with HTTP request',
-            path: matchedPath,
-            route,
-          })
-          throw new Error('Can only get user session with HTTP request')
-        }
-      } catch (e: any) {
-        if (requiresSession) {
-          logger.info({
-            action: 'Rejecting route (invalid session)',
-            path: matchedPath,
-            route,
-          })
-          throw e
-        }
+    try {
+      if (http?.request) {
+        return await getUserSession(
+          sessionService,
+          requiresSession,
+          http.request
+        )
+      } else if (requiresSession) {
+        logger.error({
+          action: 'Can only get user session with HTTP request',
+          path: matchedPath,
+          route,
+        })
+        throw new Error('Can only get user session with HTTP request')
+      }
+    } catch (e: any) {
+      if (requiresSession) {
+        logger.info({
+          action: 'Rejecting route (invalid session)',
+          path: matchedPath,
+          route,
+        })
+        throw e
       }
     }
-    
-    return undefined
+  }
+
+  return undefined
+}
+
+export const createHTTPInteraction = (request: VrameworkRequest | undefined, response: VrameworkResponse | undefined) => {
+  let http: VrameworkHTTP | undefined = undefined
+  if (request instanceof VrameworkHTTPRequest || response instanceof VrameworkHTTPResponse) {
+    http = {}
+    if (request instanceof VrameworkHTTPRequest) {
+      http.request = request
+    }
+    if (response instanceof VrameworkHTTPResponse) {
+      http.response = response
+    }
+  }
+  return http
+}
+
+export const handleError = (e: any, http: VrameworkHTTP | undefined, trackerId: string, logger: Logger, logWarningsForStatusCodes: number[]) => {
+  const errorResponse = getErrorResponse(e)
+
+  if (errorResponse != null) {
+    http?.response?.setStatus(errorResponse.status)
+    http?.response?.setJson({
+      message: errorResponse.message,
+      payload: (e as any).payload,
+      traceId: trackerId,
+    })
+
+    if (logWarningsForStatusCodes.includes(errorResponse.status)) {
+      logger.warn(`Warning id: ${trackerId}`)
+      logger.warn(e)
+    }
+  } else {
+    logger.warn(`Error id: ${trackerId}`)
+    logger.error(e)
+    http?.response?.setStatus(500)
+    http?.response?.setJson({ errorId: trackerId })
+  }
 }
 
 /**
@@ -210,21 +217,29 @@ export const runRoute = async <In, Out>({
   RunRouteParams<In>): Promise<Out> => {
   let sessionServices: any | undefined
   const trackerId: string = crypto.randomUUID().toString()
-  
-  let http: VrameworkHTTPInteraction | undefined
-  if (request instanceof VrameworkHTTPRequest && response instanceof VrameworkHTTPResponse) {
-    http = { request, response }
+
+  const http = createHTTPInteraction(request, response)
+
+  const matchedRoute = getMatchingRoute(
+    singletonServices.logger,
+    apiType,
+    apiRoute
+  )
+
+  if (!matchedRoute) {
+    if (respondWith404) {
+      http?.response?.setStatus(404)
+      http?.response?.end()
+    }
+    singletonServices.logger.info({ message: 'Invalid route', apiRoute, apiType })
+    throw new NotFoundError(`Route not found: ${apiRoute}`)
   }
-  
+
   try {
-    const { matchedPath, params, route, schemaName } = getMatchingRoute(
-      singletonServices.logger,
-      apiType,
-      apiRoute
-    )
+    const { matchedPath, params, route, schemaName } = matchedRoute
     const requiresSession = route.auth !== false
-    http?.request.setParams(params)
-    
+    http?.request?.setParams(params)
+
     singletonServices.logger.info(
       `Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${requiresSession.toString()}`
     )
@@ -232,12 +247,7 @@ export const runRoute = async <In, Out>({
     const session = await loadUserSession(skipUserSession, requiresSession, http, matchedPath, route, singletonServices.logger, singletonServices.sessionService)
     const data = await request.getData()
 
-    if (schemaName) {
-      if (coerceToArray) {
-        coerceQueryStringToArray(schemaName, data)
-      }
-      validateJson(schemaName, data)
-    }
+    validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
 
     sessionServices = await createSessionServices(
       singletonServices,
@@ -246,53 +256,24 @@ export const runRoute = async <In, Out>({
     )
     const allServices = { ...singletonServices, ...sessionServices }
 
-    if (route.permissions) {
-      await verifyPermissions(route.permissions, allServices, data, session)
-    }
+    await verifyPermissions(route.permissions, allServices, data, session)
 
     const result: any = (await route.func(
       allServices,
       data,
       session!
     )) as unknown as Out
-    http?.response.setStatus(200)
 
     if (route.returnsJSON === false) {
-      http?.response.setResponse(result)
+      http?.response?.setResponse(result)
     } else {
-      http?.response.setJson(result)
+      http?.response?.setJson(result)
     }
+    http?.response?.setStatus(200)
+
     return result
   } catch (e: any) {
-    if (e instanceof RouteNotFoundError) {
-      if (respondWith404) {
-        http?.response.setStatus(404)
-        http?.response.end()
-      }
-      throw e
-    }
-
-    const errorResponse = getErrorResponse(e)
-
-    if (errorResponse != null) {
-      http?.response.setStatus(errorResponse.status)
-      http?.response.setJson({
-        message: errorResponse.message,
-        payload: (e as any).payload,
-        traceId: trackerId,
-      })
-
-      if (logWarningsForStatusCodes.includes(errorResponse.status)) {
-        singletonServices.logger.warn(`Warning id: ${trackerId}`)
-        singletonServices.logger.warn(e)
-      }
-    } else {
-      singletonServices.logger.warn(`Error id: ${trackerId}`)
-      singletonServices.logger.error(e)
-      http?.response.setStatus(500)
-      http?.response.setJson({ errorId: trackerId })
-    }
-
+    handleError(e, http, trackerId, singletonServices.logger, logWarningsForStatusCodes)
     throw e
   } finally {
     await closeServices(singletonServices.logger, sessionServices)
