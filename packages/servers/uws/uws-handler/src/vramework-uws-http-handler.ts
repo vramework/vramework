@@ -4,12 +4,13 @@ import {
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
-import { runRoute, RunRouteOptions } from '@vramework/core/route-runner'
+import { runRoute } from '@vramework/core/http/route-runner'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
-import { logRoutes as logRegisterRoutes } from '@vramework/core/log-routes'
+import { logRoutes as logRegisterRoutes } from '@vramework/core/http/log-routes'
 import { loadAllSchemas } from '@vramework/core/schema'
+import { RunRouteOptions } from '@vramework/core/http/routes.types'
 
 /**
  * Options for configuring the `vrameworkHandler`.
@@ -34,7 +35,7 @@ export type VrameworkuWSHandlerOptions = {
  * @param {VrameworkuWSHandlerOptions} options - The options to configure the handler.
  * @returns {Function} - The request handler function.
  */
-export const vrameworkHandler = ({
+export const vrameworkHTTPHandler = ({
   logRoutes,
   singletonServices,
   createSessionServices,

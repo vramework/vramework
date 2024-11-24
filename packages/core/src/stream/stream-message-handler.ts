@@ -1,8 +1,9 @@
 import { match } from "path-to-regexp"
 import { loadSchema, validateJson } from "../schema.js"
-import { CoreSingletonServices, CoreStreamServices, CoreUserSession, VrameworkStream } from "../types/core.types.js"
+import { CoreSingletonServices, CoreStreamServices, CoreUserSession } from "../types/core.types.js"
 import { CoreAPIStreamMessage, CoreAPIStream } from "./stream.types.js"
 import { getStreams } from "./stream-runner.js"
+import { VrameworkStream } from "./vramework-stream.js"
 
 const getMatchingHandler = (
     logger: CoreSingletonServices['logger'],
@@ -30,7 +31,7 @@ const getMatchingHandler = (
 }
 
 export const registerMessageHandlers = (streamConfig: CoreAPIStream<any, any>, stream: VrameworkStream, services: CoreStreamServices, userSession?: CoreUserSession) => {
-    stream.subscribe((data) => {
+    stream.onMessage((data) => {
         let processed = false
         try {
             if (typeof data === 'string') {

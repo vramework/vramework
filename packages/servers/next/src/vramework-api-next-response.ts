@@ -1,6 +1,6 @@
 import { NextApiResponse } from 'next'
 import * as cookie from 'cookie'
-import { VrameworkHTTPResponse } from '@vramework/core/vramework-http-response'
+import { VrameworkHTTPResponse } from '@vramework/core/http/vramework-http-response'
 import { JSONValue } from '@vramework/core/types/core.types'
 
 /**

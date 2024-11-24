@@ -1,5 +1,5 @@
 import { test, describe, beforeEach, afterEach } from 'node:test'
-import assert from 'assert'
+import * as assert from 'assert'
 import { NotFoundError, NotImplementedError } from '../errors.js'
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkHTTPResponse } from './vramework-http-response.js'

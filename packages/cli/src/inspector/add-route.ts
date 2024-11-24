@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
-import { APIRouteMethod } from '@vramework/core/types/routes.types'
+import { APIRouteMethod } from '@vramework/core/http/routes.types'
 import { APIDocs } from '@vramework/core/types/core.types'
 
 const extractTypeKeys = (type: ts.Type): string[] => {

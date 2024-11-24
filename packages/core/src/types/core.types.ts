@@ -2,6 +2,7 @@ import { Logger, LogLevel } from '../services/logger.js'
 import { PermissionService, SessionService } from '../services/index.js'
 import { VrameworkHTTPRequest } from '../http/vramework-http-request.js'
 import { VrameworkHTTPResponse } from '../http/vramework-http-response.js'
+import { VrameworkStream } from '../stream/vramework-stream.js'
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.
@@ -80,16 +81,6 @@ export interface CoreSingletonServices {
 export interface VrameworkHTTP {
   request?: VrameworkHTTPRequest
   response?: VrameworkHTTPResponse
-}
-
-/**
- * Represents a stream interaction within Vramework.
- */
-export interface VrameworkStream {
-  id: string
-  subscribe: (callback: (data: any) => void) => void
-  send: (message: any) =>  void
-  onClose: (callback: () => Promise<void>) => void
 }
 
 /**

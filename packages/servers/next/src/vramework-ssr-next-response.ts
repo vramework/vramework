@@ -1,4 +1,4 @@
-import { VrameworkHTTPResponse } from '@vramework/core/vramework-http-response'
+import { VrameworkHTTPResponse } from '@vramework/core/http/vramework-http-response'
 import { IncomingMessage, ServerResponse } from 'http'
 
 /**

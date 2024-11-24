@@ -1,9 +1,10 @@
 import { EError } from "../error-handler.js"
 import { VrameworkHTTPRequest } from "../http/vramework-http-request.js"
 import { VrameworkHTTPResponse } from "../http/vramework-http-response.js"
-import { CoreServices, CoreSingletonServices, CoreStreamServices, CoreUserSession, CreateSessionServices, VrameworkStream } from "../types/core.types.js"
+import { CoreServices, CoreSingletonServices, CoreStreamServices, CoreUserSession, CreateSessionServices } from "../types/core.types.js"
 import { CoreAPIPermission } from "../types/functions.types.js"
 import { VrameworkRequest } from "../vramework-request.js"
+import { VrameworkStream } from "./vramework-stream.js"
 
 export type RunStreamOptions = Partial<{
   skipUserSession: boolean

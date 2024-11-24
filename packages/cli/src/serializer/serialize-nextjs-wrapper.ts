@@ -15,7 +15,7 @@ export const serializeNextJsWrapper = (
 import { VrameworkNextJS } from '@vramework/next'
 import type { IncomingMessage, ServerResponse } from 'http'
 import type { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils'
-import type { APIRouteMethod } from '@vramework/core/types/routes.types'
+import type { APIRouteMethod } from '@vramework/core/http/routes.types'
 import type { RoutesMap, RouteHandlerOf } from '${routesMapPath}'
 
 ${configImport}
