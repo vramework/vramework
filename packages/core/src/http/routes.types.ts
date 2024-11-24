@@ -1,10 +1,44 @@
 import { EError } from '../error-handler.js'
-import { APIDocs } from '../types/core.types.js'
+import { APIDocs, CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices } from '../types/core.types.js'
 import {
   CoreAPIFunction,
   CoreAPIFunctionSessionless,
   CoreAPIPermission,
 } from '../types/functions.types.js'
+import { VrameworkRequest } from '../vramework-request.js'
+import { VrameworkResponse } from '../vramework-response.js'
+import { VrameworkHTTPRequest } from './vramework-http-request.js'
+import { VrameworkHTTPResponse } from './vramework-http-response.js'
+
+type ExtractRouteParams<S extends string> =
+  S extends `${string}:${infer Param}/${infer Rest}`
+    ? Param | ExtractRouteParams<`/${Rest}`>
+    : S extends `${string}:${infer Param}`
+      ? Param
+      : never
+
+export type AssertRouteParams<In, Route extends string> =
+  ExtractRouteParams<Route> extends keyof In
+    ? unknown
+    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
+
+export type RunRouteOptions = Partial<{
+  skipUserSession: boolean
+  respondWith404: boolean
+  logWarningsForStatusCodes: number[]
+  coerceToArray: boolean
+}>
+
+export type RunRouteParams<In> = {
+  singletonServices: CoreSingletonServices
+  request: VrameworkRequest<In> | VrameworkHTTPRequest<In>
+  response?: VrameworkResponse | VrameworkHTTPResponse | undefined
+  createSessionServices: CreateSessionServices<
+    CoreSingletonServices,
+    CoreUserSession,
+    CoreServices
+  >
+}
 
 /**
  * Represents the HTTP methods supported for API routes.

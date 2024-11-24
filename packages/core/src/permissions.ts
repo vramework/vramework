@@ -13,11 +13,15 @@ export const verifyPermissions = async (
   permissions: Record<
     string,
     CoreAPIPermission<any>[] | CoreAPIPermission<any>
-  >,
+  > | undefined,
   services: CoreServices,
   data: any,
   session?: CoreUserSession
 ): Promise<void> => {
+  if (!permissions) {
+    return
+  }
+  
   let valid = false
   const permissionGroups = Object.values(permissions)
   if (permissionGroups.length === 0) {
