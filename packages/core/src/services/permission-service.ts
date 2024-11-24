@@ -1,4 +1,4 @@
-import { CoreAPIRoute } from '../types/routes.types.js'
+import { CoreAPIRoute } from '../http/routes.types.js'
 import { CoreUserSession } from '../types/core.types.js'
 
 /**

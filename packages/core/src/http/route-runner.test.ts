@@ -1,9 +1,9 @@
 import { test, describe, beforeEach, afterEach } from 'node:test'
 import assert from 'assert'
-import { NotImplementedError, RouteNotFoundError } from './errors.js'
+import { NotImplementedError, RouteNotFoundError } from '../errors.js'
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkHTTPResponse } from './vramework-http-response.js'
-import { JSONValue } from './types/core.types.js'
+import { JSONValue } from '../types/core.types.js'
 import {
   getUserSession,
   runRoute,

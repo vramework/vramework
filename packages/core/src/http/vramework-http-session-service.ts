@@ -1,20 +1,20 @@
-import { SessionService } from './session-service.js'
-import { JWTService } from './jwt-service.js'
+import { SessionService } from '../services/session-service.js'
+import { JWTService } from '../services/jwt-service.js'
 import { InvalidSessionError, MissingSessionError } from '../errors.js'
-import { VrameworkHTTPRequest } from '../vramework-http-request.js'
+import { VrameworkHTTPRequest } from './vramework-http-request.js'
 
 /**
- * The `VrameworkSessionService` class provides session management capabilities, including handling JWT-based sessions,
+ * The `VrameworkHTTPSessionService` class provides session management capabilities, including handling JWT-based sessions,
  * cookie-based sessions, and API key-based sessions. It allows for retrieving and transforming user sessions based on different
  * authentication mechanisms.
  *
  * @template UserSession - The type representing a user session.
  */
-export class VrameworkSessionService<UserSession>
+export class VrameworkHTTPSessionService<UserSession>
   implements SessionService<UserSession>
 {
   /**
-   * Constructs a new instance of the `VrameworkSessionService` class.
+   * Constructs a new instance of the `VrameworkHTTPSessionService` class.
    *
    * @param jwtService - The service for handling JWT operations.
    * @param options - Options for configuring the session service.

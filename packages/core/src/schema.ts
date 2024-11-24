@@ -6,7 +6,7 @@ import { ValidateFunction } from 'ajv'
 
 import { Logger } from './services/logger.js'
 import { BadRequestError } from './errors.js'
-import { getRoutes } from './route-runner.js'
+import { getRoutes } from './http/route-runner.js'
 
 const ajv = new Ajv({
   removeAdditional: false,

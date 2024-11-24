@@ -1,10 +1,10 @@
 import { EError } from '../error-handler.js'
-import { APIDocs } from './core.types.js'
+import { APIDocs } from '../types/core.types.js'
 import {
   CoreAPIFunction,
   CoreAPIFunctionSessionless,
   CoreAPIPermission,
-} from './functions.types.js'
+} from '../types/functions.types.js'
 
 /**
  * Represents the HTTP methods supported for API routes.

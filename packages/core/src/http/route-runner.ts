@@ -1,27 +1,27 @@
-import { getErrorResponse } from './error-handler.js'
-import { verifyPermissions } from './permissions.js'
+import { getErrorResponse } from '../error-handler.js'
+import { verifyPermissions } from '../permissions.js'
 import {
   CoreAPIRoute,
   CoreAPIRoutes,
   RoutesMeta,
-} from './types/routes.types.js'
-import { coerceQueryStringToArray, loadSchema, validateJson } from './schema.js'
+} from './routes.types.js'
+import { coerceQueryStringToArray, loadSchema, validateJson } from '../schema.js'
 import {
   CoreServices,
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
   VrameworkHTTPInteraction,
-} from './types/core.types.js'
+} from '../types/core.types.js'
 import { match } from 'path-to-regexp'
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkHTTPResponse } from './vramework-http-response.js'
-import { Logger, SessionService } from './services/index.js'
-import { RouteNotFoundError, NotImplementedError } from './errors.js'
+import { Logger, SessionService } from '../services/index.js'
+import { RouteNotFoundError, NotImplementedError } from '../errors.js'
 import * as cryptoImp from 'crypto'
-import { VrameworkRequest } from './vramework-request.js'
-import { VrameworkResponse } from './vramework-response.js'
-import { closeServices } from './utils.js'
+import { VrameworkRequest } from '../vramework-request.js'
+import { VrameworkResponse } from '../vramework-response.js'
+import { closeServices } from '../utils.js'
 const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
 
 type ExtractRouteParams<S extends string> =

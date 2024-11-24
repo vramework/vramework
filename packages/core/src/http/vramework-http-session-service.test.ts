@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { InvalidSessionError, MissingSessionError } from '../errors.js';
-import { VrameworkSessionService } from './vramework-session-service.js';
+import { VrameworkHTTPSessionService } from './vramework-http-session-service.js';
 
-test('VrameworkSessionService: Handles JWT-based sessions', async () => {
+test('VrameworkHTTPSessionService: Handles JWT-based sessions', async () => {
   const mockJWTService: any = {
     decode: async (token) => {
       if (token === 'validToken') return { id: 1, name: 'Test User' };
@@ -11,7 +11,7 @@ test('VrameworkSessionService: Handles JWT-based sessions', async () => {
     },
   }
 
-  const sessionService = new VrameworkSessionService(mockJWTService, {});
+  const sessionService = new VrameworkHTTPSessionService(mockJWTService, {});
   const mockRequest: any = {
     getHeader: (name) => (name === 'authorization' ? 'Bearer validToken' : undefined),
     getCookies: () => ({}),
@@ -21,7 +21,7 @@ test('VrameworkSessionService: Handles JWT-based sessions', async () => {
   assert.deepEqual(session, { id: 1, name: 'Test User' });
 });
 
-test('VrameworkSessionService: Handles API key-based sessions', async () => {
+test('VrameworkHTTPSessionService: Handles API key-based sessions', async () => {
   const mockJWTService: any = { decode: async () => undefined };
   const mockOptions = {
     getSessionForAPIKey: async (apiKey) => {
@@ -29,7 +29,7 @@ test('VrameworkSessionService: Handles API key-based sessions', async () => {
     },
   };
 
-  const sessionService = new VrameworkSessionService(mockJWTService, mockOptions);
+  const sessionService = new VrameworkHTTPSessionService(mockJWTService, mockOptions);
   const mockRequest: any = {
     getHeader: (name) => (name === 'x-api-key' ? 'validAPIKey' : undefined),
     getCookies: () => ({}),
@@ -39,7 +39,7 @@ test('VrameworkSessionService: Handles API key-based sessions', async () => {
   assert.deepEqual(session, { id: 2, name: 'API User' });
 });
 
-test('VrameworkSessionService: Handles cookie-based sessions', async () => {
+test('VrameworkHTTPSessionService: Handles cookie-based sessions', async () => {
   const mockJWTService: any = { decode: async () => undefined };
   const mockOptions = {
     cookieNames: ['session'],
@@ -51,7 +51,7 @@ test('VrameworkSessionService: Handles cookie-based sessions', async () => {
     },
   };
 
-  const sessionService = new VrameworkSessionService(mockJWTService, mockOptions);
+  const sessionService = new VrameworkHTTPSessionService(mockJWTService, mockOptions);
   const mockRequest: any = {
     getHeader: () => undefined,
     getCookies: () => ({ session: 'validCookie' }),
@@ -61,9 +61,9 @@ test('VrameworkSessionService: Handles cookie-based sessions', async () => {
   assert.deepEqual(session, { id: 3, name: 'Cookie User' });
 });
 
-test('VrameworkSessionService: Throws MissingSessionError when credentials are required but missing', async () => {
+test('VrameworkHTTPSessionService: Throws MissingSessionError when credentials are required but missing', async () => {
   const mockJWTService: any = { decode: async () => undefined };
-  const sessionService = new VrameworkSessionService(mockJWTService, {});
+  const sessionService = new VrameworkHTTPSessionService(mockJWTService, {});
 
   const mockRequest: any = {
     getHeader: () => undefined,
@@ -76,7 +76,7 @@ test('VrameworkSessionService: Throws MissingSessionError when credentials are r
   );
 });
 
-test('VrameworkSessionService: Transforms session when transformSession is provided', async () => {
+test('VrameworkHTTPSessionService: Transforms session when transformSession is provided', async () => {
   const mockJWTService: any = {
     decode: async () => ({ id: 1, name: 'Original User' }),
   };
@@ -84,7 +84,7 @@ test('VrameworkSessionService: Transforms session when transformSession is provi
     transformSession: async (session) => ({ ...session, transformed: true }),
   };
 
-  const sessionService = new VrameworkSessionService(mockJWTService, mockOptions);
+  const sessionService = new VrameworkHTTPSessionService(mockJWTService, mockOptions);
   const mockRequest: any = {
     getHeader: (name) => (name === 'authorization' ? 'Bearer validToken' : undefined),
     getCookies: () => ({}),

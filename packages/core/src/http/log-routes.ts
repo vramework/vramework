@@ -1,4 +1,4 @@
-import { Logger } from './services/index.js'
+import { Logger } from '../services/index.js'
 import { getRoutes } from './route-runner.js'
 
 /**

@@ -1,17 +1,17 @@
-import { getErrorResponse } from './error-handler.js'
+import { getErrorResponse } from '../error-handler.js'
 import {
   CoreServices,
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
-} from './types/core.types.js'
+} from '../types/core.types.js'
 import {
   CoreScheduledTask,
   CoreScheduledTasks,
   ScheduledTasksMeta,
-} from './types/schedule.types.js'
-import { CoreAPIFunctionSessionless } from './types/functions.types.js'
-import { closeServices } from './utils.js'
+} from './schedule.types.js'
+import { CoreAPIFunctionSessionless } from '../types/functions.types.js'
+import { closeServices } from '../utils.js'
 
 export type RunScheduledTasksParams = {
   name: string

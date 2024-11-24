@@ -12,5 +12,4 @@ export * from './session-service.js'
 export * from './secret-service.js'
 
 // Local implementations
-export * from './vramework-session-service.js'
 export * from './local-secrets.js'
