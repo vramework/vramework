@@ -13,7 +13,7 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeVrameworkTypes } from '../src/serializer/serialize-vramework-types.js'
+import { serializeVrameworkTypes } from '../src/core/serialize-vramework-types.js'
 import { vrameworkRoutes } from './vramework-routes.js'
 
 export const vrameworkFunctionTypes = async (

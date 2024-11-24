@@ -15,6 +15,8 @@ import { vrameworkRoutesMap } from './vramework-routes-map.js'
 import { existsSync } from 'fs'
 import { vrameworkOpenAPI } from './vramework-openapi.js'
 import { vrameworkFetch } from './vramework-fetch.js'
+import { vrameworkScheduler } from './vramework-scheduler.js'
+import { vrameworkStreams } from './vramework-streams.js'
 
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
@@ -44,6 +46,10 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
 
   await vrameworkRoutesMap(cliConfig, visitState)
 
+  await vrameworkScheduler(cliConfig, visitState)
+
+  await vrameworkStreams(cliConfig, visitState)
+  
   await vrameworkSchemas(cliConfig, visitState)
 
   if (cliConfig.nextJSfile) {
@@ -71,6 +77,12 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   )
   bootstrapImports.push(
     `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings)}'`
+  )
+  bootstrapImports.push(
+    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.schedulersFile, cliConfig.packageMappings)}'`
+  )
+  bootstrapImports.push(
+    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.streamsFile, cliConfig.packageMappings)}'`
   )
   await writeFileInDir(cliConfig.bootstrapFile, bootstrapImports.join('\n'))
 }

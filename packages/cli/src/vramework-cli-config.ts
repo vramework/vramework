@@ -1,10 +1,12 @@
 import { join, dirname, resolve, isAbsolute } from 'path'
 import { readdir } from 'fs/promises'
-import { OpenAPISpecInfo } from './openapi-spec-generator.js'
+import { OpenAPISpecInfo } from './openapi/openapi-spec-generator.js'
 
 export interface VrameworkCLICoreOutputFiles {
   outDir?: string
   routesFile: string
+  streamsFile: string
+  schedulersFile: string
   schemaDirectory: string
   typesDeclarationFile: string
   routesMapDeclarationFile: string
@@ -106,6 +108,12 @@ const _getVrameworkCLIConfig = async (
       }
       if (!result.routesFile) {
         result.routesFile = join(result.outDir, 'vramework-routes.ts')
+      }
+      if (!result.schedulersFile) {
+        result.schedulersFile = join(result.outDir, 'vramework-schedules.ts')
+      }
+      if (!result.streamsFile) {
+        result.streamsFile = join(result.outDir, 'vramework-streams.ts')
       }
       if (!result.typesDeclarationFile) {
         result.typesDeclarationFile = join(

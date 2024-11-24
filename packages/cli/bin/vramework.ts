@@ -7,6 +7,8 @@ import { all } from './vramework-all.js'
 import { functionTypes } from './vramework-function-types.js'
 import { routesMap } from './vramework-routes-map.js'
 import { fetch } from './vramework-fetch.js'
+import { streams } from './vramework-streams.js'
+import { schedules } from './vramework-scheduler.js'
 
 const program = new Command('vramework')
 program.usage('[command]')
@@ -18,5 +20,7 @@ functionTypes(program)
 schemas(program)
 nextjs(program)
 fetch(program)
+streams(program)
+schedules(program)
 
 program.parse(process.argv)

@@ -3,9 +3,9 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { serializeRoutes } from '../src/serializer/serialize-routes.js'
-import { serializeRouteMeta } from '../src/serializer/serialize-route-meta.js'
-import { serializeTypedRouteRunner } from '../src/serializer/serialize-typed-route-runner.js'
+import { serializeRoutes } from '../src/core/serialize-routes.js'
+import { serializeRouteMeta } from '../src/core/serialize-route-meta.js'
+import { serializeTypedRouteRunner } from '../src/core/serialize-typed-route-runner.js'
 import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import {
@@ -15,7 +15,6 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeSchedulers } from '../src/serializer/serialize-schedulers.js'
 
 export const vrameworkRoutes = async (
   cliConfig: VrameworkCLIConfig,
@@ -27,15 +26,10 @@ export const vrameworkRoutes = async (
     async () => {
       const { routesMapDeclarationFile, routesFile, packageMappings } =
         cliConfig
-      const { filesWithRoutes, filesWithScheduledTasks, routesMeta } =
+      const { filesWithRoutes, routesMeta } =
         visitState
       const content = [
         serializeRoutes(routesFile, filesWithRoutes, packageMappings),
-        serializeSchedulers(
-          routesFile,
-          filesWithScheduledTasks,
-          packageMappings
-        ),
         serializeRouteMeta(routesMeta),
         serializeTypedRouteRunner(
           getFileImportRelativePath(

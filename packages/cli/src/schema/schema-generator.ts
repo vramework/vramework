@@ -1,5 +1,5 @@
 import { createGenerator, RootlessError } from 'ts-json-schema-generator'
-import { writeFileInDir } from './utils.js'
+import { writeFileInDir } from '../utils.js'
 import { mkdir, writeFile } from 'fs/promises'
 import { JSONValue, RoutesMeta } from '@vramework/core'
 
