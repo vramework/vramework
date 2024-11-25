@@ -1,6 +1,6 @@
 {
   "name": "@vramework/azure-functions",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "main": "dist/cjs/index.js",
@@ -32,7 +32,7 @@
     }
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.10"
+    "@vramework/core": "^0.6.0"
   },
   "devDependencies": {
     "typescript": "^5.6.3"

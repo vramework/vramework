@@ -1,5 +1,16 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.6.0
+
+### Minor Changes
+
+- d58c440: refactor: making http requests explicit to support other types
+
+### Patch Changes
+
+- cbcc75b: feat: adding scheduler types to core
+- 11c50d4: feat: adding streams to cli
+
 ## 0.5.18
 
 ### Patch Changes

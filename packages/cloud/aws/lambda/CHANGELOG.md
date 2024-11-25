@@ -1,5 +1,19 @@
 ## 0.4.2
 
+## 1.0.0
+
+### Minor Changes
+
+- d58c440: refactor: making http requests explicit to support other types
+
+### Patch Changes
+
+- 11c50d4: feat: adding streams to cli
+- Updated dependencies [cbcc75b]
+- Updated dependencies [d58c440]
+- Updated dependencies [11c50d4]
+  - @vramework/core@0.6.0
+
 ## 0.5.2
 
 ### Patch Changes
