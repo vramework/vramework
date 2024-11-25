@@ -6,4 +6,3 @@ export const serializeRouteMeta = (routesMeta: RoutesMeta) => {
   serializedOutput.push(`addRouteMeta(${JSON.stringify(routesMeta, null, 2)})`)
   return serializedOutput.join('\n')
 }
-

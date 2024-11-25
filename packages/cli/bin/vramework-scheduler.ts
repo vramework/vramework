@@ -25,7 +25,7 @@ export const vrameworkScheduler = async (
       const { filesWithScheduledTasks } = visitState
       const content = [
         serializeSchedulers(
-            schedulersFile,
+          schedulersFile,
           filesWithScheduledTasks,
           packageMappings
         ),

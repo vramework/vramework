@@ -10,10 +10,9 @@ import { CoreAPIPermission } from './types/functions.types.js'
  * @returns A promise that resolves to void.
  */
 export const verifyPermissions = async (
-  permissions: Record<
-    string,
-    CoreAPIPermission<any>[] | CoreAPIPermission<any>
-  > | undefined,
+  permissions:
+    | Record<string, CoreAPIPermission<any>[] | CoreAPIPermission<any>>
+    | undefined,
   services: CoreServices,
   data: any,
   session?: CoreUserSession
@@ -21,7 +20,7 @@ export const verifyPermissions = async (
   if (!permissions) {
     return
   }
-  
+
   let valid = false
   const permissionGroups = Object.values(permissions)
   if (permissionGroups.length === 0) {

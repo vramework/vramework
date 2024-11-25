@@ -4,7 +4,9 @@ import { VrameworkHTTPRequest } from '@vramework/core/http/vramework-http-reques
  * The `VrameworkActionStaticNextRequest` class is an extension of the `VrameworkHTTPRequest` class,
  * specifically designed for handling static action requests in a Next.js environment.
  */
-export class VrameworkActionStaticNextRequest<In> extends VrameworkHTTPRequest<In> {
+export class VrameworkActionStaticNextRequest<
+  In,
+> extends VrameworkHTTPRequest<In> {
   private body: any
 
   /**

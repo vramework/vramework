@@ -125,9 +125,7 @@ export const loadUserSession = async (
   sessionService: SessionService | undefined
 ) => {
   if (skipUserSession && requiresSession) {
-    throw new Error(
-      "Can't skip trying to get user session if auth is required"
-    )
+    throw new Error("Can't skip trying to get user session if auth is required")
   }
 
   if (skipUserSession === false) {
@@ -161,9 +159,15 @@ export const loadUserSession = async (
   return undefined
 }
 
-export const createHTTPInteraction = (request: VrameworkRequest | undefined, response: VrameworkResponse | undefined) => {
+export const createHTTPInteraction = (
+  request: VrameworkRequest | undefined,
+  response: VrameworkResponse | undefined
+) => {
   let http: VrameworkHTTP | undefined = undefined
-  if (request instanceof VrameworkHTTPRequest || response instanceof VrameworkHTTPResponse) {
+  if (
+    request instanceof VrameworkHTTPRequest ||
+    response instanceof VrameworkHTTPResponse
+  ) {
     http = {}
     if (request instanceof VrameworkHTTPRequest) {
       http.request = request
@@ -175,7 +179,13 @@ export const createHTTPInteraction = (request: VrameworkRequest | undefined, res
   return http
 }
 
-export const handleError = (e: any, http: VrameworkHTTP | undefined, trackerId: string, logger: Logger, logWarningsForStatusCodes: number[]) => {
+export const handleError = (
+  e: any,
+  http: VrameworkHTTP | undefined,
+  trackerId: string,
+  logger: Logger,
+  logWarningsForStatusCodes: number[]
+) => {
   const errorResponse = getErrorResponse(e)
 
   if (errorResponse != null) {
@@ -231,7 +241,11 @@ export const runRoute = async <In, Out>({
       http?.response?.setStatus(404)
       http?.response?.end()
     }
-    singletonServices.logger.info({ message: 'Invalid route', apiRoute, apiType })
+    singletonServices.logger.info({
+      message: 'Invalid route',
+      apiRoute,
+      apiType,
+    })
     throw new NotFoundError(`Route not found: ${apiRoute}`)
   }
 
@@ -244,7 +258,15 @@ export const runRoute = async <In, Out>({
       `Matched route: ${route.route} | method: ${route.method.toUpperCase()} | auth: ${requiresSession.toString()}`
     )
 
-    const session = await loadUserSession(skipUserSession, requiresSession, http, matchedPath, route, singletonServices.logger, singletonServices.sessionService)
+    const session = await loadUserSession(
+      skipUserSession,
+      requiresSession,
+      http,
+      matchedPath,
+      route,
+      singletonServices.logger,
+      singletonServices.sessionService
+    )
     const data = await request.getData()
 
     validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
@@ -273,7 +295,13 @@ export const runRoute = async <In, Out>({
 
     return result
   } catch (e: any) {
-    handleError(e, http, trackerId, singletonServices.logger, logWarningsForStatusCodes)
+    handleError(
+      e,
+      http,
+      trackerId,
+      singletonServices.logger,
+      logWarningsForStatusCodes
+    )
     throw e
   } finally {
     await closeServices(singletonServices.logger, sessionServices)

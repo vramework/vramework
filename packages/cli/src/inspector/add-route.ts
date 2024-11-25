@@ -117,7 +117,10 @@ export const addRoute = (
       return
     }
 
-    const { inputType, outputType, paramType } = getFunctionTypes(checker, funcProperty)
+    const { inputType, outputType, paramType } = getFunctionTypes(
+      checker,
+      funcProperty
+    )
 
     if (paramType && !['post', 'put', 'patch'].includes(methodValue)) {
       queryValues = [

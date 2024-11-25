@@ -24,7 +24,8 @@ export const addFileWithConfig = (
         // Retrieve the symbol of the type (if it has one)
         const typeSymbol = variableType.symbol
         let typeDeclarationPath: string | null = null
-        const declaration = typeSymbol && typeSymbol.declarations && typeSymbol.declarations[0]
+        const declaration =
+          typeSymbol && typeSymbol.declarations && typeSymbol.declarations[0]
 
         if (declaration) {
           const sourceFile = declaration.getSourceFile()

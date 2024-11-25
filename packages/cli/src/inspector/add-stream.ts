@@ -27,31 +27,34 @@ const addDisconnect = (obj: ts.ObjectLiteralExpression) => {
   return !!funcProperty
 }
 
-const addMessages = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) => {
-  const messageTypes: StreamMeta['messages'] = [];
+const addMessages = (
+  obj: ts.ObjectLiteralExpression,
+  checker: ts.TypeChecker
+) => {
+  const messageTypes: StreamMeta['messages'] = []
 
   const messagesProperty = obj.properties.find(
     (p) =>
       ts.isPropertyAssignment(p) &&
       ts.isIdentifier(p.name) &&
       p.name.text === 'onMessage'
-  );
+  )
 
   if (!messagesProperty || !ts.isPropertyAssignment(messagesProperty)) {
-    console.log('onMessage property not found or is not a valid assignment.');
-    return [];
+    console.log('onMessage property not found or is not a valid assignment.')
+    return []
   }
 
-  const initializer = messagesProperty.initializer;
+  const initializer = messagesProperty.initializer
   if (!ts.isArrayLiteralExpression(initializer)) {
-    console.log('onMessage is not an array literal.');
-    return [];
+    console.log('onMessage is not an array literal.')
+    return []
   }
 
   initializer.elements.forEach((element) => {
     if (!ts.isObjectLiteralExpression(element)) {
-      console.warn('Unexpected element type in onMessage array:', element);
-      return;
+      console.warn('Unexpected element type in onMessage array:', element)
+      return
     }
 
     const routeProperty = element.properties.find(
@@ -59,44 +62,53 @@ const addMessages = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) =
         ts.isPropertyAssignment(p) &&
         ts.isIdentifier(p.name) &&
         p.name.text === 'route'
-    );
+    )
 
     const funcProperty = element.properties.find(
       (p) =>
         ts.isPropertyAssignment(p) &&
         ts.isIdentifier(p.name) &&
         p.name.text === 'func'
-    );
+    )
 
     if (!routeProperty || !ts.isPropertyAssignment(routeProperty)) {
-      console.warn('No valid route property found in onMessage array element:', element);
-      return;
+      console.warn(
+        'No valid route property found in onMessage array element:',
+        element
+      )
+      return
     }
 
     if (!funcProperty || !ts.isPropertyAssignment(funcProperty)) {
-      console.warn('No valid func property found in onMessage array element:', element);
-      return;
+      console.warn(
+        'No valid func property found in onMessage array element:',
+        element
+      )
+      return
     }
 
     const route = ts.isStringLiteral(routeProperty.initializer)
       ? routeProperty.initializer.text
-      : null;
+      : null
 
     if (!route) {
-      console.warn('Route property is not a string literal:', routeProperty.initializer);
-      return;
+      console.warn(
+        'Route property is not a string literal:',
+        routeProperty.initializer
+      )
+      return
     }
 
-    const { inputType, outputType } = getFunctionTypes(checker, funcProperty);
+    const { inputType, outputType } = getFunctionTypes(checker, funcProperty)
     messageTypes.push({
       route,
       input: inputType,
       output: outputType,
-    });
-  });
+    })
+  })
 
-  return messageTypes;
-};
+  return messageTypes
+}
 
 export const addStream = (
   node: ts.Node,

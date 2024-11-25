@@ -1,5 +1,11 @@
 import { EError } from '../error-handler.js'
-import { APIDocs, CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices } from '../types/core.types.js'
+import {
+  APIDocs,
+  CoreServices,
+  CoreSingletonServices,
+  CoreUserSession,
+  CreateSessionServices,
+} from '../types/core.types.js'
 import {
   CoreAPIFunction,
   CoreAPIFunctionSessionless,

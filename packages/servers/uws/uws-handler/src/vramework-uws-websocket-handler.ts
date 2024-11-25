@@ -18,7 +18,7 @@ export const vrameworkWebsocketHandler = ({
   singletonServices,
   createSessionServices,
   loadSchemas,
-  logRoutes
+  logRoutes,
 }: VrameworkuWSHandlerOptions) => {
   if (logRoutes) {
     logStreams(singletonServices.logger)
@@ -28,7 +28,7 @@ export const vrameworkWebsocketHandler = ({
     loadAllSchemas(singletonServices.logger)
   }
 
-  const decoder = new TextDecoder("utf-8")
+  const decoder = new TextDecoder('utf-8')
 
   return {
     upgrade: async (res, req, context) => {
@@ -36,16 +36,16 @@ export const vrameworkWebsocketHandler = ({
       const upgradeAborted = { aborted: false }
 
       res.onAborted(() => {
-        upgradeAborted.aborted = true;
+        upgradeAborted.aborted = true
       })
 
       try {
         /* You MUST copy data out of req here, as req is only valid within this immediate callback */
-        const url = req.getUrl();
-        const secWebSocketKey = req.getHeader('sec-websocket-key');
-        const secWebSocketProtocol = req.getHeader('sec-websocket-protocol');
-        const secWebSocketExtensions = req.getHeader('sec-websocket-extensions');
-       
+        const url = req.getUrl()
+        const secWebSocketKey = req.getHeader('sec-websocket-key')
+        const secWebSocketProtocol = req.getHeader('sec-websocket-protocol')
+        const secWebSocketExtensions = req.getHeader('sec-websocket-extensions')
+
         const stream = await runStream({
           request: new VrameworkUWSRequest(req, res),
           response: new VrameworkUWSResponse(res),
@@ -65,8 +65,8 @@ export const vrameworkWebsocketHandler = ({
             secWebSocketProtocol,
             secWebSocketExtensions,
             context
-          );
-        });
+          )
+        })
       } catch (e: any) {
         // Error should have already been handled by runRoute
       }
@@ -84,6 +84,6 @@ export const vrameworkWebsocketHandler = ({
     close: (ws) => {
       const { stream } = ws.getUserData()
       stream.close()
-    }
+    },
   } as uWS.WebSocketBehavior<{ stream: VrameworkStream }>
 }

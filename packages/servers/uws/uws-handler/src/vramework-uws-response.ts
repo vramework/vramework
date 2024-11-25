@@ -47,7 +47,7 @@ export class VrameworkUWSResponse extends VrameworkHTTPResponse {
     this.response().endWithoutBody()
   }
 
-  private response () {
+  private response() {
     if (this.aborted) {
       throw new Error('Response was aborted')
     }

@@ -26,10 +26,12 @@ export class S3Content implements ContentService {
     private logger: Logger,
     private signConfig: { keypairId: string; privateKeyString: string }
   ) {
-    this.s3 = new S3Client([{
-      endpoint: this.config.endpoint,
-      region: this.config.region,
-    }])
+    this.s3 = new S3Client([
+      {
+        endpoint: this.config.endpoint,
+        region: this.config.region,
+      },
+    ])
   }
 
   public async signURL(url: string) {

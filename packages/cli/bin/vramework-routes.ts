@@ -26,8 +26,7 @@ export const vrameworkRoutes = async (
     async () => {
       const { routesMapDeclarationFile, routesFile, packageMappings } =
         cliConfig
-      const { filesWithRoutes, routesMeta } =
-        visitState
+      const { filesWithRoutes, routesMeta } = visitState
       const content = [
         serializeRoutes(routesFile, filesWithRoutes, packageMappings),
         serializeRouteMeta(routesMeta),

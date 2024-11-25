@@ -49,7 +49,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   await vrameworkScheduler(cliConfig, visitState)
 
   await vrameworkStreams(cliConfig, visitState)
-  
+
   await vrameworkSchemas(cliConfig, visitState)
 
   if (cliConfig.nextJSfile) {

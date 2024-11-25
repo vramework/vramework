@@ -11,7 +11,10 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeStreams, serializeStreamMeta } from '../src/stream/serialize-streams.js'
+import {
+  serializeStreams,
+  serializeStreamMeta,
+} from '../src/stream/serialize-streams.js'
 
 export const vrameworkStreams = async (
   cliConfig: VrameworkCLIConfig,
@@ -24,11 +27,7 @@ export const vrameworkStreams = async (
       const { streamsFile, packageMappings } = cliConfig
       const { filesWithStreams, streamsMeta } = visitState
       const content = [
-        serializeStreams(
-          streamsFile,
-          filesWithStreams,
-          packageMappings
-        ),
+        serializeStreams(streamsFile, filesWithStreams, packageMappings),
         serializeStreamMeta(streamsMeta),
       ]
       await writeFileInDir(streamsFile, content.join('\n\n'))

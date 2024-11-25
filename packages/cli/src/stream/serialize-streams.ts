@@ -27,6 +27,8 @@ export const serializeStreams = (
 export const serializeStreamMeta = (streamsMeta: StreamsMeta) => {
   const serializedOutput: string[] = []
   serializedOutput.push("import { addStreamsMeta } from '@vramework/core'")
-  serializedOutput.push(`addStreamsMeta(${JSON.stringify(streamsMeta, null, 2)})`)
+  serializedOutput.push(
+    `addStreamsMeta(${JSON.stringify(streamsMeta, null, 2)})`
+  )
   return serializedOutput.join('\n')
 }
