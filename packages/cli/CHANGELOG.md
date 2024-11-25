@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.30
+
+### Patch Changes
+
+- 179b9c2: fix: fixing stream types
+- Updated dependencies [179b9c2]
+  - @vramework/core@0.5.21
+
 ## 0.5.29
 
 ### Patch Changes
