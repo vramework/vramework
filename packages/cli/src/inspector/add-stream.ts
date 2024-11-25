@@ -3,7 +3,99 @@ import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
 import { APIDocs } from '@vramework/core/types/core.types'
-import { extractTypeKeys, getInputTypes, nullifyTypes } from './add-route.js'
+import { getInputTypes } from './add-route.js'
+import { getTypeOfFunctionArg, getFunctionTypes, nullifyTypes } from './utils.js'
+import { StreamMeta } from '@vramework/core'
+
+const addConnect = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) => {
+  const funcProperty = obj.properties.find(
+    (p) =>
+      ts.isPropertyAssignment(p) &&
+      ts.isIdentifier(p.name) &&
+      p.name.text === 'onConnect'
+  )
+  return funcProperty ? {
+    input: nullifyTypes(getTypeOfFunctionArg(checker, funcProperty, 1))
+  } : undefined
+}
+
+const addDisconnect = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) => {
+  const funcProperty = obj.properties.find(
+    (p) =>
+      ts.isPropertyAssignment(p) &&
+      ts.isIdentifier(p.name) &&
+      p.name.text === 'onDisconnect'
+  )
+  return funcProperty ? {} : undefined
+}
+
+const addMessages = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) => {
+  const messageTypes: StreamMeta['messages'] = []
+
+  const messagesProperty = obj.properties.find(
+    (p) =>
+      ts.isPropertyAssignment(p) &&
+      ts.isIdentifier(p.name) &&
+      p.name.text === 'onMessage'
+  );
+
+  if (!messagesProperty || !ts.isPropertyAssignment(messagesProperty)) {
+    console.log('onMessage property not found or is not a valid assignment.');
+    return []
+  }
+
+  const initializer = messagesProperty.initializer;
+  if (!ts.isObjectLiteralExpression(initializer)) {
+    console.log('onMessage is not an object literal.');
+    return []
+  }
+
+  initializer.properties.forEach((property) => {
+    // Ensure the property is a PropertyAssignment
+    if (!ts.isPropertyAssignment(property)) {
+      console.warn('Unexpected property type:', property);
+      return;
+    }
+
+    const propertyName = ts.isIdentifier(property.name)
+      ? property.name.text
+      : ts.isStringLiteral(property.name)
+        ? property.name.text
+        : null;
+
+    if (!propertyName) {
+      console.warn('Unexpected property key type:', property.name);
+      return;
+    }
+
+    if (ts.isObjectLiteralExpression(property.initializer)) {
+      const funcProperty = property.initializer.properties.find(
+        (p) =>
+          ts.isPropertyAssignment(p) &&
+          ts.isIdentifier(p.name) &&
+          p.name.text === 'func'
+      );
+
+      if (!funcProperty) {
+        console.warn(`No 'func' property found for message '${propertyName}'.`);
+        return
+      }
+
+      if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
+        const { inputType, outputType } = getFunctionTypes(checker, funcProperty);
+        messageTypes.push({
+          route: propertyName,
+          input: inputType,
+          output: outputType
+        })
+      }
+    } else {
+      console.warn('Initializer is not an object literal:', property.initializer);
+    }
+  });
+
+  return messageTypes
+};
 
 export const addStream = (
   node: ts.Node,
@@ -53,41 +145,9 @@ export const addStream = (
     docs = (getPropertyValue(obj, 'docs') as APIDocs) || undefined
     queryValues = (getPropertyValue(obj, 'query') as string[]) || []
 
-    // Find the 'func' property within the object
-    const funcProperty = obj.properties.find(
-      (p) =>
-        ts.isPropertyAssignment(p) &&
-        ts.isIdentifier(p.name) &&
-        p.name.text === 'func'
-    )
-
-    if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
-      const funcExpression = funcProperty.initializer
-
-      // Get the type of the 'func' expression
-      const funcType = checker.getTypeAtLocation(funcExpression)
-
-      // Get the call signatures of the function type
-      const callSignatures = funcType.getCallSignatures()
-
-      for (const signature of callSignatures) {
-        const parameters = signature.getParameters()
-
-        for (const param of parameters) {
-          const paramType = checker.getTypeOfSymbolAtLocation(
-            param,
-            param.valueDeclaration!
-          )
-
-          if (param.name === 'data') {
-            inputType = checker.typeToString(paramType)
-            queryValues = [
-              ...new Set([...queryValues, ...extractTypeKeys(paramType)]),
-            ].filter((query) => !paramsValues?.includes(query))
-          }
-        }
-      }
-    }
+    const connect = addConnect(obj, checker)
+    const disconnect = addDisconnect(obj, checker)
+    const messages = addMessages(obj, checker)
 
     if (!routeValue) {
       return
@@ -95,7 +155,7 @@ export const addStream = (
 
     state.streamsMeta.push({
       route: routeValue!,
-      input: nullifyTypes(inputType),
+      input: inputType,
       params: paramsValues.length > 0 ? paramsValues : undefined,
       query: queryValues.length > 0 ? queryValues : undefined,
       inputTypes: getInputTypes(
@@ -105,6 +165,9 @@ export const addStream = (
         queryValues,
         paramsValues
       ),
+      connect,
+      disconnect,
+      messages,
       docs,
     })
 

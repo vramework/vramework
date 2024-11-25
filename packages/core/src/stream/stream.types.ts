@@ -36,6 +36,16 @@ export interface StreamMeta {
   query?: string[]
   input: string | null
   inputTypes?: RoutesMetaInputTypes
+  connect?: { 
+    input: string | null
+  }
+  disconnect?: { 
+  }
+  messages: Array<{
+    route: string
+    input: string | null
+    output: string | null
+  }>
   docs?: APIDocs
 }
 
