@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.31
+
+### Patch Changes
+
+- 73973ec: fix: data type for methods is optional
+- Updated dependencies [73973ec]
+  - @vramework/core@0.5.22
+
 ## 0.5.30
 
 ### Patch Changes

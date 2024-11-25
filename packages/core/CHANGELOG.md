@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.22
+
+### Patch Changes
+
+- 73973ec: fix: data type for methods is optional
+
 ## 0.5.21
 
 ### Patch Changes
