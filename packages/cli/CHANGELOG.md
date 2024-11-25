@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.29
+
+### Patch Changes
+
+- b20ef35: fix: generate stream types from message array
+
 ## 0.5.28
 
 ### Patch Changes
