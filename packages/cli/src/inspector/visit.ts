@@ -5,7 +5,7 @@ import { addFileExtendsCoreType } from './add-file-extends-core-type.js'
 import { RoutesMeta } from '@vramework/core/http/routes.types'
 import { StreamsMeta } from '@vramework/core/stream/stream.types'
 import { ScheduledTasksMeta } from '@vramework/core/scheduler/schedule.types'
-import { addRoute } from './add-route.js'
+// import { addRoute } from './add-route.js'
 import { addSchedule } from './add-schedule.js'
 import { addStream } from './add-stream.js'
 
@@ -67,7 +67,7 @@ export const visit = (
 
   addFileWithFactory(node, checker, state.configFactories, 'CreateConfig')
 
-  addRoute(node, checker, state)
+  // addRoute(node, checker, state)
   addSchedule(node, checker, state)
   addStream(node, checker, state)
 

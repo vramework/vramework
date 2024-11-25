@@ -4,22 +4,7 @@ import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
 import { APIRouteMethod } from '@vramework/core/http/routes.types'
 import { APIDocs } from '@vramework/core/types/core.types'
-
-export const extractTypeKeys = (type: ts.Type): string[] => {
-  return type.getProperties().map((symbol) => symbol.getName())
-}
-
-export const nullifyTypes = (type: string | null) => {
-  if (
-    type === 'void' ||
-    type === 'undefined' ||
-    type === 'unknown' ||
-    type === 'any'
-  ) {
-    return null
-  }
-  return type
-}
+import { extractTypeKeys, getFunctionTypes } from './utils.js'
 
 export const getInputTypes = (
   metaTypes: Map<string, string>,
@@ -43,7 +28,7 @@ export const getInputTypes = (
     queryValues.length > 0 || paramsValues.length > 0
       ? `Omit<${inputType}, '${[...new Set([...queryValues, ...paramsValues])].join("' | '")}'>`
       : inputType!
-  if (nullifyTypes(inputType)) {
+  if (inputType) {
     let queryTypeName: string | undefined
     if (query) {
       queryTypeName = `${inputType}Query`
@@ -97,8 +82,6 @@ export const addRoute = (
   let methodValue: string | null = null
   let paramsValues: string[] | null = []
   let queryValues: string[] | [] = []
-  let inputType: string | null = null
-  let outputType: string | null = null
   let routeValue: string | null = null
 
   state.filesWithRoutes.add(node.getSourceFile().fileName)
@@ -122,7 +105,6 @@ export const addRoute = (
     methodValue = getPropertyValue(obj, 'method') as string
     queryValues = (getPropertyValue(obj, 'query') as string[]) || []
 
-    // Find the 'func' property within the object
     const funcProperty = obj.properties.find(
       (p) =>
         ts.isPropertyAssignment(p) &&
@@ -130,40 +112,17 @@ export const addRoute = (
         p.name.text === 'func'
     )
 
-    if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
-      const funcExpression = funcProperty.initializer
+    if (!funcProperty) {
+      console.error('Missing func property in route')
+      return
+    }
 
-      // Get the type of the 'func' expression
-      const funcType = checker.getTypeAtLocation(funcExpression)
+    const { inputType, outputType, paramType } = getFunctionTypes(checker, funcProperty)
 
-      // Get the call signatures of the function type
-      const callSignatures = funcType.getCallSignatures()
-
-      for (const signature of callSignatures) {
-        const parameters = signature.getParameters()
-        const returnType = checker.getReturnTypeOfSignature(signature)
-
-        for (const param of parameters) {
-          const paramType = checker.getTypeOfSymbolAtLocation(
-            param,
-            param.valueDeclaration!
-          )
-
-          if (param.name === 'data') {
-            inputType = checker.typeToString(paramType)
-            if (!['post', 'put', 'patch'].includes(methodValue)) {
-              queryValues = [
-                ...new Set([...queryValues, ...extractTypeKeys(paramType)]),
-              ].filter((query) => !paramsValues?.includes(query))
-            }
-          }
-        }
-
-        outputType = checker
-          .typeToString(returnType)
-          .replace('Promise<', '')
-          .replace('>', '')
-      }
+    if (paramType && !['post', 'put', 'patch'].includes(methodValue)) {
+      queryValues = [
+        ...new Set([...queryValues, ...extractTypeKeys(paramType)]),
+      ].filter((query) => !paramsValues?.includes(query))
     }
 
     if (!routeValue) {
@@ -173,8 +132,8 @@ export const addRoute = (
     state.routesMeta.push({
       route: routeValue!,
       method: methodValue! as APIRouteMethod,
-      input: nullifyTypes(inputType),
-      output: nullifyTypes(outputType),
+      input: inputType,
+      output: outputType,
       params: paramsValues.length > 0 ? paramsValues : undefined,
       query: queryValues.length > 0 ? queryValues : undefined,
       inputTypes: getInputTypes(

@@ -11,7 +11,7 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeStreams, serializeStreamMeta } from '../src/stream/serialize-schedulers.js'
+import { serializeStreams, serializeStreamMeta } from '../src/stream/serialize-streams.js'
 
 export const vrameworkStreams = async (
   cliConfig: VrameworkCLIConfig,
