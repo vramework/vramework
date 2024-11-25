@@ -8,7 +8,7 @@ import { VrameworkRequest } from '../vramework-request.js'
  * @group RequestResponse
  */
 export abstract class VrameworkHTTPRequest<
-  In = any,
+  In = unknown,
 > extends VrameworkRequest<In> {
   private params: Partial<Record<string, string | string[]>> = {}
 

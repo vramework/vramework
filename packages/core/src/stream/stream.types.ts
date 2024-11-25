@@ -5,7 +5,7 @@ import { VrameworkHTTPResponse } from "../http/vramework-http-response.js"
 import { APIDocs, CoreServices, CoreSingletonServices, CoreStreamServices, CoreUserSession, CreateSessionServices } from "../types/core.types.js"
 import { CoreAPIPermission } from "../types/functions.types.js"
 import { VrameworkRequest } from "../vramework-request.js"
-import { VrameworkStream } from "./vramework-stream.js"
+import { VrameworkResponse } from "../vramework-response.js"
 
 export type RunStreamOptions = Partial<{
   skipUserSession: boolean
@@ -14,11 +14,10 @@ export type RunStreamOptions = Partial<{
   logWarningsForStatusCodes: number[]
 }>
 
-export type RunStreamParams<In> = {
+export type RunStreamParams<StreamData> = {
   singletonServices: CoreSingletonServices
-  request: VrameworkRequest<In> | VrameworkHTTPRequest<In>
-  response: VrameworkRequest<In> | VrameworkHTTPResponse
-  stream: VrameworkStream
+  request: VrameworkRequest<StreamData> | VrameworkHTTPRequest<StreamData>
+  response: VrameworkResponse | VrameworkHTTPResponse
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
@@ -36,10 +35,10 @@ export interface StreamMeta {
   query?: string[]
   input: string | null
   inputTypes?: RoutesMetaInputTypes
-  connect?: { 
+  connect?: {
     input: string | null
   }
-  disconnect?: { 
+  disconnect?: {
   }
   messages: Array<{
     route: string
@@ -69,41 +68,39 @@ type CoreFunctionlessStreamRoute<OnConnect, OnDisconnect> = {
 /**
  * Represents a core stream function that performs an operation using core services and a user session.
  *
- * @template In - The input type.
+ * @template StreamData - The data the stream was created with
  * @template Services - The services type, defaults to `CoreServices`.
  * @template Session - The session type, defaults to `CoreUserSession`.
  */
 export type CoreStreamConnect<
-  In,
-  Services extends CoreStreamServices = CoreStreamServices,
+  StreamData,
+  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
   Session = CoreUserSession,
-> = (services: Services, data: In, session: Session) => Promise<void>
+> = (services: Services, session: Session) => Promise<void>
 
 /**
 * Represents a core API function that can be used without a session.
 *
-* @template In - The input type.
 * @template Services - The services type, defaults to `CoreServices`.
 * @template Session - The session type, defaults to `CoreUserSession`.
 */
 export type CoreStreamConnectSessionless<
-  In,
-  Services = CoreServices,
+  StreamData,
+  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
   Session = CoreUserSession,
-> = (services: Services, data: In, session?: Session) => Promise<void>
+> = (services: Services, session?: Session) => Promise<void>
 
 /**
  * Represents a core stream function that performs an operation using core services and a user session.
  *
- * @template In - The input type.
  * @template Services - The services type, defaults to `CoreServices`.
  * @template Session - The session type, defaults to `CoreUserSession`.
  */
 export type CoreStreamDisconnect<
-  In,
-  Services extends CoreStreamServices = CoreStreamServices,
+  StreamData,
+  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
   Session = CoreUserSession,
-> = (services: Services, data: In, session: Session) => Promise<void>
+> = (services: Services, session: Session) => Promise<void>
 
 /**
 * Represents a core API function that can be used without a session.
@@ -113,10 +110,10 @@ export type CoreStreamDisconnect<
 * @template Session - The session type, defaults to `CoreUserSession`.
 */
 export type CoreStreamDisconnectSessionless<
-  In,
-  Services = CoreServices,
+  StreamData,
+  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
   Session = CoreUserSession,
-> = (services: Services, data: In, session?: Session) => Promise<void>
+> = (services: Services, session?: Session) => Promise<void>
 
 
 /**
@@ -129,7 +126,8 @@ export type CoreStreamDisconnectSessionless<
 export type CoreStreamMessage<
   In,
   Out,
-  Services extends CoreStreamServices = CoreStreamServices,
+  StreamData,
+  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
   Session = CoreUserSession,
 > = (services: Services, data: In, session: Session) => Promise<Out>
 
@@ -143,25 +141,26 @@ export type CoreStreamMessage<
 export type CoreStreamMessageSessionless<
   In,
   Out,
-  Services = CoreServices,
+  StreamData,
+  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
   Session = CoreUserSession,
 > = (services: Services, data: In, session?: Session) => Promise<Out>
 
-export type CoreAPIStreamMessage<StreamFunctionMessage = CoreStreamMessageSessionless<unknown, unknown> | CoreStreamMessage<unknown, unknown>> = {
+export type CoreAPIStreamMessage<StreamFunctionMessage = CoreStreamMessageSessionless<unknown, unknown, unknown> | CoreStreamMessage<unknown, unknown, unknown>> = {
   func: StreamFunctionMessage,
   route: string
 }
 
 export type CoreAPIStream<
-  In,
+  StreamData,
   R extends string,
-  StreamFunctionConnect = CoreStreamConnect<In>,
-  StreamFunctionConnectSessionless = CoreStreamConnectSessionless<In>,
-  StreamFunctionDisconnect = CoreStreamDisconnect<In>,
-  StreamFunctionDisconnectSessionless = CoreStreamDisconnectSessionless<In>,
-  StreamFunctionMessage = CoreStreamMessage<unknown, unknown>,
-  StreamFunctionMessagesSessionless = CoreStreamMessageSessionless<unknown, unknown>,
-  APIPermission = CoreAPIPermission<In>,
+  StreamFunctionConnect = CoreStreamConnect<StreamData>,
+  StreamFunctionConnectSessionless = CoreStreamConnectSessionless<StreamData>,
+  StreamFunctionDisconnect = CoreStreamDisconnect<StreamData>,
+  StreamFunctionDisconnectSessionless = CoreStreamDisconnectSessionless<StreamData>,
+  StreamFunctionMessage = CoreStreamMessage<unknown, unknown, unknown>,
+  StreamFunctionMessagesSessionless = CoreStreamMessageSessionless<unknown, unknown, unknown>,
+  APIPermission = CoreAPIPermission<StreamData>,
 > =
   | (CoreFunctionlessStreamRoute<StreamFunctionConnect, StreamFunctionDisconnect> & {
     route: R

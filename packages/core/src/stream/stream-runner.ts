@@ -4,6 +4,7 @@ import { closeServices, validateAndCoerce } from "../utils.js"
 import { verifyPermissions } from "../permissions.js"
 import { createHTTPInteraction, handleError, loadUserSession } from "../http/route-runner.js"
 import { registerMessageHandlers } from "./stream-message-handler.js"
+import { VrameworkStream } from "./vramework-stream.js"
 
 let streams: CoreAPIStreams = []
 let streamsMeta: StreamsMeta = []
@@ -74,14 +75,13 @@ export const runStream = async ({
   singletonServices,
   request,
   response,
-  stream,
   route: streamRoute,
   createSessionServices,
   skipUserSession = false,
   respondWith404 = true,
   coerceToArray = false,
   logWarningsForStatusCodes = [],
-}: Pick<CoreAPIStream<unknown, any>, 'route'> & RunStreamOptions & RunStreamParams<unknown>): Promise<void> => {
+}: Pick<CoreAPIStream<unknown, any>, 'route'> & RunStreamOptions & RunStreamParams<unknown>): Promise<VrameworkStream<unknown> | undefined> => {  
   let sessionServices: any | undefined
   const trackerId: string = crypto.randomUUID().toString()
   const http = createHTTPInteraction(request, response)
@@ -110,32 +110,35 @@ export const runStream = async ({
 
     validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
 
+    const stream = new VrameworkStream(data)
+
     sessionServices = await createSessionServices(
       singletonServices,
-      { http },
+      { http, stream },
       session
     )
     const allServices = { ...singletonServices, ...sessionServices }
 
     await verifyPermissions(streamConfig.permissions, allServices, data, session)
 
-    await streamConfig.onConnect?.(
-      allServices,
-      data,
-      session!
-    )
+    stream.registerOnOpen(async () => {
+      streamConfig.onConnect?.(
+        allServices,
+        session!
+      )
+    })
 
     registerMessageHandlers(streamConfig, stream, allServices, session)
 
-    stream.onClose(async () => {
+    stream.registerOnClose(async () => {
       streamConfig.onDisconnect?.(
         allServices,
-        data,
         session!
       )
       await closeServices(singletonServices.logger, sessionServices)
     })
 
+    return stream
   } catch (e: any) {
     handleError(e, http, trackerId, singletonServices.logger, logWarningsForStatusCodes)
     await closeServices(singletonServices.logger, sessionServices)

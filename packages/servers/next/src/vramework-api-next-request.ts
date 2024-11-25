@@ -5,7 +5,7 @@ import { NextApiRequest } from 'next'
  * The `VrameworkAPINextRequest` class is an extension of the `VrameworkHTTPRequest` class,
  * specifically designed for handling API requests in a Next.js environment.
  */
-export class VrameworkAPINextRequest extends VrameworkHTTPRequest {
+export class VrameworkAPINextRequest<In> extends VrameworkHTTPRequest<In> {
   /**
    * Constructs a new instance of the `VrameworkAPINextRequest` class.
    *

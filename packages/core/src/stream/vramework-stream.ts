@@ -1,44 +1,48 @@
 
-export class VrameworkStream {
-    private onMessageCallbacks = new Set<(data: any) => void>()
-    private onOpenCallbacks = new Set<() => void>()
-    private onCloseCallbacks = new Set<() => void>()
+export class VrameworkStream<OpeningData = unknown> {
+    private onMessageCallback?: (message: any) => void
+    private openCallBack?: () => void 
+    private closeCallback?: () => void
     private sendCallback?: (message: any) => void 
 
-    constructor() {
+    constructor(private openingData: OpeningData) {
     }
 
-    onOpen(callback: () => Promise<void>): void {
-        this.onOpenCallbacks.add(callback)
+    public getOpeningData(): OpeningData {
+        return this.openingData
+    }
+
+    registerOnOpen(callback: () => Promise<void>): void {
+        this.openCallBack = callback
     }
 
     open () {
-        this.onOpenCallbacks.forEach(callback => callback())
+        if (this.openCallBack) {
+            this.openCallBack()
+        }
     }
 
-    onMessage(callback: (data: any) => void): void {
-        this.onMessageCallbacks.add(callback)
+    registerOnMessage(callback: (data: any) => void): void {
+        this.onMessageCallback = callback
     }
 
     message (data: any) {
-        this.onMessageCallbacks.forEach(callback => callback(data))
+        this.onMessageCallback?.(data)
     }
 
-    onClose(callback: () => Promise<void>): void {
-        this.onCloseCallbacks.add(callback)
+    registerOnClose(callback: () => Promise<void>): void {
+        this.closeCallback = callback
     }
 
     close () {
-        this.onCloseCallbacks.forEach(callback => callback())
+        this.closeCallback?.()
     }
 
-    onSend (send: (message: any) => void) {
+    registerOnSend (send: (message: any) => void) {
         this.sendCallback = send
     }
 
     send(message: any): void {
-        if (this.sendCallback) {
-            this.sendCallback(message)
-        }
+        this.sendCallback?.(message)
     }
 }

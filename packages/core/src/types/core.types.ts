@@ -88,7 +88,7 @@ export interface VrameworkHTTP {
  */
 export interface VrameworkInteractions {
   http?: VrameworkHTTP
-  stream?: VrameworkStream
+  stream?: VrameworkStream<unknown>
 }
 
 /**
@@ -104,7 +104,7 @@ export type CoreHTTPServices<SingletonServices = CoreSingletonServices> = Single
 /**
  * Represents the core services used by Vramework, including singleton services and the request/response interaction.
  */
-export type CoreStreamServices<SingletonServices = CoreSingletonServices> = SingletonServices & { stream: VrameworkStream }
+export type CoreStreamServices<OpeningData = unknown, SingletonServices = CoreSingletonServices> = SingletonServices & { stream: VrameworkStream<OpeningData> }
 
 /**
  * Defines a function type for creating singleton services from the given configuration.

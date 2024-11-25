@@ -50,7 +50,7 @@ export class VrameworkUWSRequest extends VrameworkHTTPRequest {
               return
             }
             resolve(json)
-          } else {
+          } else if (chunk.length > 0) {
             try {
               json = JSON.parse(chunk.toString())
             } catch {
@@ -59,6 +59,8 @@ export class VrameworkUWSRequest extends VrameworkHTTPRequest {
               return
             }
             resolve(json)
+          } else {
+            resolve({})
           }
         } else {
           if (buffer) {

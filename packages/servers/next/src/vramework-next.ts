@@ -63,7 +63,7 @@ export class VrameworkNextJS {
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
     return await runRoute<In, Out>({
-      request: new VrameworkActionNextRequest(data),
+      request: new VrameworkActionNextRequest<In>(data),
       response: new VrameworkActionNextResponse(),
       singletonServices,
       createSessionServices: this.createSessionServices,
@@ -142,7 +142,7 @@ export class VrameworkNextJS {
     method: APIRouteMethod
   ): Promise<void> {
     const singletonServices = await this.getSingletonServices()
-    const vrameworkRequest = new VrameworkAPINextRequest(request)
+    const vrameworkRequest = new VrameworkAPINextRequest<In>(request)
     const vrameworkResponse = new VrameworkAPINextResponse(response)
     const data = await vrameworkRequest.getData()
     await runRoute<In, Out>({

@@ -1,5 +1,6 @@
 import * as uWS from 'uWebSockets.js'
 import { runStream } from '@vramework/core/stream/stream-runner'
+import { logStreams } from '@vramework/core/stream/log-streams'
 import { VrameworkStream } from '@vramework/core/stream/vramework-stream'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
@@ -17,61 +18,72 @@ export const vrameworkWebsocketHandler = ({
   singletonServices,
   createSessionServices,
   loadSchemas,
+  logRoutes
 }: VrameworkuWSHandlerOptions) => {
+  if (logRoutes) {
+    logStreams(singletonServices.logger)
+  }
+
   if (loadSchemas) {
     loadAllSchemas(singletonServices.logger)
   }
 
-  const stream = new VrameworkStream()
+  const decoder = new TextDecoder("utf-8")
 
   return {
     upgrade: async (res, req, context) => {
       /* Keep track of abortions */
-      const upgradeAborted = { aborted: false };
-
-      /* You MUST copy data out of req here, as req is only valid within this immediate callback */
-      const url = req.getUrl();
-      const secWebSocketKey = req.getHeader('sec-websocket-key');
-      const secWebSocketProtocol = req.getHeader('sec-websocket-protocol');
-      const secWebSocketExtensions = req.getHeader('sec-websocket-extensions');
+      const upgradeAborted = { aborted: false }
 
       res.onAborted(() => {
         upgradeAborted.aborted = true;
       })
 
-      await runStream({
-        request: new VrameworkUWSRequest(req, res),
-        response: new VrameworkUWSResponse(res),
-        stream,
-        singletonServices,
-        createSessionServices,
-        route: req.getUrl() as string,
-      })
+      try {
+        /* You MUST copy data out of req here, as req is only valid within this immediate callback */
+        const url = req.getUrl();
+        const secWebSocketKey = req.getHeader('sec-websocket-key');
+        const secWebSocketProtocol = req.getHeader('sec-websocket-protocol');
+        const secWebSocketExtensions = req.getHeader('sec-websocket-extensions');
+       
+        const stream = await runStream({
+          request: new VrameworkUWSRequest(req, res),
+          response: new VrameworkUWSResponse(res),
+          singletonServices,
+          createSessionServices,
+          route: req.getUrl() as string,
+        })
 
-      if (upgradeAborted.aborted) {
-        console.log("Client disconnected before we could upgrade it");
-        return
+        if (upgradeAborted.aborted) {
+          return
+        }
+
+        res.cork(() => {
+          res.upgrade(
+            { url, stream },
+            secWebSocketKey,
+            secWebSocketProtocol,
+            secWebSocketExtensions,
+            context
+          );
+        });
+      } catch (e: any) {
+        // Error should have already been handled by runRoute
       }
-
-      res.cork(() => {
-        res.upgrade(
-          { url: url },
-          secWebSocketKey,
-          secWebSocketProtocol,
-          secWebSocketExtensions,
-          context
-        );
-      });
     },
     open: (ws) => {
-      stream.onSend(ws.send.bind(ws))
+      const { stream } = ws.getUserData()
+      stream.registerOnSend(ws.send.bind(ws))
       stream.open()
     },
     message: (ws, message, isBinary) => {
-      stream.message(message)
+      const { stream } = ws.getUserData()
+      const data = isBinary ? message : decoder.decode(message)
+      stream.message(data)
     },
-    close: () => {
+    close: (ws) => {
+      const { stream } = ws.getUserData()
       stream.close()
     }
-  } as uWS.WebSocketBehavior<unknown>
+  } as uWS.WebSocketBehavior<{ stream: VrameworkStream }>
 }

@@ -5,7 +5,7 @@ import { IncomingMessage } from 'http'
  * The `VrameworkSSRNextRequest` class is an extension of the `VrameworkHTTPRequest` class,
  * specifically designed for handling server-side rendering (SSR) requests in a Next.js environment.
  */
-export class VrameworkSSRNextRequest extends VrameworkHTTPRequest {
+export class VrameworkSSRNextRequest<In> extends VrameworkHTTPRequest<In> {
   /**
    * Constructs a new instance of the `VrameworkSSRNextRequest` class.
    *

@@ -5,7 +5,7 @@ import { cookies, headers } from 'next/headers.js'
  * The `VrameworkActionNextRequest` class is an extension of the `VrameworkHTTPRequest` class,
  * specifically designed for handling action requests in a Next.js environment.
  */
-export class VrameworkActionNextRequest extends VrameworkHTTPRequest {
+export class VrameworkActionNextRequest<In> extends VrameworkHTTPRequest<In> {
   private body: any
 
   /**
