@@ -1,5 +1,13 @@
 # @vramework/next
 
+## 0.5.7
+
+### Patch Changes
+
+- 5be6da1: feat: adding streams to uws (and associated refactors)
+- Updated dependencies [5be6da1]
+  - @vramework/core@0.5.20
+
 ## 0.5.6
 
 ### Patch Changes

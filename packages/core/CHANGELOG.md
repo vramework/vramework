@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.20
+
+### Patch Changes
+
+- 5be6da1: feat: adding streams to uws (and associated refactors)
+
 ## 0.5.19
 
 ### Patch Changes
