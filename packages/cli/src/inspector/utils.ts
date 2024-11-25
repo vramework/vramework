@@ -11,18 +11,18 @@ export const getTypeOfFunctionArg = (
     const callSignatures = funcType.getCallSignatures()
 
     if (callSignatures.length > 1) {
-      console.error('Multiple call signatures found for stream')
+      console.error('Multiple call signatures found')
     }
 
     const signature = callSignatures[0]
     if (!signature) {
-      console.log('No api signature found for stream')
+      console.log('No api signature found')
       return null
     }
     const parameters = signature.getParameters()
     const parameter = parameters[argIndex]
     if (!parameter) {
-      console.log('No parameter found for stream')
+      console.log('No parameter found')
       return null
     }
     const paramType = checker.getTypeOfSymbolAtLocation(
@@ -66,15 +66,13 @@ export const getFunctionTypes = (
     const returnType = checker.getReturnTypeOfSignature(signature)
 
     const dataParameter = parameters[1]
-    if (!dataParameter) {
-      console.error('No data parameter found')
-      return { inputType: null, outputType: null, paramType: null }
+    if (dataParameter) {
+      paramType = checker.getTypeOfSymbolAtLocation(
+        dataParameter,
+        dataParameter.valueDeclaration!
+      )
+      inputType = checker.typeToString(paramType)
     }
-    const paramType = checker.getTypeOfSymbolAtLocation(
-      dataParameter,
-      dataParameter.valueDeclaration!
-    )
-    inputType = checker.typeToString(paramType)
     outputType = checker
       .typeToString(returnType)
       .replace('Promise<', '')
