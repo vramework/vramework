@@ -6,13 +6,13 @@ import {
   APIDocs,
   CoreServices,
   CoreSingletonServices,
-  CoreStreamServices,
   CoreUserSession,
   CreateSessionServices,
 } from '../types/core.types.js'
 import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
+import { VrameworkStream } from './vramework-stream.js'
 
 export type RunStreamOptions = Partial<{
   skipUserSession: boolean
@@ -76,9 +76,9 @@ type CoreFunctionlessStreamRoute<OnConnect, OnDisconnect> = {
  */
 export type CoreStreamConnect<
   StreamData,
-  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
-  Session = CoreUserSession,
-> = (services: Services, session: Session) => Promise<void>
+  Services extends CoreServices = CoreServices,
+  Session extends CoreUserSession = CoreUserSession,
+> = (services: Services & { stream: VrameworkStream<StreamData> }, session: Session) => Promise<void>
 
 /**
  * Represents a core API function that can be used without a session.
@@ -88,9 +88,9 @@ export type CoreStreamConnect<
  */
 export type CoreStreamConnectSessionless<
   StreamData,
-  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
-  Session = CoreUserSession,
-> = (services: Services, session?: Session) => Promise<void>
+  Services extends CoreServices = CoreServices,
+  Session extends CoreUserSession = CoreUserSession,
+> = (services: Services & { stream: VrameworkStream<StreamData> }, session?: Session) => Promise<void>
 
 /**
  * Represents a core stream function that performs an operation using core services and a user session.
@@ -100,9 +100,9 @@ export type CoreStreamConnectSessionless<
  */
 export type CoreStreamDisconnect<
   StreamData,
-  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
-  Session = CoreUserSession,
-> = (services: Services, session: Session) => Promise<void>
+  Services extends CoreServices = CoreServices,
+  Session extends CoreUserSession = CoreUserSession,
+> = (services: Services & { stream: VrameworkStream<StreamData> }, session: Session) => Promise<void>
 
 /**
  * Represents a core API function that can be used without a session.
@@ -113,9 +113,9 @@ export type CoreStreamDisconnect<
  */
 export type CoreStreamDisconnectSessionless<
   StreamData,
-  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
-  Session = CoreUserSession,
-> = (services: Services, session?: Session) => Promise<void>
+  Services extends CoreServices = CoreServices,
+  Session extends CoreUserSession = CoreUserSession,
+> = (services: Services & { stream: VrameworkStream<StreamData> }, session?: Session) => Promise<void>
 
 /**
  * Represents a core stream function that performs an operation using core services and a user session.
@@ -128,9 +128,9 @@ export type CoreStreamMessage<
   In,
   Out,
   StreamData,
-  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
-  Session = CoreUserSession,
-> = (services: Services, data: In, session: Session) => Promise<Out>
+  Services extends CoreServices = CoreServices,
+  Session extends CoreUserSession = CoreUserSession,
+> = (services: Services & { stream: VrameworkStream<StreamData> }, data: In, session: Session) => Promise<Out>
 
 /**
  * Represents a core API function that can be used without a session.
@@ -143,7 +143,7 @@ export type CoreStreamMessageSessionless<
   In,
   Out,
   StreamData,
-  Services extends CoreStreamServices = CoreStreamServices<StreamData>,
+  Services extends CoreServices = CoreServices,
   Session = CoreUserSession,
 > = (services: Services, data: In, session?: Session) => Promise<Out>
 

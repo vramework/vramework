@@ -1,7 +1,7 @@
 import { loadSchema, validateJson } from '../schema.js'
 import {
   CoreSingletonServices,
-  CoreStreamServices,
+  CoreServices,
   CoreUserSession,
 } from '../types/core.types.js'
 import { CoreAPIStreamMessage, CoreAPIStream } from './stream.types.js'
@@ -33,7 +33,7 @@ const getMatchingHandler = (
 export const registerMessageHandlers = (
   streamConfig: CoreAPIStream<any, any>,
   stream: VrameworkStream<unknown>,
-  services: CoreStreamServices,
+  services: CoreServices,
   userSession?: CoreUserSession
 ) => {
   stream.registerOnMessage(async (data) => {
@@ -52,7 +52,10 @@ export const registerMessageHandlers = (
           if (schemaName) {
             validateJson(schemaName, messageData.data)
           }
-          await message.func(services, messageData.data, userSession!)
+          await message.func({
+            ...services,
+            stream,
+          }, messageData.data, userSession!)
         }
       }
     } catch (e) {

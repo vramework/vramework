@@ -31,16 +31,16 @@ export type StreamDisconnectSessionless<StreamData = unknown, RequiredServices =
 export type StreamMessageSessionless<In, Out, StreamData = unknown, RequiredServices = ${servicesTypeName}> = CoreStreamMessageSessionless<In, Out, StreamData, RequiredServices, UserSession>
 
 type APIRoute<In, Out, Route extends string> = CoreAPIRoute<In, Out, Route, APIFunction<In, Out>, APIFunctionSessionless<In, Out>, APIPermission<In>>
-type APIStream<In, Out, Route extends string> = CoreAPIStream<In, Route, StreamConnect, StreamConnectSessionless, StreamDisconnect, StreamDisconnectSessionless, StreamMessage, StreamMessageSessionless>
-type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>>
+type APIStream<In, Route extends string> = CoreAPIStream<In, Route, StreamConnect, StreamConnectSessionless, StreamDisconnect, StreamDisconnectSessionless, StreamMessage<unknown, unknown>, StreamMessageSessionless<unknown, unknown>>
+type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>, UserSession>
 
 declare module "@vramework/core" {
   function addRoute<In, Out, Route extends string>(
     route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
   ): void;
 
-  function addStream<In, Out, Route extends string>(
-    route: APIStream<In, Out, Route> & AssertRouteParams<In, Route>
+  function addStream<In, Route extends string>(
+    route: APIStream<In, Route> & AssertRouteParams<In, Route>
   ): void;
 
   function addScheduledTask(task: ScheduledTask): void;
