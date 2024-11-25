@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.21
+
+### Patch Changes
+
+- 179b9c2: fix: fixing stream types
+
 ## 0.5.20
 
 ### Patch Changes
