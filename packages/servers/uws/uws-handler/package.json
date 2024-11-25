@@ -1,6 +1,6 @@
 {
   "name": "@vramework/uws-handler",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "The vramework uws handler",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -33,7 +33,7 @@
     }
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.19",
+    "@vramework/core": "^0.5.20",
     "uWebSockets.js": "*"
   },
   "dependencies": {
