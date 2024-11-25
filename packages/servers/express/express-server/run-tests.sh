@@ -29,7 +29,7 @@ done
 pattern="src/*.test.ts"
 
 # Expand the pattern into an array of files
-files=($pattern)
+files=($(find src -type f -name "*.test.ts"))
 
 # Check if any files matched the pattern
 if [ ${#files[@]} -eq 0 ]; then
