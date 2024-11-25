@@ -19,7 +19,7 @@ export class VrameworkTaskScheduler<
 
   constructor(
     private singletonServices: SingletonServices,
-    private createSessionServices: CreateSessionServices<
+    private createSessionServices?: CreateSessionServices<
       SingletonServices,
       UserSession,
       Services

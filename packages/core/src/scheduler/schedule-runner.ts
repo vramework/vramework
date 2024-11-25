@@ -17,16 +17,7 @@ export type RunScheduledTasksParams = {
   name: string
   session?: CoreUserSession
   singletonServices: CoreSingletonServices
-  createSessionServices: CreateSessionServices<
-    CoreSingletonServices,
-    CoreUserSession,
-    CoreServices
-  >
-}
-
-export type RunCronParams = {
-  singletonServices: CoreSingletonServices
-  createSessionServices: CreateSessionServices<
+  createSessionServices?: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
     CoreServices
@@ -65,15 +56,12 @@ class ScheduledTaskNotFoundError extends Error {
   }
 }
 
-/**
- * @ignore
- */
-export const runScheduledTask = async ({
+export async function runScheduledTask ({
   name,
   session,
   singletonServices,
   createSessionServices,
-}: RunScheduledTasksParams): Promise<void> => {
+}: RunScheduledTasksParams): Promise<void> {
   let sessionServices: CoreServices | undefined
   const trackerId: string = crypto.randomUUID().toString()
 
@@ -88,12 +76,15 @@ export const runScheduledTask = async ({
       `Running schedule task: ${name} | schedule: ${task.schedule}}`
     )
 
-    const sessionServices = await createSessionServices(
-      singletonServices,
-      {},
-      session
-    )
-    const allServices = { ...singletonServices, ...sessionServices }
+    let allServices = singletonServices
+    if (createSessionServices) {
+      const sessionServices = await createSessionServices(
+        singletonServices,
+        {},
+        session
+      )
+      allServices = { ...singletonServices, ...sessionServices }
+    }
 
     await task.func(allServices, undefined, session!)
   } catch (e: any) {
