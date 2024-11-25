@@ -4,33 +4,31 @@ import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
 import { APIDocs } from '@vramework/core/types/core.types'
 import { getInputTypes } from './add-route.js'
-import { getTypeOfFunctionArg, getFunctionTypes, nullifyTypes } from './utils.js'
+import { getFunctionTypes } from './utils.js'
 import { StreamMeta } from '@vramework/core'
 
-const addConnect = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) => {
+const addConnect = (obj: ts.ObjectLiteralExpression) => {
   const funcProperty = obj.properties.find(
     (p) =>
       ts.isPropertyAssignment(p) &&
       ts.isIdentifier(p.name) &&
       p.name.text === 'onConnect'
   )
-  return funcProperty ? {
-    input: nullifyTypes(getTypeOfFunctionArg(checker, funcProperty, 1))
-  } : undefined
+  return !!funcProperty
 }
 
-const addDisconnect = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) => {
+const addDisconnect = (obj: ts.ObjectLiteralExpression) => {
   const funcProperty = obj.properties.find(
     (p) =>
       ts.isPropertyAssignment(p) &&
       ts.isIdentifier(p.name) &&
       p.name.text === 'onDisconnect'
   )
-  return funcProperty ? {} : undefined
+  return !!funcProperty
 }
 
 const addMessages = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) => {
-  const messageTypes: StreamMeta['messages'] = []
+  const messageTypes: StreamMeta['messages'] = [];
 
   const messagesProperty = obj.properties.find(
     (p) =>
@@ -41,60 +39,63 @@ const addMessages = (obj: ts.ObjectLiteralExpression, checker: ts.TypeChecker) =
 
   if (!messagesProperty || !ts.isPropertyAssignment(messagesProperty)) {
     console.log('onMessage property not found or is not a valid assignment.');
-    return []
+    return [];
   }
 
   const initializer = messagesProperty.initializer;
-  if (!ts.isObjectLiteralExpression(initializer)) {
-    console.log('onMessage is not an object literal.');
-    return []
+  if (!ts.isArrayLiteralExpression(initializer)) {
+    console.log('onMessage is not an array literal.');
+    return [];
   }
 
-  initializer.properties.forEach((property) => {
-    // Ensure the property is a PropertyAssignment
-    if (!ts.isPropertyAssignment(property)) {
-      console.warn('Unexpected property type:', property);
+  initializer.elements.forEach((element) => {
+    if (!ts.isObjectLiteralExpression(element)) {
+      console.warn('Unexpected element type in onMessage array:', element);
       return;
     }
 
-    const propertyName = ts.isIdentifier(property.name)
-      ? property.name.text
-      : ts.isStringLiteral(property.name)
-        ? property.name.text
-        : null;
+    const routeProperty = element.properties.find(
+      (p) =>
+        ts.isPropertyAssignment(p) &&
+        ts.isIdentifier(p.name) &&
+        p.name.text === 'route'
+    );
 
-    if (!propertyName) {
-      console.warn('Unexpected property key type:', property.name);
+    const funcProperty = element.properties.find(
+      (p) =>
+        ts.isPropertyAssignment(p) &&
+        ts.isIdentifier(p.name) &&
+        p.name.text === 'func'
+    );
+
+    if (!routeProperty || !ts.isPropertyAssignment(routeProperty)) {
+      console.warn('No valid route property found in onMessage array element:', element);
       return;
     }
 
-    if (ts.isObjectLiteralExpression(property.initializer)) {
-      const funcProperty = property.initializer.properties.find(
-        (p) =>
-          ts.isPropertyAssignment(p) &&
-          ts.isIdentifier(p.name) &&
-          p.name.text === 'func'
-      );
-
-      if (!funcProperty) {
-        console.warn(`No 'func' property found for message '${propertyName}'.`);
-        return
-      }
-
-      if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
-        const { inputType, outputType } = getFunctionTypes(checker, funcProperty);
-        messageTypes.push({
-          route: propertyName,
-          input: inputType,
-          output: outputType
-        })
-      }
-    } else {
-      console.warn('Initializer is not an object literal:', property.initializer);
+    if (!funcProperty || !ts.isPropertyAssignment(funcProperty)) {
+      console.warn('No valid func property found in onMessage array element:', element);
+      return;
     }
+
+    const route = ts.isStringLiteral(routeProperty.initializer)
+      ? routeProperty.initializer.text
+      : null;
+
+    if (!route) {
+      console.warn('Route property is not a string literal:', routeProperty.initializer);
+      return;
+    }
+
+    const { inputType, outputType } = getFunctionTypes(checker, funcProperty);
+    messageTypes.push({
+      route,
+      input: inputType,
+      output: outputType,
+    });
   });
 
-  return messageTypes
+  return messageTypes;
 };
 
 export const addStream = (
@@ -145,8 +146,8 @@ export const addStream = (
     docs = (getPropertyValue(obj, 'docs') as APIDocs) || undefined
     queryValues = (getPropertyValue(obj, 'query') as string[]) || []
 
-    const connect = addConnect(obj, checker)
-    const disconnect = addDisconnect(obj, checker)
+    const connect = addConnect(obj)
+    const disconnect = addDisconnect(obj)
     const messages = addMessages(obj, checker)
 
     if (!routeValue) {
