@@ -1,12 +1,12 @@
 ---
-'@vramework/express-middleware': minor
-'@vramework/fastify-plugin': minor
-'@vramework/uws-handler': minor
-'@vramework/azure-functions': minor
-'@vramework/lambda': minor
-'@vramework/next': minor
-'@vramework/core': minor
-'@vramework/cli': minor
+'@vramework/express-middleware': patch
+'@vramework/fastify-plugin': patch
+'@vramework/uws-handler': patch
+'@vramework/azure-functions': patch
+'@vramework/lambda': patch
+'@vramework/next': patch
+'@vramework/core': patch
+'@vramework/cli': patch
 ---
 
 refactor: making http requests explicit to support other types
