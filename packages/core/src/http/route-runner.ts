@@ -20,7 +20,7 @@ import { Logger, SessionService } from '../services/index.js'
 import { NotFoundError, NotImplementedError } from '../errors.js'
 import * as cryptoImp from 'crypto'
 import { closeServices, validateAndCoerce } from '../utils.js'
-import { CoreAPIStream } from '../stream/stream.types.js'
+import { CoreAPIChannel } from '../channel/channel.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
 const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
@@ -120,7 +120,7 @@ export const loadUserSession = async (
   requiresSession: boolean,
   http: VrameworkHTTP | undefined,
   matchedPath: any,
-  route: CoreAPIRoute<unknown, unknown, any> | CoreAPIStream<unknown, any>,
+  route: CoreAPIRoute<unknown, unknown, any> | CoreAPIChannel<unknown, any>,
   logger: Logger,
   sessionService: SessionService | undefined
 ) => {

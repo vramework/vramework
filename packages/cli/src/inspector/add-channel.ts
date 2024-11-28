@@ -5,13 +5,13 @@ import { pathToRegexp } from 'path-to-regexp'
 import { APIDocs } from '@vramework/core/types/core.types'
 import { getInputTypes } from './add-route.js'
 import { getPropertyAssignment, getFunctionTypes } from './utils.js'
-import { StreamMeta } from '@vramework/core'
+import { ChannelMeta } from '@vramework/core'
 
 const addMessagesRoutes = (
   obj: ts.ObjectLiteralExpression,
   checker: ts.TypeChecker
 ) => {
-  const messageTypes: StreamMeta['messageRoutes'] = {};
+  const messageTypes: ChannelMeta['messageRoutes'] = {};
 
   // Find the onMessageRoute property
   const messagesProperty = obj.properties.find(
@@ -61,7 +61,7 @@ const addMessagesRoutes = (
   return messageTypes;
 }
 
-export const addStream = (
+export const addChannel = (
   node: ts.Node,
   checker: ts.TypeChecker,
   state: VisitState
@@ -75,7 +75,7 @@ export const addStream = (
   const expression = node.expression
 
   // Check if the call is to addRoute
-  if (!ts.isIdentifier(expression) || expression.text !== 'addStream') {
+  if (!ts.isIdentifier(expression) || expression.text !== 'addChannel') {
     return
   }
 
@@ -89,7 +89,7 @@ export const addStream = (
   let inputType: string | null = null
   let routeValue: string | null = null
 
-  state.filesWithStreams.add(node.getSourceFile().fileName)
+  state.filesWithChannels.add(node.getSourceFile().fileName)
 
   // Check if the first argument is an object literal
   if (ts.isObjectLiteralExpression(firstArg)) {
@@ -120,7 +120,7 @@ export const addStream = (
       return
     }
 
-    state.streamsMeta.push({
+    state.channelsMeta.push({
       route: routeValue!,
       input: inputType,
       params: paramsValues.length > 0 ? paramsValues : undefined,

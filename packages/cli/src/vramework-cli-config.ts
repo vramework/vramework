@@ -5,7 +5,7 @@ import { OpenAPISpecInfo } from './openapi/openapi-spec-generator.js'
 export interface VrameworkCLICoreOutputFiles {
   outDir?: string
   routesFile: string
-  streamsFile: string
+  channelsFile: string
   schedulersFile: string
   schemaDirectory: string
   typesDeclarationFile: string
@@ -112,8 +112,8 @@ const _getVrameworkCLIConfig = async (
       if (!result.schedulersFile) {
         result.schedulersFile = join(result.outDir, 'vramework-schedules.ts')
       }
-      if (!result.streamsFile) {
-        result.streamsFile = join(result.outDir, 'vramework-streams.ts')
+      if (!result.channelsFile) {
+        result.channelsFile = join(result.outDir, 'vramework-channels.ts')
       }
       if (!result.typesDeclarationFile) {
         result.typesDeclarationFile = join(

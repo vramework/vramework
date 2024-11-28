@@ -16,7 +16,7 @@ import { existsSync } from 'fs'
 import { vrameworkOpenAPI } from './vramework-openapi.js'
 import { vrameworkFetch } from './vramework-fetch.js'
 import { vrameworkScheduler } from './vramework-scheduler.js'
-import { vrameworkStreams } from './vramework-streams.js'
+import { vrameworkChannels } from './vramework-channels.js'
 
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
@@ -48,7 +48,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
 
   await vrameworkScheduler(cliConfig, visitState)
 
-  await vrameworkStreams(cliConfig, visitState)
+  await vrameworkChannels(cliConfig, visitState)
 
   await vrameworkSchemas(cliConfig, visitState)
 
@@ -75,15 +75,21 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   bootstrapImports.push(
     `import '${getFileImportRelativePath(cliConfig.bootstrapFile, `${cliConfig.schemaDirectory}/register.ts`, cliConfig.packageMappings)}'`
   )
-  bootstrapImports.push(
-    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings)}'`
-  )
-  bootstrapImports.push(
-    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.schedulersFile, cliConfig.packageMappings)}'`
-  )
-  bootstrapImports.push(
-    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.streamsFile, cliConfig.packageMappings)}'`
-  )
+  if (visitState.filesWithRoutes.size > 0) {
+    bootstrapImports.push(
+      `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings)}'`
+    )
+  }
+  if (visitState.filesWithScheduledTasks.size > 0) {
+    bootstrapImports.push(
+      `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.schedulersFile, cliConfig.packageMappings)}'`
+    )
+  }
+  if (visitState.filesWithChannels.size > 0) {
+    bootstrapImports.push(
+      `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.channelsFile, cliConfig.packageMappings)}'`
+    )
+  }
   await writeFileInDir(cliConfig.bootstrapFile, bootstrapImports.join('\n'))
 }
 

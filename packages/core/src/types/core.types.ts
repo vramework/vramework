@@ -2,7 +2,7 @@ import { Logger, LogLevel } from '../services/logger.js'
 import { PermissionService, SessionService } from '../services/index.js'
 import { VrameworkHTTPRequest } from '../http/vramework-http-request.js'
 import { VrameworkHTTPResponse } from '../http/vramework-http-response.js'
-import { VrameworkStream } from '../stream/vramework-stream.js'
+import { VrameworkChannel } from '../channel/vramework-channel.js'
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.
@@ -88,7 +88,7 @@ export interface VrameworkHTTP {
  */
 export interface VrameworkInteractions {
   http?: VrameworkHTTP
-  stream?: VrameworkStream<unknown>
+  stream?: VrameworkChannel<unknown>
 }
 
 /**
@@ -106,10 +106,10 @@ export type CoreHTTPServices<SingletonServices = CoreSingletonServices> =
 /**
  * Represents the core services used by Vramework, including singleton services and the request/response interaction.
  */
-export type CoreStreamServices<
+export type CoreChannelServices<
   OpeningData = unknown,
   SingletonServices = CoreSingletonServices,
-> = SingletonServices & { stream: VrameworkStream<OpeningData> }
+> = SingletonServices & { stream: VrameworkChannel<OpeningData> }
 
 /**
  * Defines a function type for creating singleton services from the given configuration.

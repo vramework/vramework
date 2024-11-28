@@ -12,18 +12,18 @@ import {
 import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
-import { VrameworkStream } from './vramework-stream.js'
+import { VrameworkChannel } from './vramework-channel.js'
 
-export type RunStreamOptions = Partial<{
+export type RunChannelOptions = Partial<{
   skipUserSession: boolean
   respondWith404: boolean
   coerceToArray: boolean
   logWarningsForStatusCodes: number[]
 }>
 
-export type RunStreamParams<StreamData> = {
+export type RunChannelParams<ChannelData> = {
   singletonServices: CoreSingletonServices
-  request: VrameworkRequest<StreamData> | VrameworkHTTPRequest<StreamData>
+  request: VrameworkRequest<ChannelData> | VrameworkHTTPRequest<ChannelData>
   response: VrameworkResponse | VrameworkHTTPResponse
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
@@ -34,7 +34,7 @@ export type RunStreamParams<StreamData> = {
 
 export interface HandlerMeta {}
 
-export interface StreamMeta {
+export interface ChannelMeta {
   route: string
   params?: string[]
   query?: string[]
@@ -50,12 +50,12 @@ export interface StreamMeta {
   docs?: APIDocs
 }
 
-export type StreamsMeta = StreamMeta[]
+export type ChannelsMeta = ChannelMeta[]
 
 /**
  * Represents an API route without a function, including metadata such as content type, route, and timeout settings.
  */
-type CoreFunctionlessStreamRoute<OnConnectionChange> = {
+type CoreFunctionlessChannelRoute<OnConnectionChange> = {
   route: string
   onConnect?: OnConnectionChange
   onDisconnect?: OnConnectionChange
@@ -67,17 +67,17 @@ type CoreFunctionlessStreamRoute<OnConnectionChange> = {
   }>
 }
 
-export type CoreStreamConnectionSessionless<
+export type CoreChannelConnectionSessionless<
   OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services, stream: VrameworkStream<OpenData>, session?: Session) => Promise<void>
+> = (services: Services, stream: VrameworkChannel<OpenData>, session?: Session) => Promise<void>
 
-export type CoreStreamConnection<
+export type CoreChannelConnection<
   OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services, stream: VrameworkStream<OpenData>, session: Session) => Promise<void>
+> = (services: Services, stream: VrameworkChannel<OpenData>, session: Session) => Promise<void>
 
 /**
  * Represents a core stream function that performs an operation using core services and a user session.
@@ -86,13 +86,13 @@ export type CoreStreamConnection<
  * @template Services - The services type, defaults to `CoreServices`.
  * @template Session - The session type, defaults to `CoreUserSession`.
  */
-export type CoreStreamMessage<
+export type CoreChannelMessage<
   In,
   Out,
   OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services, stream: VrameworkStream<OpenData, In, Out>, session: Session) => Promise<void>
+> = (services: Services, stream: VrameworkChannel<OpenData, In, Out>, session: Session) => Promise<void>
 
 /**
  * Represents a core API function that can be used without a session.
@@ -101,49 +101,49 @@ export type CoreStreamMessage<
  * @template Services - The services type, defaults to `CoreServices`.
  * @template Session - The session type, defaults to `CoreUserSession`.
  */
-export type CoreStreamMessageSessionless<
+export type CoreChannelMessageSessionless<
   In,
   Out,
   OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services, stream: VrameworkStream<OpenData, In, Out>, session?: Session) => Promise<void>
+> = (services: Services, stream: VrameworkChannel<OpenData, In, Out>, session?: Session) => Promise<void>
 
-export type CoreAPIStreamMessage<
-  StreamFunctionMessage =
-    | CoreStreamMessageSessionless<unknown, unknown, unknown>
-    | CoreStreamMessage<unknown, unknown, unknown>,
+export type CoreAPIChannelMessage<
+  ChannelFunctionMessage =
+    | CoreChannelMessageSessionless<unknown, unknown, unknown>
+    | CoreChannelMessage<unknown, unknown, unknown>,
 > = {
-  func: StreamFunctionMessage
+  func: ChannelFunctionMessage
   route: string
 }
 
-export type CoreAPIStream<
-  StreamData,
-  R extends string,
-  StreamFunctionConnection = CoreStreamConnection<StreamData>,
-  StreamFunctionConnectionSessionless = CoreStreamConnectionSessionless<StreamData>,
-  StreamFunctionMessage = CoreStreamMessage<unknown, unknown, unknown>,
-  StreamFunctionMessageSessionless = CoreStreamMessageSessionless<
+export type CoreAPIChannel<
+  ChannelData,
+  Channel extends string,
+  ChannelFunctionConnection = CoreChannelConnection<ChannelData>,
+  ChannelFunctionConnectionSessionless = CoreChannelConnectionSessionless<ChannelData>,
+  ChannelFunctionMessage = CoreChannelMessage<unknown, unknown, unknown>,
+  ChannelFunctionMessageSessionless = CoreChannelMessageSessionless<
     unknown,
     unknown,
     unknown
   >,
-  APIPermission = CoreAPIPermission<StreamData>,
+  APIPermission = CoreAPIPermission<ChannelData>,
 > =
-  | (CoreFunctionlessStreamRoute<StreamFunctionConnection> & {
-      route: R
-      onMessage?: { func: StreamFunctionMessage, permissions?: undefined }
-      onMessageRoute?: Record<string, Record<string, StreamFunctionMessage | { func: StreamFunctionMessage, permissions?: Record<string, APIPermission[] | APIPermission>}>>
+  | (CoreFunctionlessChannelRoute<ChannelFunctionConnection> & {
+      channel: Channel
+      onMessage?: { func: ChannelFunctionMessage, permissions?: undefined }
+      onMessageRoute?: Record<string, Record<string, ChannelFunctionMessage | { func: ChannelFunctionMessage, permissions?: Record<string, APIPermission[] | APIPermission>}>>
       permissions?: Record<string, APIPermission[] | APIPermission>
       auth?: true
     })
-  | (CoreFunctionlessStreamRoute<StreamFunctionConnectionSessionless> & {
-      route: R
-      onMessage?: StreamFunctionMessageSessionless
-      onMessageRoute?: Record<string, Record<string, StreamFunctionMessageSessionless | { func: StreamFunctionMessageSessionless, permissions?: undefined }>>
+  | (CoreFunctionlessChannelRoute<ChannelFunctionConnectionSessionless> & {
+      channel: Channel
+      onMessage?: ChannelFunctionMessageSessionless
+      onMessageRoute?: Record<string, Record<string, ChannelFunctionMessageSessionless | { func: ChannelFunctionMessageSessionless, permissions?: undefined }>>
       permissions?: undefined
       auth?: false
     })
 
-export type CoreAPIStreams = CoreAPIStream<any, string>[]
+export type CoreAPIChannels = CoreAPIChannel<any, string>[]

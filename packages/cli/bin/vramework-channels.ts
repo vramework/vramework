@@ -12,25 +12,25 @@ import {
   writeFileInDir,
 } from '../src/utils.js'
 import {
-  serializeStreams,
-  serializeStreamMeta,
-} from '../src/stream/serialize-streams.js'
+  serializeChannels,
+  serializeChannelMeta,
+} from '../src/channels/serialize-channels.js'
 
-export const vrameworkStreams = async (
+export const vrameworkChannels = async (
   cliConfig: VrameworkCLIConfig,
   visitState: VisitState
 ) => {
   return await logCommandInfoAndTime(
-    'Finding streams',
-    'Found streams',
+    'Finding Channels',
+    'Found channels',
     async () => {
-      const { streamsFile, packageMappings } = cliConfig
-      const { filesWithStreams, streamsMeta } = visitState
+      const { channelsFile, packageMappings } = cliConfig
+      const { filesWithChannels, channelsMeta } = visitState
       const content = [
-        serializeStreams(streamsFile, filesWithStreams, packageMappings),
-        serializeStreamMeta(streamsMeta),
+        serializeChannels(channelsFile, filesWithChannels, packageMappings),
+        serializeChannelMeta(channelsMeta),
       ]
-      await writeFileInDir(streamsFile, content.join('\n\n'))
+      await writeFileInDir(channelsFile, content.join('\n\n'))
     }
   )
 }
@@ -47,7 +47,7 @@ async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
     cliConfig.rootDir,
     cliConfig.routeDirectories
   )
-  await vrameworkStreams(cliConfig, visitState)
+  await vrameworkChannels(cliConfig, visitState)
 }
 
 export const streams = (program: Command): void => {

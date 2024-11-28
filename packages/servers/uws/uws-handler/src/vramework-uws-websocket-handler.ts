@@ -1,7 +1,7 @@
 import * as uWS from 'uWebSockets.js'
-import { runStream } from '@vramework/core/stream/stream-runner'
-import { logStreams } from '@vramework/core/stream/log-streams'
-import { VrameworkStream } from '@vramework/core/stream/vramework-stream'
+import { runChannel } from '@vramework/core/channel/channel-runner'
+import { logChannels } from '@vramework/core/channel/log-channels'
+import { VrameworkChannel } from '@vramework/core/channel/vramework-channel'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
@@ -21,7 +21,7 @@ export const vrameworkWebsocketHandler = ({
   logRoutes,
 }: VrameworkuWSHandlerOptions) => {
   if (logRoutes) {
-    logStreams(singletonServices.logger)
+    logChannels(singletonServices.logger)
   }
 
   if (loadSchemas) {
@@ -46,7 +46,7 @@ export const vrameworkWebsocketHandler = ({
         const secWebSocketProtocol = req.getHeader('sec-websocket-protocol')
         const secWebSocketExtensions = req.getHeader('sec-websocket-extensions')
 
-        const stream = await runStream({
+        const stream = await runChannel({
           request: new VrameworkUWSRequest(req, res),
           response: new VrameworkUWSResponse(res),
           singletonServices,
@@ -85,5 +85,5 @@ export const vrameworkWebsocketHandler = ({
       const { stream } = ws.getUserData()
       stream.close()
     },
-  } as uWS.WebSocketBehavior<{ stream: VrameworkStream }>
+  } as uWS.WebSocketBehavior<{ stream: VrameworkChannel }>
 }

@@ -1,10 +1,10 @@
 import {
-  CoreAPIStream,
-  CoreAPIStreams,
-  RunStreamOptions,
-  RunStreamParams,
-  StreamsMeta,
-} from './stream.types.js'
+  CoreAPIChannel,
+  CoreAPIChannels,
+  RunChannelOptions,
+  RunChannelParams,
+  ChannelsMeta,
+} from './channel.types.js'
 import { match } from 'path-to-regexp'
 import { closeServices, validateAndCoerce } from '../utils.js'
 import { verifyPermissions } from '../permissions.js'
@@ -13,66 +13,66 @@ import {
   handleError,
   loadUserSession,
 } from '../http/route-runner.js'
-import { registerMessageHandlers } from './stream-message-handler.js'
-import { VrameworkStream } from './vramework-stream.js'
+import { registerMessageHandlers } from './channel-handler.js'
+import { VrameworkChannel } from './vramework-channel.js'
 
-let streams: CoreAPIStreams = []
-let streamsMeta: StreamsMeta = []
+let channels: CoreAPIChannels = []
+let channelsMeta: ChannelsMeta = []
 
-export const addStream = <
+export const addChannel = <
   In,
-  Route extends string,
-  StreamFunction,
-  StreamFunctionSessionless,
+  Channel extends string,
+  ChannelFunction,
+  ChannelFunctionSessionless,
   APIPermission,
 >(
-  stream: CoreAPIStream<
+  stream: CoreAPIChannel<
     In,
-    Route,
-    StreamFunction,
-    StreamFunctionSessionless,
+    Channel,
+    ChannelFunction,
+    ChannelFunctionSessionless,
     APIPermission
   >
 ) => {
-  streams.push(stream as any)
+  channels.push(stream as any)
 }
 
-export const clearStreams = () => {
-  streams = []
+export const clearChannels = () => {
+  channels = []
 }
 
 /**
  * @ignore
  */
-export const addStreamsMeta = (_streamsMeta: StreamsMeta) => {
-  streamsMeta = _streamsMeta
+export const addChannelsMeta = (_channelsMeta: ChannelsMeta) => {
+  channelsMeta = _channelsMeta
 }
 
 /**
  * Returns all the registered routes and associated metadata.
  * @internal
  */
-export const getStreams = () => {
+export const getChannels = () => {
   return {
-    streams,
-    streamsMeta,
+    channels,
+    channelsMeta,
   }
 }
 
-const getMatchingStreamConfig = (requestPath: string) => {
-  for (const streamConfig of streams) {
-    const matchFunc = match(streamConfig.route.replace(/^\/\//, '/'), {
+const getMatchingChannelConfig = (requestPath: string) => {
+  for (const channelConfig of channels) {
+    const matchFunc = match(channelConfig.route.replace(/^\/\//, '/'), {
       decode: decodeURIComponent,
     })
     const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
     if (matchedPath) {
-      const schemaName = streamsMeta.find(
-        (streamMeta) => streamMeta.route === streamConfig.route
+      const schemaName = channelsMeta.find(
+        (streamMeta) => streamMeta.route === channelConfig.route
       )?.input
       return {
         matchedPath,
         params: matchedPath.params,
-        streamConfig,
+        channelConfig,
         schemaName,
       }
     }
@@ -84,7 +84,7 @@ const getMatchingStreamConfig = (requestPath: string) => {
 /**
  * @ignore
  */
-export const runStream = async ({
+export const runChannel = async ({
   singletonServices,
   request,
   response,
@@ -94,15 +94,15 @@ export const runStream = async ({
   respondWith404 = true,
   coerceToArray = false,
   logWarningsForStatusCodes = [],
-}: Pick<CoreAPIStream<unknown, any>, 'route'> &
-  RunStreamOptions &
-  RunStreamParams<unknown>): Promise<VrameworkStream<unknown> | undefined> => {
+}: Pick<CoreAPIChannel<unknown, any>, 'route'> &
+  RunChannelOptions &
+  RunChannelParams<unknown>): Promise<VrameworkChannel<unknown> | undefined> => {
   let sessionServices: any | undefined
   const trackerId: string = crypto.randomUUID().toString()
   const http = createHTTPInteraction(request, response)
 
-  const matchingStream = getMatchingStreamConfig(streamRoute)
-  if (!matchingStream) {
+  const matchingChannel = getMatchingChannelConfig(streamRoute)
+  if (!matchingChannel) {
     if (respondWith404) {
       http?.response?.setStatus(404)
       http?.response?.end()
@@ -111,13 +111,13 @@ export const runStream = async ({
   }
 
   try {
-    const { matchedPath, params, streamConfig, schemaName } = matchingStream
+    const { matchedPath, params, channelConfig, schemaName } = matchingChannel
 
-    const requiresSession = streamConfig.auth !== false
+    const requiresSession = channelConfig.auth !== false
     http?.request?.setParams(params)
 
     singletonServices.logger.info(
-      `Matched stream: ${streamConfig.route} | auth: ${requiresSession.toString()}`
+      `Matched stream: ${channelConfig.route} | auth: ${requiresSession.toString()}`
     )
 
     const session = await loadUserSession(
@@ -125,7 +125,7 @@ export const runStream = async ({
       requiresSession,
       http,
       matchedPath,
-      streamConfig,
+      channelConfig,
       singletonServices.logger,
       singletonServices.sessionService
     )
@@ -133,7 +133,7 @@ export const runStream = async ({
 
     validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
 
-    const stream = new VrameworkStream(data)
+    const stream = new VrameworkChannel(data)
 
     sessionServices = await createSessionServices(
       singletonServices,
@@ -143,20 +143,20 @@ export const runStream = async ({
     const allServices = { ...singletonServices, ...sessionServices }
 
     await verifyPermissions(
-      streamConfig.permissions,
+      channelConfig.permissions,
       allServices,
       data,
       session
     )
 
     stream.registerOnOpen(async () => {
-      streamConfig.onConnect?.(allServices, stream, session!)
+      channelConfig.onConnect?.(allServices, stream, session!)
     })
 
-    registerMessageHandlers(streamConfig, stream, allServices, session)
+    registerMessageHandlers(channelConfig, stream, allServices, session)
 
     stream.registerOnClose(async () => {
-      streamConfig.onDisconnect?.(allServices, stream, session!)
+      channelConfig.onDisconnect?.(allServices, stream, session!)
       await closeServices(singletonServices.logger, sessionServices)
     })
 

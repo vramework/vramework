@@ -1,16 +1,16 @@
-import { StreamsMeta } from '@vramework/core/stream/stream.types'
+import { ChannelsMeta } from '@vramework/core/channel/channel.types'
 import { getFileImportRelativePath } from '../utils.js'
 
-export const serializeStreams = (
+export const serializeChannels = (
   outputPath: string,
-  filesWithStreams: Set<string>,
+  filesWithChannels: Set<string>,
   packageMappings: Record<string, string> = {}
 ) => {
   const serializedOutput: string[] = [
-    '/* The files with an addStream function call */',
+    '/* The files with an addChannel function call */',
   ]
 
-  Array.from(filesWithStreams)
+  Array.from(filesWithChannels)
     .sort()
     .forEach((path) => {
       const filePath = getFileImportRelativePath(
@@ -24,11 +24,11 @@ export const serializeStreams = (
   return serializedOutput.join('\n')
 }
 
-export const serializeStreamMeta = (streamsMeta: StreamsMeta) => {
+export const serializeChannelMeta = (channelsMeta: ChannelsMeta) => {
   const serializedOutput: string[] = []
-  serializedOutput.push("import { addStreamsMeta } from '@vramework/core'")
+  serializedOutput.push("import { addChannelsMeta } from '@vramework/core'")
   serializedOutput.push(
-    `addStreamsMeta(${JSON.stringify(streamsMeta, null, 2)})`
+    `addChannelsMeta(${JSON.stringify(channelsMeta, null, 2)})`
   )
   return serializedOutput.join('\n')
 }

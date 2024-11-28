@@ -57,7 +57,7 @@ export type APIRouteMethod = 'post' | 'get' | 'delete' | 'patch' | 'head'
 type CoreFunctionlessAPIRoute = {
   contentType?: 'xml' | 'json'
   route: string
-  eventStream?: false
+  eventChannel?: false
   returnsJSON?: false
   timeout?: number
   docs?: Partial<{

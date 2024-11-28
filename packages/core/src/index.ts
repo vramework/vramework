@@ -22,4 +22,4 @@ export * from './scheduler/index.js'
 
 export * from './http/index.js'
 
-export * from './stream/index.js'
+export * from './channel/index.js'

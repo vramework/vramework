@@ -5,9 +5,9 @@ import {
   CoreUserSession,
   JSONValue,
 } from '../types/core.types.js'
-import { CoreAPIStream } from './stream.types.js'
-import { getStreams } from './stream-runner.js'
-import { VrameworkStream } from './vramework-stream.js'
+import { CoreAPIChannel } from './channel.types.js'
+import { getChannels } from './channel-runner.js'
+import { VrameworkChannel } from './vramework-channel.js'
 
 const validateSchema = (
   logger: CoreSingletonServices['logger'],
@@ -15,9 +15,9 @@ const validateSchema = (
   routerValue: string,
   data: JSONValue
 ) => {
-  const { streamsMeta } = getStreams()
-  const schemaName = streamsMeta.find(
-    (streamMeta) => streamMeta.messageRoutes[routingProperty]?.[routerValue]
+  const { channelsMeta } = getChannels()
+  const schemaName = channelsMeta.find(
+    (channelsMeta) => channelsMeta.messageRoutes[routingProperty]?.[routerValue]
   )?.input
   if (schemaName) {
     loadSchema(schemaName, logger)
@@ -26,22 +26,22 @@ const validateSchema = (
 }
 
 export const registerMessageHandlers = (
-  streamConfig: CoreAPIStream<any, any>,
-  stream: VrameworkStream<unknown>,
+  channelConfig: CoreAPIChannel<any, any>,
+  stream: VrameworkChannel<unknown>,
   services: CoreServices,
   userSession?: CoreUserSession
 ) => {
   stream.registerOnMessage(async (data) => {
     let processed = false
     try {
-      if (streamConfig.onMessageRoute && typeof data === 'string') {
+      if (channelConfig.onMessageRoute && typeof data === 'string') {
         processed = true
         const messageData = JSON.parse(data)
-        const routingProperties = Object.keys(streamConfig.onMessageRoute).filter(key => key !== 'default')
+        const routingProperties = Object.keys(channelConfig.onMessageRoute).filter(key => key !== 'default')
         for (const routingProperty of routingProperties) {
           const routerValue: string = messageData[routingProperty]
           if (routerValue) {
-            const handler = streamConfig.onMessageRoute[routingProperty][routerValue]
+            const handler = channelConfig.onMessageRoute[routingProperty][routerValue]
             validateSchema(services.logger, routingProperty, routerValue, messageData)
             const func: any = typeof handler === 'function' ? handler : handler.func
             await func(
@@ -56,7 +56,7 @@ export const registerMessageHandlers = (
       // TODO: Handle error
     }
 
-    const onMessage = streamConfig.onMessage
+    const onMessage = channelConfig.onMessage
     if (!processed && onMessage) {
       const func: any = typeof onMessage === 'function' ? onMessage : onMessage.func
       await func(services, stream, userSession!)

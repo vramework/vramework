@@ -13,7 +13,7 @@ export const serializeVrameworkTypes = (
   
 import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission, CoreAPIRoute, AssertRouteParams } from '@vramework/core'
 import { CoreScheduledTask } from '@vramework/core'
-import { CoreAPIStream, CoreStreamConnection, CoreStreamConnectionSessionless, CoreStreamMessage, CoreStreamMessageSessionless } from '@vramework/core'
+import { CoreAPIChannel, CoreChannelConnection, CoreChannelConnectionSessionless, CoreChannelMessage, CoreChannelMessageSessionless } from '@vramework/core'
 
 ${userSessionTypeImport}
 ${sessionServicesTypeImport}
@@ -22,13 +22,13 @@ export type APIFunctionSessionless<In, Out, RequiredServices = ${servicesTypeNam
 export type APIFunction<In, Out, RequiredServices = ${servicesTypeName}> = CoreAPIFunction<In, Out, RequiredServices, ${userSessionTypeName}>
 export type APIPermission<In, RequiredServices = ${servicesTypeName}> = CoreAPIPermission<In, RequiredServices, ${userSessionTypeName}>
 
-export type StreamConnection<StreamData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreStreamConnection<StreamData, RequiredServices, UserSession>
-export type StreamMessage<In, Out = unknown, StreamData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreStreamMessage<In, Out, StreamData, RequiredServices, UserSession>
-export type StreamConnectionSessionless<StreamData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreStreamConnectionSessionless<StreamData, RequiredServices, UserSession>
-export type StreamMessageSessionless<In, Out = unknown, StreamData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreStreamMessageSessionless<In, Out, StreamData, RequiredServices, UserSession>
+export type ChannelConnection<ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelConnection<ChannelData, RequiredServices, UserSession>
+export type ChannelMessage<In, Out = unknown, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelMessage<In, Out, ChannelData, RequiredServices, UserSession>
+export type ChannelConnectionSessionless<ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelConnectionSessionless<ChannelData, RequiredServices, UserSession>
+export type ChannelMessageSessionless<In, Out = unknown, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelMessageSessionless<In, Out, ChannelData, RequiredServices, UserSession>
 
 type APIRoute<In, Out, Route extends string> = CoreAPIRoute<In, Out, Route, APIFunction<In, Out>, APIFunctionSessionless<In, Out>, APIPermission<In>>
-type APIStream<In, Route extends string> = CoreAPIStream<In, Route, StreamConnection, StreamConnectionSessionless, StreamMessage<unknown, unknown>, StreamMessageSessionless<unknown, unknown>>
+type APIChannel<In, Route extends string> = CoreAPIChannel<In, Route, ChannelConnection, ChannelConnectionSessionless, ChannelMessage<unknown, unknown>, ChannelMessageSessionless<unknown, unknown>>
 type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>, UserSession>
 
 declare module "@vramework/core" {
@@ -36,8 +36,8 @@ declare module "@vramework/core" {
     route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
   ): void;
 
-  function addStream<In, Route extends string>(
-    route: APIStream<In, Route> & AssertRouteParams<In, Route>
+  function addChannel<In, Route extends string>(
+    route: APIChannel<In, Route> & AssertRouteParams<In, Route>
   ): void;
 
   function addScheduledTask(task: ScheduledTask): void;
