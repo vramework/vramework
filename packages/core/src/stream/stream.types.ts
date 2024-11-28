@@ -42,11 +42,11 @@ export interface StreamMeta {
   inputTypes?: RoutesMetaInputTypes
   connect: boolean
   disconnect: boolean
-  messages: Array<{
-    route: string
-    input: string | null
-    output: string | null
-  }>
+  message: { inputs: string[] | null; outputs: string[] | null } | null
+  messageRoutes: Record<string, Record<string, {
+    inputs: string[] | null
+    outputs: string[] | null
+  }>>
   docs?: APIDocs
 }
 
@@ -55,10 +55,10 @@ export type StreamsMeta = StreamMeta[]
 /**
  * Represents an API route without a function, including metadata such as content type, route, and timeout settings.
  */
-type CoreFunctionlessStreamRoute<OnConnect, OnDisconnect> = {
+type CoreFunctionlessStreamRoute<OnConnectionChange> = {
   route: string
-  onConnect?: OnConnect
-  onDisconnect?: OnDisconnect
+  onConnect?: OnConnectionChange
+  onDisconnect?: OnConnectionChange
   docs?: Partial<{
     description: string
     response: string
@@ -67,55 +67,17 @@ type CoreFunctionlessStreamRoute<OnConnect, OnDisconnect> = {
   }>
 }
 
-/**
- * Represents a core stream function that performs an operation using core services and a user session.
- *
- * @template StreamData - The data the stream was created with
- * @template Services - The services type, defaults to `CoreServices`.
- * @template Session - The session type, defaults to `CoreUserSession`.
- */
-export type CoreStreamConnect<
-  StreamData,
+export type CoreStreamConnectionSessionless<
+  OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services & { stream: VrameworkStream<StreamData> }, session: Session) => Promise<void>
+> = (services: Services, stream: VrameworkStream<OpenData>, session?: Session) => Promise<void>
 
-/**
- * Represents a core API function that can be used without a session.
- *
- * @template Services - The services type, defaults to `CoreServices`.
- * @template Session - The session type, defaults to `CoreUserSession`.
- */
-export type CoreStreamConnectSessionless<
-  StreamData,
+export type CoreStreamConnection<
+  OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services & { stream: VrameworkStream<StreamData> }, session?: Session) => Promise<void>
-
-/**
- * Represents a core stream function that performs an operation using core services and a user session.
- *
- * @template Services - The services type, defaults to `CoreServices`.
- * @template Session - The session type, defaults to `CoreUserSession`.
- */
-export type CoreStreamDisconnect<
-  StreamData,
-  Services extends CoreServices = CoreServices,
-  Session extends CoreUserSession = CoreUserSession,
-> = (services: Services & { stream: VrameworkStream<StreamData> }, session: Session) => Promise<void>
-
-/**
- * Represents a core API function that can be used without a session.
- *
- * @template In - The input type.
- * @template Services - The services type, defaults to `CoreServices`.
- * @template Session - The session type, defaults to `CoreUserSession`.
- */
-export type CoreStreamDisconnectSessionless<
-  StreamData,
-  Services extends CoreServices = CoreServices,
-  Session extends CoreUserSession = CoreUserSession,
-> = (services: Services & { stream: VrameworkStream<StreamData> }, session?: Session) => Promise<void>
+> = (services: Services, stream: VrameworkStream<OpenData>, session: Session) => Promise<void>
 
 /**
  * Represents a core stream function that performs an operation using core services and a user session.
@@ -127,10 +89,10 @@ export type CoreStreamDisconnectSessionless<
 export type CoreStreamMessage<
   In,
   Out,
-  StreamData,
+  OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services & { stream: VrameworkStream<StreamData> }, data: In, session: Session) => Promise<Out>
+> = (services: Services, stream: VrameworkStream<OpenData, In, Out>, session: Session) => Promise<void>
 
 /**
  * Represents a core API function that can be used without a session.
@@ -142,10 +104,10 @@ export type CoreStreamMessage<
 export type CoreStreamMessageSessionless<
   In,
   Out,
-  StreamData,
+  OpenData,
   Services extends CoreServices = CoreServices,
-  Session = CoreUserSession,
-> = (services: Services, data: In, session?: Session) => Promise<Out>
+  Session extends CoreUserSession = CoreUserSession,
+> = (services: Services, stream: VrameworkStream<OpenData, In, Out>, session?: Session) => Promise<void>
 
 export type CoreAPIStreamMessage<
   StreamFunctionMessage =
@@ -159,33 +121,27 @@ export type CoreAPIStreamMessage<
 export type CoreAPIStream<
   StreamData,
   R extends string,
-  StreamFunctionConnect = CoreStreamConnect<StreamData>,
-  StreamFunctionConnectSessionless = CoreStreamConnectSessionless<StreamData>,
-  StreamFunctionDisconnect = CoreStreamDisconnect<StreamData>,
-  StreamFunctionDisconnectSessionless = CoreStreamDisconnectSessionless<StreamData>,
+  StreamFunctionConnection = CoreStreamConnection<StreamData>,
+  StreamFunctionConnectionSessionless = CoreStreamConnectionSessionless<StreamData>,
   StreamFunctionMessage = CoreStreamMessage<unknown, unknown, unknown>,
-  StreamFunctionMessagesSessionless = CoreStreamMessageSessionless<
+  StreamFunctionMessageSessionless = CoreStreamMessageSessionless<
     unknown,
     unknown,
     unknown
   >,
   APIPermission = CoreAPIPermission<StreamData>,
 > =
-  | (CoreFunctionlessStreamRoute<
-      StreamFunctionConnect,
-      StreamFunctionDisconnect
-    > & {
+  | (CoreFunctionlessStreamRoute<StreamFunctionConnection> & {
       route: R
-      onMessage: Array<CoreAPIStreamMessage<StreamFunctionMessage>>
+      onMessage?: { func: StreamFunctionMessage, permissions?: undefined }
+      onMessageRoute?: Record<string, Record<string, StreamFunctionMessage | { func: StreamFunctionMessage, permissions?: Record<string, APIPermission[] | APIPermission>}>>
       permissions?: Record<string, APIPermission[] | APIPermission>
       auth?: true
     })
-  | (CoreFunctionlessStreamRoute<
-      StreamFunctionConnectSessionless,
-      StreamFunctionDisconnectSessionless
-    > & {
+  | (CoreFunctionlessStreamRoute<StreamFunctionConnectionSessionless> & {
       route: R
-      onMessage: Array<CoreAPIStreamMessage<StreamFunctionMessagesSessionless>>
+      onMessage?: StreamFunctionMessageSessionless
+      onMessageRoute?: Record<string, Record<string, StreamFunctionMessageSessionless | { func: StreamFunctionMessageSessionless, permissions?: undefined }>>
       permissions?: undefined
       auth?: false
     })

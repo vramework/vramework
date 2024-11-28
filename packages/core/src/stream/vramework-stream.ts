@@ -1,4 +1,4 @@
-export class VrameworkStream<OpeningData = unknown> {
+export class VrameworkStream<OpeningData = unknown, In = unknown, Out = unknown> {
   private onMessageCallback?: (message: any) => void
   private openCallBack?: () => void
   private closeCallback?: () => void

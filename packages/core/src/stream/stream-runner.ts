@@ -150,13 +150,13 @@ export const runStream = async ({
     )
 
     stream.registerOnOpen(async () => {
-      streamConfig.onConnect?.(allServices, session!)
+      streamConfig.onConnect?.(allServices, stream, session!)
     })
 
     registerMessageHandlers(streamConfig, stream, allServices, session)
 
     stream.registerOnClose(async () => {
-      streamConfig.onDisconnect?.(allServices, session!)
+      streamConfig.onDisconnect?.(allServices, stream, session!)
       await closeServices(singletonServices.logger, sessionServices)
     })
 

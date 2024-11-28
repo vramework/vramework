@@ -3,31 +3,26 @@ import {
   CoreSingletonServices,
   CoreServices,
   CoreUserSession,
+  JSONValue,
 } from '../types/core.types.js'
-import { CoreAPIStreamMessage, CoreAPIStream } from './stream.types.js'
+import { CoreAPIStream } from './stream.types.js'
 import { getStreams } from './stream-runner.js'
 import { VrameworkStream } from './vramework-stream.js'
 
-const getMatchingHandler = (
+const validateSchema = (
   logger: CoreSingletonServices['logger'],
-  messages: Array<CoreAPIStreamMessage>,
-  messageTopic: string
+  routingProperty: string,
+  routerValue: string,
+  data: JSONValue
 ) => {
-  const streamsMeta = getStreams().streamsMeta
-
-  for (const message of messages) {
-    if (message.route === messageTopic) {
-      const schemaName = streamsMeta.find(
-        (streamMeta) => streamMeta.route === message.route
-      )?.input
-      if (schemaName) {
-        loadSchema(schemaName, logger)
-      }
-      return { message, schemaName }
-    }
+  const { streamsMeta } = getStreams()
+  const schemaName = streamsMeta.find(
+    (streamMeta) => streamMeta.messageRoutes[routingProperty]?.[routerValue]
+  )?.input
+  if (schemaName) {
+    loadSchema(schemaName, logger)
+    validateJson(schemaName, data)
   }
-
-  throw new Error('Handler not found')
 }
 
 export const registerMessageHandlers = (
@@ -39,31 +34,36 @@ export const registerMessageHandlers = (
   stream.registerOnMessage(async (data) => {
     let processed = false
     try {
-      if (typeof data === 'string') {
+      if (streamConfig.onMessageRoute && typeof data === 'string') {
         processed = true
         const messageData = JSON.parse(data)
-        if (messageData.topic) {
-          processed = true
-          const { schemaName, message } = getMatchingHandler(
-            services.logger,
-            streamConfig.onMessage,
-            messageData.topic
-          )
-          if (schemaName) {
-            validateJson(schemaName, messageData.data)
+        const routingProperties = Object.keys(streamConfig.onMessageRoute).filter(key => key !== 'default')
+        for (const routingProperty of routingProperties) {
+          const routerValue: string = messageData[routingProperty]
+          if (routerValue) {
+            const handler = streamConfig.onMessageRoute[routingProperty][routerValue]
+            validateSchema(services.logger, routingProperty, routerValue, messageData)
+            const func: any = typeof handler === 'function' ? handler : handler.func
+            await func(
+              services,
+              stream,
+              userSession!
+            )
           }
-          await message.func({
-            ...services,
-            stream,
-          }, messageData.data, userSession!)
         }
       }
     } catch (e) {
       // TODO: Handle error
     }
 
+    const onMessage = streamConfig.onMessage
+    if (!processed && onMessage) {
+      const func: any = typeof onMessage === 'function' ? onMessage : onMessage.func
+      await func(services, stream, userSession!)
+    }
+
     if (!processed) {
-      // TODO: Process using default handler
+      // TODO: Do we log an error here or respond with one?
     }
   })
 }

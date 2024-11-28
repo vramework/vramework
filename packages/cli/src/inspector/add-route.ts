@@ -105,26 +105,22 @@ export const addRoute = (
     methodValue = getPropertyValue(obj, 'method') as string
     queryValues = (getPropertyValue(obj, 'query') as string[]) || []
 
-    const funcProperty = obj.properties.find(
-      (p) =>
-        ts.isPropertyAssignment(p) &&
-        ts.isIdentifier(p.name) &&
-        p.name.text === 'func'
+    const { inputs, outputs, inputTypes } = getFunctionTypes(
+      checker,
+      obj,
+      { funcName: 'func', inputIndex: 0, outputIndex: 1 }
     )
 
-    if (!funcProperty) {
-      console.error('Missing func property in route')
-      return
+    const input = inputs ? inputs[0] || null : null
+    const output = outputs ? outputs[0] || null : null
+
+    if ((inputs && inputs?.length > 1) || (outputs && outputs.length > 1)) {
+      console.warn('Only one input and one output are currently allowed for routes')
     }
 
-    const { inputType, outputType, paramType } = getFunctionTypes(
-      checker,
-      funcProperty
-    )
-
-    if (paramType && !['post', 'put', 'patch'].includes(methodValue)) {
+    if (inputTypes[0] && !['post', 'put', 'patch'].includes(methodValue)) {
       queryValues = [
-        ...new Set([...queryValues, ...extractTypeKeys(paramType)]),
+        ...new Set([...queryValues, ...extractTypeKeys(inputTypes[0])]),
       ].filter((query) => !paramsValues?.includes(query))
     }
 
@@ -135,26 +131,26 @@ export const addRoute = (
     state.routesMeta.push({
       route: routeValue!,
       method: methodValue! as APIRouteMethod,
-      input: inputType,
-      output: outputType,
+      input,
+      output,
       params: paramsValues.length > 0 ? paramsValues : undefined,
       query: queryValues.length > 0 ? queryValues : undefined,
       inputTypes: getInputTypes(
         state.metaInputTypes,
         methodValue,
-        inputType,
+        input,
         queryValues,
         paramsValues
       ),
       docs,
     })
 
-    if (inputType) {
-      state.inputTypes.add(inputType)
+    if (input) {
+      state.inputTypes.add(input)
     }
 
-    if (outputType) {
-      state.outputTypes.add(outputType)
+    if (output) {
+      state.outputTypes.add(output)
     }
   }
 }
