@@ -1,5 +1,15 @@
 # @vramework/cli
 
+## 0.5.32
+
+### Patch Changes
+
+- e9a9968: refactor: completing rename of stream to channel
+- Updated dependencies [7fa64a0]
+- Updated dependencies [539937e]
+- Updated dependencies [e9a9968]
+  - @vramework/core@0.5.23
+
 ## 0.5.31
 
 ### Patch Changes

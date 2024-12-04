@@ -1,5 +1,13 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.23
+
+### Patch Changes
+
+- 7fa64a0: feat: making schedule session services optional
+- 539937e: refactor: use a map instead for scheduled tasks
+- e9a9968: refactor: completing rename of stream to channel
+
 ## 0.5.22
 
 ### Patch Changes
