@@ -61,6 +61,11 @@ export async function saveSchemas(
       .filter((s) => !!s && !['boolean', 'string', 'number'].includes(s))
   )
 
+  if (desiredSchemas.size === 0) {
+    console.log(`\x1b[34m• Skipping schemas since none found.\x1b[0m`)
+    return
+  }
+
   await mkdir(`${schemaParentDir}/schemas`, { recursive: true })
   await Promise.all(
     Object.entries(schemas).map(async ([schemaName, schema]) => {

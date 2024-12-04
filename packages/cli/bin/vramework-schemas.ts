@@ -19,12 +19,7 @@ export const vrameworkSchemas = async (
     [false],
     async () => {
       const schemas = await generateSchemas(tsconfig, routesMeta)
-      if (Object.keys(schemas).length === 0) {
-        console.log(`\x1b[34m• Skipping schemas since none found.\x1b[0m`)
-        return
-      }
       await saveSchemas(schemaDirectory, schemas, routesMeta)
-      return schemas
     }
   )
 }
