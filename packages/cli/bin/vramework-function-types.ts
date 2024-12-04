@@ -31,7 +31,8 @@ export const vrameworkFunctionTypes = async (
           visitState,
           packageMappings,
           typesFile,
-          options
+          options,
+          { userSessionType: true, sessionServiceType: true }
         )
       const content = serializeVrameworkTypes(
         `import type { ${userSessionType.type} } from '${getFileImportRelativePath(typesFile, userSessionType.typePath, packageMappings)}'`,

@@ -29,9 +29,9 @@ interface Meta {
 }
 
 export type FilesAndMethods = {
-  vrameworkConfig: Meta
   userSessionType: Meta
   sessionServicesType: Meta
+  vrameworkConfigFactory: Meta
   singletonServicesFactory: Meta
   sessionServicesFactory: Meta
 }
@@ -93,37 +93,44 @@ export const getVrameworkFilesAndMethods = async (
     configFileType,
     singletonServicesFactoryType,
     sessionServicesFactoryType,
-  }: VrameworkCLIOptions
+  }: VrameworkCLIOptions,
+  requires: Partial<{ 
+    config: boolean, 
+    sessionServiceType: boolean,
+    userSessionType: boolean,
+    singletonServicesFactory: boolean,
+    sessionServicesFactory: boolean
+  }> = { config: false, sessionServiceType: false, userSessionType: false, singletonServicesFactory: false, sessionServicesFactory: false },
 ): Promise<FilesAndMethods> => {
   let errors = new Map<string, PathToNameAndType>()
 
   const result: Partial<FilesAndMethods> = {
-    vrameworkConfig: getMetaTypes(
-      'CoreConfig',
-      errors,
-      configFactories,
-      configFileType
-    ),
     userSessionType: getMetaTypes(
       'CoreUserSession',
-      errors,
+      requires.userSessionType ? errors : new Map(),
       userSessionTypeImportMap,
       configFileType
     ),
     sessionServicesType: getMetaTypes(
       'CoreServices',
-      errors,
+      requires.sessionServiceType ? errors : new Map(),
       httpSessionServicesTypeImportMap
+    ),
+    vrameworkConfigFactory: getMetaTypes(
+      'CoreConfig',
+      requires.config ? errors : new Map(),
+      configFactories,
+      configFileType
     ),
     singletonServicesFactory: getMetaTypes(
       'CreateSingletonServices',
-      errors,
+      requires.singletonServicesFactory ? errors : new Map(),
       singletonServicesFactories,
       singletonServicesFactoryType
     ),
     sessionServicesFactory: getMetaTypes(
       'CreateSessionServices',
-      errors,
+      requires.sessionServicesFactory ? errors : new Map(),
       sessionServicesFactories,
       sessionServicesFactoryType
     ),
