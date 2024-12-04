@@ -96,7 +96,9 @@ export const runChannel = async ({
   logWarningsForStatusCodes = [],
 }: Pick<CoreAPIChannel<unknown, any>, 'route'> &
   RunChannelOptions &
-  RunChannelParams<unknown>): Promise<VrameworkChannel<unknown> | undefined> => {
+  RunChannelParams<unknown>): Promise<
+  VrameworkChannel<unknown> | undefined
+> => {
   let sessionServices: any | undefined
   const trackerId: string = crypto.randomUUID().toString()
   const http = createHTTPInteraction(request, response)

@@ -25,10 +25,3 @@ export type CoreScheduledTask<
   docs?: APIDocs
   session?: UserSession
 }
-
-/**
- * Represents an array of core schedules tasks.
- */
-export type CoreScheduledTasks = Array<
-  CoreScheduledTask<CoreAPIFunctionSessionless<void, void>>
->

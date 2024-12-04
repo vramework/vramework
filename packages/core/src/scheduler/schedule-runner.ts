@@ -1,16 +1,13 @@
-import { getErrorResponse } from '../error-handler.js'
-import {
+import type {
   CoreServices,
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
 } from '../types/core.types.js'
-import {
-  CoreScheduledTask,
-  CoreScheduledTasks,
-  ScheduledTasksMeta,
-} from './schedule.types.js'
-import { CoreAPIFunctionSessionless } from '../types/functions.types.js'
+import type { CoreScheduledTask, ScheduledTasksMeta } from './schedule.types.js'
+import type { CoreAPIFunctionSessionless } from '../types/functions.types.js'
+
+import { getErrorResponse } from '../error-handler.js'
 import { closeServices } from '../utils.js'
 
 export type RunScheduledTasksParams = {
@@ -24,19 +21,22 @@ export type RunScheduledTasksParams = {
   >
 }
 
-let scheduledTasks: CoreScheduledTasks = []
-let scheduledTasksMeta: ScheduledTasksMeta = []
+const scheduledTasks = new Map<string, CoreScheduledTask>()
+const scheduledTasksMeta: ScheduledTasksMeta = []
 
 export const addScheduledTask = <
   APIFunction extends CoreAPIFunctionSessionless<void, void>,
 >(
   scheduledTask: CoreScheduledTask<APIFunction>
 ) => {
-  scheduledTasks.push(scheduledTask as any)
+  if (scheduledTasks.has(scheduledTask.name)) {
+    throw new Error(`Scheduled task already exists: ${scheduledTask.name}`)
+  }
+  scheduledTasks.set(scheduledTask.name, scheduledTask)
 }
 
 export const clearScheduledTasks = () => {
-  scheduledTasks = []
+  scheduledTasks.clear()
 }
 
 /**
@@ -56,7 +56,7 @@ class ScheduledTaskNotFoundError extends Error {
   }
 }
 
-export async function runScheduledTask ({
+export async function runScheduledTask({
   name,
   session,
   singletonServices,
@@ -66,7 +66,7 @@ export async function runScheduledTask ({
   const trackerId: string = crypto.randomUUID().toString()
 
   try {
-    const task = scheduledTasks.find((task) => task.name === name)
+    const task = scheduledTasks.get(name)
 
     if (!task) {
       throw new ScheduledTaskNotFoundError(`Scheduled task not found: ${name}`)

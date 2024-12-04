@@ -105,17 +105,19 @@ export const addRoute = (
     methodValue = getPropertyValue(obj, 'method') as string
     queryValues = (getPropertyValue(obj, 'query') as string[]) || []
 
-    const { inputs, outputs, inputTypes } = getFunctionTypes(
-      checker,
-      obj,
-      { funcName: 'func', inputIndex: 0, outputIndex: 1 }
-    )
+    const { inputs, outputs, inputTypes } = getFunctionTypes(checker, obj, {
+      funcName: 'func',
+      inputIndex: 0,
+      outputIndex: 1,
+    })
 
     const input = inputs ? inputs[0] || null : null
     const output = outputs ? outputs[0] || null : null
 
     if ((inputs && inputs?.length > 1) || (outputs && outputs.length > 1)) {
-      console.warn('Only one input and one output are currently allowed for routes')
+      console.warn(
+        'Only one input and one output are currently allowed for routes'
+      )
     }
 
     if (inputTypes[0] && !['post', 'put', 'patch'].includes(methodValue)) {

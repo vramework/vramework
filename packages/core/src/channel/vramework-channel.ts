@@ -1,4 +1,8 @@
-export class VrameworkChannel<OpeningData = unknown, In = unknown, Out = unknown> {
+export class VrameworkChannel<
+  OpeningData = unknown,
+  In = unknown,
+  Out = unknown,
+> {
   private onMessageCallback?: (message: any) => void
   private openCallBack?: () => void
   private closeCallback?: () => void

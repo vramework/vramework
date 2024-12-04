@@ -1,6 +1,9 @@
 import * as ts from 'typescript'
 
-export const resolveUnionTypes = (checker: ts.TypeChecker, type: ts.Type): { types: ts.Type[], names: string[] } => {
+export const resolveUnionTypes = (
+  checker: ts.TypeChecker,
+  type: ts.Type
+): { types: ts.Type[]; names: string[] } => {
   const types: ts.Type[] = []
   const names: string[] = []
 
@@ -20,7 +23,7 @@ export const resolveUnionTypes = (checker: ts.TypeChecker, type: ts.Type): { typ
     }
   }
 
-  return { types, names}
+  return { types, names }
 }
 
 export const getTypeOfFunctionArg = (
@@ -57,7 +60,10 @@ export const getTypeOfFunctionArg = (
   return null
 }
 
-export const getPropertyAssignment = (obj: ts.ObjectLiteralExpression, name: string) => {
+export const getPropertyAssignment = (
+  obj: ts.ObjectLiteralExpression,
+  name: string
+) => {
   const property = obj.properties.find(
     (p) =>
       (ts.isPropertyAssignment(p) || ts.isShorthandPropertyAssignment(p)) &&
@@ -65,7 +71,7 @@ export const getPropertyAssignment = (obj: ts.ObjectLiteralExpression, name: str
       p.name.text === name
   )
   if (!property) {
-    console.error(`Missing property '${name}' in object`);
+    console.error(`Missing property '${name}' in object`)
     return null
   }
   return property
@@ -77,14 +83,14 @@ export const getTypeArgumentsOfType = (
 ): readonly ts.Type[] | null => {
   // If the type is a union or intersection, collect type arguments from its constituent types
   if (type.isUnionOrIntersection()) {
-    const types: ts.Type[] = [];
+    const types: ts.Type[] = []
     for (const subType of type.types) {
-      const subTypeArgs = getTypeArgumentsOfType(checker, subType);
+      const subTypeArgs = getTypeArgumentsOfType(checker, subType)
       if (subTypeArgs) {
-        types.push(...subTypeArgs);
+        types.push(...subTypeArgs)
       }
     }
-    return types.length > 0 ? types : null;
+    return types.length > 0 ? types : null
   }
 
   // If the type is a TypeReference with typeArguments, return them
@@ -92,27 +98,40 @@ export const getTypeArgumentsOfType = (
     type.flags & ts.TypeFlags.Object &&
     (type as ts.ObjectType).objectFlags & ts.ObjectFlags.Reference
   ) {
-    const typeRef = type as ts.TypeReference;
+    const typeRef = type as ts.TypeReference
     if (typeRef.typeArguments && typeRef.typeArguments.length > 0) {
-      return typeRef.typeArguments;
+      return typeRef.typeArguments
     }
   }
 
   // If the type is an alias with aliasTypeArguments, return them
   if (type.aliasTypeArguments && type.aliasTypeArguments.length > 0) {
-    return type.aliasTypeArguments as ts.Type[];
+    return type.aliasTypeArguments as ts.Type[]
   }
 
-  return null;
-};
+  return null
+}
 
-type FunctionTypes = { inputTypes: ts.Type[], inputs: null | string[], outputTypes: ts.Type[], outputs: null | string[] }
-export const getFunctionTypes = (checker: ts.TypeChecker, obj: ts.ObjectLiteralExpression, { funcName, inputIndex, outputIndex }: { funcName: string, inputIndex: number, outputIndex: number }): FunctionTypes  => {
+type FunctionTypes = {
+  inputTypes: ts.Type[]
+  inputs: null | string[]
+  outputTypes: ts.Type[]
+  outputs: null | string[]
+}
+export const getFunctionTypes = (
+  checker: ts.TypeChecker,
+  obj: ts.ObjectLiteralExpression,
+  {
+    funcName,
+    inputIndex,
+    outputIndex,
+  }: { funcName: string; inputIndex: number; outputIndex: number }
+): FunctionTypes => {
   const result: FunctionTypes = {
     inputTypes: [],
     inputs: null,
     outputTypes: [],
-    outputs: null
+    outputs: null,
   }
 
   const property = getPropertyAssignment(obj, funcName)
@@ -120,57 +139,63 @@ export const getFunctionTypes = (checker: ts.TypeChecker, obj: ts.ObjectLiteralE
     return result
   }
 
-  let type: ts.Type | undefined;
+  let type: ts.Type | undefined
 
   // Handle shorthand property assignment
   if (ts.isShorthandPropertyAssignment(property)) {
-    const symbol = checker.getShorthandAssignmentValueSymbol(property);
+    const symbol = checker.getShorthandAssignmentValueSymbol(property)
     if (symbol) {
-      type = checker.getTypeOfSymbolAtLocation(symbol, property);
+      type = checker.getTypeOfSymbolAtLocation(symbol, property)
     }
   }
   // Handle regular property assignment
   else if (ts.isPropertyAssignment(property)) {
     if (ts.isObjectLiteralExpression(property.initializer)) {
-      return getFunctionTypes(checker, property.initializer, { funcName: 'func', inputIndex, outputIndex });
+      return getFunctionTypes(checker, property.initializer, {
+        funcName: 'func',
+        inputIndex,
+        outputIndex,
+      })
     }
 
     if (property.initializer) {
-      type = checker.getTypeAtLocation(property.initializer);
+      type = checker.getTypeAtLocation(property.initializer)
     }
   }
 
   if (!type) {
-    console.error(`Unable to resolve type for property '${funcName}'`);
+    console.error(`Unable to resolve type for property '${funcName}'`)
     return result
   }
 
   // Access type arguments from TypeReference
-  const typeArguments = getTypeArgumentsOfType(checker, type);
+  const typeArguments = getTypeArgumentsOfType(checker, type)
 
   if (!typeArguments || typeArguments.length === 0) {
-    console.error('No generic type arguments found', typeArguments?.length);
+    console.error('No generic type arguments found', typeArguments?.length)
     return result
   }
 
   if (inputIndex !== undefined && inputIndex < typeArguments.length) {
-    const types = resolveUnionTypes(checker, typeArguments[inputIndex]);
-    result.inputs = types.names;
-    result.inputTypes = types.types;
+    const types = resolveUnionTypes(checker, typeArguments[inputIndex]!)
+    result.inputs = types.names
+    result.inputTypes = types.types
   } else {
-    console.error(`Input index ${inputIndex} is out of bounds`);
+    console.error(`Input index ${inputIndex} is out of bounds`)
   }
 
   if (outputIndex !== undefined && outputIndex < typeArguments.length) {
-    const types = resolveUnionTypes(checker, typeArguments[outputIndex]);
-    result.outputs = types.names;
-    result.outputTypes = types.types;
+    const types = resolveUnionTypes(checker, typeArguments[outputIndex]!)
+    result.outputs = types.names
+    result.outputTypes = types.types
   } else {
-    console.error(`Output index ${outputIndex} is out of bounds for ${funcName}`);
+    console.error(
+      `Output index ${outputIndex} is out of bounds for ${funcName}`
+    )
   }
 
   return result
-};
+}
 
 export const getFunctionTypes_old = (
   checker: ts.TypeChecker,

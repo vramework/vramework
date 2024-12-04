@@ -43,10 +43,16 @@ export interface ChannelMeta {
   connect: boolean
   disconnect: boolean
   message: { inputs: string[] | null; outputs: string[] | null } | null
-  messageRoutes: Record<string, Record<string, {
-    inputs: string[] | null
-    outputs: string[] | null
-  }>>
+  messageRoutes: Record<
+    string,
+    Record<
+      string,
+      {
+        inputs: string[] | null
+        outputs: string[] | null
+      }
+    >
+  >
   docs?: APIDocs
 }
 
@@ -71,13 +77,21 @@ export type CoreChannelConnectionSessionless<
   OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services, stream: VrameworkChannel<OpenData>, session?: Session) => Promise<void>
+> = (
+  services: Services,
+  stream: VrameworkChannel<OpenData>,
+  session?: Session
+) => Promise<void>
 
 export type CoreChannelConnection<
   OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services, stream: VrameworkChannel<OpenData>, session: Session) => Promise<void>
+> = (
+  services: Services,
+  stream: VrameworkChannel<OpenData>,
+  session: Session
+) => Promise<void>
 
 /**
  * Represents a core stream function that performs an operation using core services and a user session.
@@ -92,7 +106,11 @@ export type CoreChannelMessage<
   OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services, stream: VrameworkChannel<OpenData, In, Out>, session: Session) => Promise<void>
+> = (
+  services: Services,
+  stream: VrameworkChannel<OpenData, In, Out>,
+  session: Session
+) => Promise<void>
 
 /**
  * Represents a core API function that can be used without a session.
@@ -107,7 +125,11 @@ export type CoreChannelMessageSessionless<
   OpenData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
-> = (services: Services, stream: VrameworkChannel<OpenData, In, Out>, session?: Session) => Promise<void>
+> = (
+  services: Services,
+  stream: VrameworkChannel<OpenData, In, Out>,
+  session?: Session
+) => Promise<void>
 
 export type CoreAPIChannelMessage<
   ChannelFunctionMessage =
@@ -133,15 +155,32 @@ export type CoreAPIChannel<
 > =
   | (CoreFunctionlessChannelRoute<ChannelFunctionConnection> & {
       channel: Channel
-      onMessage?: { func: ChannelFunctionMessage, permissions?: undefined }
-      onMessageRoute?: Record<string, Record<string, ChannelFunctionMessage | { func: ChannelFunctionMessage, permissions?: Record<string, APIPermission[] | APIPermission>}>>
+      onMessage?: { func: ChannelFunctionMessage; permissions?: undefined }
+      onMessageRoute?: Record<
+        string,
+        Record<
+          string,
+          | ChannelFunctionMessage
+          | {
+              func: ChannelFunctionMessage
+              permissions?: Record<string, APIPermission[] | APIPermission>
+            }
+        >
+      >
       permissions?: Record<string, APIPermission[] | APIPermission>
       auth?: true
     })
   | (CoreFunctionlessChannelRoute<ChannelFunctionConnectionSessionless> & {
       channel: Channel
       onMessage?: ChannelFunctionMessageSessionless
-      onMessageRoute?: Record<string, Record<string, ChannelFunctionMessageSessionless | { func: ChannelFunctionMessageSessionless, permissions?: undefined }>>
+      onMessageRoute?: Record<
+        string,
+        Record<
+          string,
+          | ChannelFunctionMessageSessionless
+          | { func: ChannelFunctionMessageSessionless; permissions?: undefined }
+        >
+      >
       permissions?: undefined
       auth?: false
     })

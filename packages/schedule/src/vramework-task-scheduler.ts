@@ -38,9 +38,12 @@ export class VrameworkTaskScheduler<
 
   public start(names: string[]) {
     const { scheduledTasks } = getScheduledTasks()
-    scheduledTasks
-      .filter((task) => names.includes(task.name))
-      .forEach((task) => this.startJobSchedule(task))
+    for (const name of names) {
+      const task = scheduledTasks.get(name)
+      if (task) {
+        this.startJobSchedule(task)
+      }
+    }
   }
 
   public stop(names: string[]) {

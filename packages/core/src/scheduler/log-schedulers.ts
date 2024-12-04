@@ -7,14 +7,14 @@ import { getScheduledTasks } from './schedule-runner.js'
  */
 export const logSchedulers = (logger: Logger) => {
   const { scheduledTasks } = getScheduledTasks()
-  if (scheduledTasks.length === 0) {
+  if (scheduledTasks.size === 0) {
     logger.info('No scheduled tasks added')
     return
   }
 
   let scheduledTasksMessage = 'Scheduled tasks:'
-  for (const { name, schedule } of scheduledTasks) {
+  scheduledTasks.forEach(({ schedule }, name) => {
     scheduledTasksMessage += `\n\t- ${name} -> ${schedule}`
-  }
+  })
   logger.info(scheduledTasksMessage)
 }

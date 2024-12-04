@@ -37,18 +37,23 @@ export const registerMessageHandlers = (
       if (channelConfig.onMessageRoute && typeof data === 'string') {
         processed = true
         const messageData = JSON.parse(data)
-        const routingProperties = Object.keys(channelConfig.onMessageRoute).filter(key => key !== 'default')
+        const routingProperties = Object.keys(
+          channelConfig.onMessageRoute
+        ).filter((key) => key !== 'default')
         for (const routingProperty of routingProperties) {
           const routerValue: string = messageData[routingProperty]
           if (routerValue) {
-            const handler = channelConfig.onMessageRoute[routingProperty][routerValue]
-            validateSchema(services.logger, routingProperty, routerValue, messageData)
-            const func: any = typeof handler === 'function' ? handler : handler.func
-            await func(
-              services,
-              stream,
-              userSession!
+            const handler =
+              channelConfig.onMessageRoute[routingProperty]![routerValue]
+            validateSchema(
+              services.logger,
+              routingProperty,
+              routerValue,
+              messageData
             )
+            const func: any =
+              typeof handler === 'function' ? handler : handler!.func!
+            await func(services, stream, userSession!)
           }
         }
       }
@@ -58,7 +63,8 @@ export const registerMessageHandlers = (
 
     const onMessage = channelConfig.onMessage
     if (!processed && onMessage) {
-      const func: any = typeof onMessage === 'function' ? onMessage : onMessage.func
+      const func: any =
+        typeof onMessage === 'function' ? onMessage : onMessage.func
       await func(services, stream, userSession!)
     }
 

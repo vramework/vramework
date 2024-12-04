@@ -11,7 +11,7 @@ const addMessagesRoutes = (
   obj: ts.ObjectLiteralExpression,
   checker: ts.TypeChecker
 ) => {
-  const messageTypes: ChannelMeta['messageRoutes'] = {};
+  const messageTypes: ChannelMeta['messageRoutes'] = {}
 
   // Find the onMessageRoute property
   const messagesProperty = obj.properties.find(
@@ -19,46 +19,54 @@ const addMessagesRoutes = (
       ts.isPropertyAssignment(p) &&
       ts.isIdentifier(p.name) &&
       p.name.text === 'onMessageRoute'
-  );
+  )
 
   if (!messagesProperty || !ts.isPropertyAssignment(messagesProperty)) {
-    console.log('onMessageRoute property not found or is not a valid assignment.');
+    console.log(
+      'onMessageRoute property not found or is not a valid assignment.'
+    )
     return {}
   }
 
-  const initializer = messagesProperty.initializer;
+  const initializer = messagesProperty.initializer
   // Ensure initializer is an object literal expression
   if (!ts.isObjectLiteralExpression(initializer)) {
-    console.log('onMessageRoute is not an object literal.');
+    console.log('onMessageRoute is not an object literal.')
     return {}
   }
-  
+
   // Iterate over the first level properties (like 'event')
   initializer.properties.forEach((property) => {
-    const channel = property.name!.getText();
+    const channel = property.name!.getText()
     messageTypes[channel] = {}
 
     if (ts.isPropertyAssignment(property)) {
-      const nestedObject = property.initializer;
+      const nestedObject = property.initializer
       if (ts.isObjectLiteralExpression(nestedObject)) {
         const keys = nestedObject.properties.map((p) => p.name?.getText())
         for (const route of keys) {
           if (route) {
-            const result = getFunctionTypes(checker, nestedObject, { funcName: route, inputIndex: 0, outputIndex: 1 })
+            const result = getFunctionTypes(checker, nestedObject, {
+              funcName: route,
+              inputIndex: 0,
+              outputIndex: 1,
+            })
             const inputs = result?.inputs || null
             const outputs = result?.outputs || null
             messageTypes[channel][route] = { inputs, outputs }
           }
         }
       } else {
-        console.warn('Nested property is not an object literal:', nestedObject);
+        console.warn('Nested property is not an object literal:', nestedObject)
       }
     } else {
-      console.warn(`Property "${property.getText()}" is a ${ts.SyntaxKind[property.kind]}`);
+      console.warn(
+        `Property "${property.getText()}" is a ${ts.SyntaxKind[property.kind]}`
+      )
     }
-  });
+  })
 
-  return messageTypes;
+  return messageTypes
 }
 
 export const addChannel = (
@@ -111,7 +119,11 @@ export const addChannel = (
 
     const connect = !!getPropertyAssignment(obj, 'onConnect')
     const disconnect = !!getPropertyAssignment(obj, 'onDisconnect')
-    const { inputs, outputs } = getFunctionTypes(checker, obj, { funcName: 'onMessage', inputIndex: 0, outputIndex: 1 })
+    const { inputs, outputs } = getFunctionTypes(checker, obj, {
+      funcName: 'onMessage',
+      inputIndex: 0,
+      outputIndex: 1,
+    })
     const message = { inputs, outputs }
 
     const messageRoutes = addMessagesRoutes(obj, checker)
