@@ -1,5 +1,15 @@
 # @vramework/uws-handler
 
+## 0.5.8
+
+### Patch Changes
+
+- e9a9968: refactor: completing rename of stream to channel
+- Updated dependencies [7fa64a0]
+- Updated dependencies [539937e]
+- Updated dependencies [e9a9968]
+  - @vramework/core@0.5.23
+
 ## 0.5.7
 
 ### Patch Changes
