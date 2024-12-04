@@ -35,7 +35,7 @@ export type RunChannelParams<ChannelData> = {
 export interface HandlerMeta {}
 
 export interface ChannelMeta {
-  route: string
+  channel: string
   params?: string[]
   query?: string[]
   input: string | null
@@ -62,7 +62,7 @@ export type ChannelsMeta = ChannelMeta[]
  * Represents an API route without a function, including metadata such as content type, route, and timeout settings.
  */
 type CoreFunctionlessChannelRoute<OnConnectionChange> = {
-  route: string
+  channel: string
   onConnect?: OnConnectionChange
   onDisconnect?: OnConnectionChange
   docs?: Partial<{
@@ -154,7 +154,6 @@ export type CoreAPIChannel<
   APIPermission = CoreAPIPermission<ChannelData>,
 > =
   | (CoreFunctionlessChannelRoute<ChannelFunctionConnection> & {
-      channel: Channel
       onMessage?: { func: ChannelFunctionMessage; permissions?: undefined }
       onMessageRoute?: Record<
         string,
@@ -171,7 +170,6 @@ export type CoreAPIChannel<
       auth?: true
     })
   | (CoreFunctionlessChannelRoute<ChannelFunctionConnectionSessionless> & {
-      channel: Channel
       onMessage?: ChannelFunctionMessageSessionless
       onMessageRoute?: Record<
         string,

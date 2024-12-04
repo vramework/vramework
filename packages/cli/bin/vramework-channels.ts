@@ -23,6 +23,7 @@ export const vrameworkChannels = async (
   return await logCommandInfoAndTime(
     'Finding Channels',
     'Found channels',
+    [visitState.filesWithChannels.size === 0],
     async () => {
       const { channelsFile, packageMappings } = cliConfig
       const { filesWithChannels, channelsMeta } = visitState

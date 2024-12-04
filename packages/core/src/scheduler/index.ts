@@ -5,6 +5,7 @@ export {
   getScheduledTasks,
   addScheduledTask,
   clearScheduledTasks,
+  setScheduledTasksMeta,
 } from './schedule-runner.js'
 
 export * from './log-schedulers.js'

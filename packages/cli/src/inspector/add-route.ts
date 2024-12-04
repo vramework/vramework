@@ -105,18 +105,29 @@ export const addRoute = (
     methodValue = getPropertyValue(obj, 'method') as string
     queryValues = (getPropertyValue(obj, 'query') as string[]) || []
 
-    const { inputs, outputs, inputTypes } = getFunctionTypes(checker, obj, {
+    let { inputs, outputs, inputTypes } = getFunctionTypes(checker, obj, {
       funcName: 'func',
       inputIndex: 0,
       outputIndex: 1,
     })
 
+    // TODO: Temporary hack since typescript breaks boolean into two types
+    if (outputs && outputs.length === 2 && outputs.includes('true') && outputs.includes('false')) {
+      outputs = ['boolean']
+    }
+
     const input = inputs ? inputs[0] || null : null
     const output = outputs ? outputs[0] || null : null
 
-    if ((inputs && inputs?.length > 1) || (outputs && outputs.length > 1)) {
+    if ((inputs && inputs?.length > 1)) {
       console.warn(
-        'Only one input and one output are currently allowed for routes'
+        `Only one input type is currently allowed for route ${routeValue}: ${inputs}`
+      )
+    }
+
+    if ((outputs && outputs?.length > 1)) {
+      console.warn(
+        `Only one output type is currently allowed for route ${routeValue}: ${outputs}`
       )
     }
 

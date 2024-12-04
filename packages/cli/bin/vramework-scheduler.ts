@@ -11,7 +11,7 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeSchedulers } from '../src/scheduler/serialize-schedulers.js'
+import { serializeSchedulerMeta, serializeSchedulers } from '../src/scheduler/serialize-schedulers.js'
 
 export const vrameworkScheduler = async (
   cliConfig: VrameworkCLIConfig,
@@ -20,6 +20,7 @@ export const vrameworkScheduler = async (
   return await logCommandInfoAndTime(
     'Finding scheduled tasks',
     'Found scheduled tasks',
+    [visitState.filesWithScheduledTasks.size === 0],
     async () => {
       const { schedulersFile, packageMappings } = cliConfig
       const { filesWithScheduledTasks } = visitState
@@ -29,6 +30,7 @@ export const vrameworkScheduler = async (
           filesWithScheduledTasks,
           packageMappings
         ),
+        serializeSchedulerMeta(visitState.scheduledTasksMeta),
       ]
       await writeFileInDir(schedulersFile, content.join('\n\n'))
     }

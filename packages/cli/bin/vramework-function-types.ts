@@ -24,6 +24,7 @@ export const vrameworkFunctionTypes = async (
   await logCommandInfoAndTime(
     'Creating api types',
     'Created api types',
+    [false],
     async () => {
       const { userSessionType, sessionServicesType } =
         await getVrameworkFilesAndMethods(

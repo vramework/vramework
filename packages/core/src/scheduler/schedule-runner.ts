@@ -22,7 +22,7 @@ export type RunScheduledTasksParams = {
 }
 
 const scheduledTasks = new Map<string, CoreScheduledTask>()
-const scheduledTasksMeta: ScheduledTasksMeta = []
+let scheduledTasksMeta: ScheduledTasksMeta = []
 
 export const addScheduledTask = <
   APIFunction extends CoreAPIFunctionSessionless<void, void>,
@@ -37,6 +37,10 @@ export const addScheduledTask = <
 
 export const clearScheduledTasks = () => {
   scheduledTasks.clear()
+}
+
+export const setScheduledTasksMeta = (_scheduledTasksMeta: ScheduledTasksMeta) => {
+  scheduledTasksMeta = _scheduledTasksMeta
 }
 
 /**

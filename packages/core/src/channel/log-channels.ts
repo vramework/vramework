@@ -13,8 +13,8 @@ export const logChannels = (logger: Logger) => {
   }
 
   let scheduledChannels = 'Channels:'
-  for (const { route } of channels) {
-    scheduledChannels += `\n\t- ${route}`
+  for (const { channel } of channels) {
+    scheduledChannels += `\n\t- ${channel}`
   }
   logger.info(scheduledChannels)
 }

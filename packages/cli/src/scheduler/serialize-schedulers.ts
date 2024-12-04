@@ -1,3 +1,4 @@
+import { ScheduledTasksMeta } from '@vramework/core'
 import { getFileImportRelativePath } from '../utils.js'
 
 export const serializeSchedulers = (
@@ -20,5 +21,15 @@ export const serializeSchedulers = (
       serializedOutput.push(`import '${filePath}'`)
     })
 
+  return serializedOutput.join('\n')
+}
+
+
+export const serializeSchedulerMeta = (scheduledTasksMeta: ScheduledTasksMeta) => {
+  const serializedOutput: string[] = []
+  serializedOutput.push("import { setScheduledTasksMeta } from '@vramework/core'")
+  serializedOutput.push(
+    `setScheduledTasksMeta(${JSON.stringify(scheduledTasksMeta, null, 2)})`
+  )
   return serializedOutput.join('\n')
 }

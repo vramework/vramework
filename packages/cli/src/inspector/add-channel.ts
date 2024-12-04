@@ -95,7 +95,7 @@ export const addChannel = (
   let paramsValues: string[] | null = []
   let queryValues: string[] | [] = []
   let inputType: string | null = null
-  let routeValue: string | null = null
+  let channelValue: string | null = null
 
   state.filesWithChannels.add(node.getSourceFile().fileName)
 
@@ -103,9 +103,9 @@ export const addChannel = (
   if (ts.isObjectLiteralExpression(firstArg)) {
     const obj = firstArg
 
-    routeValue = getPropertyValue(obj, 'route') as string | null
-    if (routeValue) {
-      const { keys } = pathToRegexp(routeValue)
+    channelValue = getPropertyValue(obj, 'channel') as string | null
+    if (channelValue) {
+      const { keys } = pathToRegexp(channelValue)
       paramsValues = keys.reduce((result, { type, name }) => {
         if (type === 'param') {
           result.push(name)
@@ -128,12 +128,12 @@ export const addChannel = (
 
     const messageRoutes = addMessagesRoutes(obj, checker)
 
-    if (!routeValue) {
+    if (!channelValue) {
       return
     }
 
     state.channelsMeta.push({
-      route: routeValue!,
+      channel: channelValue!,
       input: inputType,
       params: paramsValues.length > 0 ? paramsValues : undefined,
       query: queryValues.length > 0 ? queryValues : undefined,

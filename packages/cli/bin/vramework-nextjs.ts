@@ -26,9 +26,10 @@ export const vrameworkNext = async (
   visitState: VisitState,
   options: VrameworkCLIOptions
 ) => {
-  await logCommandInfoAndTime(
+  return await logCommandInfoAndTime(
     'Generating nextjs wrapper',
     'Generated nextjs wrapper',
+    [nextJSfile === undefined, 'openAPI outfile is required'],
     async () => {
       if (!nextJSfile) {
         throw new Error('nextJSfile is required in vramework config')

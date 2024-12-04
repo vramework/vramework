@@ -44,7 +44,7 @@ export const clearChannels = () => {
 /**
  * @ignore
  */
-export const addChannelsMeta = (_channelsMeta: ChannelsMeta) => {
+export const setChannelsMeta = (_channelsMeta: ChannelsMeta) => {
   channelsMeta = _channelsMeta
 }
 
@@ -61,13 +61,13 @@ export const getChannels = () => {
 
 const getMatchingChannelConfig = (requestPath: string) => {
   for (const channelConfig of channels) {
-    const matchFunc = match(channelConfig.route.replace(/^\/\//, '/'), {
+    const matchFunc = match(channelConfig.channel.replace(/^\/\//, '/'), {
       decode: decodeURIComponent,
     })
     const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
     if (matchedPath) {
       const schemaName = channelsMeta.find(
-        (streamMeta) => streamMeta.route === channelConfig.route
+        (streamMeta) => streamMeta.channel === channelConfig.channel
       )?.input
       return {
         matchedPath,
@@ -88,13 +88,13 @@ export const runChannel = async ({
   singletonServices,
   request,
   response,
-  route: streamRoute,
+  channel: channelRoute,
   createSessionServices,
   skipUserSession = false,
   respondWith404 = true,
   coerceToArray = false,
   logWarningsForStatusCodes = [],
-}: Pick<CoreAPIChannel<unknown, any>, 'route'> &
+}: Pick<CoreAPIChannel<unknown, any>, 'channel'> &
   RunChannelOptions &
   RunChannelParams<unknown>): Promise<
   VrameworkChannel<unknown> | undefined
@@ -103,7 +103,7 @@ export const runChannel = async ({
   const trackerId: string = crypto.randomUUID().toString()
   const http = createHTTPInteraction(request, response)
 
-  const matchingChannel = getMatchingChannelConfig(streamRoute)
+  const matchingChannel = getMatchingChannelConfig(channelRoute)
   if (!matchingChannel) {
     if (respondWith404) {
       http?.response?.setStatus(404)
@@ -119,7 +119,7 @@ export const runChannel = async ({
     http?.request?.setParams(params)
 
     singletonServices.logger.info(
-      `Matched stream: ${channelConfig.route} | auth: ${requiresSession.toString()}`
+      `Matched channel: ${channelConfig.channel} | auth: ${requiresSession.toString()}`
     )
 
     const session = await loadUserSession(

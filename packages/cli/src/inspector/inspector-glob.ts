@@ -12,6 +12,7 @@ export const inspectorGlob = async (
   await logCommandInfoAndTime(
     'Inspecting codebase',
     'Inspected codebase',
+    [false],
     async () => {
       const routeFiles = (
         await Promise.all(

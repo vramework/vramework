@@ -123,9 +123,10 @@ export const getFunctionTypes = (
   obj: ts.ObjectLiteralExpression,
   {
     funcName,
+    subFunctionName = funcName,
     inputIndex,
     outputIndex,
-  }: { funcName: string; inputIndex: number; outputIndex: number }
+  }: { subFunctionName?: string, funcName: string; inputIndex: number; outputIndex: number }
 ): FunctionTypes => {
   const result: FunctionTypes = {
     inputTypes: [],
@@ -134,7 +135,7 @@ export const getFunctionTypes = (
     outputs: null,
   }
 
-  const property = getPropertyAssignment(obj, funcName)
+  const property = getPropertyAssignment(obj, subFunctionName)
   if (!property) {
     return result
   }
@@ -152,7 +153,8 @@ export const getFunctionTypes = (
   else if (ts.isPropertyAssignment(property)) {
     if (ts.isObjectLiteralExpression(property.initializer)) {
       return getFunctionTypes(checker, property.initializer, {
-        funcName: 'func',
+        funcName,
+        subFunctionName: 'func',
         inputIndex,
         outputIndex,
       })
@@ -172,7 +174,9 @@ export const getFunctionTypes = (
   const typeArguments = getTypeArgumentsOfType(checker, type)
 
   if (!typeArguments || typeArguments.length === 0) {
-    console.error('No generic type arguments found', typeArguments?.length)
+    // This is the case for inline functions. In this case we would want to 
+    // get the types from the second argument of the function...
+    console.error(`No generic type arguments found for ${funcName}. Support for inline functions is not yet implemented.`)
     return result
   }
 
@@ -188,16 +192,17 @@ export const getFunctionTypes = (
     const types = resolveUnionTypes(checker, typeArguments[outputIndex]!)
     result.outputs = types.names
     result.outputTypes = types.types
-  } else {
-    console.error(
-      `Output index ${outputIndex} is out of bounds for ${funcName}`
-    )
-  }
+  } 
+  // else {
+  //   console.debug(
+  //     `Output index ${outputIndex} is out of bounds for ${funcName}`
+  //   )
+  // }
 
   return result
 }
 
-export const getFunctionTypes_old = (
+export const getFunctionTypesSimple = (
   checker: ts.TypeChecker,
   funcProperty: ts.ObjectLiteralElementLike
 ) => {

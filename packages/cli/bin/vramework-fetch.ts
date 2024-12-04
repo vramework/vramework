@@ -20,6 +20,7 @@ export const vrameworkFetch = async ({
   await logCommandInfoAndTime(
     'Generating fetch wrapper',
     'Generated fetch wrapper',
+    [fetchFile === undefined, 'fetchFile is required in vramework config'],
     async () => {
       if (!fetchFile) {
         throw new Error('fetchFile is required in vramework config')

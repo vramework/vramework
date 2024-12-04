@@ -21,6 +21,12 @@ import { vrameworkChannels } from './vramework-channels.js'
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
 
+
+  const imports: string[] = []
+  const addImport = (from: string) => {
+    imports.push(`import '${getFileImportRelativePath(cliConfig.bootstrapFile, from, cliConfig.packageMappings)}'`)
+ }
+
   const cliConfig = await getVrameworkCLIConfig(options.config, [], true)
 
   let typesDeclarationFileExists = true
@@ -42,23 +48,31 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
     )
   }
 
-  await vrameworkRoutes(cliConfig, visitState)
+  const routes = await vrameworkRoutes(cliConfig, visitState)
+  if (routes) {
+    addImport(cliConfig.routesFile)
+  }
 
   await vrameworkRoutesMap(cliConfig, visitState)
 
-  await vrameworkScheduler(cliConfig, visitState)
+  const scheduled = await vrameworkScheduler(cliConfig, visitState)
+  if (scheduled) {
+    addImport(cliConfig.schedulersFile)
+}
 
-  await vrameworkChannels(cliConfig, visitState)
-
-  await vrameworkSchemas(cliConfig, visitState)
-
-  if (cliConfig.nextJSfile) {
-    await vrameworkNext(cliConfig, visitState, options)
+  const channels = await vrameworkChannels(cliConfig, visitState)
+  if (channels) {
+    addImport(cliConfig.channelsFile)
   }
 
-  if (cliConfig.fetchFile) {
-    await vrameworkFetch(cliConfig)
+  const schemas = await vrameworkSchemas(cliConfig, visitState)
+  if (schemas) {
+    addImport(`${cliConfig.schemaDirectory}/register.ts`)
   }
+
+  await vrameworkNext(cliConfig, visitState, options)
+
+  await vrameworkFetch(cliConfig)
 
   if (cliConfig.openAPI) {
     console.log(
@@ -71,26 +85,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
     await vrameworkOpenAPI(cliConfig, visitState)
   }
 
-  const bootstrapImports: string[] = []
-  bootstrapImports.push(
-    `import '${getFileImportRelativePath(cliConfig.bootstrapFile, `${cliConfig.schemaDirectory}/register.ts`, cliConfig.packageMappings)}'`
-  )
-  if (visitState.filesWithRoutes.size > 0) {
-    bootstrapImports.push(
-      `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.routesFile, cliConfig.packageMappings)}'`
-    )
-  }
-  if (visitState.filesWithScheduledTasks.size > 0) {
-    bootstrapImports.push(
-      `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.schedulersFile, cliConfig.packageMappings)}'`
-    )
-  }
-  if (visitState.filesWithChannels.size > 0) {
-    bootstrapImports.push(
-      `import '${getFileImportRelativePath(cliConfig.bootstrapFile, cliConfig.channelsFile, cliConfig.packageMappings)}'`
-    )
-  }
-  await writeFileInDir(cliConfig.bootstrapFile, bootstrapImports.join('\n'))
+  await writeFileInDir(cliConfig.bootstrapFile, imports.join('\n'))
 }
 
 export const all = (program: Command): void => {

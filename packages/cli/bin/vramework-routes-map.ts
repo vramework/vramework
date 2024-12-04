@@ -20,6 +20,7 @@ export const vrameworkRoutesMap = async (
   return await logCommandInfoAndTime(
     'Creating routes map',
     'Created routes map',
+    [visitState.filesWithRoutes.size === 0],
     async () => {
       const content = serializeTypedRoutesMap(
         routesMapDeclarationFile,

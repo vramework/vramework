@@ -22,6 +22,7 @@ export const vrameworkOpenAPI = async (
   await logCommandInfoAndTime(
     'Creating OpenAPI spec',
     'Created OpenAPI spec',
+    [openAPI?.outputFile === undefined, 'openAPI outfile is required'],
     async () => {
       if (!openAPI?.outputFile) {
         throw new Error('openAPI is required')

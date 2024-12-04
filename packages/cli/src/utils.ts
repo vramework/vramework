@@ -169,16 +169,23 @@ export const writeFileInDir = async (
   console.log(`\x1b[32m✓ File written to ${path}\x1b[0m`)
 }
 
-export const logCommandInfoAndTime = async <ReturnType = void>(
+export const logCommandInfoAndTime = async (
   commandStart: string,
   commandEnd: string,
-  callback: (...args: any[]) => Promise<ReturnType>
-) => {
+  [skipCondition, skipMessage = 'none found']: [boolean] | [boolean, string],
+  callback: (...args: any[]) => Promise<unknown>
+): Promise<boolean> => {
+  if (skipCondition === true) {
+    console.log(`\x1b[34m• Skipping ${commandStart} since ${skipMessage}.\x1b[0m`)
+    return false
+  }
+
   const start = Date.now()
   console.log(`\x1b[34m• ${commandStart}...\x1b[0m`)
-  const result = await callback()
+  await callback()
+  
   console.log(`\x1b[32m✓ ${commandEnd} in ${Date.now() - start}ms.\x1b[0m`)
-  return result
+  return true
 }
 
 export const logVrameworkLogo = () => {

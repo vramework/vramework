@@ -30,16 +30,16 @@ export const addSchedule = (
   if (ts.isObjectLiteralExpression(firstArg)) {
     const obj = firstArg
 
-    const titleValue = getPropertyValue(obj, 'title') as string | null
+    const nameValue = getPropertyValue(obj, 'name') as string | null
     const scheduleValue = getPropertyValue(obj, 'schedule') as string | null
     const docs = (getPropertyValue(obj, 'docs') as APIDocs) || undefined
 
-    if (!titleValue || !scheduleValue) {
+    if (!nameValue || !scheduleValue) {
       return
     }
 
     state.scheduledTasksMeta.push({
-      title: titleValue,
+      name: nameValue,
       schedule: scheduleValue,
       docs,
     })

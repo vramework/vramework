@@ -55,7 +55,7 @@ export const clearRoutes = () => {
 /**
  * @ignore
  */
-export const addRouteMeta = (_routeMeta: RoutesMeta) => {
+export const setRoutesMeta = (_routeMeta: RoutesMeta) => {
   routesMeta = _routeMeta
 }
 

@@ -5,11 +5,9 @@ import {
 } from '../src/vramework-cli-config.js'
 import { serializeRoutes } from '../src/core/serialize-routes.js'
 import { serializeRouteMeta } from '../src/core/serialize-route-meta.js'
-import { serializeTypedRouteRunner } from '../src/core/serialize-typed-route-runner.js'
 import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import {
-  getFileImportRelativePath,
   logCommandInfoAndTime,
   logVrameworkLogo,
   VrameworkCLIOptions,
@@ -23,20 +21,13 @@ export const vrameworkRoutes = async (
   return await logCommandInfoAndTime(
     'Finding routes',
     'Found routes',
+    [visitState.filesWithRoutes.size === 0],
     async () => {
-      const { routesMapDeclarationFile, routesFile, packageMappings } =
-        cliConfig
+      const { routesFile, packageMappings } = cliConfig
       const { filesWithRoutes, routesMeta } = visitState
       const content = [
         serializeRoutes(routesFile, filesWithRoutes, packageMappings),
         serializeRouteMeta(routesMeta),
-        serializeTypedRouteRunner(
-          getFileImportRelativePath(
-            routesFile,
-            routesMapDeclarationFile,
-            packageMappings
-          )
-        ),
       ]
       await writeFileInDir(routesFile, content.join('\n\n'))
     }
