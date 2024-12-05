@@ -9,7 +9,9 @@ import { ChannelMeta } from '@vramework/core'
 
 const addMessagesRoutes = (
   obj: ts.ObjectLiteralExpression,
-  checker: ts.TypeChecker
+  checker: ts.TypeChecker,
+  inputTypeSet: Set<string>,
+  outputTypeSet: Set<string>
 ) => {
   const messageTypes: ChannelMeta['messageRoutes'] = {}
 
@@ -50,6 +52,8 @@ const addMessagesRoutes = (
               funcName: route,
               inputIndex: 0,
               outputIndex: 1,
+              inputTypeSet,
+              outputTypeSet
             })
             const inputs = result?.inputs || null
             const outputs = result?.outputs || null
@@ -97,7 +101,7 @@ export const addChannel = (
   let inputType: string | null = null
   let channelValue: string | null = null
 
-  state.filesWithChannels.add(node.getSourceFile().fileName)
+  state.channels.files.add(node.getSourceFile().fileName)
 
   // Check if the first argument is an object literal
   if (ts.isObjectLiteralExpression(firstArg)) {
@@ -123,22 +127,23 @@ export const addChannel = (
       funcName: 'onMessage',
       inputIndex: 0,
       outputIndex: 1,
+      inputTypeSet: state.channels.inputTypes,
+      outputTypeSet: state.channels.outputTypes
     })
     const message = { inputs, outputs }
-
-    const messageRoutes = addMessagesRoutes(obj, checker)
+    const messageRoutes = addMessagesRoutes(obj, checker, state.channels.inputTypes, state.channels.outputTypes)
 
     if (!channelValue) {
       return
     }
 
-    state.channelsMeta.push({
+    state.channels.meta.push({
       channel: channelValue!,
       input: inputType,
       params: paramsValues.length > 0 ? paramsValues : undefined,
       query: queryValues.length > 0 ? queryValues : undefined,
       inputTypes: getInputTypes(
-        state.metaInputTypes,
+        state.channels.metaInputTypes,
         'get',
         inputType,
         queryValues,
@@ -150,9 +155,5 @@ export const addChannel = (
       messageRoutes,
       docs,
     })
-
-    if (inputType) {
-      state.inputTypes.add(inputType)
-    }
   }
 }

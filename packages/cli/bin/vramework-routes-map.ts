@@ -11,23 +11,23 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeTypedRoutesMap } from '../src/core/serialize-typed-route-map.js'
+import { serializeTypedRoutesMap } from '../src/http/serialize-typed-route-map.js'
 
-export const vrameworkRoutesMap = async (
+export const vrameworkHTTPMap = async (
   { routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig,
   visitState: VisitState
 ) => {
   return await logCommandInfoAndTime(
     'Creating routes map',
     'Created routes map',
-    [visitState.filesWithRoutes.size === 0],
+    [visitState.http.files.size === 0],
     async () => {
       const content = serializeTypedRoutesMap(
         routesMapDeclarationFile,
         packageMappings,
-        visitState.functionTypesImportMap,
-        visitState.routesMeta,
-        visitState.metaInputTypes
+        visitState.http.importMap,
+        visitState.http.meta,
+        visitState.http.metaInputTypes
       )
       await writeFileInDir(routesMapDeclarationFile, content)
     }
@@ -45,7 +45,7 @@ async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
     cliConfig.rootDir,
     cliConfig.routeDirectories
   )
-  await vrameworkRoutesMap(cliConfig, visitState)
+  await vrameworkHTTPMap(cliConfig, visitState)
 }
 
 export const routesMap = (program: Command): void => {

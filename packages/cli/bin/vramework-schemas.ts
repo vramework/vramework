@@ -11,15 +11,15 @@ import { logCommandInfoAndTime, logVrameworkLogo } from '../src/utils.js'
 
 export const vrameworkSchemas = async (
   { tsconfig, schemaDirectory }: VrameworkCLIConfig,
-  { routesMeta }: VisitState
+  { http }: VisitState
 ) => {
   return await logCommandInfoAndTime(
     'Creating schemas',
     'Created schemas',
     [false],
     async () => {
-      const schemas = await generateSchemas(tsconfig, routesMeta)
-      await saveSchemas(schemaDirectory, schemas, routesMeta)
+      const schemas = await generateSchemas(tsconfig, http.meta)
+      await saveSchemas(schemaDirectory, schemas, http.meta)
     }
   )
 }

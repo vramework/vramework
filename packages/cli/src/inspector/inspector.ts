@@ -20,19 +20,29 @@ export const inspector = (routeFiles: string[]): VisitState => {
   const state: VisitState = {
     sessionServicesTypeImportMap: new Map(),
     userSessionTypeImportMap: new Map(),
-    functionTypesImportMap: new Map(),
-    metaInputTypes: new Map(),
-    scheduledTasksMeta: [],
-    routesMeta: [],
-    channelsMeta: [],
-    inputTypes: new Set<string>(),
-    outputTypes: new Set<string>(),
-    filesWithRoutes: new Set<string>(),
-    filesWithScheduledTasks: new Set<string>(),
-    filesWithChannels: new Set<string>(),
     singletonServicesFactories: new Map(),
     sessionServicesFactories: new Map(),
     configFactories: new Map(),
+    http: {
+      importMap: new Map(),
+      metaInputTypes: new Map(),
+      meta: [],
+      inputTypes: new Set<string>(),
+      outputTypes: new Set<string>(),
+      files: new Set<string>(),
+    },
+    channels: {
+      importMap: new Map(),
+      metaInputTypes: new Map<string, string>(),
+      inputTypes: new Set<string>(),
+      outputTypes: new Set<string>(),
+      files: new Set<string>(),
+      meta: [],
+    },
+    scheduledTasks: {
+      meta: [],
+      files: new Set<string>(),
+    },
   }
 
   for (const sourceFile of sourceFiles) {
@@ -40,9 +50,14 @@ export const inspector = (routeFiles: string[]): VisitState => {
   }
 
   // Looks for and adds all the input/out schema types
-  addFilesWithSymbols(program, checker, state.functionTypesImportMap, [
-    ...state.inputTypes,
-    ...state.outputTypes,
+  addFilesWithSymbols(program, checker, state.http.importMap, [
+    ...state.http.inputTypes,
+    ...state.http.outputTypes,
+  ])
+
+  addFilesWithSymbols(program, checker, state.channels.importMap, [
+    ...state.channels.inputTypes,
+    ...state.channels.outputTypes,
   ])
 
   return state

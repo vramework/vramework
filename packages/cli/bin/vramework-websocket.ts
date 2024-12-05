@@ -10,30 +10,30 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { serializeFetchWrapper } from '../src/http/serialize-fetch-wrapper.js'
+import { serializeWebsocketWrapper } from '../src/channels/serialize-websocket-wrapper.js'
 
-export const vrameworkFetch = async ({
-  fetchFile,
-  routesMapDeclarationFile,
+export const vrameworkWebSocket = async ({
+  websocketFile,
+  channelsMapDeclarationFile,
   packageMappings,
 }: VrameworkCLIConfig) => {
   await logCommandInfoAndTime(
-    'Generating fetch wrapper',
-    'Generated fetch wrapper',
-    [fetchFile === undefined, 'fetchFile is required in vramework config'],
+    'Generating websocket wrapper',
+    'Generated websocket wrapper',
+    [websocketFile === undefined, 'websocketFile is required in vramework config'],
     async () => {
-      if (!fetchFile) {
+      if (!websocketFile) {
         throw new Error('fetchFile is required in vramework config')
       }
 
-      const routesMapDeclarationPath = getFileImportRelativePath(
-        fetchFile,
-        routesMapDeclarationFile,
+      const channelsMapDeclarationPath = getFileImportRelativePath(
+        websocketFile,
+        channelsMapDeclarationFile,
         packageMappings
       )
 
-      const content = [serializeFetchWrapper(routesMapDeclarationPath)]
-      await writeFileInDir(fetchFile, content.join('\n'))
+      const content = [serializeWebsocketWrapper(channelsMapDeclarationPath)]
+      await writeFileInDir(websocketFile, content.join('\n'))
     }
   )
 }
@@ -45,13 +45,13 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
     ['rootDir', 'schemaDirectory', 'configDir', 'fetchFile'],
     true
   )
-  await vrameworkFetch(cliConfig)
+  await vrameworkWebSocket(cliConfig)
 }
 
-export const fetch = (program: Command): void => {
+export const websocket = (program: Command): void => {
   program
-    .command('fetch')
-    .description('generate fetch wrapper')
+    .command('websocket')
+    .description('generate websocket wrapper')
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }

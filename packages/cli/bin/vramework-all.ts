@@ -11,12 +11,14 @@ import { vrameworkRoutes } from './vramework-routes.js'
 import { vrameworkSchemas } from './vramework-schemas.js'
 import { vrameworkNext } from './vramework-nextjs.js'
 import { vrameworkFunctionTypes } from './vramework-function-types.js'
-import { vrameworkRoutesMap } from './vramework-routes-map.js'
+import { vrameworkHTTPMap } from './vramework-routes-map.js'
 import { existsSync } from 'fs'
 import { vrameworkOpenAPI } from './vramework-openapi.js'
 import { vrameworkFetch } from './vramework-fetch.js'
 import { vrameworkScheduler } from './vramework-scheduler.js'
 import { vrameworkChannels } from './vramework-channels.js'
+import { vrameworkChannelsMap } from './vramework-channels-map.js'
+import { vrameworkWebSocket } from './vramework-websocket.js'
 
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
@@ -50,10 +52,10 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
 
   const routes = await vrameworkRoutes(cliConfig, visitState)
   if (routes) {
+    await vrameworkHTTPMap(cliConfig, visitState)
+    await vrameworkFetch(cliConfig)
     addImport(cliConfig.routesFile)
   }
-
-  await vrameworkRoutesMap(cliConfig, visitState)
 
   const scheduled = await vrameworkScheduler(cliConfig, visitState)
   if (scheduled) {
@@ -62,6 +64,8 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
 
   const channels = await vrameworkChannels(cliConfig, visitState)
   if (channels) {
+    await vrameworkChannelsMap(cliConfig, visitState)
+    await vrameworkWebSocket(cliConfig)
     addImport(cliConfig.channelsFile)
   }
 
@@ -71,8 +75,6 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   }
 
   await vrameworkNext(cliConfig, visitState, options)
-
-  await vrameworkFetch(cliConfig)
 
   if (cliConfig.openAPI) {
     console.log(

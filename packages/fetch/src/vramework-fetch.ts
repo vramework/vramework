@@ -34,7 +34,7 @@ export const coreVrameworkFetch = async (
   }
 
   return await fetch(uri, {
-    method,
+    method: method.toUpperCase(),
     ...options,
     body: body ? JSON.stringify(body) : undefined,
   })

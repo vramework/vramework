@@ -73,7 +73,13 @@ export const vrameworkWebsocketHandler = ({
     },
     open: (ws) => {
       const { stream } = ws.getUserData()
-      stream.registerOnSend(ws.send.bind(ws))
+      stream.registerOnSend(data => {
+        if (typeof data === 'object') {
+          ws.send(JSON.stringify(data))
+        } else {
+          ws.send(data)
+        }
+      })
       stream.open()
     },
     message: (ws, message, isBinary) => {

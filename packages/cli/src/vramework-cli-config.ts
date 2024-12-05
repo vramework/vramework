@@ -10,6 +10,7 @@ export interface VrameworkCLICoreOutputFiles {
   schemaDirectory: string
   typesDeclarationFile: string
   routesMapDeclarationFile: string
+  channelsMapDeclarationFile: string
   bootstrapFile: string
 }
 
@@ -27,6 +28,7 @@ export type VrameworkCLIConfig = {
 
   nextJSfile?: string
   fetchFile?: string
+  websocketFile?: string
 
   openAPI?: {
     outputFile: string
@@ -125,6 +127,12 @@ const _getVrameworkCLIConfig = async (
         result.routesMapDeclarationFile = join(
           result.outDir,
           'vramework-routes-map.d.ts'
+        )
+      }
+      if (!result.channelsMapDeclarationFile) {
+        result.channelsMapDeclarationFile = join(
+          result.outDir,
+          'vramework-channels-map.d.ts'
         )
       }
       if (!result.bootstrapFile) {

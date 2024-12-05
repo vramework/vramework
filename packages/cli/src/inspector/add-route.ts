@@ -84,7 +84,7 @@ export const addRoute = (
   let queryValues: string[] | [] = []
   let routeValue: string | null = null
 
-  state.filesWithRoutes.add(node.getSourceFile().fileName)
+  state.http.files.add(node.getSourceFile().fileName)
 
   // Check if the first argument is an object literal
   if (ts.isObjectLiteralExpression(firstArg)) {
@@ -109,6 +109,8 @@ export const addRoute = (
       funcName: 'func',
       inputIndex: 0,
       outputIndex: 1,
+      inputTypeSet: state.http.inputTypes,
+      outputTypeSet: state.http.outputTypes,
     })
 
     // TODO: Temporary hack since typescript breaks boolean into two types
@@ -141,7 +143,7 @@ export const addRoute = (
       return
     }
 
-    state.routesMeta.push({
+    state.http.meta.push({
       route: routeValue!,
       method: methodValue! as APIRouteMethod,
       input,
@@ -149,7 +151,7 @@ export const addRoute = (
       params: paramsValues.length > 0 ? paramsValues : undefined,
       query: queryValues.length > 0 ? queryValues : undefined,
       inputTypes: getInputTypes(
-        state.metaInputTypes,
+        state.http.metaInputTypes,
         methodValue,
         input,
         queryValues,
@@ -157,13 +159,5 @@ export const addRoute = (
       ),
       docs,
     })
-
-    if (input) {
-      state.inputTypes.add(input)
-    }
-
-    if (output) {
-      state.outputTypes.add(output)
-    }
   }
 }

@@ -11,34 +11,31 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import {
-  serializeChannels,
-  serializeChannelMeta,
-} from '../src/channels/serialize-channels.js'
+import { serializeTypedChannelsMap } from '../src/channels/serialize-typed-channel-map.js'
 
-export const vrameworkChannels = async (
-  cliConfig: VrameworkCLIConfig,
+export const vrameworkChannelsMap = async (
+  { channelsMapDeclarationFile, packageMappings }: VrameworkCLIConfig,
   visitState: VisitState
 ) => {
   return await logCommandInfoAndTime(
-    'Finding Channels',
-    'Found channels',
+    'Creating channels map',
+    'Created channels map',
     [visitState.channels.files.size === 0],
     async () => {
-      const { channelsFile, packageMappings } = cliConfig
-      const { channels } = visitState
-      const content = [
-        serializeChannels(channelsFile, channels.files, packageMappings),
-        serializeChannelMeta(channels.meta),
-      ]
-      await writeFileInDir(channelsFile, content.join('\n\n'))
+      const content = serializeTypedChannelsMap(
+        channelsMapDeclarationFile,
+        packageMappings,
+        visitState.channels.importMap,
+        visitState.channels.meta,
+        visitState.channels.metaInputTypes
+      )
+      await writeFileInDir(channelsMapDeclarationFile, content)
     }
   )
 }
 
 async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
   logVrameworkLogo()
-
   const cliConfig = await getVrameworkCLIConfig(cliOptions.config, [
     'rootDir',
     'routeDirectories',
@@ -48,13 +45,13 @@ async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
     cliConfig.rootDir,
     cliConfig.routeDirectories
   )
-  await vrameworkChannels(cliConfig, visitState)
+  await vrameworkChannelsMap(cliConfig, visitState)
 }
 
-export const streams = (program: Command): void => {
+export const channelsMap = (program: Command): void => {
   program
-    .command('streams')
-    .description('Find all streams to import')
+    .command('channels-map')
+    .description('Generate a map of all channels to aid in type checking')
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }

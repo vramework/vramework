@@ -20,17 +20,17 @@ export const vrameworkScheduler = async (
   return await logCommandInfoAndTime(
     'Finding scheduled tasks',
     'Found scheduled tasks',
-    [visitState.filesWithScheduledTasks.size === 0],
+    [visitState.scheduledTasks.files.size === 0],
     async () => {
       const { schedulersFile, packageMappings } = cliConfig
-      const { filesWithScheduledTasks } = visitState
+      const { scheduledTasks } = visitState
       const content = [
         serializeSchedulers(
           schedulersFile,
-          filesWithScheduledTasks,
+          scheduledTasks.files,
           packageMappings
         ),
-        serializeSchedulerMeta(visitState.scheduledTasksMeta),
+        serializeSchedulerMeta(scheduledTasks.meta),
       ]
       await writeFileInDir(schedulersFile, content.join('\n\n'))
     }

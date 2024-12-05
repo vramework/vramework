@@ -11,6 +11,7 @@
       "packages/core",
       "packages/cli",
       "packages/fetch",
+      "packages/websocket",
       "packages/schedule",
       "packages/services/*",
       "packages/servers/*",

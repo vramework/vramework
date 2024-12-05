@@ -126,7 +126,9 @@ export const getFunctionTypes = (
     subFunctionName = funcName,
     inputIndex,
     outputIndex,
-  }: { subFunctionName?: string, funcName: string; inputIndex: number; outputIndex: number }
+    inputTypeSet,
+    outputTypeSet
+  }: { subFunctionName?: string, funcName: string; inputIndex: number; outputIndex: number, inputTypeSet: Set<string>, outputTypeSet: Set<string> }
 ): FunctionTypes => {
   const result: FunctionTypes = {
     inputTypes: [],
@@ -157,6 +159,8 @@ export const getFunctionTypes = (
         subFunctionName: 'func',
         inputIndex,
         outputIndex,
+        inputTypeSet,
+        outputTypeSet
       })
     }
 
@@ -183,6 +187,7 @@ export const getFunctionTypes = (
   if (inputIndex !== undefined && inputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[inputIndex]!)
     result.inputs = types.names
+    result.inputs.forEach(input => inputTypeSet.add(input))
     result.inputTypes = types.types
   } else {
     console.error(`Input index ${inputIndex} is out of bounds`)
@@ -191,6 +196,7 @@ export const getFunctionTypes = (
   if (outputIndex !== undefined && outputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[outputIndex]!)
     result.outputs = types.names
+    result.outputs.forEach(input => outputTypeSet.add(input))
     result.outputTypes = types.types
   } 
   // else {

@@ -1,6 +1,6 @@
 import { RoutesMeta } from '@vramework/core'
 import { ImportMap } from '../inspector/inspector.js'
-import { serializeImportMap } from './serialize-import-map.js'
+import { serializeImportMap } from '../core/serialize-import-map.js'
 
 export const serializeTypedRoutesMap = (
   relativeToPath: string,

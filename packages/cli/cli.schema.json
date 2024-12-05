@@ -15,7 +15,9 @@
               "type": "string"
             }
           },
-          "required": ["url"],
+          "required": [
+            "url"
+          ],
           "type": "object"
         },
         "info": {
@@ -49,7 +51,9 @@
                   "type": "string"
                 }
               },
-              "required": ["name"],
+              "required": [
+                "name"
+              ],
               "type": "object"
             },
             "termsOfService": {
@@ -62,7 +66,11 @@
               "type": "string"
             }
           },
-          "required": ["title", "version", "description"],
+          "required": [
+            "title",
+            "version",
+            "description"
+          ],
           "type": "object"
         },
         "security": {
@@ -89,7 +97,9 @@
                 "type": "string"
               }
             },
-            "required": ["url"],
+            "required": [
+              "url"
+            ],
             "type": "object"
           },
           "type": "array"
@@ -105,13 +115,18 @@
                 "type": "string"
               }
             },
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "type": "object"
           },
           "type": "array"
         }
       },
-      "required": ["info", "servers"],
+      "required": [
+        "info",
+        "servers"
+      ],
       "type": "object"
     },
     "VrameworkCLIConfig": {
@@ -121,6 +136,12 @@
           "type": "string"
         },
         "bootstrapFile": {
+          "type": "string"
+        },
+        "channelsFile": {
+          "type": "string"
+        },
+        "channelsMapDeclarationFile": {
           "type": "string"
         },
         "configDir": {
@@ -145,7 +166,10 @@
               "type": "string"
             }
           },
-          "required": ["outputFile", "additionalInfo"],
+          "required": [
+            "outputFile",
+            "additionalInfo"
+          ],
           "type": "object"
         },
         "outDir": {
@@ -178,9 +202,6 @@
         "schemaDirectory": {
           "type": "string"
         },
-        "streamsFile": {
-          "type": "string"
-        },
         "tsconfig": {
           "type": "string"
         },
@@ -190,6 +211,8 @@
       },
       "required": [
         "bootstrapFile",
+        "channelsFile",
+        "channelsMapDeclarationFile",
         "configDir",
         "packageMappings",
         "rootDir",
@@ -198,7 +221,6 @@
         "routesMapDeclarationFile",
         "schedulersFile",
         "schemaDirectory",
-        "streamsFile",
         "tsconfig",
         "typesDeclarationFile"
       ],

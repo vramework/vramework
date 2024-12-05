@@ -17,19 +17,29 @@ export type PathToNameAndType = Map<
 export interface VisitState {
   sessionServicesTypeImportMap: PathToNameAndType
   userSessionTypeImportMap: PathToNameAndType
-  functionTypesImportMap: ImportMap
-  metaInputTypes: Map<string, string>
-  routesMeta: RoutesMeta
-  channelsMeta: ChannelsMeta
-  scheduledTasksMeta: ScheduledTasksMeta
-  inputTypes: Set<string>
-  outputTypes: Set<string>
-  filesWithRoutes: Set<string>
-  filesWithScheduledTasks: Set<string>
-  filesWithChannels: Set<string>
   singletonServicesFactories: PathToNameAndType
   sessionServicesFactories: PathToNameAndType
   configFactories: PathToNameAndType
+  http: {
+    importMap: ImportMap
+    metaInputTypes: Map<string, string>
+    meta: RoutesMeta
+    inputTypes: Set<string>
+    outputTypes: Set<string>
+    files: Set<string>
+  }
+  channels: {
+    importMap: ImportMap
+    metaInputTypes: Map<string, string>
+    meta: ChannelsMeta
+    inputTypes: Set<string>
+    outputTypes: Set<string>
+    files: Set<string>
+  }
+  scheduledTasks: {
+    meta: ScheduledTasksMeta
+    files: Set<string>
+  }
 }
 
 export const visit = (

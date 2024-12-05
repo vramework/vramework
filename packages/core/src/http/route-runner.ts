@@ -292,6 +292,7 @@ export const runRoute = async <In, Out>({
       http?.response?.setJson(result)
     }
     http?.response?.setStatus(200)
+    http?.response?.end()
 
     return result
   } catch (e: any) {

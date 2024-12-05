@@ -4,7 +4,7 @@ import { ImportMap } from './inspector.js'
 export const addFilesWithSymbols = (
   program: ts.Program,
   checker: ts.TypeChecker,
-  functionTypesImportMap: ImportMap,
+  importMap: ImportMap,
   symbolNames: string[]
 ): string | null => {
   for (const sourceFile of program.getSourceFiles()) {
@@ -21,12 +21,12 @@ export const addFilesWithSymbols = (
         const declaration = declarations && declarations[0]
         if (declaration) {
           let filePath = declaration.getSourceFile().fileName
-          const importInfo = functionTypesImportMap.get(filePath) || {
+          const importInfo = importMap.get(filePath) || {
             importPath: filePath,
             variableNames: new Set(),
           }
           importInfo.variableNames.add(symbol.getName())
-          functionTypesImportMap.set(filePath, importInfo)
+          importMap.set(filePath, importInfo)
         }
       }
     }

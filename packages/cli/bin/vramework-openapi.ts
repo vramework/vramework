@@ -17,7 +17,7 @@ import { stringify } from 'yaml'
 
 export const vrameworkOpenAPI = async (
   { tsconfig, openAPI }: VrameworkCLIConfig,
-  { routesMeta }: VisitState
+  { http }: VisitState
 ) => {
   await logCommandInfoAndTime(
     'Creating OpenAPI spec',
@@ -27,9 +27,9 @@ export const vrameworkOpenAPI = async (
       if (!openAPI?.outputFile) {
         throw new Error('openAPI is required')
       }
-      const schemas = await generateSchemas(tsconfig, routesMeta)
+      const schemas = await generateSchemas(tsconfig, http.meta)
       const openAPISpec = await generateOpenAPISpec(
-        routesMeta,
+        http.meta,
         schemas,
         openAPI.additionalInfo
       )

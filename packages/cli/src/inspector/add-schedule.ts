@@ -25,7 +25,7 @@ export const addSchedule = (
     return
   }
 
-  state.filesWithScheduledTasks.add(node.getSourceFile().fileName)
+  state.scheduledTasks.files.add(node.getSourceFile().fileName)
 
   if (ts.isObjectLiteralExpression(firstArg)) {
     const obj = firstArg
@@ -38,7 +38,7 @@ export const addSchedule = (
       return
     }
 
-    state.scheduledTasksMeta.push({
+    state.scheduledTasks.meta.push({
       name: nameValue,
       schedule: scheduleValue,
       docs,
