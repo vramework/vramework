@@ -13,6 +13,11 @@ export class VrameworkUWSRequest extends VrameworkHTTPRequest {
 
   public async getBody() {
     try {
+      // If the request method is GET, return an empty object since GET
+      // shouldn't have a body
+      if (this.request.getMethod() === 'get') {
+        return {}
+      }
       return await this.readJson()
     } catch {
       throw new Error('Failed to parse JSON')

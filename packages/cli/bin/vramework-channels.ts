@@ -51,10 +51,10 @@ async function action(cliOptions: VrameworkCLIOptions): Promise<void> {
   await vrameworkChannels(cliConfig, visitState)
 }
 
-export const streams = (program: Command): void => {
+export const channels = (program: Command): void => {
   program
-    .command('streams')
-    .description('Find all streams to import')
+    .command('channels')
+    .description('Find all channels to import')
     .option('-c | --config <string>', 'The path to vramework cli config file')
     .action(action)
 }

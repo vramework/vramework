@@ -14,7 +14,7 @@ import {
   loadUserSession,
 } from '../http/route-runner.js'
 import { registerMessageHandlers } from './channel-handler.js'
-import { VrameworkChannel } from './vramework-channel.js'
+import { VrameworkChannelHandler } from './vramework-channel-handler.js'
 
 let channels: CoreAPIChannels = []
 let channelsMeta: ChannelsMeta = []
@@ -26,7 +26,7 @@ export const addChannel = <
   ChannelFunctionSessionless,
   APIPermission,
 >(
-  stream: CoreAPIChannel<
+  channel: CoreAPIChannel<
     In,
     Channel,
     ChannelFunction,
@@ -34,7 +34,7 @@ export const addChannel = <
     APIPermission
   >
 ) => {
-  channels.push(stream as any)
+  channels.push(channel as any)
 }
 
 export const clearChannels = () => {
@@ -67,7 +67,7 @@ const getMatchingChannelConfig = (requestPath: string) => {
     const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
     if (matchedPath) {
       const schemaName = channelsMeta.find(
-        (streamMeta) => streamMeta.channel === channelConfig.channel
+        (channelMeta) => channelMeta.channel === channelConfig.channel
       )?.input
       return {
         matchedPath,
@@ -81,9 +81,6 @@ const getMatchingChannelConfig = (requestPath: string) => {
   return null
 }
 
-/**
- * @ignore
- */
 export const runChannel = async ({
   singletonServices,
   request,
@@ -96,9 +93,7 @@ export const runChannel = async ({
   logWarningsForStatusCodes = [],
 }: Pick<CoreAPIChannel<unknown, any>, 'channel'> &
   RunChannelOptions &
-  RunChannelParams<unknown>): Promise<
-  VrameworkChannel<unknown> | undefined
-> => {
+  RunChannelParams<unknown>): Promise<VrameworkChannelHandler | undefined> => {
   let sessionServices: any | undefined
   const trackerId: string = crypto.randomUUID().toString()
   const http = createHTTPInteraction(request, response)
@@ -122,24 +117,27 @@ export const runChannel = async ({
       `Matched channel: ${channelConfig.channel} | auth: ${requiresSession.toString()}`
     )
 
-    const session = await loadUserSession(
+    let session = await loadUserSession(
       skipUserSession,
-      requiresSession,
+      // We say we require a session, but we don't actually need it 
+      // on connect since channels can authenticate later
+      false,
       http,
       matchedPath,
       channelConfig,
       singletonServices.logger,
       singletonServices.sessionService
     )
-    const data = await request.getData()
 
+    const data = await request.getData()
     validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
 
-    const stream = new VrameworkChannel(data)
+    const channelHandler = new VrameworkChannelHandler(data, (newSession) => session = newSession)
+    const channel = channelHandler.getChannel()
 
     sessionServices = await createSessionServices(
       singletonServices,
-      { http, stream },
+      { http },
       session
     )
     const allServices = { ...singletonServices, ...sessionServices }
@@ -151,18 +149,18 @@ export const runChannel = async ({
       session
     )
 
-    stream.registerOnOpen(async () => {
-      channelConfig.onConnect?.(allServices, stream, session!)
+    channelHandler.registerOnOpen(async () => {
+      channelConfig.onConnect?.(allServices, channel)
     })
 
-    registerMessageHandlers(channelConfig, stream, allServices, session)
+    registerMessageHandlers(singletonServices.logger, channelConfig, channelHandler, allServices)
 
-    stream.registerOnClose(async () => {
-      channelConfig.onDisconnect?.(allServices, stream, session!)
+    channelHandler.registerOnClose(async () => {
+      channelConfig.onDisconnect?.(allServices, channel)
       await closeServices(singletonServices.logger, sessionServices)
     })
 
-    return stream
+    return channelHandler
   } catch (e: any) {
     handleError(
       e,

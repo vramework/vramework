@@ -12,7 +12,7 @@ import {
 import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
-import { VrameworkChannel } from './vramework-channel.js'
+import { VrameworkChannel } from './vramework-channel-handler.js'
 
 export type RunChannelOptions = Partial<{
   skipUserSession: boolean
@@ -32,7 +32,7 @@ export type RunChannelParams<ChannelData> = {
   >
 }
 
-export interface HandlerMeta {}
+export interface HandlerMeta { }
 
 export interface ChannelMeta {
   channel: string
@@ -58,43 +58,28 @@ export interface ChannelMeta {
 
 export type ChannelsMeta = ChannelMeta[]
 
-/**
- * Represents an API route without a function, including metadata such as content type, route, and timeout settings.
- */
-type CoreFunctionlessChannelRoute<OnConnectionChange> = {
-  channel: string
-  onConnect?: OnConnectionChange
-  onDisconnect?: OnConnectionChange
-  docs?: Partial<{
-    description: string
-    response: string
-    errors: Array<typeof EError>
-    tags: string[]
-  }>
-}
-
-export type CoreChannelConnectionSessionless<
-  OpenData,
-  Services extends CoreServices = CoreServices,
-  Session extends CoreUserSession = CoreUserSession,
-> = (
-  services: Services,
-  stream: VrameworkChannel<OpenData>,
-  session?: Session
-) => Promise<void>
-
 export type CoreChannelConnection<
   OpenData,
+  Out = unknown,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: Services,
-  stream: VrameworkChannel<OpenData>,
-  session: Session
+  channel: VrameworkChannel<Session, OpenData, undefined, Out>
+) => Promise<void>
+
+export type CoreChannelDisconnection<
+  OpenData,
+  Out = unknown,
+  Services extends CoreServices = CoreServices,
+  Session extends CoreUserSession = CoreUserSession,
+> = (
+  services: Services,
+  channel: VrameworkChannel<Session, OpenData, undefined, never>
 ) => Promise<void>
 
 /**
- * Represents a core stream function that performs an operation using core services and a user session.
+ * Represents a core channel function that performs an operation using core services and a user session.
  *
  * @template In - The input type.
  * @template Services - The services type, defaults to `CoreServices`.
@@ -108,33 +93,12 @@ export type CoreChannelMessage<
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: Services,
-  stream: VrameworkChannel<OpenData, In, Out>,
-  session: Session
-) => Promise<void>
-
-/**
- * Represents a core API function that can be used without a session.
- *
- * @template In - The input type.
- * @template Services - The services type, defaults to `CoreServices`.
- * @template Session - The session type, defaults to `CoreUserSession`.
- */
-export type CoreChannelMessageSessionless<
-  In,
-  Out,
-  OpenData,
-  Services extends CoreServices = CoreServices,
-  Session extends CoreUserSession = CoreUserSession,
-> = (
-  services: Services,
-  stream: VrameworkChannel<OpenData, In, Out>,
-  session?: Session
+  channel: VrameworkChannel<Session, OpenData, In, Out>,
+  data: In
 ) => Promise<void>
 
 export type CoreAPIChannelMessage<
-  ChannelFunctionMessage =
-    | CoreChannelMessageSessionless<unknown, unknown, unknown>
-    | CoreChannelMessage<unknown, unknown, unknown>,
+  ChannelFunctionMessage = CoreChannelMessage<unknown, unknown, unknown>,
 > = {
   func: ChannelFunctionMessage
   route: string
@@ -144,43 +108,33 @@ export type CoreAPIChannel<
   ChannelData,
   Channel extends string,
   ChannelFunctionConnection = CoreChannelConnection<ChannelData>,
-  ChannelFunctionConnectionSessionless = CoreChannelConnectionSessionless<ChannelData>,
+  ChannelFunctionDisconnection = CoreChannelConnection<ChannelData>,
   ChannelFunctionMessage = CoreChannelMessage<unknown, unknown, unknown>,
-  ChannelFunctionMessageSessionless = CoreChannelMessageSessionless<
-    unknown,
-    unknown,
-    unknown
-  >,
   APIPermission = CoreAPIPermission<ChannelData>,
-> =
-  | (CoreFunctionlessChannelRoute<ChannelFunctionConnection> & {
-      onMessage?: { func: ChannelFunctionMessage; permissions?: undefined }
-      onMessageRoute?: Record<
-        string,
-        Record<
-          string,
-          | ChannelFunctionMessage
-          | {
-              func: ChannelFunctionMessage
-              permissions?: Record<string, APIPermission[] | APIPermission>
-            }
-        >
-      >
-      permissions?: Record<string, APIPermission[] | APIPermission>
-      auth?: true
-    })
-  | (CoreFunctionlessChannelRoute<ChannelFunctionConnectionSessionless> & {
-      onMessage?: ChannelFunctionMessageSessionless
-      onMessageRoute?: Record<
-        string,
-        Record<
-          string,
-          | ChannelFunctionMessageSessionless
-          | { func: ChannelFunctionMessageSessionless; permissions?: undefined }
-        >
-      >
-      permissions?: undefined
-      auth?: false
-    })
+> = {
+  channel: string
+  onConnect?: ChannelFunctionConnection
+  onDisconnect?: ChannelFunctionDisconnection
+  onMessage?: { func: ChannelFunctionMessage; permissions?: undefined }
+  onMessageRoute?: Record<
+    string,
+    Record<
+      string,
+      | ChannelFunctionMessage
+      | {
+        func: ChannelFunctionMessage
+        permissions?: Record<string, APIPermission[] | APIPermission>
+      }
+    >
+  >
+  permissions?: Record<string, APIPermission[] | APIPermission>
+  auth?: boolean
+  docs?: Partial<{
+    description: string
+    response: string
+    errors: Array<typeof EError>
+    tags: string[]
+  }>
+}
 
 export type CoreAPIChannels = CoreAPIChannel<any, string>[]
