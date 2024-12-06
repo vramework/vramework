@@ -24,7 +24,6 @@ import {
 } from '../errors.js'
 import * as cryptoImp from 'crypto'
 import { closeServices, validateAndCoerce } from '../utils.js'
-import { CoreAPIChannel } from '../channel/channel.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
 const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
@@ -124,7 +123,7 @@ export const loadUserSession = async (
   requiresSession: boolean,
   http: VrameworkHTTP | undefined,
   matchedPath: any,
-  route: CoreAPIRoute<unknown, unknown, any> | CoreAPIChannel<unknown, any>,
+  route: CoreAPIRoute<unknown, unknown, any> | unknown,
   logger: Logger,
   sessionService: SessionService | undefined
 ) => {

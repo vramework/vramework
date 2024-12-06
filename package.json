@@ -9,6 +9,7 @@
   "workspaces": {
     "packages": [
       "packages/core",
+      "packages/channel",
       "packages/cli",
       "packages/fetch",
       "packages/websocket",

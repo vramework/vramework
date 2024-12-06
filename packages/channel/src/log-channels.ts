@@ -1,4 +1,4 @@
-import { Logger } from '../services/index.js'
+import { Logger } from '@vramework/core/services/index'
 import { getChannels } from './channel-runner.js'
 
 /**

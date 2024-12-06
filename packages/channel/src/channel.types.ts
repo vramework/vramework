@@ -1,17 +1,17 @@
-import { EError } from '../error-handler.js'
-import { RoutesMetaInputTypes } from '../http/routes.types.js'
-import { VrameworkHTTPRequest } from '../http/vramework-http-request.js'
-import { VrameworkHTTPResponse } from '../http/vramework-http-response.js'
+import { EError } from '@vramework/core/error-handler'
+import { RoutesMetaInputTypes } from '@vramework/core/http/routes.types'
+import { VrameworkHTTPRequest } from '@vramework/core/http/vramework-http-request'
+import { VrameworkHTTPResponse } from '@vramework/core/http/vramework-http-response'
 import {
   APIDocs,
   CoreServices,
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
-} from '../types/core.types.js'
-import { CoreAPIPermission } from '../types/functions.types.js'
-import { VrameworkRequest } from '../vramework-request.js'
-import { VrameworkResponse } from '../vramework-response.js'
+} from '@vramework/core/types/core.types'
+import { CoreAPIPermission } from '@vramework/core/types/functions.types'
+import { VrameworkRequest } from '@vramework/core/vramework-request'
+import { VrameworkResponse } from '@vramework/core/vramework-response'
 import { VrameworkChannel } from './vramework-channel-handler.js'
 
 export type RunChannelOptions = Partial<{

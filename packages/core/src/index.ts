@@ -21,5 +21,3 @@ export * from './types/functions.types.js'
 export * from './scheduler/index.js'
 
 export * from './http/index.js'
-
-export * from './channel/index.js'

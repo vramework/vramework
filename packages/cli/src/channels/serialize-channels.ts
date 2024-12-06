@@ -1,4 +1,4 @@
-import { ChannelsMeta } from '@vramework/core/channel/channel.types'
+import { ChannelsMeta } from '@vramework/channel'
 import { getFileImportRelativePath } from '../utils.js'
 
 export const serializeChannels = (

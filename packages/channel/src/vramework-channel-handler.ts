@@ -1,4 +1,4 @@
-import { CoreUserSession } from '../types/core.types.js'
+import { CoreUserSession } from '@vramework/core/types/core.types'
 
 export interface VrameworkChannel<Session, OpeningData, In, Out> {
   session?: Session

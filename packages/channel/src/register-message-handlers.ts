@@ -3,12 +3,12 @@ import {
   CoreServices,
   CoreUserSession,
   JSONValue,
-} from '../types/core.types.js'
+} from '@vramework/core/types/core.types'
 import { CoreAPIChannel } from './channel.types.js'
 import { getChannels } from './channel-runner.js'
 import { VrameworkChannelHandler } from './vramework-channel-handler.js'
-import { Logger } from '../services/logger.js'
-import { verifyPermissions } from '../permissions.js'
+import { Logger } from '@vramework/core/services/logger'
+import { verifyPermissions } from '@vramework/core/permissions'
 
 const validateSchema = (
   logger: CoreSingletonServices['logger'],

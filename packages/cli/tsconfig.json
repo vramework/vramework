@@ -9,10 +9,13 @@
     "resolveJsonModule": true
   },
   "include": ["bin/**/*.ts", "src/**/*.ts"],
-  "exclude": ["**/*.test.ts", "node_modules", "bin/dist"],
+  "exclude": ["**/*.test.ts", "node_modules", "dist"],
   "references": [
     {
       "path": "../core/tsconfig.json"
+    },
+    {
+      "path": "../channel/tsconfig.json"
     }
   ]
 }

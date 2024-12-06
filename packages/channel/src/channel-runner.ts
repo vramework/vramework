@@ -6,14 +6,14 @@ import {
   ChannelsMeta,
 } from './channel.types.js'
 import { match } from 'path-to-regexp'
-import { closeServices, validateAndCoerce } from '../utils.js'
-import { verifyPermissions } from '../permissions.js'
+import { closeServices, validateAndCoerce } from '@vramework/core/utils'
+import { verifyPermissions } from '@vramework/core/permissions'
 import {
   createHTTPInteraction,
   handleError,
   loadUserSession,
-} from '../http/route-runner.js'
-import { registerMessageHandlers } from './channel-handler.js'
+} from '@vramework/core/http/route-runner'
+import { registerMessageHandlers } from './register-message-handlers.js'
 import { VrameworkChannelHandler } from './vramework-channel-handler.js'
 
 let channels: CoreAPIChannels = []

@@ -1,3 +1,3 @@
-# @vramework/scheduler
+# @vramework/streams
 
-This package is part of @vramework/mono and is responsible for scheduling tasks in vramework.
+This package is part of @vramework/mono, but is currently NOT used.

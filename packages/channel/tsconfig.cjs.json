@@ -2,21 +2,18 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "module": "commonjs",
+    "module": "CommonJS",
     "outDir": "dist/cjs",
     "target": "es2015",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "paths": {
-      "@vramework/core/*": ["../../../core/dist/cjs/*"],
-      "@vramework/channel/*": ["../../../channel/dist/cjs/*"]
+      "@vramework/core/*": ["../core/dist/cjs/*"]
     }
   },
   "references": [
     {
-      "path": "../../../core/tsconfig.cjs.json"
-    },
-    {
-      "path": "../../../channel/tsconfig.cjs.json"
+      "path": "../core/tsconfig.cjs.json"
     }
   ],
   "exclude": ["**/*.test.ts", "node_modules", "dist"]

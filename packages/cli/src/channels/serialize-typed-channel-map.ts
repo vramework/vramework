@@ -1,4 +1,4 @@
-import { ChannelsMeta } from '@vramework/core'
+import { ChannelsMeta } from '@vramework/channel'
 import { ImportMap } from '../inspector/inspector.js'
 import { serializeImportMap } from '../core/serialize-import-map.js'
 

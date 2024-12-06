@@ -26,7 +26,9 @@
     "forceConsistentCasingInFileNames": true, // Ensures case-sensitive imports
     "paths": {
       "@vramework/core": ["./packages/core"],
-      "@vramework/core/*": ["./packages/core/*"]
+      "@vramework/core/*": ["./packages/core/*"],
+      "@vramework/channel": ["./packages/channel"],
+      "@vramework/channel/*": ["./packages/channel/*"],
     }
   },
   "exclude": ["node_modules", ".typedocs"]
