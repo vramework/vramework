@@ -114,20 +114,25 @@ export const addRoute = (
     })
 
     // TODO: Temporary hack since typescript breaks boolean into two types
-    if (outputs && outputs.length === 2 && outputs.includes('true') && outputs.includes('false')) {
+    if (
+      outputs &&
+      outputs.length === 2 &&
+      outputs.includes('true') &&
+      outputs.includes('false')
+    ) {
       outputs = ['boolean']
     }
 
     const input = inputs ? inputs[0] || null : null
     const output = outputs ? outputs[0] || null : null
 
-    if ((inputs && inputs?.length > 1)) {
+    if (inputs && inputs?.length > 1) {
       console.warn(
         `Only one input type is currently allowed for route ${routeValue}: ${inputs}`
       )
     }
 
-    if ((outputs && outputs?.length > 1)) {
+    if (outputs && outputs?.length > 1) {
       console.warn(
         `Only one output type is currently allowed for route ${routeValue}: ${outputs}`
       )

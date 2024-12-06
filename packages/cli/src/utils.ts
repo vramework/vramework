@@ -94,13 +94,19 @@ export const getVrameworkFilesAndMethods = async (
     singletonServicesFactoryType,
     sessionServicesFactoryType,
   }: VrameworkCLIOptions,
-  requires: Partial<{ 
-    config: boolean, 
-    sessionServiceType: boolean,
-    userSessionType: boolean,
-    singletonServicesFactory: boolean,
+  requires: Partial<{
+    config: boolean
+    sessionServiceType: boolean
+    userSessionType: boolean
+    singletonServicesFactory: boolean
     sessionServicesFactory: boolean
-  }> = { config: false, sessionServiceType: false, userSessionType: false, singletonServicesFactory: false, sessionServicesFactory: false },
+  }> = {
+    config: false,
+    sessionServiceType: false,
+    userSessionType: false,
+    singletonServicesFactory: false,
+    sessionServicesFactory: false,
+  }
 ): Promise<FilesAndMethods> => {
   let errors = new Map<string, PathToNameAndType>()
 
@@ -183,14 +189,16 @@ export const logCommandInfoAndTime = async (
   callback: (...args: any[]) => Promise<unknown>
 ): Promise<boolean> => {
   if (skipCondition === true) {
-    console.log(`\x1b[34m• Skipping ${commandStart} since ${skipMessage}.\x1b[0m`)
+    console.log(
+      `\x1b[34m• Skipping ${commandStart} since ${skipMessage}.\x1b[0m`
+    )
     return false
   }
 
   const start = Date.now()
   console.log(`\x1b[34m• ${commandStart}...\x1b[0m`)
   await callback()
-  
+
   console.log(`\x1b[32m✓ ${commandEnd} in ${Date.now() - start}ms.\x1b[0m`)
   return true
 }

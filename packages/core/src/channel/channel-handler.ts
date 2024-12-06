@@ -15,12 +15,13 @@ const validateSchema = (
   data: JSONValue,
   channelName: string,
   routingProperty?: string,
-  routerValue?: string,
+  routerValue?: string
 ) => {
   const { channelsMeta } = getChannels()
   for (const channelMeta of channelsMeta) {
     if (routingProperty && routerValue) {
-      const channelRoute = channelMeta.messageRoutes[routingProperty]?.[routerValue]
+      const channelRoute =
+        channelMeta.messageRoutes[routingProperty]?.[routerValue]
       if (channelRoute) {
         const schemaNames = channelRoute.inputs
         if (schemaNames) {
@@ -33,20 +34,45 @@ const validateSchema = (
   }
 }
 
-const validateAuth = (requiresSession: boolean, channelHandler: VrameworkChannelHandler, onMessage: any) => {
-  const auth = typeof onMessage === 'function' ? requiresSession : onMessage.auth === undefined ? requiresSession : onMessage.auth
+const validateAuth = (
+  requiresSession: boolean,
+  channelHandler: VrameworkChannelHandler,
+  onMessage: any
+) => {
+  const auth =
+    typeof onMessage === 'function'
+      ? requiresSession
+      : onMessage.auth === undefined
+        ? requiresSession
+        : onMessage.auth
   if (auth && !channelHandler.getChannel().session) {
     return false
   }
   return true
 }
 
-const validatePermissions = async (services: CoreServices, channelHandler: VrameworkChannelHandler, onMessage: any, data: unknown) => {
-  const permissions = typeof onMessage === 'function' ? {} : onMessage.permissions
-  return await verifyPermissions(permissions, services, data, channelHandler.getChannel().session)
+const validatePermissions = async (
+  services: CoreServices,
+  channelHandler: VrameworkChannelHandler,
+  onMessage: any,
+  data: unknown
+) => {
+  const permissions =
+    typeof onMessage === 'function' ? {} : onMessage.permissions
+  return await verifyPermissions(
+    permissions,
+    services,
+    data,
+    channelHandler.getChannel().session
+  )
 }
 
-const runFunction = async (services: CoreServices, channelHandler: VrameworkChannelHandler, onMessage: any, data: unknown) => {
+const runFunction = async (
+  services: CoreServices,
+  channelHandler: VrameworkChannelHandler,
+  onMessage: any,
+  data: unknown
+) => {
   const func: any = typeof onMessage === 'function' ? onMessage : onMessage.func
   await func(services, channelHandler.getChannel(), data)
 }
@@ -55,76 +81,90 @@ export const registerMessageHandlers = (
   logger: Logger,
   channelConfig: CoreAPIChannel<any, any>,
   channelHandler: VrameworkChannelHandler<CoreUserSession, unknown>,
-  services: CoreServices,
+  services: CoreServices
 ) => {
   const requiresSession = channelConfig.auth !== false
 
-  channelHandler.registerOnMessage(async (data) => {
-    let processed = false
-    try {
-      let messageData: JSONValue
-      if (typeof data === 'string') {
-        messageData = JSON.parse(data)
-      }
-
-      if (channelConfig.onMessageRoute && messageData) {
-        const routingProperties = Object.keys(channelConfig.onMessageRoute)
-        for (const routingProperty of routingProperties) {
-          const routerValue: string = messageData[routingProperty]
-          if (routerValue) {
-            processed = true
-            const onMessage = channelConfig.onMessageRoute[routingProperty]![routerValue]
-            
-            if (validateAuth(requiresSession, channelHandler, onMessage)) {
-              validateSchema(
-                services.logger,
-                messageData,
-                channelConfig.channel,
-                routingProperty,
-                routerValue,
-              )
-              if (await validatePermissions(services, channelHandler, onMessage, data)) {
-                await runFunction(services, channelHandler, onMessage, data)
-              } else {
-                logger.error(`Channel ${channelConfig.channel} requires permissions for message route ${routingProperty}:${routerValue}`)
-              }
-            } else {
-              logger.error(`Channel ${channelConfig.channel} requires a session for message route ${routingProperty}:${routerValue}`)
-            }
-          }
-        }
-      }
-
-      const onMessage = channelConfig.onMessage
-      if (!processed && onMessage) {
-        if (validateAuth(requiresSession, channelHandler, onMessage)) {
-          processed = true
-          validateSchema(
-            services.logger,
-            messageData,
-            channelConfig.channel,
-          )
-          await runFunction(services, channelHandler, onMessage, data)
-        } else {
-          logger.error(`Channel ${channelConfig.channel} requires a session for default message route`)
-        }
-      }
-    } catch (e) {
-      // TODO: Handle error
+  const processMessage = async (
+    data: JSONValue,
+    onMessage: any,
+    routingProperty?: string,
+    routerValue?: string
+  ): Promise<void> => {
+    if (!validateAuth(requiresSession, channelHandler, onMessage)) {
+      logger.error(
+        `Channel ${channelConfig.channel} requires a session for ${routingProperty || 'default message route'}`
+      )
     }
 
-    const onMessage = channelConfig.onMessage
-    if (!processed && onMessage) {
-      if (validateAuth(requiresSession, channelHandler, onMessage)) {
-        await runFunction(services, channelHandler, onMessage, data)
-      } else {
-        logger.error(`Channel ${channelConfig.channel} requires a session for default message route`)
+    validateSchema(
+      services.logger,
+      data,
+      channelConfig.channel,
+      routingProperty,
+      routerValue
+    )
+
+    const hasPermission = await validatePermissions(
+      services,
+      channelHandler,
+      onMessage,
+      data
+    )
+    if (!hasPermission) {
+      logger.error(
+        `Channel ${channelConfig.channel} requires permissions for ${routingProperty || 'default message route'}`
+      )
+    }
+
+    await runFunction(services, channelHandler, onMessage, data)
+  }
+
+  channelHandler.registerOnMessage(async (rawData) => {
+    let processed = false
+
+    try {
+      // Route-specific handling
+      if (typeof rawData === 'string' && channelConfig.onMessageRoute) {
+        const messageData = JSON.parse(rawData)
+        const entries = Object.entries(channelConfig.onMessageRoute)
+        for (const [routingProperty, routes] of entries) {
+          const routerValue = messageData[routingProperty]
+          if (routerValue && routes[routerValue]) {
+            processed = true
+            await processMessage(
+              messageData,
+              routes[routerValue],
+              routingProperty,
+              routerValue
+            )
+            break
+          }
+        }
+
+        // Default handler if no routes matched but json data was parsed
+        if (!processed && channelConfig.onMessage) {
+          processed = true
+          await processMessage(messageData, channelConfig.onMessage)
+        }
       }
+
+      // Default handler if no routes matched and json data wasn't parsed
+      if (!processed && channelConfig.onMessage) {
+        await processMessage(rawData, channelConfig.onMessage)
+      }
+    } catch (error) {
+      logger.error(
+        `Error processing message in channel ${channelConfig.channel}:`,
+        error
+      )
     }
 
     if (!processed) {
-      // TODO: Do we respond with an error to frontend or fail silently?
-      logger.error('No message handler or default message route found for message:', data)
+      logger.error(
+        `No handler found for message in channel ${channelConfig.channel}:`,
+        rawData
+      )
     }
   })
 }

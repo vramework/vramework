@@ -23,11 +23,12 @@ import { vrameworkWebSocket } from './vramework-websocket.js'
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
 
-
   const imports: string[] = []
   const addImport = (from: string) => {
-    imports.push(`import '${getFileImportRelativePath(cliConfig.bootstrapFile, from, cliConfig.packageMappings)}'`)
- }
+    imports.push(
+      `import '${getFileImportRelativePath(cliConfig.bootstrapFile, from, cliConfig.packageMappings)}'`
+    )
+  }
 
   const cliConfig = await getVrameworkCLIConfig(options.config, [], true)
 
@@ -60,7 +61,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   const scheduled = await vrameworkScheduler(cliConfig, visitState)
   if (scheduled) {
     addImport(cliConfig.schedulersFile)
-}
+  }
 
   const channels = await vrameworkChannels(cliConfig, visitState)
   if (channels) {

@@ -44,7 +44,11 @@ export const vrameworkNext = async (
         packageMappings,
         nextJSfile,
         options,
-        { config: true, singletonServicesFactory: true, sessionServicesFactory: true }
+        {
+          config: true,
+          singletonServicesFactory: true,
+          sessionServicesFactory: true,
+        }
       )
 
       const vrameworkConfigImport = `import { ${vrameworkConfigFactory.variable} as createConfig } from '${getFileImportRelativePath(nextJSfile, vrameworkConfigFactory.file, packageMappings)}'`

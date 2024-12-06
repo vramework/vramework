@@ -127,8 +127,15 @@ export const getFunctionTypes = (
     inputIndex,
     outputIndex,
     inputTypeSet,
-    outputTypeSet
-  }: { subFunctionName?: string, funcName: string; inputIndex: number; outputIndex: number, inputTypeSet: Set<string>, outputTypeSet: Set<string> }
+    outputTypeSet,
+  }: {
+    subFunctionName?: string
+    funcName: string
+    inputIndex: number
+    outputIndex: number
+    inputTypeSet: Set<string>
+    outputTypeSet: Set<string>
+  }
 ): FunctionTypes => {
   const result: FunctionTypes = {
     inputTypes: [],
@@ -160,7 +167,7 @@ export const getFunctionTypes = (
         inputIndex,
         outputIndex,
         inputTypeSet,
-        outputTypeSet
+        outputTypeSet,
       })
     }
 
@@ -178,16 +185,18 @@ export const getFunctionTypes = (
   const typeArguments = getTypeArgumentsOfType(checker, type)
 
   if (!typeArguments || typeArguments.length === 0) {
-    // This is the case for inline functions. In this case we would want to 
+    // This is the case for inline functions. In this case we would want to
     // get the types from the second argument of the function...
-    console.error(`No generic type arguments found for ${funcName}. Support for inline functions is not yet implemented.`)
+    console.error(
+      `No generic type arguments found for ${funcName}. Support for inline functions is not yet implemented.`
+    )
     return result
   }
 
   if (inputIndex !== undefined && inputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[inputIndex]!)
     result.inputs = types.names
-    result.inputs.forEach(input => inputTypeSet.add(input))
+    result.inputs.forEach((input) => inputTypeSet.add(input))
     result.inputTypes = types.types
   } else {
     console.error(`Input index ${inputIndex} is out of bounds`)
@@ -196,9 +205,9 @@ export const getFunctionTypes = (
   if (outputIndex !== undefined && outputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[outputIndex]!)
     result.outputs = types.names
-    result.outputs.forEach(input => outputTypeSet.add(input))
+    result.outputs.forEach((input) => outputTypeSet.add(input))
     result.outputTypes = types.types
-  } 
+  }
   // else {
   //   console.debug(
   //     `Output index ${outputIndex} is out of bounds for ${funcName}`

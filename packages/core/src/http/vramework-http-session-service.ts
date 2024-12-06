@@ -114,7 +114,9 @@ export class VrameworkHTTPSessionService<UserSession>
     }
 
     if (!userSession && this.options.getSessionForQueryValue) {
-      userSession = await this.options.getSessionForQueryValue(request.getQuery())
+      userSession = await this.options.getSessionForQueryValue(
+        request.getQuery()
+      )
     }
 
     if (!userSession && credentialsRequired) {

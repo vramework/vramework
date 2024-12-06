@@ -11,7 +11,10 @@ import {
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeSchedulerMeta, serializeSchedulers } from '../src/scheduler/serialize-schedulers.js'
+import {
+  serializeSchedulerMeta,
+  serializeSchedulers,
+} from '../src/scheduler/serialize-schedulers.js'
 
 export const vrameworkScheduler = async (
   cliConfig: VrameworkCLIConfig,

@@ -1,5 +1,5 @@
 export const serializeWebsocketWrapper = (channelsMapPath: string) => {
-    return `import { CoreVrameworkWebsocket, CoreVrameworkRouteHandler } from '@vramework/websocket'
+  return `import { CoreVrameworkWebsocket, CoreVrameworkRouteHandler } from '@vramework/websocket'
 import { ChannelDefaultHandlerOf, ChannelRouteHandlerOf, ChannelsMap } from '${channelsMapPath}';
 
 class VrameworkWebSocketRoute<Channel extends keyof ChannelsMap, Route extends keyof ChannelsMap[Channel]['routes']> extends CoreVrameworkRouteHandler {
@@ -58,5 +58,4 @@ export class VrameworkWebSocket<Channel extends keyof ChannelsMap, Data = Channe
     }
 }
   `
-  }
-  
+}

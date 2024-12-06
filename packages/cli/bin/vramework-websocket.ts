@@ -20,7 +20,10 @@ export const vrameworkWebSocket = async ({
   await logCommandInfoAndTime(
     'Generating websocket wrapper',
     'Generated websocket wrapper',
-    [websocketFile === undefined, 'websocketFile is required in vramework config'],
+    [
+      websocketFile === undefined,
+      'websocketFile is required in vramework config',
+    ],
     async () => {
       if (!websocketFile) {
         throw new Error('fetchFile is required in vramework config')

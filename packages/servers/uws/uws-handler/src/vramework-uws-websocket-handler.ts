@@ -20,7 +20,7 @@ const isSerializable = (data: any): boolean => {
     data instanceof Int32Array ||
     data instanceof Float32Array ||
     data instanceof Float64Array
-  );
+  )
 }
 
 /**
@@ -95,12 +95,12 @@ export const vrameworkWebsocketHandler = ({
     },
     open: (ws) => {
       const { channelHandler } = ws.getUserData()
-      channelHandler.registerOnSend(data => {
-          if (isSerializable(data)) {
-            ws.send(JSON.stringify(data))
-          } else {
-            ws.send(data as any)
-          }
+      channelHandler.registerOnSend((data) => {
+        if (isSerializable(data)) {
+          ws.send(JSON.stringify(data))
+        } else {
+          ws.send(data as any)
+        }
       })
       channelHandler.open()
     },

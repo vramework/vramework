@@ -5,8 +5,6 @@
  * @module @vramework/ws
  */
 
-export {
-  CoreVrameworkWebsocket
-} from './core-vramework-websocket.js'
+export { CoreVrameworkWebsocket } from './core-vramework-websocket.js'
 
 export { CoreVrameworkRouteHandler } from './core-vramework-route-handler.js'

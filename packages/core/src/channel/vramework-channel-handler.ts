@@ -1,4 +1,4 @@
-import { CoreUserSession } from "../types/core.types.js"
+import { CoreUserSession } from '../types/core.types.js'
 
 export interface VrameworkChannel<Session, OpeningData, In, Out> {
   session?: Session
@@ -19,16 +19,33 @@ export class VrameworkChannelHandler<
   private openCallBack?: () => void
   private closeCallback?: () => void
   private sendCallback?: (message: Out) => void
-  private channel?: { session: UserSession; openingData: OpeningData; setSession: (session: UserSession) => void; send: (message: Out) => void; close: () => void; data: undefined }
+  private channel?: {
+    session: UserSession
+    openingData: OpeningData
+    setSession: (session: UserSession) => void
+    send: (message: Out) => void
+    close: () => void
+    data: undefined
+  }
 
-  constructor(private openingData: OpeningData, private updateSession: (session: UserSession) => void) { }
+  constructor(
+    private openingData: OpeningData,
+    private updateSession: (session: UserSession) => void
+  ) {}
 
-  public getChannelWithData<In>(data: In): VrameworkChannel<UserSession, OpeningData, In, Out> {
+  public getChannelWithData<In>(
+    data: In
+  ): VrameworkChannel<UserSession, OpeningData, In, Out> {
     const channel = this.getChannel()
     return { ...channel, data }
   }
 
-  public getChannel(): VrameworkChannel<UserSession, OpeningData, undefined, Out> {
+  public getChannel(): VrameworkChannel<
+    UserSession,
+    OpeningData,
+    undefined,
+    Out
+  > {
     if (!this.channel) {
       this.channel = {
         session: this.userSession!,

@@ -53,7 +53,7 @@ const addMessagesRoutes = (
               inputIndex: 0,
               outputIndex: 1,
               inputTypeSet,
-              outputTypeSet
+              outputTypeSet,
             })
             const inputs = result?.inputs || null
             const outputs = result?.outputs || null
@@ -128,10 +128,15 @@ export const addChannel = (
       inputIndex: 0,
       outputIndex: 1,
       inputTypeSet: state.channels.inputTypes,
-      outputTypeSet: state.channels.outputTypes
+      outputTypeSet: state.channels.outputTypes,
     })
     const message = { inputs, outputs }
-    const messageRoutes = addMessagesRoutes(obj, checker, state.channels.inputTypes, state.channels.outputTypes)
+    const messageRoutes = addMessagesRoutes(
+      obj,
+      checker,
+      state.channels.inputTypes,
+      state.channels.outputTypes
+    )
 
     if (!channelValue) {
       return

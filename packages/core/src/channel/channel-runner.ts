@@ -119,7 +119,7 @@ export const runChannel = async ({
 
     let session = await loadUserSession(
       skipUserSession,
-      // We may require a session, but we don't actually need it 
+      // We may require a session, but we don't actually need it
       // on connect since channels can authenticate later given
       // how websocket sessions work (cookie or queryParam based)
       false,
@@ -133,7 +133,10 @@ export const runChannel = async ({
     const data = await request.getData()
     validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
 
-    const channelHandler = new VrameworkChannelHandler(data, (newSession) => session = newSession)
+    const channelHandler = new VrameworkChannelHandler(
+      data,
+      (newSession) => (session = newSession)
+    )
     const channel = channelHandler.getChannel()
 
     sessionServices = await createSessionServices(
@@ -154,7 +157,12 @@ export const runChannel = async ({
       channelConfig.onConnect?.(allServices, channel)
     })
 
-    registerMessageHandlers(singletonServices.logger, channelConfig, channelHandler, allServices)
+    registerMessageHandlers(
+      singletonServices.logger,
+      channelConfig,
+      channelHandler,
+      allServices
+    )
 
     channelHandler.registerOnClose(async () => {
       channelConfig.onDisconnect?.(allServices, channel)

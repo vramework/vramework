@@ -1,14 +1,14 @@
-import { CoreVrameworkRouteHandler } from "./core-vramework-route-handler.js";
+import { CoreVrameworkRouteHandler } from './core-vramework-route-handler.js'
 
-let WebSocketClass: typeof WebSocket;
+let WebSocketClass: typeof WebSocket
 
 if (typeof WebSocket !== 'undefined') {
-  WebSocketClass = WebSocket;
+  WebSocketClass = WebSocket
 } else {
   try {
     WebSocketClass = require('ws')
   } catch (e) {
-    console.error("WebSocket not supported and `ws` library is not available.");
+    console.error('WebSocket not supported and `ws` library is not available.')
     process.exit(1)
   }
 }
@@ -20,7 +20,7 @@ if (typeof WebSocket !== 'undefined') {
  */
 export class CoreVrameworkWebsocket {
   public ws: WebSocket
-  
+
   private routes = new Map<string, CoreVrameworkRouteHandler>()
   private subscriptions = new Set<(data: unknown) => void>()
 
@@ -36,7 +36,10 @@ export class CoreVrameworkWebsocket {
     const route2 = route.toString()
     let routeHandler = this.routes.get(route2)
     if (!routeHandler) {
-      routeHandler = new CoreVrameworkRouteHandler(route2, this.ws.send.bind(this.ws))
+      routeHandler = new CoreVrameworkRouteHandler(
+        route2,
+        this.ws.send.bind(this.ws)
+      )
       this.routes.set(route2, routeHandler)
     }
     return routeHandler

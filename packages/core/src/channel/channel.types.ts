@@ -32,7 +32,7 @@ export type RunChannelParams<ChannelData> = {
   >
 }
 
-export interface HandlerMeta { }
+export interface HandlerMeta {}
 
 export interface ChannelMeta {
   channel: string
@@ -115,17 +115,23 @@ export type CoreAPIChannel<
   channel: string
   onConnect?: ChannelFunctionConnection
   onDisconnect?: ChannelFunctionDisconnection
-  onMessage?: { func: ChannelFunctionMessage; permissions?: Record<string, APIPermission[] | APIPermission>, auth?: boolean } | ChannelFunctionMessage
+  onMessage?:
+    | {
+        func: ChannelFunctionMessage
+        permissions?: Record<string, APIPermission[] | APIPermission>
+        auth?: boolean
+      }
+    | ChannelFunctionMessage
   onMessageRoute?: Record<
     string,
     Record<
       string,
       | ChannelFunctionMessage
       | {
-        func: ChannelFunctionMessage
-        permissions?: Record<string, APIPermission[] | APIPermission>
-        auth?: boolean
-      }
+          func: ChannelFunctionMessage
+          permissions?: Record<string, APIPermission[] | APIPermission>
+          auth?: boolean
+        }
     >
   >
   permissions?: Record<string, APIPermission[] | APIPermission>

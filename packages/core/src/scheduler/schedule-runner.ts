@@ -39,7 +39,9 @@ export const clearScheduledTasks = () => {
   scheduledTasks.clear()
 }
 
-export const setScheduledTasksMeta = (_scheduledTasksMeta: ScheduledTasksMeta) => {
+export const setScheduledTasksMeta = (
+  _scheduledTasksMeta: ScheduledTasksMeta
+) => {
   scheduledTasksMeta = _scheduledTasksMeta
 }
 
