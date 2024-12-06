@@ -32,6 +32,14 @@ const validateSchema = (
   }
 }
 
+const validateAuth = (requiresSession: boolean, channelHandler: VrameworkChannelHandler, onMessage: any) => {
+  const auth = typeof onMessage === 'function' ? requiresSession : onMessage.auth === undefined ? requiresSession : onMessage.auth
+  if (auth && !channelHandler.getChannel().session) {
+    return false
+  }
+  return true
+}
+
 const runFunction = async (services: CoreServices, channelHandler: VrameworkChannelHandler, onMessage: any, data: unknown) => {
   const func: any = typeof onMessage === 'function' ? onMessage : onMessage.func
   await func(services, channelHandler.getChannel(), data)
@@ -43,6 +51,8 @@ export const registerMessageHandlers = (
   channelHandler: VrameworkChannelHandler<CoreUserSession, unknown>,
   services: CoreServices,
 ) => {
+  const requiresSession = channelConfig.auth !== false
+
   channelHandler.registerOnMessage(async (data) => {
     let processed = false
     try {
@@ -57,32 +67,36 @@ export const registerMessageHandlers = (
           const routerValue: string = messageData[routingProperty]
           if (routerValue) {
             processed = true
-            validateSchema(
-              services.logger,
-              messageData,
-              channelConfig.channel,
-              routingProperty,
-              routerValue,
-            )
-            await runFunction(
-              services,
-              channelHandler,
-              channelConfig.onMessageRoute[routingProperty]![routerValue],
-              messageData
-            )
+            const onMessage = channelConfig.onMessageRoute[routingProperty]![routerValue]
+            if (validateAuth(requiresSession, channelHandler, onMessage)) {
+              validateSchema(
+                services.logger,
+                messageData,
+                channelConfig.channel,
+                routingProperty,
+                routerValue,
+              )
+              await runFunction(services, channelHandler, onMessage, data)
+            } else {
+              logger.error(`Channel ${channelConfig.channel} requires a session for message route ${routingProperty}:${routerValue}`)
+            }
           }
         }
       }
 
       const onMessage = channelConfig.onMessage
       if (!processed && onMessage) {
-        processed = true
-        validateSchema(
-          services.logger,
-          messageData,
-          channelConfig.channel,
-        )
-        await runFunction(services, channelHandler, onMessage, messageData)
+        if (validateAuth(requiresSession, channelHandler, onMessage)) {
+          processed = true
+          validateSchema(
+            services.logger,
+            messageData,
+            channelConfig.channel,
+          )
+          await runFunction(services, channelHandler, onMessage, data)
+        } else {
+          logger.error(`Channel ${channelConfig.channel} requires a session for default message route`)
+        }
       }
     } catch (e) {
       // TODO: Handle error
@@ -90,7 +104,11 @@ export const registerMessageHandlers = (
 
     const onMessage = channelConfig.onMessage
     if (!processed && onMessage) {
-      await runFunction(services, channelHandler, onMessage, data)
+      if (validateAuth(requiresSession, channelHandler, onMessage)) {
+        await runFunction(services, channelHandler, onMessage, data)
+      } else {
+        logger.error(`Channel ${channelConfig.channel} requires a session for default message route`)
+      }
     }
 
     if (!processed) {

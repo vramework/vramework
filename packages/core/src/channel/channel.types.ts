@@ -115,7 +115,7 @@ export type CoreAPIChannel<
   channel: string
   onConnect?: ChannelFunctionConnection
   onDisconnect?: ChannelFunctionDisconnection
-  onMessage?: { func: ChannelFunctionMessage; permissions?: undefined }
+  onMessage?: { func: ChannelFunctionMessage; permissions?: Record<string, APIPermission[] | APIPermission>, auth?: boolean } | ChannelFunctionMessage
   onMessageRoute?: Record<
     string,
     Record<
@@ -124,6 +124,7 @@ export type CoreAPIChannel<
       | {
         func: ChannelFunctionMessage
         permissions?: Record<string, APIPermission[] | APIPermission>
+        auth?: boolean
       }
     >
   >

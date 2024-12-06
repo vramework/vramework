@@ -27,6 +27,7 @@ export class VrameworkHTTPSessionService<UserSession>
         cookieValue: string,
         cookieName: string
       ) => Promise<UserSession>
+      getSessionForQueryValue?: (queryValue: unknown) => Promise<UserSession>
       getSessionForAPIKey?: (apiKey: string) => Promise<UserSession>
       transformSession?: (session: any) => Promise<UserSession>
     }
@@ -110,6 +111,10 @@ export class VrameworkHTTPSessionService<UserSession>
 
     if (!userSession && this.options.getSessionForCookieValue) {
       userSession = await this.getCookieSession(request)
+    }
+
+    if (!userSession && this.options.getSessionForQueryValue) {
+      userSession = await this.options.getSessionForQueryValue(request.getQuery())
     }
 
     if (!userSession && credentialsRequired) {

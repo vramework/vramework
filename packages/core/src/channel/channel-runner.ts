@@ -119,8 +119,9 @@ export const runChannel = async ({
 
     let session = await loadUserSession(
       skipUserSession,
-      // We say we require a session, but we don't actually need it 
-      // on connect since channels can authenticate later
+      // We may require a session, but we don't actually need it 
+      // on connect since channels can authenticate later given
+      // how websocket sessions work (cookie or queryParam based)
       false,
       http,
       matchedPath,
