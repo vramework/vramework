@@ -17,7 +17,7 @@ import { match } from 'path-to-regexp'
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkHTTPResponse } from './vramework-http-response.js'
 import { Logger, SessionService } from '../services/index.js'
-import { NotFoundError, NotImplementedError } from '../errors.js'
+import { ForbiddenError, NotFoundError, NotImplementedError } from '../errors.js'
 import * as cryptoImp from 'crypto'
 import { closeServices, validateAndCoerce } from '../utils.js'
 import { CoreAPIChannel } from '../channel/channel.types.js'
@@ -278,7 +278,10 @@ export const runRoute = async <In, Out>({
     )
     const allServices = { ...singletonServices, ...sessionServices }
 
-    await verifyPermissions(route.permissions, allServices, data, session)
+    const permissioned = await verifyPermissions(route.permissions, allServices, data, session)
+    if (permissioned === false) {
+      throw new ForbiddenError('Permission denied')
+    }
 
     const result: any = (await route.func(
       allServices,

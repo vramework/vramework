@@ -1,4 +1,3 @@
-import { ForbiddenError } from './errors.js'
 import { CoreServices, CoreUserSession } from './types/core.types.js'
 import { CoreAPIPermission } from './types/functions.types.js'
 
@@ -16,15 +15,15 @@ export const verifyPermissions = async (
   services: CoreServices,
   data: any,
   session?: CoreUserSession
-): Promise<void> => {
+): Promise<boolean> => {
   if (!permissions) {
-    return
+    return true
   }
 
   let valid = false
   const permissionGroups = Object.values(permissions)
   if (permissionGroups.length === 0) {
-    return
+    return true
   }
 
   for (const funcs of permissionGroups) {
@@ -39,9 +38,8 @@ export const verifyPermissions = async (
       valid = await funcs(services, data, session)
     }
     if (valid) {
-      return
+      return true
     }
   }
-
-  throw new ForbiddenError()
+  return false
 }

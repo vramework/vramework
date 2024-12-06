@@ -8,6 +8,7 @@ import { CoreAPIChannel } from './channel.types.js'
 import { getChannels } from './channel-runner.js'
 import { VrameworkChannelHandler } from './vramework-channel-handler.js'
 import { Logger } from '../services/logger.js'
+import { verifyPermissions } from '../permissions.js'
 
 const validateSchema = (
   logger: CoreSingletonServices['logger'],
@@ -40,6 +41,11 @@ const validateAuth = (requiresSession: boolean, channelHandler: VrameworkChannel
   return true
 }
 
+const validatePermissions = async (services: CoreServices, channelHandler: VrameworkChannelHandler, onMessage: any, data: unknown) => {
+  const permissions = typeof onMessage === 'function' ? {} : onMessage.permissions
+  return await verifyPermissions(permissions, services, data, channelHandler.getChannel().session)
+}
+
 const runFunction = async (services: CoreServices, channelHandler: VrameworkChannelHandler, onMessage: any, data: unknown) => {
   const func: any = typeof onMessage === 'function' ? onMessage : onMessage.func
   await func(services, channelHandler.getChannel(), data)
@@ -68,6 +74,7 @@ export const registerMessageHandlers = (
           if (routerValue) {
             processed = true
             const onMessage = channelConfig.onMessageRoute[routingProperty]![routerValue]
+            
             if (validateAuth(requiresSession, channelHandler, onMessage)) {
               validateSchema(
                 services.logger,
@@ -76,7 +83,11 @@ export const registerMessageHandlers = (
                 routingProperty,
                 routerValue,
               )
-              await runFunction(services, channelHandler, onMessage, data)
+              if (await validatePermissions(services, channelHandler, onMessage, data)) {
+                await runFunction(services, channelHandler, onMessage, data)
+              } else {
+                logger.error(`Channel ${channelConfig.channel} requires permissions for message route ${routingProperty}:${routerValue}`)
+              }
             } else {
               logger.error(`Channel ${channelConfig.channel} requires a session for message route ${routingProperty}:${routerValue}`)
             }
