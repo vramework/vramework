@@ -1,10 +1,9 @@
 import {
   CoreSingletonServices,
   CreateSessionServices,
-  runRoute,
-  RunRouteOptions,
   loadAllSchemas,
 } from '@vramework/core'
+import { runRoute, RunRouteOptions } from '@vramework/core/http'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 import { VrameworkFastifyRequest } from './vramework-fastify-request.js'

@@ -1,6 +1,7 @@
 import '@vramework/core/errors'
 
-import { RoutesMeta, getErrorResponseForConstructorName } from '@vramework/core'
+import { getErrorResponseForConstructorName } from '@vramework/core'
+import { RoutesMeta } from '@vramework/core/http'
 import _convertSchema from '@openapi-contrib/json-schema-to-openapi-schema'
 const convertSchema =
   'default' in _convertSchema ? (_convertSchema.default as any) : _convertSchema

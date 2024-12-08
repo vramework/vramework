@@ -1,4 +1,4 @@
-import { RoutesMeta } from '@vramework/core'
+import { RoutesMeta } from '@vramework/core/http'
 import { ImportMap } from '../inspector/inspector.js'
 import { serializeImportMap } from '../core/serialize-import-map.js'
 

@@ -1,4 +1,4 @@
-import { ScheduledTasksMeta } from '@vramework/core'
+import { ScheduledTasksMeta } from '@vramework/core/scheduler'
 import { getFileImportRelativePath } from '../utils.js'
 
 export const serializeSchedulers = (

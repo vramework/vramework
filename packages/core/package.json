@@ -22,6 +22,22 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
+    "./channel": {
+      "import": "./dist/esm/channel/index.js",
+      "require": "./dist/cjs/channel/index.js"
+    },
+    "./scheduler": {
+      "import": "./dist/esm/scheduler/index.js",
+      "require": "./dist/cjs/scheduler/index.js"
+    },
+    "./http": {
+      "import": "./dist/esm/http/index.js",
+      "require": "./dist/cjs/http/index.js"
+    },
+    "./services": {
+      "import": "./dist/esm/services/index.js",
+      "require": "./dist/cjs/services/index.js"
+    },
     "./*": {
       "import": "./dist/esm/*.js",
       "require": "./dist/cjs/*.js"

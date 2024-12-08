@@ -1,5 +1,5 @@
 import { InvocationContext } from '@azure/functions'
-import { Logger, LogLevel } from '@vramework/core'
+import { Logger, LogLevel } from '@vramework/core/services'
 
 export class AzInvocationLogger implements Logger {
   // private logLevel: LogLevel = LogLevel.info

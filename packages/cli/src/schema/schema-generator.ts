@@ -1,7 +1,8 @@
 import { createGenerator, RootlessError } from 'ts-json-schema-generator'
 import { writeFileInDir } from '../utils.js'
 import { mkdir, writeFile } from 'fs/promises'
-import { JSONValue, RoutesMeta } from '@vramework/core'
+import { JSONValue } from '@vramework/core'
+import { RoutesMeta } from '@vramework/core/http'
 
 export async function generateSchemas(
   tsconfig: string,

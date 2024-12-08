@@ -1,7 +1,7 @@
 import pinoImp from 'pino'
 const pino = 'default' in pinoImp ? pinoImp.default : (pinoImp as any)
 
-import { Logger, LogLevel } from '@vramework/core'
+import { Logger, LogLevel } from '@vramework/core/services'
 
 export class PinoLogger implements Logger {
   public pino: pinoImp.Logger

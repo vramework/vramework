@@ -5,7 +5,7 @@ import { pathToRegexp } from 'path-to-regexp'
 import { APIDocs } from '@vramework/core/types/core.types'
 import { getInputTypes } from './add-route.js'
 import { getPropertyAssignment, getFunctionTypes } from './utils.js'
-import { ChannelMeta } from '@vramework/core'
+import { ChannelMeta } from '@vramework/core/channel'
 
 const addMessagesRoutes = (
   obj: ts.ObjectLiteralExpression,

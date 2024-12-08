@@ -1,14 +1,16 @@
 import { CronJob } from 'cron'
 import {
   CoreAPIFunctionSessionless,
-  CoreScheduledTask,
   CoreServices,
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
+} from '@vramework/core'
+import {
   getScheduledTasks,
   runScheduledTask,
-} from '@vramework/core'
+  CoreScheduledTask,
+} from '@vramework/core/scheduler'
 
 export class VrameworkTaskScheduler<
   SingletonServices extends CoreSingletonServices,
