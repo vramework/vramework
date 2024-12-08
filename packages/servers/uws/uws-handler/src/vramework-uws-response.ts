@@ -1,9 +1,9 @@
 import { HttpResponse } from 'uWebSockets.js'
 import * as cookie from 'cookie'
-import { VrameworkHTTPResponse } from '@vramework/core/http/vramework-http-response'
+import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
 import { JSONValue } from '@vramework/core/types/core.types'
 
-export class VrameworkUWSResponse extends VrameworkHTTPResponse {
+export class VrameworkUWSResponse extends VrameworkHTTPAbstractResponse {
   private aborted = false
 
   constructor(private uwsResponse: HttpResponse) {

@@ -8,9 +8,9 @@ import { runHTTPRoute } from '@vramework/core/http'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
-import { logRoutes as logRegisterRoutes } from '@vramework/core/http/log-routes'
+import { logRoutes as logRegisterRoutes } from '@vramework/core/http/log-http-routes'
 import { loadAllSchemas } from '@vramework/core/schema'
-import { RunRouteOptions } from '@vramework/core/http/routes.types'
+import { RunRouteOptions } from '@vramework/core/http/http-routes.types'
 
 /**
  * Options for configuring the `vrameworkHandler`.

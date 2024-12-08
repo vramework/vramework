@@ -1,9 +1,9 @@
 import { HttpRequest, HttpResponse } from 'uWebSockets.js'
 import * as cookie from 'cookie'
 import * as querystring from 'qs'
-import { VrameworkHTTPRequest } from '@vramework/core/http/vramework-http-request'
+import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 
-export class VrameworkUWSRequest extends VrameworkHTTPRequest {
+export class VrameworkUWSRequest extends VrameworkHTTPAbstractRequest {
   constructor(
     private request: HttpRequest,
     private response: HttpResponse

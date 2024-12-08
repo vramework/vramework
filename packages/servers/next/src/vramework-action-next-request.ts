@@ -1,11 +1,11 @@
-import { VrameworkHTTPRequest } from '@vramework/core/http/vramework-http-request'
+import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 import { cookies, headers } from 'next/headers.js'
 
 /**
- * The `VrameworkActionNextRequest` class is an extension of the `VrameworkHTTPRequest` class,
+ * The `VrameworkActionNextRequest` class is an extension of the `VrameworkHTTPAbstractRequest` class,
  * specifically designed for handling action requests in a Next.js environment.
  */
-export class VrameworkActionNextRequest<In> extends VrameworkHTTPRequest<In> {
+export class VrameworkActionNextRequest<In> extends VrameworkHTTPAbstractRequest<In> {
   private body: any
 
   /**

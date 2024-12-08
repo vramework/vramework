@@ -1,7 +1,7 @@
-import { VrameworkHTTPRequest } from '@vramework/core/http/vramework-http-request'
+import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 
-export class VrameworkAPIGatewayLambdaRequest extends VrameworkHTTPRequest {
+export class VrameworkAPIGatewayLambdaRequest extends VrameworkHTTPAbstractRequest {
   constructor(protected event: APIGatewayProxyEvent) {
     super()
   }

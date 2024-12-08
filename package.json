@@ -18,6 +18,7 @@
       "packages/servers/express/*",
       "packages/servers/fastify/*",
       "packages/servers/uws/*",
+      "packages/servers/ws/*",
       "packages/cloud/aws/*",
       "packages/cloud/azure/*"
     ]

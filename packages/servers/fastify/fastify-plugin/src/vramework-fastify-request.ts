@@ -1,8 +1,8 @@
-import { VrameworkHTTPRequest } from '@vramework/core/http/vramework-http-request'
+import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 import * as cookie from 'cookie'
 import { FastifyRequest } from 'fastify'
 
-export class VrameworkFastifyRequest extends VrameworkHTTPRequest {
+export class VrameworkFastifyRequest extends VrameworkHTTPAbstractRequest {
   constructor(private request: FastifyRequest) {
     super()
   }

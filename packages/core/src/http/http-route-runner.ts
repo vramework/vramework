@@ -14,8 +14,8 @@ import {
   VrameworkHTTP,
 } from '../types/core.types.js'
 import { match } from 'path-to-regexp'
-import { VrameworkHTTPRequest } from './vramework-http-request.js'
-import { VrameworkHTTPResponse } from './vramework-http-response.js'
+import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
+import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
 import { Logger, SessionService } from '../services/index.js'
 import {
   ForbiddenError,
@@ -109,7 +109,7 @@ const getMatchingRoute = (
 export const getUserSession = async <UserSession extends CoreUserSession>(
   sessionService: SessionService<UserSession> | undefined,
   auth: boolean,
-  request: VrameworkHTTPRequest
+  request: VrameworkHTTPAbstractRequest
 ): Promise<CoreUserSession | undefined> => {
   if (sessionService) {
     return (await sessionService.getUserSession(auth, request)) as UserSession
@@ -169,14 +169,14 @@ export const createHTTPInteraction = (
 ) => {
   let http: VrameworkHTTP | undefined = undefined
   if (
-    request instanceof VrameworkHTTPRequest ||
-    response instanceof VrameworkHTTPResponse
+    request instanceof VrameworkHTTPAbstractRequest ||
+    response instanceof VrameworkHTTPAbstractResponse
   ) {
     http = {}
-    if (request instanceof VrameworkHTTPRequest) {
+    if (request instanceof VrameworkHTTPAbstractRequest) {
       http.request = request
     }
-    if (response instanceof VrameworkHTTPResponse) {
+    if (response instanceof VrameworkHTTPAbstractResponse) {
       http.response = response
     }
   }

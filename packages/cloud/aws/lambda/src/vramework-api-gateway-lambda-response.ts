@@ -1,8 +1,8 @@
 import { JSONValue } from '@vramework/core/types/core.types'
-import { VrameworkHTTPResponse } from '@vramework/core/http/vramework-http-response'
+import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
 import { APIGatewayProxyResult } from 'aws-lambda'
 
-export class VrameworkAPIGatewayLambdaResponse extends VrameworkHTTPResponse {
+export class VrameworkAPIGatewayLambdaResponse extends VrameworkHTTPAbstractResponse {
   public headers: Record<string, string> = {}
   private status: number = 200
   private body: any

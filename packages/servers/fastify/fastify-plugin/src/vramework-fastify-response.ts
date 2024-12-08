@@ -1,9 +1,9 @@
 import { JSONValue } from '@vramework/core/types/core.types'
-import { VrameworkHTTPResponse } from '@vramework/core/http/vramework-http-response'
+import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
 import * as cookie from 'cookie'
 import { FastifyReply } from 'fastify'
 
-export class VrameworkFastifyResponse extends VrameworkHTTPResponse {
+export class VrameworkFastifyResponse extends VrameworkHTTPAbstractResponse {
   constructor(protected response: FastifyReply) {
     super()
   }

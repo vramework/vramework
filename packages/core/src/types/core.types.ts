@@ -1,7 +1,7 @@
-import { Logger, LogLevel } from '../services/logger.ts'
-import { PermissionService, SessionService } from '../services/index.ts'
-import { VrameworkHTTPRequest } from '../http/vramework-http-request.ts'
-import { VrameworkHTTPResponse } from '../http/vramework-http-response.ts'
+import { Logger, LogLevel } from '../services/logger.js'
+import { PermissionService, SessionService } from '../services/index.js'
+import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
+import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.
@@ -78,8 +78,8 @@ export interface CoreSingletonServices {
  * Represents a http interaction within Vramework, including a request and response.
  */
 export interface VrameworkHTTP {
-  request?: VrameworkHTTPRequest
-  response?: VrameworkHTTPResponse
+  request?: VrameworkHTTPAbstractRequest
+  response?: VrameworkHTTPAbstractResponse
 }
 
 /**

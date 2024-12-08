@@ -13,8 +13,8 @@ import {
 } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
-import { VrameworkHTTPRequest } from './vramework-http-request.js'
-import { VrameworkHTTPResponse } from './vramework-http-response.js'
+import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
+import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
@@ -37,8 +37,8 @@ export type RunRouteOptions = Partial<{
 
 export type RunRouteParams<In> = {
   singletonServices: CoreSingletonServices
-  request: VrameworkRequest<In> | VrameworkHTTPRequest<In>
-  response?: VrameworkResponse | VrameworkHTTPResponse | undefined
+  request: VrameworkRequest<In> | VrameworkHTTPAbstractRequest<In>
+  response?: VrameworkResponse | VrameworkHTTPAbstractResponse | undefined
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,

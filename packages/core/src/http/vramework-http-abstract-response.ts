@@ -6,7 +6,7 @@ import { VrameworkResponse } from '../vramework-response.js'
  * Abstract class representing a vramework response.
  * @group RequestResponse
  */
-export abstract class VrameworkHTTPResponse extends VrameworkResponse {
+export abstract class VrameworkHTTPAbstractResponse extends VrameworkResponse {
   /**
    * Sets the HTTP status code for the response.
    * @param status - The HTTP status code to set.

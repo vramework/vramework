@@ -3,7 +3,7 @@ import { runHTTPRoute, RunRouteOptions } from '@vramework/core/http'
 import { RequestHandler } from 'express'
 import { VrameworkExpressRequest } from './vramework-express-request.js'
 import { VrameworkExpressResponse } from './vramework-express-response.js'
-import { logRoutes as logRegisterRoutes } from '@vramework/core/http/log-routes'
+import { logRoutes as logRegisterRoutes } from '@vramework/core/http/log-http-routes'
 import { loadAllSchemas } from '@vramework/core/schema'
 
 /**

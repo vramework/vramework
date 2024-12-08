@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
-import { HTTPMethod } from '@vramework/core/http/routes.types'
+import { HTTPMethod } from '@vramework/core/http/http-routes.types'
 import { APIDocs } from '@vramework/core/types/core.types'
 import { extractTypeKeys, getFunctionTypes } from './utils.js'
 

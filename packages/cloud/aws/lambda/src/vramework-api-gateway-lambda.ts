@@ -7,7 +7,7 @@ import {
   CoreUserSession,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
-import { CoreHTTPFunctionRoutes, HTTPFunctionsMeta } from '@vramework/core/http/routes.types'
+import { CoreHTTPFunctionRoutes, HTTPFunctionsMeta } from '@vramework/core/http/http-routes.types'
 import { runHTTPRoute } from '@vramework/core/http'
 import { Logger } from '@vramework/core/services/logger'
 import { VrameworkAPIGatewayLambdaRequest } from './vramework-api-gateway-lambda-request.js'

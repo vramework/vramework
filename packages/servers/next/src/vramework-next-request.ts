@@ -1,11 +1,11 @@
-import { VrameworkHTTPRequest } from '@vramework/core/http/vramework-http-request'
+import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 import { NextRequest } from 'next/server.js'
 
 /**
- * The `VrameworkNextRequest` class is an extension of the `VrameworkHTTPRequest` class,
+ * The `VrameworkNextRequest` class is an extension of the `VrameworkHTTPAbstractRequest` class,
  * specifically designed for handling requests in a Next.js server environment.
  */
-export class VrameworkNextRequest extends VrameworkHTTPRequest {
+export class VrameworkNextRequest extends VrameworkHTTPAbstractRequest {
   /**
    * Constructs a new instance of the `VrameworkNextRequest` class.
    *

@@ -1,7 +1,7 @@
 import { EError } from '../error-handler.js'
 import { HTTPFunctionMetaInputTypes } from '../http/http-routes.types.js'
-import { VrameworkHTTPRequest } from '../http/vramework-http-request.js'
-import { VrameworkHTTPResponse } from '../http/vramework-http-response.js'
+import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
+import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
 import {
   APIDocs,
   CoreServices,
@@ -23,8 +23,8 @@ export type RunChannelOptions = Partial<{
 
 export type RunChannelParams<ChannelData> = {
   singletonServices: CoreSingletonServices
-  request: VrameworkRequest<ChannelData> | VrameworkHTTPRequest<ChannelData>
-  response: VrameworkResponse | VrameworkHTTPResponse
+  request: VrameworkRequest<ChannelData> | VrameworkHTTPAbstractRequest<ChannelData>
+  response: VrameworkResponse | VrameworkHTTPAbstractResponse
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,

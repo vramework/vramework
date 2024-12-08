@@ -1,8 +1,8 @@
 import { test, describe, beforeEach, afterEach } from 'node:test'
 import * as assert from 'assert'
 import { NotFoundError, NotImplementedError } from '../errors.js'
-import { VrameworkHTTPRequest } from './vramework-http-request.js'
-import { VrameworkHTTPResponse } from './vramework-http-response.js'
+import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
+import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
 import { JSONValue } from '../types/core.types.js'
 import {
   getUserSession,
@@ -11,13 +11,13 @@ import {
   addRoute,
 } from './http-route-runner.js'
 
-class VrameworkTestRequest extends VrameworkHTTPRequest {
+class VrameworkTestRequest extends VrameworkHTTPAbstractRequest {
   public getHeader(_headerName: string): string | undefined {
     throw new Error('Method not implemented.')
   }
 }
 
-class VrameworkTestResponse extends VrameworkHTTPResponse {
+class VrameworkTestResponse extends VrameworkHTTPAbstractResponse {
   public setStatus(_status: number): void {
     throw new Error('Method not implemented.')
   }

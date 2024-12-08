@@ -2213,6 +2213,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ws@npm:^8":
+  version: 8.5.13
+  resolution: "@types/ws@npm:8.5.13"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/21369beafa75c91ae3b00d3a2671c7408fceae1d492ca2abd5ac7c8c8bf4596d513c1599ebbddeae82c27c4a2d248976d0d714c4b3d34362b2ae35b964e2e637
+  languageName: node
+  linkType: hard
+
 "@ungap/structured-clone@npm:^1.0.0":
   version: 1.2.0
   resolution: "@ungap/structured-clone@npm:1.2.0"
@@ -2467,6 +2476,18 @@ __metadata:
   dependenciesMeta:
     ws:
       optional: true
+  languageName: unknown
+  linkType: soft
+
+"@vramework/ws@workspace:packages/servers/ws":
+  version: 0.0.0-use.local
+  resolution: "@vramework/ws@workspace:packages/servers/ws"
+  dependencies:
+    "@types/ws": "npm:^8"
+    typescript: "npm:^5.6.3"
+    ws: "npm:^8.18.0"
+  peerDependencies:
+    "@vramework/core": ^0.5.19
   languageName: unknown
   linkType: soft
 
