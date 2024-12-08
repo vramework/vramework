@@ -1,5 +1,5 @@
 import { EError } from '../error-handler.js'
-import { RoutesMetaInputTypes } from '../http/routes.types.js'
+import { HTTPFunctionMetaInputTypes } from '../http/http-routes.types.js'
 import { VrameworkHTTPRequest } from '../http/vramework-http-request.js'
 import { VrameworkHTTPResponse } from '../http/vramework-http-response.js'
 import {
@@ -39,7 +39,7 @@ export interface ChannelMeta {
   params?: string[]
   query?: string[]
   input: string | null
-  inputTypes?: RoutesMetaInputTypes
+  inputTypes?: HTTPFunctionMetaInputTypes
   connect: boolean
   disconnect: boolean
   message: { inputs: string[] | null; outputs: string[] | null } | null

@@ -1,12 +1,12 @@
 import { getErrorResponse } from '../error-handler.js'
 import { verifyPermissions } from '../permissions.js'
 import {
-  CoreAPIRoute,
-  CoreAPIRoutes,
-  RoutesMeta,
+  CoreHTTPFunctionRoute,
+  CoreHTTPFunctionRoutes,
+  HTTPFunctionsMeta,
   RunRouteOptions,
   RunRouteParams,
-} from './routes.types.js'
+} from './http-routes.types.js'
 import { loadSchema } from '../schema.js'
 import {
   CoreSingletonServices,
@@ -29,8 +29,8 @@ import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
 const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
 
-let routes: CoreAPIRoutes = []
-let routesMeta: RoutesMeta = []
+let routes: CoreHTTPFunctionRoutes = []
+let routesMeta: HTTPFunctionsMeta = []
 
 export const addRoute = <
   In,
@@ -40,7 +40,7 @@ export const addRoute = <
   APIFunctionSessionless,
   APIPermission,
 >(
-  route: CoreAPIRoute<
+  route: CoreHTTPFunctionRoute<
     In,
     Out,
     Route,
@@ -59,7 +59,7 @@ export const clearRoutes = () => {
 /**
  * @ignore
  */
-export const setRoutesMeta = (_routeMeta: RoutesMeta) => {
+export const setHTTPFunctionsMeta = (_routeMeta: HTTPFunctionsMeta) => {
   routesMeta = _routeMeta
 }
 
@@ -124,7 +124,7 @@ export const loadUserSession = async (
   requiresSession: boolean,
   http: VrameworkHTTP | undefined,
   matchedPath: any,
-  route: CoreAPIRoute<unknown, unknown, any> | CoreAPIChannel<unknown, any>,
+  route: CoreHTTPFunctionRoute<unknown, unknown, any> | CoreAPIChannel<unknown, any>,
   logger: Logger,
   sessionService: SessionService | undefined
 ) => {
@@ -215,7 +215,7 @@ export const handleError = (
 /**
  * @ignore
  */
-export const runRoute = async <In, Out>({
+export const runHTTPRoute = async <In, Out>({
   singletonServices,
   request,
   response,
@@ -226,7 +226,7 @@ export const runRoute = async <In, Out>({
   respondWith404 = true,
   logWarningsForStatusCodes = [],
   coerceToArray = false,
-}: Pick<CoreAPIRoute<unknown, unknown, any>, 'route' | 'method'> &
+}: Pick<CoreHTTPFunctionRoute<unknown, unknown, any>, 'route' | 'method'> &
   RunRouteOptions &
   RunRouteParams<In>): Promise<Out> => {
   let sessionServices: any | undefined

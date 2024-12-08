@@ -1,5 +1,5 @@
 import { Logger } from '../services/index.js'
-import { getRoutes } from './route-runner.js'
+import { getRoutes } from './http-route-runner.js'
 
 /**
  * Logs all the loaded routes.

@@ -1,5 +1,5 @@
 import { CoreSingletonServices, CreateSessionServices } from '@vramework/core'
-import { runRoute, RunRouteOptions } from '@vramework/core/http'
+import { runHTTPRoute, RunRouteOptions } from '@vramework/core/http'
 import { RequestHandler } from 'express'
 import { VrameworkExpressRequest } from './vramework-express-request.js'
 import { VrameworkExpressResponse } from './vramework-express-response.js'
@@ -48,7 +48,7 @@ export const vrameworkMiddleware = (
 
   return async (req, res, next) => {
     try {
-      await runRoute({
+      await runHTTPRoute({
         request: new VrameworkExpressRequest(req),
         response: new VrameworkExpressResponse(res),
         singletonServices,
@@ -59,7 +59,7 @@ export const vrameworkMiddleware = (
         coerceToArray,
       })
     } catch {
-      // Error should have already been handled by runRoute
+      // Error should have already been handled by runHTTPRoute
     }
 
     next()

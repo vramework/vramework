@@ -17,8 +17,7 @@ import {
   CreateConfig,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
-import { APIRouteMethod } from '@vramework/core/http/routes.types'
-import { runRoute } from '@vramework/core/http/route-runner'
+import { HTTPMethod, runHTTPRoute } from '@vramework/core/http'
 
 const injectIntoUrl = (route: string, keys: Record<string, string>) => {
   const path = compile(route)
@@ -62,13 +61,13 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
-    return await runRoute<In, Out>({
+    return await runHTTPRoute<In, Out>({
       request: new VrameworkActionNextRequest<In>(data),
       response: new VrameworkActionNextResponse(),
       singletonServices,
       createSessionServices: this.createSessionServices,
       route: injectIntoUrl(route as string, data),
-      method: method as APIRouteMethod,
+      method: method as HTTPMethod,
     })
   }
 
@@ -86,13 +85,13 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
-    return await runRoute<In, Out>({
+    return await runHTTPRoute<In, Out>({
       request: new VrameworkActionStaticNextRequest(data),
       response: new VrameworkActionNextResponse(),
       singletonServices,
       createSessionServices: this.createSessionServices,
       route: injectIntoUrl(route as string, data),
-      method: method as APIRouteMethod,
+      method: method as HTTPMethod,
       skipUserSession: true,
     })
   }
@@ -113,11 +112,11 @@ export class VrameworkNextJS {
     },
     response: ServerResponse<IncomingMessage>,
     route: string,
-    method: APIRouteMethod,
+    method: HTTPMethod,
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
-    return await runRoute<In, Out>({
+    return await runHTTPRoute<In, Out>({
       request: new VrameworkSSRNextRequest(request, data),
       response: new VrameworkSSRNextResponse(response),
       singletonServices,
@@ -139,13 +138,13 @@ export class VrameworkNextJS {
     request: NextApiRequest,
     response: NextApiResponse,
     route: string,
-    method: APIRouteMethod
+    method: HTTPMethod
   ): Promise<void> {
     const singletonServices = await this.getSingletonServices()
     const vrameworkRequest = new VrameworkAPINextRequest<In>(request)
     const vrameworkResponse = new VrameworkAPINextResponse(response)
     const data = await vrameworkRequest.getData()
-    await runRoute<In, Out>({
+    await runHTTPRoute<In, Out>({
       request: vrameworkRequest,
       response: vrameworkResponse,
       singletonServices,

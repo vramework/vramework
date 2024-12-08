@@ -3,7 +3,7 @@ import {
   CreateSessionServices,
   loadAllSchemas,
 } from '@vramework/core'
-import { runRoute, RunRouteOptions } from '@vramework/core/http'
+import { runHTTPRoute, RunRouteOptions } from '@vramework/core/http'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 import { VrameworkFastifyRequest } from './vramework-fastify-request.js'
@@ -50,7 +50,7 @@ const vrameworkPlugin: FastifyPluginAsync<
   }
   fastify.all('/*', async (req, res) => {
     try {
-      await runRoute({
+      await runHTTPRoute({
         request: new VrameworkFastifyRequest(req),
         response: new VrameworkFastifyResponse(res),
         singletonServices: vramework.singletonServices,
@@ -60,7 +60,7 @@ const vrameworkPlugin: FastifyPluginAsync<
         respondWith404: vramework.respondWith404,
       })
     } catch {
-      // Error should have already been handled by runRoute
+      // Error should have already been handled by runHTTPRoute
     }
   })
 }

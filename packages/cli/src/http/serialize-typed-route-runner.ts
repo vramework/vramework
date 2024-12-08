@@ -2,7 +2,7 @@ export const serializeTypedRouteRunner = (routesMapImport: string) => {
   return `/**
 * This is used to provide a route runner that is aware of the routes within your application
 */
-import { runRoute, CoreSingletonServices, CreateSessionServices, CoreServices, CoreUserSession, VrameworkHTTPRequest, VrameworkHTTPResponse } from '@vramework/core'
+import { runHTTPRoute, CoreSingletonServices, CreateSessionServices, CoreServices, CoreUserSession, VrameworkHTTPRequest, VrameworkHTTPResponse } from '@vramework/core'
 import type { RoutesMap, RouteHandlerOf } from '${routesMapImport}'
 
 export const runTypedRoute = async <
@@ -15,7 +15,7 @@ export const runTypedRoute = async <
   createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices>,
   route: { route: Route; method: Method }
 ): Promise<RouteHandlerOf<Route, Method>['output']> => {
-  return runRoute({
+  return runHTTPRoute({
     request, 
     response, 
     singletonServices, 

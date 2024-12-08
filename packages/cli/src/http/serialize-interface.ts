@@ -1,11 +1,11 @@
-import { RoutesMeta } from '@vramework/core/http'
+import { HTTPFunctionsMeta } from '@vramework/core/http'
 import { ImportMap } from '../inspector/inspector.js'
 import { serializeImportMap } from '../core/serialize-import-map.js'
 
 export const serializeInterface = (
   relativeTo: string,
   importMap: ImportMap,
-  routesMeta: RoutesMeta,
+  routesMeta: HTTPFunctionsMeta,
   packageMappings: Record<string, string>
 ) => {
   const serializedOutput: string[] = []

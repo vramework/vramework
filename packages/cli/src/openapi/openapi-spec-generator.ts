@@ -1,7 +1,7 @@
 import '@vramework/core/errors'
 
 import { getErrorResponseForConstructorName } from '@vramework/core'
-import { RoutesMeta } from '@vramework/core/http'
+import { HTTPFunctionsMeta } from '@vramework/core/http'
 import _convertSchema from '@openapi-contrib/json-schema-to-openapi-schema'
 const convertSchema =
   'default' in _convertSchema ? (_convertSchema.default as any) : _convertSchema
@@ -69,7 +69,7 @@ export interface OpenAPISpecInfo {
 }
 
 const convertSchemasToBodyPayloads = async (
-  routesMeta: RoutesMeta,
+  routesMeta: HTTPFunctionsMeta,
   schemas: Record<string, any>
 ) => {
   const requiredSchemas = new Set(
@@ -94,7 +94,7 @@ const convertSchemasToBodyPayloads = async (
 }
 
 export async function generateOpenAPISpec(
-  routeMeta: RoutesMeta,
+  routeMeta: HTTPFunctionsMeta,
   schemas: Record<string, any>,
   additionalInfo: OpenAPISpecInfo
 ): Promise<OpenAPISpec> {

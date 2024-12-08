@@ -15,7 +15,7 @@ export const serializeNextJsWrapper = (
 import { VrameworkNextJS } from '@vramework/next'
 import type { IncomingMessage, ServerResponse } from 'http'
 import type { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils'
-import type { APIRouteMethod } from '@vramework/core/http/routes.types'
+import type { HTTPMethod } from '@vramework/core/http/routes.types'
 import type { RoutesMap, RouteHandlerOf } from '${routesMapPath}'
 
 ${configImport}
@@ -104,7 +104,7 @@ export const vramework = () => {
     method: Method,
     data: RouteHandlerOf<Route, Method>['input']
   ): Promise<RouteHandlerOf<Route, Method>['output']> => {
-    return _vramework!.ssrRequest(request, response, route, method as APIRouteMethod, data as any)
+    return _vramework!.ssrRequest(request, response, route, method as HTTPMethod, data as any)
   }
 
   /**
@@ -124,7 +124,7 @@ export const vramework = () => {
     route: Route,
     method: Method,
   ): Promise<void> => {
-    return _vramework!.apiRequest(request, response, route, method as APIRouteMethod)
+    return _vramework!.apiRequest(request, response, route, method as HTTPMethod)
   }
 
   return {

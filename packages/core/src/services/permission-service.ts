@@ -1,5 +1,5 @@
-import { CoreAPIRoute } from '../http/routes.types.js'
-import { CoreUserSession } from '../types/core.types.js'
+import type { CoreHTTPFunctionRoute } from '../http/http-routes.types.js'
+import type { CoreUserSession } from '../types/core.types.js'
 
 /**
  * Interface for handling permission verification.
@@ -12,7 +12,7 @@ export interface PermissionService {
    * @returns A promise that resolves if access is granted.
    */
   verifyRouteAccess(
-    route: CoreAPIRoute<unknown, unknown, any>,
+    route: CoreHTTPFunctionRoute<unknown, unknown, any>,
     session?: CoreUserSession
   ): Promise<void>
 }

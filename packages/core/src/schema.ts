@@ -6,7 +6,7 @@ import { ValidateFunction } from 'ajv'
 
 import { Logger } from './services/logger.js'
 import { BadRequestError } from './errors.js'
-import { getRoutes } from './http/route-runner.js'
+import { getRoutes } from './http/http-route-runner.js'
 
 const ajv = new Ajv({
   removeAdditional: false,
@@ -21,13 +21,10 @@ const validators = new Map<string, ValidateFunction>()
  * @returns A map of schemas.
  */
 const getSchemas = () => {
-  // @ts-ignore
-  if (!global.schemas) {
-    // @ts-ignore
-    global.schemas = new Map<string, any>()
+  if (!global.vrameworkSchemas) {
+    global.vrameworkSchemas = new Map<string, any>()
   }
-  // @ts-ignore
-  return global.schemas
+  return global.vrameworkSchemas
 }
 
 /**

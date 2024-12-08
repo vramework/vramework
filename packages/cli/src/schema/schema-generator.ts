@@ -2,11 +2,11 @@ import { createGenerator, RootlessError } from 'ts-json-schema-generator'
 import { writeFileInDir } from '../utils.js'
 import { mkdir, writeFile } from 'fs/promises'
 import { JSONValue } from '@vramework/core'
-import { RoutesMeta } from '@vramework/core/http'
+import { HTTPFunctionsMeta } from '@vramework/core/http'
 
 export async function generateSchemas(
   tsconfig: string,
-  routesMeta: RoutesMeta
+  routesMeta: HTTPFunctionsMeta
 ): Promise<Record<string, JSONValue>> {
   const schemasSet = new Set(
     routesMeta
@@ -48,7 +48,7 @@ export async function generateSchemas(
 export async function saveSchemas(
   schemaParentDir: string,
   schemas: Record<string, JSONValue>,
-  routesMeta: RoutesMeta
+  routesMeta: HTTPFunctionsMeta
 ) {
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,

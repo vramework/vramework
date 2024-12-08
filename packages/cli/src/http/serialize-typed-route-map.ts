@@ -1,4 +1,4 @@
-import { RoutesMeta } from '@vramework/core/http'
+import { HTTPFunctionsMeta } from '@vramework/core/http'
 import { ImportMap } from '../inspector/inspector.js'
 import { serializeImportMap } from '../core/serialize-import-map.js'
 
@@ -6,7 +6,7 @@ export const serializeTypedRoutesMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,
   importMap: ImportMap,
-  routesMeta: RoutesMeta,
+  routesMeta: HTTPFunctionsMeta,
   metaTypes: Map<string, string>
 ) => {
   return `/**
@@ -34,7 +34,7 @@ export type RouteHandlerOf<Route extends keyof RoutesMap, Method extends keyof R
   `
 }
 
-function generateRoutes(routesMeta: RoutesMeta): string {
+function generateRoutes(routesMeta: HTTPFunctionsMeta): string {
   // Initialize an object to collect routes
   const routesObj: Record<
     string,

@@ -49,12 +49,12 @@ export type RunRouteParams<In> = {
 /**
  * Represents the HTTP methods supported for API routes.
  */
-export type APIRouteMethod = 'post' | 'get' | 'delete' | 'patch' | 'head'
+export type HTTPMethod = 'post' | 'get' | 'delete' | 'patch' | 'head'
 
 /**
  * Represents an API route without a function, including metadata such as content type, route, and timeout settings.
  */
-type CoreFunctionlessAPIRoute = {
+type CoreHTTPFunction = {
   contentType?: 'xml' | 'json'
   route: string
   eventChannel?: false
@@ -78,7 +78,7 @@ type CoreFunctionlessAPIRoute = {
  * @template APIFunctionSessionless - The sessionless API function type, defaults to `CoreAPIFunctionSessionless`.
  * @template APIPermission - The permission function type, defaults to `CoreAPIPermission`.
  */
-export type CoreAPIRoute<
+export type CoreHTTPFunctionRoute<
   In,
   Out,
   R extends string,
@@ -86,21 +86,21 @@ export type CoreAPIRoute<
   APIFunctionSessionless = CoreAPIFunctionSessionless<In, Out>,
   APIPermission = CoreAPIPermission<In>,
 > =
-  | (CoreFunctionlessAPIRoute & {
+  | (CoreHTTPFunction & {
       route: R
-      method: APIRouteMethod
+      method: HTTPMethod
       func: APIFunction
       permissions?: Record<string, APIPermission[] | APIPermission>
       auth?: true
     })
-  | (CoreFunctionlessAPIRoute & {
+  | (CoreHTTPFunction & {
       route: R
-      method: APIRouteMethod
+      method: HTTPMethod
       func: APIFunctionSessionless
       permissions?: undefined
       auth?: false
     })
-  | (CoreFunctionlessAPIRoute & {
+  | (CoreHTTPFunction & {
       route: R
       method: 'post'
       func: APIFunction
@@ -108,7 +108,7 @@ export type CoreAPIRoute<
       auth?: true
       query?: Array<keyof In>
     })
-  | (CoreFunctionlessAPIRoute & {
+  | (CoreHTTPFunction & {
       route: R
       method: 'post'
       func: APIFunctionSessionless
@@ -120,12 +120,12 @@ export type CoreAPIRoute<
 /**
  * Represents an array of core API routes.
  */
-export type CoreAPIRoutes = Array<CoreAPIRoute<any, any, string>>
+export type CoreHTTPFunctionRoutes = Array<CoreHTTPFunctionRoute<any, any, string>>
 
 /**
  * Represents the input types for route metadata, including parameters, query, and body types.
  */
-export type RoutesMetaInputTypes = {
+export type HTTPFunctionMetaInputTypes = {
   params?: string
   query?: string
   body?: string
@@ -134,13 +134,13 @@ export type RoutesMetaInputTypes = {
 /**
  * Represents metadata for a set of routes, including route details, methods, input/output types, and documentation.
  */
-export type RoutesMeta = Array<{
+export type HTTPFunctionsMeta = Array<{
   route: string
-  method: APIRouteMethod
+  method: HTTPMethod
   params?: string[]
   query?: string[]
   input: string | null
   output: string | null
-  inputTypes?: RoutesMetaInputTypes
+  inputTypes?: HTTPFunctionMetaInputTypes
   docs?: APIDocs
 }>

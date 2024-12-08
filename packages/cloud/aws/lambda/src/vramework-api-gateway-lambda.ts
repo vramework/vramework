@@ -7,8 +7,8 @@ import {
   CoreUserSession,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
-import { CoreAPIRoutes, RoutesMeta } from '@vramework/core/http/routes.types'
-import { runRoute } from '@vramework/core/http/route-runner'
+import { CoreHTTPFunctionRoutes, HTTPFunctionsMeta } from '@vramework/core/http/routes.types'
+import { runHTTPRoute } from '@vramework/core/http'
 import { Logger } from '@vramework/core/services/logger'
 import { VrameworkAPIGatewayLambdaRequest } from './vramework-api-gateway-lambda-request.js'
 import { VrameworkAPIGatewayLambdaResponse } from './vramework-api-gateway-lambda-response.js'
@@ -41,8 +41,8 @@ const generalHandler = async (
     CoreUserSession,
     CoreServices
   >,
-  routes: CoreAPIRoutes,
-  routesMeta: RoutesMeta,
+  routes: CoreHTTPFunctionRoutes,
+  routesMeta: HTTPFunctionsMeta,
   request: VrameworkAPIGatewayLambdaRequest,
   response: VrameworkAPIGatewayLambdaResponse
 ): Promise<APIGatewayProxyResult> => {
@@ -66,7 +66,7 @@ const generalHandler = async (
   }
 
   try {
-    await runRoute({
+    await runHTTPRoute({
       request,
       response,
       singletonServices,
@@ -75,7 +75,7 @@ const generalHandler = async (
       method: request.getMethod() as any,
     })
   } catch {
-    // Error should have already been handled by runRoute
+    // Error should have already been handled by runHTTPRoute
   }
 
   return response.getLambdaResponse()
@@ -83,8 +83,8 @@ const generalHandler = async (
 
 export const processCorsless = async (
   event: APIGatewayProxyEvent,
-  routes: CoreAPIRoutes,
-  routesMeta: RoutesMeta,
+  routes: CoreHTTPFunctionRoutes,
+  routesMeta: HTTPFunctionsMeta,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<
@@ -107,8 +107,8 @@ export const processCorsless = async (
 
 export const processFromAnywhereCors = async (
   event: APIGatewayProxyEvent,
-  routes: CoreAPIRoutes,
-  routesMeta: RoutesMeta,
+  routes: CoreHTTPFunctionRoutes,
+  routesMeta: HTTPFunctionsMeta,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
@@ -138,8 +138,8 @@ export const processFromAnywhereCors = async (
 export const processCors = async (
   event: APIGatewayProxyEvent,
   allowedOrigins: string[],
-  routes: CoreAPIRoutes,
-  routesMeta: RoutesMeta,
+  routes: CoreHTTPFunctionRoutes,
+  routesMeta: HTTPFunctionsMeta,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,

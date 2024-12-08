@@ -1,4 +1,4 @@
-import { CoreServices, CoreUserSession } from './core.types.js'
+import type { CoreServices, CoreUserSession } from './core.types.js'
 
 /**
  * Represents a core API function that performs an operation using core services and a user session.

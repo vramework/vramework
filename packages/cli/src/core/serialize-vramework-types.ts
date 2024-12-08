@@ -11,7 +11,7 @@ export const serializeVrameworkTypes = (
 * This is used to provide the application types in the typescript project
 */
   
-import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission, CoreAPIRoute, AssertRouteParams } from '@vramework/core'
+import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission, CoreHTTPFunction, AssertRouteParams } from '@vramework/core'
 import { CoreScheduledTask } from '@vramework/core'
 import { CoreAPIChannel, CoreChannelConnection, CoreChannelConnectionSessionless, CoreChannelDisconnection, CoreChannelMessage, CoreChannelMessageSessionless } from '@vramework/core'
 
@@ -23,7 +23,7 @@ export type APIPermission<In = unknown, RequiredServices = ${servicesTypeName}> 
 
 export type APIFunctionSessionless<In = unknown, Out = never, RequiredServices = ${servicesTypeName}> = CoreAPIFunctionSessionless<In, Out, RequiredServices, ${userSessionTypeName}>
 export type APIFunction<In = unknown, Out = never, RequiredServices = ${servicesTypeName}> = CoreAPIFunction<In, Out, RequiredServices, ${userSessionTypeName}>
-type APIRoute<In, Out, Route extends string> = CoreAPIRoute<In, Out, Route, APIFunction<In, Out>, APIFunctionSessionless<In, Out>, APIPermission<In>>
+type APIRoute<In, Out, Route extends string> = CoreHTTPFunction<In, Out, Route, APIFunction<In, Out>, APIFunctionSessionless<In, Out>, APIPermission<In>>
 
 export type ChannelConnection<Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelConnection<Out, ChannelData, RequiredServices, UserSession>
 export type ChannelDisconnection<ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelDisconnection<never, ChannelData, RequiredServices, UserSession>

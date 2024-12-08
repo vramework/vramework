@@ -1,7 +1,7 @@
-import { Logger, LogLevel } from '../services/logger.js'
-import { PermissionService, SessionService } from '../services/index.js'
-import { VrameworkHTTPRequest } from '../http/vramework-http-request.js'
-import { VrameworkHTTPResponse } from '../http/vramework-http-response.js'
+import { Logger, LogLevel } from '../services/logger.ts'
+import { PermissionService, SessionService } from '../services/index.ts'
+import { VrameworkHTTPRequest } from '../http/vramework-http-request.ts'
+import { VrameworkHTTPResponse } from '../http/vramework-http-response.ts'
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.

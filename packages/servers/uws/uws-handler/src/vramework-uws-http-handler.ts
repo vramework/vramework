@@ -4,7 +4,7 @@ import {
   CoreSingletonServices,
   CreateSessionServices,
 } from '@vramework/core/types/core.types'
-import { runRoute } from '@vramework/core/http/route-runner'
+import { runHTTPRoute } from '@vramework/core/http'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
@@ -50,7 +50,7 @@ export const vrameworkHTTPHandler = ({
 
   return async (res: uWS.HttpResponse, req: uWS.HttpRequest): Promise<void> => {
     try {
-      await runRoute({
+      await runHTTPRoute({
         request: new VrameworkUWSRequest(req, res),
         response: new VrameworkUWSResponse(res),
         singletonServices,
@@ -59,7 +59,7 @@ export const vrameworkHTTPHandler = ({
         route: req.getUrl() as string,
       })
     } catch {
-      // Error should have already been handled by runRoute
+      // Error should have already been handled by runHTTPRoute
     }
   }
 }

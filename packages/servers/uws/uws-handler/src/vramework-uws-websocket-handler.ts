@@ -90,7 +90,7 @@ export const vrameworkWebsocketHandler = ({
           )
         })
       } catch (e: any) {
-        // Error should have already been handled by runRoute
+        // Error should have already been handled by runHTTPRoute
       }
     },
     open: (ws) => {

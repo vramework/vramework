@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { addFileWithFactory } from './add-file-with-factory.js'
 import { ImportMap } from './inspector.js'
 import { addFileExtendsCoreType } from './add-file-extends-core-type.js'
-import { RoutesMeta } from '@vramework/core/http/routes.types'
+import { HTTPFunctionsMeta } from '@vramework/core/http/routes.types'
 import { ChannelsMeta } from '@vramework/core/channel/channel.types'
 import { ScheduledTasksMeta } from '@vramework/core/scheduler/schedule.types'
 import { addRoute } from './add-route.js'
@@ -23,7 +23,7 @@ export interface VisitState {
   http: {
     importMap: ImportMap
     metaInputTypes: Map<string, string>
-    meta: RoutesMeta
+    meta: HTTPFunctionsMeta
     inputTypes: Set<string>
     outputTypes: Set<string>
     files: Set<string>

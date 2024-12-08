@@ -6,10 +6,10 @@ import { VrameworkHTTPResponse } from './vramework-http-response.js'
 import { JSONValue } from '../types/core.types.js'
 import {
   getUserSession,
-  runRoute,
+  runHTTPRoute,
   clearRoutes,
   addRoute,
-} from './route-runner.js'
+} from './http-route-runner.js'
 
 class VrameworkTestRequest extends VrameworkHTTPRequest {
   public getHeader(_headerName: string): string | undefined {
@@ -29,7 +29,7 @@ class VrameworkTestResponse extends VrameworkHTTPResponse {
   }
 }
 
-describe('runRoute', () => {
+describe('runHTTPRoute', () => {
   let singletonServices: any
   let createSessionServices: any
   let request: any
@@ -67,7 +67,7 @@ describe('runRoute', () => {
 
     await assert.rejects(
       async () =>
-        runRoute({
+        runHTTPRoute({
           request,
           response,
           singletonServices,
@@ -89,7 +89,7 @@ describe('runRoute', () => {
       func: routeFunc,
     })
 
-    const result = await runRoute({
+    const result = await runHTTPRoute({
       request,
       response,
       singletonServices,
@@ -114,7 +114,7 @@ describe('runRoute', () => {
       permissions,
     })
 
-    await runRoute({
+    await runHTTPRoute({
       request,
       response,
       singletonServices,
@@ -141,7 +141,7 @@ describe('runRoute', () => {
 
     await assert.rejects(
       async () =>
-        runRoute({
+        runHTTPRoute({
           request,
           response,
           singletonServices,

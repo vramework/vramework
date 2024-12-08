@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
-import { APIRouteMethod } from '@vramework/core/http/routes.types'
+import { HTTPMethod } from '@vramework/core/http/routes.types'
 import { APIDocs } from '@vramework/core/types/core.types'
 import { extractTypeKeys, getFunctionTypes } from './utils.js'
 
@@ -150,7 +150,7 @@ export const addRoute = (
 
     state.http.meta.push({
       route: routeValue!,
-      method: methodValue! as APIRouteMethod,
+      method: methodValue! as HTTPMethod,
       input,
       output,
       params: paramsValues.length > 0 ? paramsValues : undefined,

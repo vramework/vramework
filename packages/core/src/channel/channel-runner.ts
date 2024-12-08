@@ -12,7 +12,7 @@ import {
   createHTTPInteraction,
   handleError,
   loadUserSession,
-} from '../http/route-runner.js'
+} from '../http/http-route-runner.js'
 import { registerMessageHandlers } from './channel-handler.js'
 import { VrameworkChannelHandler } from './vramework-channel-handler.js'
 

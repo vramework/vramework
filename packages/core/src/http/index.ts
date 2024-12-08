@@ -4,8 +4,8 @@ export * from './vramework-http-request.js'
 
 export * from './vramework-http-response.js'
 
-export * from './log-routes.js'
+export * from './log-http-routes.js'
 
-export { runRoute, getRoutes, setRoutesMeta, addRoute } from './route-runner.js'
+export { runHTTPRoute, getRoutes, setHTTPFunctionsMeta, addRoute } from './http-route-runner.js'
 
-export type * from './routes.types.js'
+export type * from './http-routes.types.js'
