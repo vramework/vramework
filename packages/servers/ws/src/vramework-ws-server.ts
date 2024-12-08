@@ -1,13 +1,13 @@
 import { Server } from 'http'
-import { WebSocket, WebSocketServer, Data } from 'ws'
+import { WebSocket, WebSocketServer } from 'ws'
 import { runChannel, logChannels } from '@vramework/core/channel'
-
 import { loadAllSchemas } from '@vramework/core/schema'
 import { RunRouteOptions } from '@vramework/core/http'
 import { VrameworkChannelHandler } from '@vramework/core/channel/vramework-channel-handler'
+import { CoreSingletonServices, CreateSessionServices } from '@vramework/core/src/types/core.types.js'
+
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkDuplexResponse } from './vramework-duplex-response.js'
-import { CoreSingletonServices, CreateSessionServices } from '@vramework/core/src/types/core.types.js'
 
 /**
  * Options for configuring the `vrameworkHandler`.
@@ -74,27 +74,29 @@ export const vrameworkWebsocketHandler = ({
     loadAllSchemas(singletonServices.logger)
   }
 
-  const onConnect = async (ws: WebSocket, channelHandler: VrameworkChannelHandler) => {
-    // Set up the WebSocket events
-    ws.on('open', () => {
-      channelHandler.registerOnSend((data) => {
-        if (isSerializable(data)) {
-          ws.send(JSON.stringify(data))
-        } else {
-          ws.send(data as any)
-        }
-      })
-      channelHandler.open()
+  wss.on('connection', (ws: WebSocket, channelHandler: VrameworkChannelHandler) => {
+    channelHandler.registerOnSend((data) => {
+      if (isSerializable(data)) {
+        ws.send(JSON.stringify(data))
+      } else {
+        ws.send(data as any)
+      }
     })
 
-    ws.on('message', (message: Data) => {
-      channelHandler.message(message)
+    ws.on('message', (message, isBinary) => {
+      if (isBinary) {
+        channelHandler.message(message)
+      } else {
+        channelHandler.message(message.toString())
+      }
     })
 
     ws.on('close', () => {
       channelHandler.close()
     })
-  }
+
+    channelHandler.open()
+  })
 
   server.on('upgrade', async (req, socket, head) => {
     // Handle WebSocket connection upgrade
@@ -106,19 +108,18 @@ export const vrameworkWebsocketHandler = ({
     const channelHandler = await runChannel({
       request,
       response,
-      singletonServices,
+      singletonServices: singletonServices as any,
       createSessionServices: createSessionServices as any,
       channel: url,
     })
 
     if (!channelHandler) {
-      socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
       socket.destroy();
       return;
     }
 
     wss.handleUpgrade(req, socket, head, (ws) => {
-      onConnect(ws, channelHandler)
+      wss.emit('connection', ws, channelHandler)
     })
   })
 }

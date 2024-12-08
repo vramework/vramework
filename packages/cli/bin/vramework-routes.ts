@@ -3,7 +3,7 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { serializeRouteMeta } from '../src/http/serialize-route-meta.js'
+import { serializeHTTPRoutesMeta } from '../src/http/serialize-route-meta.js'
 import { VisitState } from '../src/inspector/visit.js'
 import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import {
@@ -27,7 +27,7 @@ export const vrameworkRoutes = async (
       const { http } = visitState
       const content = [
         serializeRoutes(routesFile, http.files, packageMappings),
-        serializeRouteMeta(http.meta),
+        serializeHTTPRoutesMeta(http.meta),
       ]
       await writeFileInDir(routesFile, content.join('\n\n'))
     }

@@ -26,7 +26,7 @@ export const serializeChannels = (
 
 export const serializeChannelMeta = (channelsMeta: ChannelsMeta) => {
   const serializedOutput: string[] = []
-  serializedOutput.push("import { setChannelsMeta } from '@vramework/core'")
+  serializedOutput.push("import { setChannelsMeta } from '@vramework/core/channel'")
   serializedOutput.push(
     `setChannelsMeta(${JSON.stringify(channelsMeta, null, 2)})`
   )

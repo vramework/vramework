@@ -22,29 +22,45 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
+    "./*": {
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.js"
+    },
     "./channel": {
       "import": "./dist/esm/channel/index.js",
       "require": "./dist/cjs/channel/index.js"
-    },
-    "./scheduler": {
-      "import": "./dist/esm/scheduler/index.js",
-      "require": "./dist/cjs/scheduler/index.js"
     },
     "./http": {
       "import": "./dist/esm/http/index.js",
       "require": "./dist/cjs/http/index.js"
     },
+    "./scheduler": {
+      "import": "./dist/esm/scheduler/index.js",
+      "require": "./dist/cjs/scheduler/index.js"
+    },
     "./services": {
       "import": "./dist/esm/services/index.js",
       "require": "./dist/cjs/services/index.js"
     },
-    "./*": {
-      "import": "./dist/esm/*.js",
-      "require": "./dist/cjs/*.js"
-    },
     "./*.d.ts": {
       "import": "./dist/esm/*.d.ts",
       "require": "./dist/cjs/*.d.ts"
+    },
+    "./channel/*.d.ts": {
+      "import": "./dist/esm/channel/*.d.ts",
+      "require": "./dist/cjs/channel/*.d.ts"
+    },
+    "./http/*.d.ts": {
+      "import": "./dist/esm/http/*.d.ts",
+      "require": "./dist/cjs/http/*.d.ts"
+    },
+    "./scheduler/*.d.ts": {
+      "import": "./dist/esm/scheduler/*.d.ts",
+      "require": "./dist/cjs/scheduler/*.d.ts"
+    },
+    "./services/*.d.ts": {
+      "import": "./dist/esm/services/*.d.ts",
+      "require": "./dist/cjs/services/*.d.ts"
     }
   },
   "dependencies": {

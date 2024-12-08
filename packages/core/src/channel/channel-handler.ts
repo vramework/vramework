@@ -125,6 +125,7 @@ export const registerMessageHandlers = (
 
     try {
       // Route-specific handling
+      console.log({ rawData }, typeof rawData)
       if (typeof rawData === 'string' && channelConfig.onMessageRoute) {
         const messageData = JSON.parse(rawData)
         const entries = Object.entries(channelConfig.onMessageRoute)
@@ -154,16 +155,12 @@ export const registerMessageHandlers = (
         await processMessage(rawData, channelConfig.onMessage)
       }
     } catch (error) {
-      logger.error(
-        `Error processing message in channel ${channelConfig.channel}:`,
-        error
-      )
+      // Most likely a json error.. ignore
     }
 
     if (!processed) {
       logger.error(
-        `No handler found for message in channel ${channelConfig.channel}:`,
-        rawData
+        `No handler found for message in channel ${channelConfig.channel} for ${rawData}`
       )
     }
   })

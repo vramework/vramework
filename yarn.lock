@@ -2485,9 +2485,9 @@ __metadata:
   dependencies:
     "@types/ws": "npm:^8"
     typescript: "npm:^5.6.3"
-    ws: "npm:^8.18.0"
   peerDependencies:
     "@vramework/core": ^0.5.19
+    ws: ^8.18.0
   languageName: unknown
   linkType: soft
 

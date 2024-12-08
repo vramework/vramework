@@ -59,7 +59,7 @@ export const clearRoutes = () => {
 /**
  * @ignore
  */
-export const setHTTPFunctionsMeta = (_routeMeta: HTTPFunctionsMeta) => {
+export const setHTTPRoutesMeta = (_routeMeta: HTTPFunctionsMeta) => {
   routesMeta = _routeMeta
 }
 

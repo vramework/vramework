@@ -29,7 +29,7 @@ export const serializeSchedulerMeta = (
 ) => {
   const serializedOutput: string[] = []
   serializedOutput.push(
-    "import { setScheduledTasksMeta } from '@vramework/core'"
+    "import { setScheduledTasksMeta } from '@vramework/core/scheduler'"
   )
   serializedOutput.push(
     `setScheduledTasksMeta(${JSON.stringify(scheduledTasksMeta, null, 2)})`

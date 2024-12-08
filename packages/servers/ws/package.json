@@ -33,7 +33,8 @@
     }
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.19"
+    "@vramework/core": "^0.5.19",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/ws": "^8",
@@ -41,8 +42,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "dependencies": {
-    "ws": "^8.18.0"
   }
 }
