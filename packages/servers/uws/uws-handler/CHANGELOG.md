@@ -1,5 +1,16 @@
 # @vramework/uws-handler
 
+## 0.5.9
+
+### Patch Changes
+
+- bba25cc: chore: updating all packages to reflect major changes
+- 9deb482: refactor: finalizing stream api
+- Updated dependencies [bba25cc]
+- Updated dependencies [9deb482]
+- Updated dependencies [ee0c6ea]
+  - @vramework/core@0.5.24
+
 ## 0.5.8
 
 ### Patch Changes

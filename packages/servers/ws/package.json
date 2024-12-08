@@ -1,6 +1,6 @@
 {
   "name": "@vramework/ws",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "The vramework ws server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -33,7 +33,7 @@
     }
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.19",
+    "@vramework/core": "^0.5.24",
     "ws": "^8.18.0"
   },
   "devDependencies": {

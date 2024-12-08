@@ -1,5 +1,13 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.24
+
+### Patch Changes
+
+- bba25cc: chore: updating all packages to reflect major changes
+- 9deb482: refactor: finalizing stream api
+- ee0c6ea: feat: adding ws server
+
 ## 0.5.23
 
 ### Patch Changes
