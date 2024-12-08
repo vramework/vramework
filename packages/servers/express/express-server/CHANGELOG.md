@@ -1,5 +1,16 @@
 # @vramework/express
 
+## 0.5.7
+
+### Patch Changes
+
+- bba25cc: chore: updating all packages to reflect major changes
+- Updated dependencies [bba25cc]
+- Updated dependencies [9deb482]
+- Updated dependencies [ee0c6ea]
+  - @vramework/core@0.5.24
+  - @vramework/express-middleware@0.5.9
+
 ## 0.5.6
 
 ### Patch Changes

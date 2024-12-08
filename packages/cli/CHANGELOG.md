@@ -1,5 +1,19 @@
 # @vramework/cli
 
+## 0.5.33
+
+### Patch Changes
+
+- bba25cc: chore: updating all packages to reflect major changes
+- 9deb482: refactor: finalizing stream api
+- f37042d: fix: always print out core schema register file
+- ee0c6ea: feat: adding ws server
+- d97e952: refactor: removing requirement of config method outside of nextjs
+- Updated dependencies [bba25cc]
+- Updated dependencies [9deb482]
+- Updated dependencies [ee0c6ea]
+  - @vramework/core@0.5.24
+
 ## 0.5.32
 
 ### Patch Changes

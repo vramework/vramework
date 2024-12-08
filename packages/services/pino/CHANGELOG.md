@@ -1,11 +1,10 @@
-# @vramework/ws
+# @vramework/pino
 
 ## 0.5.1
 
 ### Patch Changes
 
 - bba25cc: chore: updating all packages to reflect major changes
-- ee0c6ea: feat: adding ws server
 - Updated dependencies [bba25cc]
 - Updated dependencies [9deb482]
 - Updated dependencies [ee0c6ea]

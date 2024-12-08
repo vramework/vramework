@@ -1,5 +1,15 @@
 # @vramework/fastify-plugin
 
+## 0.5.8
+
+### Patch Changes
+
+- bba25cc: chore: updating all packages to reflect major changes
+- Updated dependencies [bba25cc]
+- Updated dependencies [9deb482]
+- Updated dependencies [ee0c6ea]
+  - @vramework/core@0.5.24
+
 ## 0.5.7
 
 ### Patch Changes

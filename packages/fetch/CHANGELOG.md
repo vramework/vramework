@@ -1,5 +1,11 @@
 # @vramework/fetch
 
+## 0.5.6
+
+### Patch Changes
+
+- bba25cc: chore: updating all packages to reflect major changes
+
 ## 0.5.5
 
 ### Patch Changes
