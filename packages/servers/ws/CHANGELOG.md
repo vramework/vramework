@@ -1,5 +1,11 @@
 # @vramework/ws
 
+## 0.5.2
+
+### Patch Changes
+
+- 8e8e816: fix: including missing packages
+
 ## 0.5.1
 
 ### Patch Changes
