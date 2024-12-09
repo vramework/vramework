@@ -1,6 +1,6 @@
 {
   "name": "@vramework/uws",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "The vramework uws server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -18,11 +18,11 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.24"
+    "@vramework/core": "^0.5.25"
   },
   "dependencies": {
     "@types/qs": "^6",
-    "@vramework/uws-handler": "^0.5.9",
+    "@vramework/uws-handler": "^0.5.10",
     "qs": "^6.13.0",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.49.0"
   },

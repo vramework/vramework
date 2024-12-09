@@ -1,5 +1,13 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.25
+
+### Patch Changes
+
+- 0f96787: refactor: dropping cjs support
+- 64e4a1e: refactor: seperating core into cleaner sub-packages
+- c23524a: refactor: bump to versions to ensure correct package usage
+
 ## 0.5.24
 
 ### Patch Changes

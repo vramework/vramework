@@ -1,5 +1,17 @@
 ## 0.0.8 - 26.06.2022
 
+## 0.5.4
+
+### Patch Changes
+
+- 0f96787: refactor: dropping cjs support
+- 64e4a1e: refactor: seperating core into cleaner sub-packages
+- c23524a: refactor: bump to versions to ensure correct package usage
+- Updated dependencies [0f96787]
+- Updated dependencies [64e4a1e]
+- Updated dependencies [c23524a]
+  - @vramework/core@0.5.25
+
 ## 0.5.3
 
 ### Patch Changes

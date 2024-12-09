@@ -1,5 +1,12 @@
 # @vramework/fetch
 
+## 0.5.7
+
+### Patch Changes
+
+- 0f96787: refactor: dropping cjs support
+- c23524a: refactor: bump to versions to ensure correct package usage
+
 ## 0.5.6
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@vramework/ws",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "The vramework ws server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -18,7 +18,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.24",
+    "@vramework/core": "^0.5.25",
     "ws": "^8.18.0"
   },
   "devDependencies": {
