@@ -17,20 +17,6 @@
     "test:watch": "bash run-tests.sh --watch",
     "test:coverage": "bash run-tests.sh --coverage"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/cjs/index.js"
-    },
-    "./*": {
-      "import": "./dist/*.js",
-      "require": "./dist/cjs/*.js"
-    },
-    "./*.d.ts": {
-      "import": "./dist/*.d.ts",
-      "require": "./dist/cjs/*.d.ts"
-    }
-  },
   "peerDependencies": {
     "@vramework/core": "^0.5.24"
   },

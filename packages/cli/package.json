@@ -4,10 +4,10 @@
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "bin": {
-    "vramework": "dist/cjs/bin/vramework.js"
+    "vramework": "dist/bin/vramework.js"
   },
   "type": "module",
-  "main": "dist/cjs/bin/vramework.js",
+  "main": "dist/bin/vramework.js",
   "module": "dist/bin/vramework.js",
   "scripts": {
     "tsc": "tsc",

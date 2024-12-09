@@ -1,5 +1,5 @@
 import { join, dirname, resolve, isAbsolute } from 'path'
-import { readdir } from 'fs/promises'
+import { readdir, readFile } from 'fs/promises'
 import { OpenAPISpecInfo } from './openapi/openapi-spec-generator.js'
 
 export interface VrameworkCLICoreOutputFiles {
@@ -76,8 +76,9 @@ const _getVrameworkCLIConfig = async (
 
   try {
     let result: VrameworkCLIConfig
-    const config: VrameworkCLIConfig = await import(configFile)
+    const file = await readFile(configFile, 'utf-8')
     const configDir = dirname(configFile)
+    const config: VrameworkCLIConfig = JSON.parse(file)
     if (config.extends) {
       const extendedConfig = await getVrameworkCLIConfig(
         resolve(configDir, config.extends),
