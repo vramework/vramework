@@ -1,5 +1,16 @@
 # @vramework/fastify
 
+## 0.5.9
+
+### Patch Changes
+
+- 64e4a1e: refactor: seperating core into cleaner sub-packages
+- c23524a: refactor: bump to versions to ensure correct package usage
+- Updated dependencies [64e4a1e]
+- Updated dependencies [c23524a]
+  - @vramework/fastify-plugin@0.5.9
+  - @vramework/core@0.5.25
+
 ## 0.5.8
 
 ### Patch Changes

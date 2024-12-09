@@ -1,5 +1,11 @@
 # @vramework/fetch
 
+## 0.5.7
+
+### Patch Changes
+
+- c23524a: refactor: bump to versions to ensure correct package usage
+
 ## 0.5.6
 
 ### Patch Changes

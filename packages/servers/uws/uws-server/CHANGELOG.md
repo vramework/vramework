@@ -1,5 +1,16 @@
 # @vramework/uws
 
+## 0.5.8
+
+### Patch Changes
+
+- 64e4a1e: refactor: seperating core into cleaner sub-packages
+- c23524a: refactor: bump to versions to ensure correct package usage
+- Updated dependencies [64e4a1e]
+- Updated dependencies [c23524a]
+  - @vramework/uws-handler@0.5.10
+  - @vramework/core@0.5.25
+
 ## 0.5.7
 
 ### Patch Changes
