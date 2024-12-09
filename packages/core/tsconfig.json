@@ -4,7 +4,7 @@
     "rootDir": "./src",
     "composite": true,
     "module": "NodeNext",
-    "outDir": "dist/esm",
+    "outDir": "dist",
     "target": "esnext",
     "moduleResolution": "NodeNext"
   },

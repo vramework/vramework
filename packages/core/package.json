@@ -3,14 +3,13 @@
   "version": "0.5.24",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "tsc": "tsc",
-    "build:esm": "tsc -b && echo '{\"type\": \"module\"}' > dist/esm/package.json",
-    "build:cjs": "tsc -b tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
-    "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc -b",
+    "build": "rm -rf dist && yarn build:esm",
     "ncu": "ncu",
     "release": "npm run build && npm test",
     "test": "bash run-tests.sh",
@@ -18,39 +17,15 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
-    },
-    "./channel": {
-      "import": "./dist/esm/channel/index.js",
-      "require": "./dist/cjs/channel/index.js"
-    },
-    "./http": {
-      "import": "./dist/esm/http/index.js",
-      "require": "./dist/cjs/http/index.js"
-    },
-    "./http/vramework-http-session-service": {
-      "import": "./dist/esm/http/vramework-http-session-service.js",
-      "require": "./dist/cjs/http/vramework-http-session-service.js"
-    },
-    "./errors": {
-      "import": "./dist/esm/errors/index.js",
-      "require": "./dist/cjs/errors/index.js"
-    },
-    "./scheduler": {
-      "import": "./dist/esm/scheduler/index.js",
-      "require": "./dist/cjs/scheduler/index.js"
-    },
-    "./services": {
-      "import": "./dist/esm/services/index.js",
-      "require": "./dist/cjs/services/index.js"
-    },
-    "./schema": {
-      "import": "./dist/esm/schema.js",
-      "require": "./dist/cjs/schema.js"
-    },
-    "./types": "./dist/esm/types/index.d.ts"
+    ".": "./dist/index.js",
+    "./channel": "./dist/channel/index.js",
+    "./http": "./dist/http/index.js",
+    "./http/vramework-http-session-service": "./dist/http/vramework-http-session-service.js",
+    "./errors": "./dist/errors/index.js",
+    "./scheduler": "./dist/scheduler/index.js",
+    "./services": "./dist/services/index.js",
+    "./schema": "./dist/schema.js",
+    "./types": "./dist/types/index.d.ts"
   },
   "dependencies": {
     "@types/cookie": "^0.6.0",
