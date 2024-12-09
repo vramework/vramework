@@ -1,4 +1,4 @@
-import { APIDocs } from '@vramework/core/types/core.types'
+import { APIDocs } from '@vramework/core'
 import * as ts from 'typescript'
 
 export const getPropertyValue = (

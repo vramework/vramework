@@ -7,18 +7,12 @@ export const serializeTypedChannelsMap = (
   packageMappings: Record<string, string>,
   importMap: ImportMap,
   channelsMeta: ChannelsMeta,
-  metaTypes: Map<string, string>
 ): string => {
   return `/**
  * This provides the structure needed for TypeScript to be aware of channels
  */
     
 ${serializeImportMap(relativeToPath, packageMappings, importMap)}
-
-// The '& {}' is a workaround for not directly referring to a type since it confuses TypeScript
-${Array.from(metaTypes.entries())
-  .map(([name, schema]) => `export type ${name} = ${schema} & {}`)
-  .join('\n')}
 
 interface ChannelHandler<I, O> {
     input: I;

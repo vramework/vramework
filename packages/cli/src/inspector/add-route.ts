@@ -2,8 +2,8 @@ import * as ts from 'typescript'
 import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
-import { HTTPMethod } from '@vramework/core/http/http-routes.types'
-import { APIDocs } from '@vramework/core/types/core.types'
+import { HTTPMethod } from '@vramework/core/http'
+import { APIDocs } from '@vramework/core'
 import { extractTypeKeys, getFunctionTypes } from './utils.js'
 
 export const getInputTypes = (
@@ -111,6 +111,7 @@ export const addRoute = (
       outputIndex: 1,
       inputTypeSet: state.http.inputTypes,
       outputTypeSet: state.http.outputTypes,
+      customAliasedTypes: state.http.customAliasedTypes,
     })
 
     // TODO: Temporary hack since typescript breaks boolean into two types
@@ -127,14 +128,14 @@ export const addRoute = (
     const output = outputs ? outputs[0] || null : null
 
     if (inputs && inputs?.length > 1) {
-      console.warn(
-        `Only one input type is currently allowed for route ${routeValue}: ${inputs}`
+      console.error(
+        `Only one input type is currently allowed for method '${methodValue}' and route '${routeValue}': \n\t${inputs.join('\n\t')}`
       )
     }
 
     if (outputs && outputs?.length > 1) {
-      console.warn(
-        `Only one output type is currently allowed for route ${routeValue}: ${outputs}`
+      console.error(
+        `Only one output type is currently allowed for method '${methodValue}' and route '${routeValue}': \n\t${outputs.join('\n\t')}`
       )
     }
 

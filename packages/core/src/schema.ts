@@ -5,7 +5,7 @@ import addFormats from 'ajv-formats'
 import { ValidateFunction } from 'ajv'
 
 import { Logger } from './services/logger.js'
-import { BadRequestError } from './errors.js'
+import { BadRequestError } from './errors/errors.js'
 import { getRoutes } from './http/http-route-runner.js'
 
 const ajv = new Ajv({

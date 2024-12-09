@@ -1,6 +1,4 @@
-import '@vramework/core/errors'
-
-import { getErrorResponseForConstructorName } from '@vramework/core'
+import { getErrors } from '@vramework/core/errors'
 import { HTTPFunctionsMeta } from '@vramework/core/http'
 import _convertSchema from '@openapi-contrib/json-schema-to-openapi-schema'
 const convertSchema =
@@ -66,6 +64,16 @@ export interface OpenAPISpecInfo {
   }
   securitySchemes?: Record<string, any>
   security?: { [key: string]: any[] }[]
+}
+
+const getErrorResponseForConstructorName = (constructorName: string) => {
+  const foundError = Array.from(getErrors().entries()).find(
+    ([e]) => e.name === constructorName
+  )
+  if (foundError) {
+    return foundError[1]
+  }
+  return undefined
 }
 
 const convertSchemasToBodyPayloads = async (

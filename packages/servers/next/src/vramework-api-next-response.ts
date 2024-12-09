@@ -1,7 +1,7 @@
 import { NextApiResponse } from 'next'
 import * as cookie from 'cookie'
-import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
-import { JSONValue } from '@vramework/core/types/core.types'
+import { VrameworkHTTPAbstractResponse } from '@vramework/core/http'
+import { JSONValue } from '@vramework/core'
 
 /**
  * The `VrameworkAPINextResponse` class is an extension of the `VrameworkHTTPAbstractResponse` class,

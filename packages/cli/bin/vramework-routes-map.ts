@@ -27,6 +27,7 @@ export const vrameworkHTTPMap = async (
         packageMappings,
         visitState.http.importMap,
         visitState.http.meta,
+        visitState.http.customAliasedTypes,
         visitState.http.metaInputTypes
       )
       await writeFileInDir(routesMapDeclarationFile, content)

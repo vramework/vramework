@@ -16,7 +16,7 @@ import {
   CoreSingletonServices,
   CreateConfig,
   CreateSessionServices,
-} from '@vramework/core/types/core.types'
+} from '@vramework/core'
 import { HTTPMethod, runHTTPRoute } from '@vramework/core/http'
 
 const injectIntoUrl = (route: string, keys: Record<string, string>) => {

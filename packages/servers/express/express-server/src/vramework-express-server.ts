@@ -18,7 +18,7 @@ import {
   CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
-} from '@vramework/core/types/core.types'
+} from '@vramework/core'
 import { vrameworkMiddleware } from '@vramework/express-middleware'
 
 /**

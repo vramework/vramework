@@ -1,14 +1,14 @@
 import {
   CoreSingletonServices,
   CreateSessionServices,
-  loadAllSchemas,
 } from '@vramework/core'
+import { loadAllSchemas } from '@vramework/core/schema'
 import { runHTTPRoute, RunRouteOptions } from '@vramework/core/http'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 import { VrameworkFastifyRequest } from './vramework-fastify-request.js'
 import { VrameworkFastifyResponse } from './vramework-fastify-response.js'
-import { logRoutes } from '@vramework/core/http/log-http-routes'
+import { logRoutes } from '@vramework/core/http'
 
 /**
  * The `VrameworkFastifyPlugin` is a Fastify plugin that integrates the Vramework framework with Fastify,

@@ -125,7 +125,6 @@ export const registerMessageHandlers = (
 
     try {
       // Route-specific handling
-      console.log({ rawData }, typeof rawData)
       if (typeof rawData === 'string' && channelConfig.onMessageRoute) {
         const messageData = JSON.parse(rawData)
         const entries = Object.entries(channelConfig.onMessageRoute)

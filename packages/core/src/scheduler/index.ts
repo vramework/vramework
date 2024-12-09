@@ -1,4 +1,4 @@
-export * from './schedule.types.js'
+export * from './scheduler.types.js'
 
 export {
   runScheduledTask,
@@ -6,6 +6,6 @@ export {
   addScheduledTask,
   clearScheduledTasks,
   setScheduledTasksMeta,
-} from './schedule-runner.js'
+} from './scheduler-runner.js'
 
 export * from './log-schedulers.js'

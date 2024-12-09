@@ -1,6 +1,6 @@
 import { test, describe, beforeEach, afterEach } from 'node:test'
 import * as assert from 'assert'
-import { NotFoundError, NotImplementedError } from '../errors.js'
+import { NotFoundError, NotImplementedError } from '../errors/errors.js'
 import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
 import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
 import { JSONValue } from '../types/core.types.js'

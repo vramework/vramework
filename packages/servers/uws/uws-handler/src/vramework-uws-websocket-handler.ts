@@ -1,12 +1,10 @@
 import * as uWS from 'uWebSockets.js'
-import { runChannel } from '@vramework/core/channel/channel-runner'
-import { logChannels } from '@vramework/core/channel/log-channels'
+import { runChannel, logChannels, VrameworkChannelHandler } from '@vramework/core/channel'
+import { loadAllSchemas } from '@vramework/core/schema'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
-import { loadAllSchemas } from '@vramework/core/schema'
 import { VrameworkuWSHandlerOptions } from './vramework-uws-http-handler.js'
-import { VrameworkChannelHandler } from '@vramework/core/channel/vramework-channel-handler'
 
 const isSerializable = (data: any): boolean => {
   return !(

@@ -4,10 +4,10 @@ import type {
   CoreUserSession,
   CreateSessionServices,
 } from '../types/core.types.js'
-import type { CoreScheduledTask, ScheduledTasksMeta } from './schedule.types.js'
+import type { CoreScheduledTask, ScheduledTasksMeta } from './scheduler.types.js'
 import type { CoreAPIFunctionSessionless } from '../types/functions.types.js'
 
-import { getErrorResponse } from '../error-handler.js'
+import { getErrorResponse } from '../errors/error-handler.js'
 import { closeServices } from '../utils.js'
 
 export type RunScheduledTasksParams = {

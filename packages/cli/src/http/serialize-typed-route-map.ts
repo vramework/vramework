@@ -7,13 +7,20 @@ export const serializeTypedRoutesMap = (
   packageMappings: Record<string, string>,
   importMap: ImportMap,
   routesMeta: HTTPFunctionsMeta,
-  metaTypes: Map<string, string>
+  customTypes: Map<string, string>,
+  metaTypes: Map<string, string>,
 ) => {
   return `/**
  * This provides the structure needed for typescript to be aware of routes and their return types
  */
     
 ${serializeImportMap(relativeToPath, packageMappings, importMap)}
+
+// Custom types are those that are defined directly within generics
+// or are broken into simpler types
+${Array.from(customTypes.entries())
+  .map(([name, schema]) => `export type ${name} = ${schema}`)
+  .join('\n')}
 
 // The '& {}' is a workaround for not directly refering to a type since it confuses typescript
 ${Array.from(metaTypes.entries())

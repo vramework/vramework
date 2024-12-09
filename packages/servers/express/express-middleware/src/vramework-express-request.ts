@@ -1,4 +1,4 @@
-import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
+import { VrameworkHTTPAbstractRequest } from '@vramework/core/http'
 import { Request } from 'express-serve-static-core'
 import * as getRawBodyImp from 'raw-body'
 const getRawBody =

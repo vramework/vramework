@@ -1,4 +1,4 @@
-import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
+import { VrameworkHTTPAbstractResponse } from '@vramework/core/http'
 import type { SerializeOptions } from 'cookie'
 import { cookies } from 'next/headers.js'
 

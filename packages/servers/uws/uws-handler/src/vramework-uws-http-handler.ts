@@ -3,14 +3,13 @@ import * as uWS from 'uWebSockets.js'
 import {
   CoreSingletonServices,
   CreateSessionServices,
-} from '@vramework/core/types/core.types'
+} from '@vramework/core'
 import { runHTTPRoute } from '@vramework/core/http'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
-import { logRoutes as logRegisterRoutes } from '@vramework/core/http/log-http-routes'
+import { logRoutes as logRegisterRoutes, RunRouteOptions } from '@vramework/core/http'
 import { loadAllSchemas } from '@vramework/core/schema'
-import { RunRouteOptions } from '@vramework/core/http/http-routes.types'
 
 /**
  * Options for configuring the `vrameworkHandler`.

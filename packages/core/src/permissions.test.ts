@@ -1,7 +1,7 @@
 import { test, describe } from 'node:test'
 import assert from 'assert'
-import { getErrorResponse, addError } from './error-handler.js'
-import { ForbiddenError, BadRequestError, NotFoundError } from './errors.js'
+import { getErrorResponse, addError } from './errors/error-handler.js'
+import { ForbiddenError, BadRequestError, NotFoundError } from './errors/errors.js'
 
 describe('getErrorResponse', () => {
   test('should return the correct error response for BadRequestError', () => {

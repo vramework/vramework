@@ -64,15 +64,5 @@ export const getErrorResponse = (
   return apiErrors.get(error)
 }
 
-/**
- * @ignore
- */
-export const getErrorResponseForConstructorName = (constructorName: string) => {
-  const foundError = Array.from(apiErrors.entries()).find(
-    ([e]) => e.name === constructorName
-  )
-  if (foundError) {
-    return foundError[1]
-  }
-  return undefined
-}
+export const getErrors = () => apiErrors
+

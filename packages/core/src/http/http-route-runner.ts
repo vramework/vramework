@@ -1,4 +1,4 @@
-import { getErrorResponse } from '../error-handler.js'
+import { getErrorResponse } from '../errors/error-handler.js'
 import { verifyPermissions } from '../permissions.js'
 import {
   CoreHTTPFunctionRoute,
@@ -21,7 +21,7 @@ import {
   ForbiddenError,
   NotFoundError,
   NotImplementedError,
-} from '../errors.js'
+} from '../errors/errors.js'
 import * as cryptoImp from 'crypto'
 import { closeServices, validateAndCoerce } from '../utils.js'
 import { CoreAPIChannel } from '../channel/channel.types.js'

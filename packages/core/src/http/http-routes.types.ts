@@ -1,4 +1,4 @@
-import { EError } from '../error-handler.js'
+import { EError } from '../errors/error-handler.js'
 import {
   APIDocs,
   CoreServices,

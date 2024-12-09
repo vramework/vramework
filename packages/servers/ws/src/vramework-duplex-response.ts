@@ -1,5 +1,5 @@
 import { Duplex } from 'stream'  // Assuming `Duplex` is from Node.js' 'stream' module
-import type { JSONValue } from '@vramework/core/types/core.types'
+import type { JSONValue } from '@vramework/core'
 import { VrameworkHTTPAbstractResponse } from '@vramework/core/http'
 
 export class VrameworkDuplexResponse extends VrameworkHTTPAbstractResponse {

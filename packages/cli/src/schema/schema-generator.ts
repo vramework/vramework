@@ -91,6 +91,6 @@ addSchema('${schema}', ${schema})
 
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,
-    `import { addSchema } from '@vramework/core'\n${schemaImports}`
+    `import { addSchema } from '@vramework/core/schema'\n${schemaImports}`
   )
 }

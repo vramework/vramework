@@ -4,7 +4,7 @@ import {
   CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
-} from '@vramework/core/types/core.types'
+} from '@vramework/core'
 import vrameworkFastifyPlugin from '@vramework/fastify-plugin'
 
 export type FastifyCoreConfig = CoreConfig & {

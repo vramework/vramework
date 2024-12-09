@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { InvalidSessionError, MissingSessionError } from '../errors.js'
+import { InvalidSessionError, MissingSessionError } from '../errors/errors.js'
 import { VrameworkHTTPSessionService } from './vramework-http-session-service.js'
 
 test('VrameworkHTTPSessionService: Handles JWT-based sessions', async () => {

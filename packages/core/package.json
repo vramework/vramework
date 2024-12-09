@@ -22,10 +22,6 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
-    "./*": {
-      "import": "./dist/esm/*.js",
-      "require": "./dist/cjs/*.js"
-    },
     "./channel": {
       "import": "./dist/esm/channel/index.js",
       "require": "./dist/cjs/channel/index.js"
@@ -33,6 +29,14 @@
     "./http": {
       "import": "./dist/esm/http/index.js",
       "require": "./dist/cjs/http/index.js"
+    },
+    "./http/vramework-http-session-service": {
+      "import": "./dist/esm/http/vramework-http-session-service.js",
+      "require": "./dist/cjs/http/vramework-http-session-service.js"
+    },
+    "./errors": {
+      "import": "./dist/esm/errors/index.js",
+      "require": "./dist/cjs/errors/index.js"
     },
     "./scheduler": {
       "import": "./dist/esm/scheduler/index.js",
@@ -42,26 +46,11 @@
       "import": "./dist/esm/services/index.js",
       "require": "./dist/cjs/services/index.js"
     },
-    "./*.d.ts": {
-      "import": "./dist/esm/*.d.ts",
-      "require": "./dist/cjs/*.d.ts"
+    "./schema": {
+      "import": "./dist/esm/schema.js",
+      "require": "./dist/cjs/schema.js"
     },
-    "./channel/*.d.ts": {
-      "import": "./dist/esm/channel/*.d.ts",
-      "require": "./dist/cjs/channel/*.d.ts"
-    },
-    "./http/*.d.ts": {
-      "import": "./dist/esm/http/*.d.ts",
-      "require": "./dist/cjs/http/*.d.ts"
-    },
-    "./scheduler/*.d.ts": {
-      "import": "./dist/esm/scheduler/*.d.ts",
-      "require": "./dist/cjs/scheduler/*.d.ts"
-    },
-    "./services/*.d.ts": {
-      "import": "./dist/esm/services/*.d.ts",
-      "require": "./dist/cjs/services/*.d.ts"
-    }
+    "./types": "./dist/esm/types/index.d.ts"
   },
   "dependencies": {
     "@types/cookie": "^0.6.0",

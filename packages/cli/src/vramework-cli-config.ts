@@ -36,7 +36,7 @@ export type VrameworkCLIConfig = {
   }
 } & VrameworkCLICoreOutputFiles
 
-const CONFIG_DIR_FILES = ['nextJSfile', 'fetchFile']
+const CONFIG_DIR_FILES = ['nextJSfile', 'fetchFile', 'websocketFile']
 
 export const getVrameworkCLIConfig = async (
   configFile: string | undefined = undefined,
@@ -150,7 +150,9 @@ const _getVrameworkCLIConfig = async (
           ? result.configDir
           : result.rootDir
         if (result[objectKey]) {
-          result[objectKey] = join(relativeTo, result[objectKey])
+          if (!isAbsolute(result[objectKey])) {
+            result[objectKey] = join(relativeTo, result[objectKey])
+          }
         }
       }
     }

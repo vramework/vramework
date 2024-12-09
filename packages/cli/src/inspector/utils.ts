@@ -4,26 +4,27 @@ export const resolveUnionTypes = (
   checker: ts.TypeChecker,
   type: ts.Type
 ): { types: ts.Type[]; names: string[] } => {
-  const types: ts.Type[] = []
-  const names: string[] = []
-
-  if (type.isUnion()) {
+  const types: ts.Type[] = [];
+  const names: string[] = [];
+ 
+  // Check if it's a union type AND not part of an intersection
+  if (type.isUnion() && !(type.flags & ts.TypeFlags.Intersection)) {
     for (const t of type.types) {
-      const name = nullifyTypes(checker.typeToString(t))
+      const name = nullifyTypes(checker.typeToString(t));
       if (name) {
-        types.push(t)
-        names.push(name)
+        types.push(t);
+        names.push(name);
       }
     }
   } else {
-    const name = nullifyTypes(checker.typeToString(type))
+    const name = nullifyTypes(checker.typeToString(type));
     if (name) {
-      types.push(type)
-      names.push(name)
+      types.push(type);
+      names.push(name);
     }
   }
 
-  return { types, names }
+  return { types, names };
 }
 
 export const getTypeOfFunctionArg = (
@@ -45,6 +46,7 @@ export const getTypeOfFunctionArg = (
       console.log('No api signature found')
       return null
     }
+    
     const parameters = signature.getParameters()
     const parameter = parameters[argIndex]
     if (!parameter) {
@@ -81,7 +83,6 @@ export const getTypeArgumentsOfType = (
   checker: ts.TypeChecker,
   type: ts.Type
 ): readonly ts.Type[] | null => {
-  // If the type is a union or intersection, collect type arguments from its constituent types
   if (type.isUnionOrIntersection()) {
     const types: ts.Type[] = []
     for (const subType of type.types) {
@@ -128,6 +129,7 @@ export const getFunctionTypes = (
     outputIndex,
     inputTypeSet,
     outputTypeSet,
+    customAliasedTypes
   }: {
     subFunctionName?: string
     funcName: string
@@ -135,6 +137,7 @@ export const getFunctionTypes = (
     outputIndex: number
     inputTypeSet: Set<string>
     outputTypeSet: Set<string>
+    customAliasedTypes?: Map<string, string>
   }
 ): FunctionTypes => {
   const result: FunctionTypes = {
@@ -150,12 +153,15 @@ export const getFunctionTypes = (
   }
 
   let type: ts.Type | undefined
-
+  
   // Handle shorthand property assignment
   if (ts.isShorthandPropertyAssignment(property)) {
     const symbol = checker.getShorthandAssignmentValueSymbol(property)
     if (symbol) {
       type = checker.getTypeOfSymbolAtLocation(symbol, property)
+      if (funcName === 'func') {
+        funcName = symbol.name
+      }
     }
   }
   // Handle regular property assignment
@@ -168,11 +174,15 @@ export const getFunctionTypes = (
         outputIndex,
         inputTypeSet,
         outputTypeSet,
+        customAliasedTypes
       })
     }
 
     if (property.initializer) {
       type = checker.getTypeAtLocation(property.initializer)
+      if (funcName === 'func') {
+        funcName = property.initializer.getText()
+      }
     }
   }
 
@@ -195,24 +205,37 @@ export const getFunctionTypes = (
 
   if (inputIndex !== undefined && inputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[inputIndex]!)
-    result.inputs = types.names
-    result.inputs.forEach((input) => inputTypeSet.add(input))
-    result.inputTypes = types.types
+    if (customAliasedTypes && types.names.length > 1) {
+      const aliasType = types.names.join(' | ')
+      const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Input`
+      customAliasedTypes.set(aliasName, aliasType)
+      result.inputs = [aliasName]
+      inputTypeSet.add(aliasName)
+      result.inputTypes = []
+    } else {
+      result.inputs = types.names
+      result.inputs.forEach((input) => inputTypeSet.add(input))
+      result.inputTypes = types.types
+    }
   } else {
     console.error(`Input index ${inputIndex} is out of bounds`)
   }
 
   if (outputIndex !== undefined && outputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[outputIndex]!)
-    result.outputs = types.names
-    result.outputs.forEach((input) => outputTypeSet.add(input))
-    result.outputTypes = types.types
+    if (customAliasedTypes && types.names.length > 1) {
+      const aliasType = types.names.join(' | ')
+      const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Output`
+      customAliasedTypes.set(aliasName, aliasType)
+      result.outputs = [aliasName]
+      outputTypeSet.add(aliasName)
+      result.outputTypes = []
+    } else {
+      result.outputs = types.names
+      result.outputs.forEach((output) => outputTypeSet.add(output))
+      result.outputTypes = types.types
+    }
   }
-  // else {
-  //   console.debug(
-  //     `Output index ${outputIndex} is out of bounds for ${funcName}`
-  //   )
-  // }
 
   return result
 }

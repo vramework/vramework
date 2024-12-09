@@ -24,6 +24,7 @@ export const inspector = (routeFiles: string[]): VisitState => {
     sessionServicesFactories: new Map(),
     configFactories: new Map(),
     http: {
+      customAliasedTypes: new Map(),
       importMap: new Map(),
       metaInputTypes: new Map(),
       meta: [],
@@ -33,7 +34,7 @@ export const inspector = (routeFiles: string[]): VisitState => {
     },
     channels: {
       importMap: new Map(),
-      metaInputTypes: new Map<string, string>(),
+      metaInputTypes: new Map(),
       inputTypes: new Set<string>(),
       outputTypes: new Set<string>(),
       files: new Set<string>(),

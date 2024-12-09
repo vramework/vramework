@@ -1,4 +1,4 @@
-import { EError } from '../error-handler.js'
+import { EError } from '../errors/error-handler.js'
 import { HTTPFunctionMetaInputTypes } from '../http/http-routes.types.js'
 import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
 import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
@@ -59,23 +59,23 @@ export interface ChannelMeta {
 export type ChannelsMeta = ChannelMeta[]
 
 export type CoreChannelConnection<
-  OpenData,
+  ChannelData,
   Out = unknown,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: Services,
-  channel: VrameworkChannel<Session, OpenData, undefined, Out>
+  channel: VrameworkChannel<Session, ChannelData, undefined, Out>
 ) => Promise<void>
 
 export type CoreChannelDisconnection<
-  OpenData,
+  ChannelData,
   Out = unknown,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: Services,
-  channel: VrameworkChannel<Session, OpenData, undefined, never>
+  channel: VrameworkChannel<Session, ChannelData, undefined, never>
 ) => Promise<void>
 
 /**
@@ -88,12 +88,12 @@ export type CoreChannelDisconnection<
 export type CoreChannelMessage<
   In,
   Out,
-  OpenData,
+  ChannelData,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: Services,
-  channel: VrameworkChannel<Session, OpenData, In, Out>,
+  channel: VrameworkChannel<Session, ChannelData, In, Out>,
   data: In
 ) => Promise<void>
 

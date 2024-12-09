@@ -1,5 +1,5 @@
-import { JSONValue } from '@vramework/core/types/core.types'
-import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
+import { JSONValue } from '@vramework/core'
+import { VrameworkHTTPAbstractResponse } from '@vramework/core/http'
 import { Response, CookieOptions } from 'express-serve-static-core'
 
 export class VrameworkExpressResponse extends VrameworkHTTPAbstractResponse {

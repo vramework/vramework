@@ -11,15 +11,15 @@ export const serializeVrameworkTypes = (
 * This is used to provide the application types in the typescript project
 */
   
-import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission, CoreHTTPFunction, AssertRouteParams } from '@vramework/core'
-import { CoreScheduledTask } from '@vramework/core'
-import { CoreAPIChannel, CoreChannelConnection, CoreChannelConnectionSessionless, CoreChannelDisconnection, CoreChannelMessage, CoreChannelMessageSessionless } from '@vramework/core'
+import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission } from '@vramework/core'
+import { CoreHTTPFunction, AssertRouteParams } from '@vramework/core/http'
+import { CoreScheduledTask } from '@vramework/core/scheduler'
+import { CoreAPIChannel, CoreChannelConnection, CoreChannelDisconnection, CoreChannelMessage } from '@vramework/core/channel'
 
 ${userSessionTypeImport}
 ${sessionServicesTypeImport}
 
 export type APIPermission<In = unknown, RequiredServices = ${servicesTypeName}> = CoreAPIPermission<In, RequiredServices, ${userSessionTypeName}>
-
 
 export type APIFunctionSessionless<In = unknown, Out = never, RequiredServices = ${servicesTypeName}> = CoreAPIFunctionSessionless<In, Out, RequiredServices, ${userSessionTypeName}>
 export type APIFunction<In = unknown, Out = never, RequiredServices = ${servicesTypeName}> = CoreAPIFunction<In, Out, RequiredServices, ${userSessionTypeName}>
@@ -32,16 +32,19 @@ type APIChannel<ChannelData, Channel extends string> = CoreAPIChannel<ChannelDat
 
 type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>, UserSession>
 
-declare module "@vramework/core" {
-
+declare module "@vramework/core/http" {
   function addRoute<In, Out, Route extends string>(
     route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
   ): void;
+}
 
+declare module "@vramework/core/channel" {
   function addChannel<ChannelData, Channel extends string>(
     channel: APIChannel<ChannelData, Channel> & AssertRouteParams<ChannelData, Channel>
   ): void;
+}
 
+declare module "@vramework/core/scheduler" {
   function addScheduledTask(task: ScheduledTask): void;
 }
 `

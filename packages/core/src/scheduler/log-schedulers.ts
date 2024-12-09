@@ -1,5 +1,5 @@
 import { Logger } from '../services/index.js'
-import { getScheduledTasks } from './schedule-runner.js'
+import { getScheduledTasks } from './scheduler-runner.js'
 
 /**
  * Logs all the loaded scheduled tasks.

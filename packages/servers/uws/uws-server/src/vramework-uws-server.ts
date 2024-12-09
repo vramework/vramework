@@ -1,10 +1,10 @@
 import * as uWS from 'uWebSockets.js'
 
-import {
+import type {
   CoreConfig,
   CoreSingletonServices,
   CreateSessionServices,
-} from '@vramework/core/types/core.types'
+} from '@vramework/core'
 
 import {
   vrameworkHTTPHandler,
