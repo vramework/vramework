@@ -1,5 +1,11 @@
 # @vramework/next
 
+## 0.5.11
+
+### Patch Changes
+
+- 5d03fac: refactor: removing some dead code
+
 ## 0.5.10
 
 ### Patch Changes
