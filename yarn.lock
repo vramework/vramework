@@ -2567,7 +2567,7 @@ __metadata:
     "@types/cookie": "npm:^0.6.0"
     "@types/node": "npm:^22.7.8"
     "@types/uuid": "npm:^10.0.0"
-    "@vramework/core": "npm:^0.5.26"
+    "@vramework/core": "npm:^0.5.27"
     commander: "npm:^12"
     glob: "npm:^10"
     path-to-regexp: "npm:^8.2.0"
@@ -2579,7 +2579,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/core@npm:^0.5.26, @vramework/core@workspace:packages/core":
+"@vramework/core@npm:^0.5.26, @vramework/core@npm:^0.5.27, @vramework/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@vramework/core@workspace:packages/core"
   dependencies:
@@ -2754,7 +2754,7 @@ __metadata:
     qs: "npm:^6.13.0"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.5.26
+    "@vramework/core": ^0.5.27
     uWebSockets.js: "*"
   languageName: unknown
   linkType: soft

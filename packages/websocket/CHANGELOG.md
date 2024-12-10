@@ -1,5 +1,11 @@
 # @vramework/websocket
 
+## 0.5.3
+
+### Patch Changes
+
+- aa8435c: fix: fixing up channel apis and implementations
+
 ## 0.5.2
 
 ### Patch Changes

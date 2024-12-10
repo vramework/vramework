@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.27
+
+### Patch Changes
+
+- aa8435c: fix: fixing up channel apis and implementations
+
 ## 0.5.26
 
 ### Patch Changes
