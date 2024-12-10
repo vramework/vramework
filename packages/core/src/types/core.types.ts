@@ -93,13 +93,7 @@ export interface VrameworkInteractions {
  * Represents the core services used by Vramework, including singleton services and the request/response interaction.
  */
 export type CoreServices<SingletonServices = CoreSingletonServices> =
-  SingletonServices
-
-/**
- * Represents the core services used by Vramework, including singleton services and the request/response interaction.
- */
-export type CoreHTTPServices<SingletonServices = CoreSingletonServices> =
-  SingletonServices & { http: VrameworkHTTP }
+  SingletonServices & VrameworkInteractions
 
 /**
  * Defines a function type for creating singleton services from the given configuration.

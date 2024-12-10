@@ -1,4 +1,4 @@
-import { VrameworkHTTPAbstractResponse } from '@vramework/core/http'
+import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
 import type { SerializeOptions } from 'cookie'
 import { cookies } from 'next/headers.js'
 
@@ -7,11 +7,19 @@ import { cookies } from 'next/headers.js'
  * specifically designed for handling action responses in a Next.js environment.
  */
 export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
-  /**
-   * Constructs a new instance of the `VrameworkActionNextResponse` class.
-   */
-  constructor() {
+  private cookieStore: any
+
+/**
+ * Constructs a new instance of the `VrameworkActionNextRequest` class.
+ */
+  constructor(private dynamicOptIn: { cookies: boolean } = { cookies: true }) {
     super()
+  }
+
+  public async init() {
+    if (this.dynamicOptIn.cookies) {
+      this.cookieStore = await cookies()
+    }
   }
 
   /**
@@ -20,7 +28,7 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
    * @remarks
    * This method is currently a placeholder and should be implemented as needed.
    */
-  public setStatus() {}
+  public setStatus() { }
 
   /**
    * Sets the response body as JSON.
@@ -28,7 +36,7 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
    * @remarks
    * This method is currently a placeholder and should be implemented as needed.
    */
-  public setJson() {}
+  public setJson() { }
 
   /**
    * Sets the final response to be sent to the client.
@@ -36,7 +44,7 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
    * @remarks
    * This method is currently a placeholder and should be implemented as needed.
    */
-  public setResponse() {}
+  public setResponse() { }
 
   /**
    * Sets a cookie in the response.
@@ -50,8 +58,7 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
     value: string,
     options: SerializeOptions
   ): void {
-    const cookieStore = cookies()
-    cookieStore.set(name, value, options)
+    this.getCookieStore().set(name, value, options)
   }
 
   /**
@@ -60,7 +67,18 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
    * @param name - The name of the cookie to clear.
    */
   public clearCookie(name: string): void {
-    const cookieStore = cookies()
-    cookieStore.delete(name)
+    this.getCookieStore().delete(name)
+  }
+
+  private getCookieStore() {
+    if (!this.cookieStore) {
+      if (!this.dynamicOptIn.cookies) {
+        throw new Error('Need to allow dynamic optin for cookies')
+      }
+      if (!this.cookieStore) {
+        throw new Error('init needs to be called')
+      }
+    }
+    return this.cookieStore
   }
 }

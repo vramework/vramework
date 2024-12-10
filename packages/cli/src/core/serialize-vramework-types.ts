@@ -14,7 +14,7 @@ export const serializeVrameworkTypes = (
 import { CoreAPIFunction, CoreAPIFunctionSessionless, CoreAPIPermission } from '@vramework/core'
 import { CoreHTTPFunction, AssertRouteParams } from '@vramework/core/http'
 import { CoreScheduledTask } from '@vramework/core/scheduler'
-import { CoreAPIChannel, CoreChannelConnection, CoreChannelDisconnection, CoreChannelMessage } from '@vramework/core/channel'
+import { CoreAPIChannel, CoreChannelConnection, CoreChannelDisconnection, CoreChannelMessage, VrameworkChannel } from '@vramework/core/channel'
 
 ${userSessionTypeImport}
 ${sessionServicesTypeImport}

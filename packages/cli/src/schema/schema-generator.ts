@@ -83,7 +83,7 @@ export async function saveSchemas(
   const schemaImports = Array.from(desiredSchemas)
     .map(
       (schema) => `
-import * as ${schema} from './schemas/${schema}.schema.json'
+import * as ${schema} from './schemas/${schema}.schema.json' with { type: 'json' }
 addSchema('${schema}', ${schema})
 `
     )

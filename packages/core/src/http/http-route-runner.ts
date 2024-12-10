@@ -280,7 +280,7 @@ export const runHTTPRoute = async <In, Out>({
       { http },
       session
     )
-    const allServices = { ...singletonServices, ...sessionServices }
+    const allServices = { ...singletonServices, ...sessionServices, http }
 
     const permissioned = await verifyPermissions(
       route.permissions,

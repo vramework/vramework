@@ -83,55 +83,9 @@ export const vramework = () => {
     return _vramework!.staticActionRequest(route, method, data as any)
   }
 
-  /**
-   * Makes a server-side rendering (SSR) request for a specified route and method.
-   *
-   * @template Route - The route key from the RoutesMap.
-   * @template Method - The method key from the specified route.
-   * @param request - The incoming HTTP request object with cookies.
-   * @param response - The outgoing HTTP response object.
-   * @param route - The route to make the request to.
-   * @param method - The method to be used for the request.
-   * @param data - The input data for the request.
-   * @returns A promise that resolves to the output of the route handler.
-   */
-  const ssrRequest = <Route extends keyof RoutesMap, Method extends keyof RoutesMap[Route]>(
-    request: IncomingMessage & {
-      cookies: Partial<{ [key: string]: string }>;
-    },
-    response: ServerResponse<IncomingMessage>,
-    route: Route,
-    method: Method,
-    data: RouteHandlerOf<Route, Method>['input']
-  ): Promise<RouteHandlerOf<Route, Method>['output']> => {
-    return _vramework!.ssrRequest(request, response, route, method as HTTPMethod, data as any)
-  }
-
-  /**
-   * Handles an API request for a specified route and method.
-   *
-   * @template Route - The route key from the RoutesMap.
-   * @template Method - The method key from the specified route.
-   * @param request - The incoming Next.js API request object.
-   * @param response - The outgoing Next.js API response object.
-   * @param route - The route to make the request to.
-   * @param method - The method to be used for the request.
-   * @returns A promise that resolves when the request is handled.
-   */
-  const apiRequest = <Route extends keyof RoutesMap, Method extends keyof RoutesMap[Route]>(
-    request: NextApiRequest,
-    response: NextApiResponse,
-    route: Route,
-    method: Method,
-  ): Promise<void> => {
-    return _vramework!.apiRequest(request, response, route, method as HTTPMethod)
-  }
-
   return {
     staticActionRequest,
-    actionRequest,
-    apiRequest,
-    ssrRequest
+    actionRequest
   }
 }`
 }

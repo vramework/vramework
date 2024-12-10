@@ -1,4 +1,4 @@
-import { VrameworkHTTPAbstractRequest } from '@vramework/core/http'
+import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 
 /**
  * The `VrameworkActionStaticNextRequest` class is an extension of the `VrameworkHTTPAbstractRequest` class,

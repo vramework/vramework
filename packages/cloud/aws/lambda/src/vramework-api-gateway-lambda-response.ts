@@ -1,5 +1,5 @@
 import { JSONValue } from '@vramework/core'
-import { VrameworkHTTPAbstractResponse } from '@vramework/core/http'
+import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
 import { APIGatewayProxyResult } from 'aws-lambda'
 
 export class VrameworkAPIGatewayLambdaResponse extends VrameworkHTTPAbstractResponse {

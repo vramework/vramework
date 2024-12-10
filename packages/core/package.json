@@ -21,6 +21,8 @@
     "./channel": "./dist/channel/index.js",
     "./http": "./dist/http/index.js",
     "./http/vramework-http-session-service": "./dist/http/vramework-http-session-service.js",
+    "./http/vramework-http-abstract-response": "./dist/http/vramework-http-abstract-response.js",
+    "./http/vramework-http-abstract-request": "./dist/http/vramework-http-abstract-request.js",
     "./errors": "./dist/errors/index.js",
     "./scheduler": "./dist/scheduler/index.js",
     "./services": "./dist/services/index.js",

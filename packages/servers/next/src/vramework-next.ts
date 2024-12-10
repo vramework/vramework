@@ -1,12 +1,6 @@
 import { compile } from 'path-to-regexp'
-import { IncomingMessage, ServerResponse } from 'http'
-import { NextApiRequest, NextApiResponse } from 'next'
 import { EventEmitter } from 'eventemitter3'
 
-import { VrameworkSSRNextRequest } from './vramework-ssr-next-request.js'
-import { VrameworkSSRNextResponse } from './vramework-ssr-next-response.js'
-import { VrameworkAPINextRequest } from './vramework-api-next-request.js'
-import { VrameworkAPINextResponse } from './vramework-api-next-response.js'
 import { VrameworkActionNextRequest } from './vramework-action-next-request.js'
 import { VrameworkActionNextResponse } from './vramework-action-next-response.js'
 import { VrameworkActionStaticNextRequest } from './vramework-action-static-next-request.js'
@@ -61,9 +55,13 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
+    const request = new VrameworkActionNextRequest<In>(data)
+    await request.init()
+    const response = new VrameworkActionNextResponse()
+    await request.init()
     return await runHTTPRoute<In, Out>({
-      request: new VrameworkActionNextRequest<In>(data),
-      response: new VrameworkActionNextResponse(),
+      request,
+      response,
       singletonServices,
       createSessionServices: this.createSessionServices,
       route: injectIntoUrl(route as string, data),
@@ -93,64 +91,6 @@ export class VrameworkNextJS {
       route: injectIntoUrl(route as string, data),
       method: method as HTTPMethod,
       skipUserSession: true,
-    })
-  }
-
-  /**
-   * Handles an SSR request, routing it to the appropriate handler.
-   *
-   * @param request - The incoming message request object.
-   * @param response - The server response object.
-   * @param route - The route to handle.
-   * @param method - The HTTP method for the request.
-   * @param data - The data to be sent with the request.
-   * @returns A promise that resolves to the response data.
-   */
-  public async ssrRequest<In extends Record<string, any>, Out>(
-    request: IncomingMessage & {
-      cookies: Partial<{ [key: string]: string }>
-    },
-    response: ServerResponse<IncomingMessage>,
-    route: string,
-    method: HTTPMethod,
-    data: In
-  ): Promise<Out> {
-    const singletonServices = await this.getSingletonServices()
-    return await runHTTPRoute<In, Out>({
-      request: new VrameworkSSRNextRequest(request, data),
-      response: new VrameworkSSRNextResponse(response),
-      singletonServices,
-      createSessionServices: this.createSessionServices,
-      route: injectIntoUrl(route, data),
-      method,
-    })
-  }
-
-  /**
-   * Handles an API request, routing it to the appropriate handler.
-   *
-   * @param request - The Next.js API request object.
-   * @param response - The Next.js API response object.
-   * @param route - The route to handle.
-   * @param method - The HTTP method for the request.
-   */
-  public async apiRequest<In extends Record<string, any>, Out>(
-    request: NextApiRequest,
-    response: NextApiResponse,
-    route: string,
-    method: HTTPMethod
-  ): Promise<void> {
-    const singletonServices = await this.getSingletonServices()
-    const vrameworkRequest = new VrameworkAPINextRequest<In>(request)
-    const vrameworkResponse = new VrameworkAPINextResponse(response)
-    const data = await vrameworkRequest.getData()
-    await runHTTPRoute<In, Out>({
-      request: vrameworkRequest,
-      response: vrameworkResponse,
-      singletonServices,
-      createSessionServices: this.createSessionServices,
-      route: injectIntoUrl(route, data),
-      method,
     })
   }
 
