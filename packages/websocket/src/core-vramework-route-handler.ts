@@ -41,7 +41,12 @@ export class CoreVrameworkRouteHandler {
     )
   }
 
-  public handleMessage(method: string | number | symbol, data: any) {
+  /**
+   * This is in an internal function that is called when a message is received.
+   *
+   * @ignore
+   */
+  public _handleMessage(method: string | number | symbol, data: any) {
     const method2 = method.toString()
     const subs = this.subscriptions.get(method2)
     if (subs) {

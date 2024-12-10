@@ -4,9 +4,7 @@ import * as querystring from 'qs'
 import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 
 export class VrameworkHTTPRequest extends VrameworkHTTPAbstractRequest {
-  constructor(
-    private request: IncomingMessage
-  ) {
+  constructor(private request: IncomingMessage) {
     super()
   }
 

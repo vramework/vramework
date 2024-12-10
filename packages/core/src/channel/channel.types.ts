@@ -23,7 +23,9 @@ export type RunChannelOptions = Partial<{
 
 export type RunChannelParams<ChannelData> = {
   singletonServices: CoreSingletonServices
-  request: VrameworkRequest<ChannelData> | VrameworkHTTPAbstractRequest<ChannelData>
+  request:
+    | VrameworkRequest<ChannelData>
+    | VrameworkHTTPAbstractRequest<ChannelData>
   response: VrameworkResponse | VrameworkHTTPAbstractResponse
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
@@ -65,7 +67,7 @@ export type CoreChannelConnection<
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: Services,
-  channel: VrameworkChannel<Session, ChannelData, undefined, Out>
+  channel: VrameworkChannel<Session, ChannelData, Out>
 ) => Promise<void>
 
 export type CoreChannelDisconnection<
@@ -75,7 +77,7 @@ export type CoreChannelDisconnection<
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: Services,
-  channel: VrameworkChannel<Session, ChannelData, undefined, never>
+  channel: VrameworkChannel<Session, ChannelData, never>
 ) => Promise<void>
 
 /**
@@ -93,7 +95,7 @@ export type CoreChannelMessage<
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: Services,
-  channel: VrameworkChannel<Session, ChannelData, In, Out>,
+  channel: VrameworkChannel<Session, ChannelData, Out>,
   data: In
 ) => Promise<void>
 

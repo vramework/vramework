@@ -1,5 +1,9 @@
 import * as uWS from 'uWebSockets.js'
-import { runChannel, logChannels, VrameworkChannelHandler } from '@vramework/core/channel'
+import {
+  runChannel,
+  logChannels,
+  VrameworkChannelHandler,
+} from '@vramework/core/channel'
 import { loadAllSchemas } from '@vramework/core/schema'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'

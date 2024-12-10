@@ -1,12 +1,12 @@
 import { CoreUserSession } from '../types/core.types.js'
 
-export interface VrameworkChannel<Session, OpeningData, In, Out> {
+export interface VrameworkChannel<Session, OpeningData, Out> {
   session?: Session
   setSession: (session: Session) => void
   openingData: OpeningData
   send: (data: Out) => void
-  data: In
   close: () => void
+  state: 'initial' | 'open' | 'closed'
 }
 
 export class VrameworkChannelHandler<
@@ -19,33 +19,14 @@ export class VrameworkChannelHandler<
   private openCallBack?: () => void
   private closeCallback?: () => void
   private sendCallback?: (message: Out) => void
-  private channel?: {
-    session: UserSession
-    openingData: OpeningData
-    setSession: (session: UserSession) => void
-    send: (message: Out) => void
-    close: () => void
-    data: undefined
-  }
+  private channel?: VrameworkChannel<UserSession, OpeningData, Out>
 
   constructor(
     private openingData: OpeningData,
     private updateSession: (session: UserSession) => void
   ) {}
 
-  public getChannelWithData<In>(
-    data: In
-  ): VrameworkChannel<UserSession, OpeningData, In, Out> {
-    const channel = this.getChannel()
-    return { ...channel, data }
-  }
-
-  public getChannel(): VrameworkChannel<
-    UserSession,
-    OpeningData,
-    undefined,
-    Out
-  > {
+  public getChannel(): VrameworkChannel<UserSession, OpeningData, Out> {
     if (!this.channel) {
       this.channel = {
         session: this.userSession!,
@@ -53,7 +34,7 @@ export class VrameworkChannelHandler<
         setSession: this.setSession.bind(this),
         send: this.send.bind(this),
         close: this.close.bind(this),
-        data: undefined,
+        state: 'initial',
       }
     }
     return this.channel
@@ -64,6 +45,7 @@ export class VrameworkChannelHandler<
   }
 
   public open() {
+    this.getChannel().state = 'open'
     if (this.openCallBack) {
       this.openCallBack()
     }
@@ -82,6 +64,7 @@ export class VrameworkChannelHandler<
   }
 
   public close() {
+    this.getChannel().state = 'closed'
     this.closeCallback?.()
   }
 

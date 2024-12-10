@@ -8,7 +8,7 @@ export const serializeTypedRoutesMap = (
   importMap: ImportMap,
   routesMeta: HTTPFunctionsMeta,
   customTypes: Map<string, string>,
-  metaTypes: Map<string, string>,
+  metaTypes: Map<string, string>
 ) => {
   return `/**
  * This provides the structure needed for typescript to be aware of routes and their return types

@@ -26,7 +26,7 @@ export const vrameworkChannelsMap = async (
         channelsMapDeclarationFile,
         packageMappings,
         visitState.channels.importMap,
-        visitState.channels.meta,
+        visitState.channels.meta
       )
       await writeFileInDir(channelsMapDeclarationFile, content)
     }

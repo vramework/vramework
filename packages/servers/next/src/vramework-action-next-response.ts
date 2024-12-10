@@ -9,9 +9,9 @@ import { cookies } from 'next/headers.js'
 export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
   private cookieStore: any
 
-/**
- * Constructs a new instance of the `VrameworkActionNextRequest` class.
- */
+  /**
+   * Constructs a new instance of the `VrameworkActionNextRequest` class.
+   */
   constructor(private dynamicOptIn: { cookies: boolean } = { cookies: true }) {
     super()
   }
@@ -28,7 +28,7 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
    * @remarks
    * This method is currently a placeholder and should be implemented as needed.
    */
-  public setStatus() { }
+  public setStatus() {}
 
   /**
    * Sets the response body as JSON.
@@ -36,7 +36,7 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
    * @remarks
    * This method is currently a placeholder and should be implemented as needed.
    */
-  public setJson() { }
+  public setJson() {}
 
   /**
    * Sets the final response to be sent to the client.
@@ -44,7 +44,7 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
    * @remarks
    * This method is currently a placeholder and should be implemented as needed.
    */
-  public setResponse() { }
+  public setResponse() {}
 
   /**
    * Sets a cookie in the response.

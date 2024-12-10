@@ -6,7 +6,7 @@ export const serializeTypedChannelsMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,
   importMap: ImportMap,
-  channelsMeta: ChannelsMeta,
+  channelsMeta: ChannelsMeta
 ): string => {
   return `/**
  * This provides the structure needed for TypeScript to be aware of channels

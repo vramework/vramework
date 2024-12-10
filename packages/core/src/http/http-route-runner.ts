@@ -124,7 +124,9 @@ export const loadUserSession = async (
   requiresSession: boolean,
   http: VrameworkHTTP | undefined,
   matchedPath: any,
-  route: CoreHTTPFunctionRoute<unknown, unknown, any> | CoreAPIChannel<unknown, any>,
+  route:
+    | CoreHTTPFunctionRoute<unknown, unknown, any>
+    | CoreAPIChannel<unknown, any>,
   logger: Logger,
   sessionService: SessionService | undefined
 ) => {

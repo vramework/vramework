@@ -20,13 +20,13 @@ class VrameworkWebSocketRoute<Channel extends keyof ChannelsMap, Route extends k
 
     public send<
         Method extends keyof ChannelsMap[Channel]['routes'][Route],
-        Data extends ChannelRouteHandlerOf<Channel, Route, Method>['output']
+        Data extends ChannelRouteHandlerOf<Channel, Route, Method>['input']
     >(method: Method, data: Data) {
         super.send(method.toString(), data)
     }
 }
 
-export class VrameworkWebSocket<Channel extends keyof ChannelsMap, Data = ChannelDefaultHandlerOf<Channel>['input']> extends CoreVrameworkWebsocket {
+export class VrameworkWebSocket<Channel extends keyof ChannelsMap> extends CoreVrameworkWebsocket {
     /**
      * Send a message to a specific route and method.
      * Validates the input data type.

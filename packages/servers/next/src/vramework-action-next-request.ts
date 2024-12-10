@@ -5,7 +5,9 @@ import { cookies, headers } from 'next/headers.js'
  * The `VrameworkActionNextRequest` class is an extension of the `VrameworkHTTPAbstractRequest` class,
  * specifically designed for handling action requests in a Next.js environment.
  */
-export class VrameworkActionNextRequest<In> extends VrameworkHTTPAbstractRequest<In> {
+export class VrameworkActionNextRequest<
+  In,
+> extends VrameworkHTTPAbstractRequest<In> {
   private body: any
   private cookies: Record<string, string> | undefined
   private headers: Map<string, string> | undefined
@@ -15,7 +17,13 @@ export class VrameworkActionNextRequest<In> extends VrameworkHTTPAbstractRequest
    *
    * @param body - The request body to be wrapped and converted to a plain object.
    */
-  constructor(body: any, private dynamicOptIn: { cookies: boolean, headers: boolean } = { cookies: true, headers: true }) {
+  constructor(
+    body: any,
+    private dynamicOptIn: { cookies: boolean; headers: boolean } = {
+      cookies: true,
+      headers: true,
+    }
+  ) {
     super()
     // Needed to convert the body to a plain object and validate dates
     this.body = JSON.parse(JSON.stringify(body))

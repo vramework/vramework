@@ -1,4 +1,4 @@
-import { Duplex } from 'stream'  // Assuming `Duplex` is from Node.js' 'stream' module
+import { Duplex } from 'stream' // Assuming `Duplex` is from Node.js' 'stream' module
 import type { JSONValue } from '@vramework/core'
 import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
 
@@ -35,7 +35,7 @@ export class VrameworkDuplexResponse extends VrameworkHTTPAbstractResponse {
   private writeBody(body: string | Buffer): void {
     if (!this.aborted) {
       // Write the headers
-      this.duplex.write('\r\n')  // Empty line to separate headers from body
+      this.duplex.write('\r\n') // Empty line to separate headers from body
       // Write the actual body content
       this.duplex.write(body)
     }
@@ -52,7 +52,7 @@ export class VrameworkDuplexResponse extends VrameworkHTTPAbstractResponse {
   // End the response
   public end(): void {
     if (!this.aborted) {
-      this.duplex.end()  // Close the Duplex stream
+      this.duplex.end() // Close the Duplex stream
     }
   }
 }

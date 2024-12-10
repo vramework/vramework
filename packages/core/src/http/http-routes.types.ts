@@ -120,7 +120,9 @@ export type CoreHTTPFunctionRoute<
 /**
  * Represents an array of core API routes.
  */
-export type CoreHTTPFunctionRoutes = Array<CoreHTTPFunctionRoute<any, any, string>>
+export type CoreHTTPFunctionRoutes = Array<
+  CoreHTTPFunctionRoute<any, any, string>
+>
 
 /**
  * Represents the input types for route metadata, including parameters, query, and body types.

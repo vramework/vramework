@@ -4,7 +4,10 @@ import { runChannel, logChannels } from '@vramework/core/channel'
 import { loadAllSchemas } from '@vramework/core/schema'
 import { RunRouteOptions } from '@vramework/core/http'
 import { VrameworkChannelHandler } from '@vramework/core/channel'
-import { CoreSingletonServices, CreateSessionServices } from '@vramework/core/src/types/core.types.js'
+import {
+  CoreSingletonServices,
+  CreateSessionServices,
+} from '@vramework/core/src/types/core.types.js'
 
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkDuplexResponse } from './vramework-duplex-response.js'
@@ -43,13 +46,13 @@ const isSerializable = (data: any): boolean => {
     data instanceof Float64Array ||
     data instanceof DataView ||
     data instanceof SharedArrayBuffer ||
-    (Array.isArray(data) && data.some(item => item instanceof Buffer))
+    (Array.isArray(data) && data.some((item) => item instanceof Buffer))
   ) {
-    return false; // Not serializable (binary or buffer-like)
+    return false // Not serializable (binary or buffer-like)
   }
 
   // Allow primitive objects and objects that are not binary-like
-  return true;
+  return true
 }
 
 /**
@@ -74,29 +77,32 @@ export const vrameworkWebsocketHandler = ({
     loadAllSchemas(singletonServices.logger)
   }
 
-  wss.on('connection', (ws: WebSocket, channelHandler: VrameworkChannelHandler) => {
-    channelHandler.registerOnSend((data) => {
-      if (isSerializable(data)) {
-        ws.send(JSON.stringify(data))
-      } else {
-        ws.send(data as any)
-      }
-    })
+  wss.on(
+    'connection',
+    (ws: WebSocket, channelHandler: VrameworkChannelHandler) => {
+      channelHandler.registerOnSend((data) => {
+        if (isSerializable(data)) {
+          ws.send(JSON.stringify(data))
+        } else {
+          ws.send(data as any)
+        }
+      })
 
-    ws.on('message', (message, isBinary) => {
-      if (isBinary) {
-        channelHandler.message(message)
-      } else {
-        channelHandler.message(message.toString())
-      }
-    })
+      ws.on('message', (message, isBinary) => {
+        if (isBinary) {
+          channelHandler.message(message)
+        } else {
+          channelHandler.message(message.toString())
+        }
+      })
 
-    ws.on('close', () => {
-      channelHandler.close()
-    })
+      ws.on('close', () => {
+        channelHandler.close()
+      })
 
-    channelHandler.open()
-  })
+      channelHandler.open()
+    }
+  )
 
   server.on('upgrade', async (req, socket, head) => {
     // Handle WebSocket connection upgrade
@@ -114,8 +120,8 @@ export const vrameworkWebsocketHandler = ({
     })
 
     if (!channelHandler) {
-      socket.destroy();
-      return;
+      socket.destroy()
+      return
     }
 
     wss.handleUpgrade(req, socket, head, (ws) => {

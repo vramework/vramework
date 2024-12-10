@@ -4,27 +4,27 @@ export const resolveUnionTypes = (
   checker: ts.TypeChecker,
   type: ts.Type
 ): { types: ts.Type[]; names: string[] } => {
-  const types: ts.Type[] = [];
-  const names: string[] = [];
- 
+  const types: ts.Type[] = []
+  const names: string[] = []
+
   // Check if it's a union type AND not part of an intersection
   if (type.isUnion() && !(type.flags & ts.TypeFlags.Intersection)) {
     for (const t of type.types) {
-      const name = nullifyTypes(checker.typeToString(t));
+      const name = nullifyTypes(checker.typeToString(t))
       if (name) {
-        types.push(t);
-        names.push(name);
+        types.push(t)
+        names.push(name)
       }
     }
   } else {
-    const name = nullifyTypes(checker.typeToString(type));
+    const name = nullifyTypes(checker.typeToString(type))
     if (name) {
-      types.push(type);
-      names.push(name);
+      types.push(type)
+      names.push(name)
     }
   }
 
-  return { types, names };
+  return { types, names }
 }
 
 export const getTypeOfFunctionArg = (
@@ -46,7 +46,7 @@ export const getTypeOfFunctionArg = (
       console.log('No api signature found')
       return null
     }
-    
+
     const parameters = signature.getParameters()
     const parameter = parameters[argIndex]
     if (!parameter) {
@@ -129,7 +129,7 @@ export const getFunctionTypes = (
     outputIndex,
     inputTypeSet,
     outputTypeSet,
-    customAliasedTypes
+    customAliasedTypes,
   }: {
     subFunctionName?: string
     funcName: string
@@ -174,7 +174,7 @@ export const getFunctionTypes = (
         outputIndex,
         inputTypeSet,
         outputTypeSet,
-        customAliasedTypes
+        customAliasedTypes,
       })
     }
 

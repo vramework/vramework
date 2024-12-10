@@ -10,8 +10,7 @@ export class VrameworkNextRequest {
    *
    * @param request - The Next.js request object to be wrapped.
    */
-  constructor(private request: NextRequest) {
-  }
+  constructor(private request: NextRequest) {}
 
   /**
    * Retrieves the cookies from the request.

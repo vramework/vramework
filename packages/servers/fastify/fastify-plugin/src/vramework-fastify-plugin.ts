@@ -1,7 +1,4 @@
-import {
-  CoreSingletonServices,
-  CreateSessionServices,
-} from '@vramework/core'
+import { CoreSingletonServices, CreateSessionServices } from '@vramework/core'
 import { loadAllSchemas } from '@vramework/core/schema'
 import { runHTTPRoute, RunRouteOptions } from '@vramework/core/http'
 import { FastifyPluginAsync } from 'fastify'

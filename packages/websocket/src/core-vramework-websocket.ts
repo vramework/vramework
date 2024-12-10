@@ -72,7 +72,7 @@ export class CoreVrameworkWebsocket {
         for (const [type, routeHandler] of this.routes) {
           const route = json[type]
           if (route) {
-            routeHandler.handleMessage(json[type], json)
+            routeHandler._handleMessage(json[type], json)
           }
         }
         this.subscriptions.forEach((subscription) => subscription(json))
