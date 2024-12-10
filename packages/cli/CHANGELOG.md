@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.39
+
+### Patch Changes
+
+- 75a828d: feat: create schemas for custom types extracted from apis
+
 ## 0.5.38
 
 ### Patch Changes
