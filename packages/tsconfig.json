@@ -5,7 +5,7 @@
     "noImplicitAny": false,
     "skipLibCheck": true,
     "noUnusedLocals": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "removeComments": false,
     "noLib": false,
     "emitDecoratorMetadata": true,

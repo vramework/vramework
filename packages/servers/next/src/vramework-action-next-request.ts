@@ -17,20 +17,14 @@ export class VrameworkActionNextRequest<
    *
    * @param body - The request body to be wrapped and converted to a plain object.
    */
-  constructor(
-    body: any,
-    private dynamicOptIn: { cookies: boolean; headers: boolean } = {
-      cookies: true,
-      headers: true,
-    }
-  ) {
+  constructor(body: any, private dynamic: boolean) {
     super()
     // Needed to convert the body to a plain object and validate dates
     this.body = JSON.parse(JSON.stringify(body))
   }
 
   public async init() {
-    if (this.dynamicOptIn.cookies) {
+    if (this.dynamic) {
       const cookieStore = await cookies()
       const allCookies = cookieStore.getAll()
       this.cookies = allCookies.reduce<Record<string, string>>(
@@ -40,9 +34,7 @@ export class VrameworkActionNextRequest<
         },
         {}
       )
-    }
 
-    if (this.dynamicOptIn.headers) {
       const headerStore = await headers()
       this.headers = new Map()
       for (const [key, value] of headerStore.entries()) {
@@ -57,8 +49,11 @@ export class VrameworkActionNextRequest<
    * @returns An object containing the cookies.
    */
   public getCookies() {
+    if (!this.dynamic) {
+      throw new Error('Need to allow dynamic option for cookies')
+    }
     if (!this.cookies) {
-      throw new Error('Need to allow dynamic optin for cookies')
+      throw new Error('Init first needs to be called')
     }
     return this.cookies
   }
@@ -70,8 +65,11 @@ export class VrameworkActionNextRequest<
    * @returns The value of the specified header, or `undefined` if not found.
    */
   public getHeader(headerName: string): string | undefined {
+    if (!this.dynamic) {
+      throw new Error('Need to allow dynamic option for cookies')
+    }
     if (!this.headers) {
-      throw new Error('Need to allow dynamic optin for headers')
+      throw new Error('Init first needs to be called')
     }
     return this.headers.get(headerName)
   }

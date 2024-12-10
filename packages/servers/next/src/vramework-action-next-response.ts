@@ -12,12 +12,12 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
   /**
    * Constructs a new instance of the `VrameworkActionNextRequest` class.
    */
-  constructor(private dynamicOptIn: { cookies: boolean } = { cookies: true }) {
+  constructor(private dynamic: boolean) {
     super()
   }
 
   public async init() {
-    if (this.dynamicOptIn.cookies) {
+    if (this.dynamic) {
       this.cookieStore = await cookies()
     }
   }
@@ -72,11 +72,11 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
 
   private getCookieStore() {
     if (!this.cookieStore) {
-      if (!this.dynamicOptIn.cookies) {
+      if (!this.dynamic) {
         throw new Error('Need to allow dynamic optin for cookies')
       }
       if (!this.cookieStore) {
-        throw new Error('init needs to be called')
+        throw new Error('init() needs to be called')
       }
     }
     return this.cookieStore

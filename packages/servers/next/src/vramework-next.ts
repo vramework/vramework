@@ -3,7 +3,6 @@ import { EventEmitter } from 'eventemitter3'
 
 import { VrameworkActionNextRequest } from './vramework-action-next-request.js'
 import { VrameworkActionNextResponse } from './vramework-action-next-response.js'
-import { VrameworkActionStaticNextRequest } from './vramework-action-static-next-request.js'
 
 import {
   CoreConfig,
@@ -55,9 +54,9 @@ export class VrameworkNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
-    const request = new VrameworkActionNextRequest<In>(data)
+    const request = new VrameworkActionNextRequest<In>(data, true)
     await request.init()
-    const response = new VrameworkActionNextResponse()
+    const response = new VrameworkActionNextResponse(true)
     await request.init()
     return await runHTTPRoute<In, Out>({
       request,
@@ -84,8 +83,8 @@ export class VrameworkNextJS {
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
     return await runHTTPRoute<In, Out>({
-      request: new VrameworkActionStaticNextRequest(data),
-      response: new VrameworkActionNextResponse(),
+      request: new VrameworkActionNextRequest(data, false),
+      response: new VrameworkActionNextResponse(false),
       singletonServices,
       createSessionServices: this.createSessionServices,
       route: injectIntoUrl(route as string, data),

@@ -114,16 +114,6 @@ export const addRoute = (
       customAliasedTypes: state.http.customAliasedTypes,
     })
 
-    // TODO: Temporary hack since typescript breaks boolean into two types
-    if (
-      outputs &&
-      outputs.length === 2 &&
-      outputs.includes('true') &&
-      outputs.includes('false')
-    ) {
-      outputs = ['boolean']
-    }
-
     const input = inputs ? inputs[0] || null : null
     const output = outputs ? outputs[0] || null : null
 
