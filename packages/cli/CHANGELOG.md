@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.40
+
+### Patch Changes
+
+- 57731ed: fix: deleting a deadline in serializer
+
 ## 0.5.39
 
 ### Patch Changes
