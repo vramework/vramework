@@ -48,7 +48,8 @@ export async function generateSchemas(
 export async function saveSchemas(
   schemaParentDir: string,
   schemas: Record<string, JSONValue>,
-  routesMeta: HTTPFunctionsMeta
+  routesMeta: HTTPFunctionsMeta,
+  supportsImportAttributes: boolean
 ) {
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,
@@ -83,7 +84,7 @@ export async function saveSchemas(
   const schemaImports = Array.from(desiredSchemas)
     .map(
       (schema) => `
-import * as ${schema} from './schemas/${schema}.schema.json' with { type: 'json' }
+import * as ${schema} from './schemas/${schema}.schema.json' ${supportsImportAttributes ? `with { type: 'json' }` : ''}
 addSchema('${schema}', ${schema})
 `
     )

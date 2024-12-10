@@ -10,7 +10,7 @@ import { VisitState } from '../src/inspector/visit.js'
 import { logCommandInfoAndTime, logVrameworkLogo } from '../src/utils.js'
 
 export const vrameworkSchemas = async (
-  { tsconfig, schemaDirectory }: VrameworkCLIConfig,
+  { tsconfig, schemaDirectory, supportsImportAttributes }: VrameworkCLIConfig,
   { http }: VisitState
 ) => {
   return await logCommandInfoAndTime(
@@ -19,7 +19,7 @@ export const vrameworkSchemas = async (
     [false],
     async () => {
       const schemas = await generateSchemas(tsconfig, http.meta)
-      await saveSchemas(schemaDirectory, schemas, http.meta)
+      await saveSchemas(schemaDirectory, schemas, http.meta, supportsImportAttributes)
     }
   )
 }

@@ -22,6 +22,7 @@ export type VrameworkCLIConfig = {
   rootDir: string
   routeDirectories: string[]
   packageMappings: Record<string, string>
+  supportsImportAttributes: boolean
 
   configDir: string
   tsconfig: string

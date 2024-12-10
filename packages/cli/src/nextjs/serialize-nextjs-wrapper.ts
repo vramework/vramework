@@ -13,8 +13,6 @@ export const serializeNextJsWrapper = (
  * This ensures type safety for route handling methods when integrating with the \`@vramework/core\` framework.
  */
 import { VrameworkNextJS } from '@vramework/next'
-import type { IncomingMessage, ServerResponse } from 'http'
-import type { NextApiRequest, NextApiResponse } from 'next/dist/shared/lib/utils'
 import type { HTTPMethod } from '@vramework/core/http'
 import type { RoutesMap, RouteHandlerOf } from '${routesMapPath}'
 
