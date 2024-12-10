@@ -1,5 +1,14 @@
 # @vramework/cli
 
+## 0.5.35
+
+### Patch Changes
+
+- 2160039: fix: fixing alias issue with generated types
+- ab42f18: chore: upgrading to next15 and dropping pages support
+- Updated dependencies [ab42f18]
+  - @vramework/core@0.5.26
+
 ## 0.5.34
 
 ### Patch Changes
