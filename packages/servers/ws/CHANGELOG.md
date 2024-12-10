@@ -1,5 +1,13 @@
 # @vramework/ws
 
+## 0.5.4
+
+### Patch Changes
+
+- ab42f18: chore: upgrading to next15 and dropping pages support
+- Updated dependencies [ab42f18]
+  - @vramework/core@0.5.26
+
 ## 0.5.3
 
 ### Patch Changes

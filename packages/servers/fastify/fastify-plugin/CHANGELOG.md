@@ -1,5 +1,13 @@
 # @vramework/fastify-plugin
 
+## 0.5.10
+
+### Patch Changes
+
+- ab42f18: chore: upgrading to next15 and dropping pages support
+- Updated dependencies [ab42f18]
+  - @vramework/core@0.5.26
+
 ## 0.5.9
 
 ### Patch Changes

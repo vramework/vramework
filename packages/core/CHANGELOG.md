@@ -1,5 +1,11 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.26
+
+### Patch Changes
+
+- ab42f18: chore: upgrading to next15 and dropping pages support
+
 ## 0.5.25
 
 ### Patch Changes
