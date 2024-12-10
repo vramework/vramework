@@ -1,5 +1,13 @@
 # @vramework/uws-handler
 
+## 0.5.12
+
+### Patch Changes
+
+- aa8435c: fix: fixing up channel apis and implementations
+- Updated dependencies [aa8435c]
+  - @vramework/core@0.5.27
+
 ## 0.5.11
 
 ### Patch Changes

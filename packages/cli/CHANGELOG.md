@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.5.36
+
+### Patch Changes
+
+- aa8435c: fix: fixing up channel apis and implementations
+- Updated dependencies [aa8435c]
+  - @vramework/core@0.5.27
+
 ## 0.5.35
 
 ### Patch Changes
