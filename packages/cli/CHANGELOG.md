@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.38
+
+### Patch Changes
+
+- 6dc72d5: feat: add support for import attributes to cli options
+
 ## 0.5.37
 
 ### Patch Changes
