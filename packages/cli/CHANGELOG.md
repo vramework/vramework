@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.37
+
+### Patch Changes
+
+- 5d03fac: refactor: removing some dead code
+
 ## 0.5.36
 
 ### Patch Changes
