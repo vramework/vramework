@@ -153,7 +153,7 @@ export const getFunctionTypes = (
   }
 
   let type: ts.Type | undefined
-  
+
   // Handle shorthand property assignment
   if (ts.isShorthandPropertyAssignment(property)) {
     const symbol = checker.getShorthandAssignmentValueSymbol(property)

@@ -25,9 +25,9 @@ export type APIFunctionSessionless<In = unknown, Out = never, RequiredServices =
 export type APIFunction<In = unknown, Out = never, RequiredServices = ${servicesTypeName}> = CoreAPIFunction<In, Out, RequiredServices, ${userSessionTypeName}>
 type APIRoute<In, Out, Route extends string> = CoreHTTPFunction<In, Out, Route, APIFunction<In, Out>, APIFunctionSessionless<In, Out>, APIPermission<In>>
 
-export type ChannelConnection<Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelConnection<Out, ChannelData, RequiredServices, UserSession>
-export type ChannelDisconnection<ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelDisconnection<never, ChannelData, RequiredServices, UserSession>
-export type ChannelMessage<In, Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = CoreChannelMessage<In, Out, ChannelData, RequiredServices, UserSession>
+export type ChannelConnection<Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<Session, ChannelData, undefined, Out>) => Promise<void>
+export type ChannelDisconnection<ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<Session, ChannelData, undefined, never>) => Promise<void>
+export type ChannelMessage<In, Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<UserSession, ChannelData, In, Out>, data: In) => Promise<void>
 type APIChannel<ChannelData, Channel extends string> = CoreAPIChannel<ChannelData, Channel, ChannelConnection, ChannelDisconnection, ChannelMessage<unknown, unknown, ChannelData>>
 
 type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>, UserSession>
@@ -42,6 +42,26 @@ declare module "@vramework/core" {
   ): void;
 
   function addScheduledTask(task: ScheduledTask): void;
+}
+
+declare module "@vramework/core/channel" {
+  function addChannel<ChannelData, Channel extends string>(
+    channel: APIChannel<ChannelData, Channel> & AssertRouteParams<ChannelData, Channel>
+  ): void;
+}
+
+declare module "@vramework/core/http" {
+  function addRoute<In, Out, Route extends string>(
+    route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
+  ): void;
+
+  function addScheduledTask(task: ScheduledTask): void;
+}
+
+declare module "@vramework/core/schedular" {
+  function addScheduledTask<In, Out, Route extends string>(
+    route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
+  ): void;
 }
 `
 }
