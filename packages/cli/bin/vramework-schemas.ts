@@ -18,8 +18,8 @@ export const vrameworkSchemas = async (
     'Created schemas',
     [false],
     async () => {
-      const schemas = await generateSchemas(tsconfig, http.meta)
-      await saveSchemas(schemaDirectory, schemas, http.meta, supportsImportAttributes)
+      const schemas = await generateSchemas(tsconfig, http.meta, http.customAliasedTypes)
+      await saveSchemas(schemaDirectory, schemas, http.meta, http.customAliasedTypes, supportsImportAttributes)
     }
   )
 }

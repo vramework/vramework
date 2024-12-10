@@ -6,22 +6,27 @@ import { HTTPFunctionsMeta } from '@vramework/core/http'
 
 export async function generateSchemas(
   tsconfig: string,
-  routesMeta: HTTPFunctionsMeta
+  routesMeta: HTTPFunctionsMeta,
+  customAliasedTypes: Map<string, string>
 ): Promise<Record<string, JSONValue>> {
-  const schemasSet = new Set(
-    routesMeta
-      .map<Array<string | undefined | null>>(
-        ({ input, output, inputTypes }) => [
-          input,
-          output,
-          inputTypes?.body,
-          inputTypes?.query,
-          inputTypes?.params,
-        ]
-      )
-      .flat()
-      .filter((s) => !!s) as string[]
-  )
+  const schemasSet = new Set(customAliasedTypes.keys())
+  for (const { input, output, inputTypes } of routesMeta) {
+    if (input) {
+      schemasSet.add(input)
+    }
+    if (output) {
+      schemasSet.add(output)
+    }
+    if (inputTypes?.body) {
+      schemasSet.add(inputTypes.body)
+    }
+    if (inputTypes?.query) {
+      schemasSet.add(inputTypes.query)
+    }
+    if (inputTypes?.params) {
+      schemasSet.add(inputTypes.params)
+    }
+  }
 
   const generator = createGenerator({
     tsconfig,
@@ -49,6 +54,7 @@ export async function saveSchemas(
   schemaParentDir: string,
   schemas: Record<string, JSONValue>,
   routesMeta: HTTPFunctionsMeta,
+  customAliasedTypes: Map<string, string>,
   supportsImportAttributes: boolean
 ) {
   await writeFileInDir(
@@ -56,12 +62,14 @@ export async function saveSchemas(
     'export const empty = null;'
   )
 
-  const desiredSchemas = new Set(
+  const desiredSchemas = new Set([
+    ...
     routesMeta
       .map(({ input, output }) => [input, output])
       .flat()
-      .filter((s) => !!s && !['boolean', 'string', 'number'].includes(s))
-  )
+      .filter((s) => !!s && !['boolean', 'string', 'number', 'null', 'undefined'].includes(s)),
+    ...customAliasedTypes.keys(),
+  ])
 
   if (desiredSchemas.size === 0) {
     console.log(`\x1b[34m• Skipping schemas since none found.\x1b[0m`)

@@ -13,8 +13,8 @@
     "strictPropertyInitialization": true, // Ensures properties are initialized in classes
     "noImplicitThis": true, // Disallows `this` of type `any`
     "alwaysStrict": true, // Ensures `use strict` in every file
-    "emitDecoratorMetadata": true, // For decorator support (needed if using NestJS or similar)
-    "experimentalDecorators": true, // For experimental decorators
+    "emitDecoratorMetadata": false, // For decorator support (needed if using NestJS or similar)
+    "experimentalDecorators": false, // For experimental decorators
     "useUnknownInCatchVariables": true, // Stricter type for catch variables
     "sourceMap": true, // Keeps source maps for debugging
     "allowJs": false, // Keep JavaScript disallowed
