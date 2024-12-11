@@ -1,5 +1,13 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.29
+
+### Patch Changes
+
+- 662a6cf: feat: adding scheduled tasks names
+- c8578ea: fix: getting websocket auth to work on individual messages
+- d2f8edf: feat: adding channelId to channels for serverless compatability
+
 ## 0.5.28
 
 ### Patch Changes

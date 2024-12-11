@@ -1,5 +1,15 @@
 # @vramework/uws-handler
 
+## 0.5.14
+
+### Patch Changes
+
+- d2f8edf: feat: adding channelId to channels for serverless compatability
+- Updated dependencies [662a6cf]
+- Updated dependencies [c8578ea]
+- Updated dependencies [d2f8edf]
+  - @vramework/core@0.5.29
+
 ## 0.5.13
 
 ### Patch Changes
