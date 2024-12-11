@@ -1,5 +1,10 @@
 import * as ts from 'typescript'
 
+const isValidVariableName = (name: string) => {
+  const regex = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
+  return regex.test(name)
+}
+
 export const resolveUnionTypes = (
   checker: ts.TypeChecker,
   type: ts.Type
@@ -27,14 +32,23 @@ export const resolveUnionTypes = (
   return { types, names }
 }
 
+// This allows aliases to be preserved
+const getType = (checker: ts.TypeChecker, node: ts.Node) => {
+  return checker.getTypeAtLocation(node)
+  // const symbol = checker.getSymbolAtLocation(node)
+  // if (symbol) {
+  //   return checker.getDeclaredTypeOfSymbol(symbol);
+  // } 
+  // throw new Error('No symbol found')
+}
+
 export const getTypeOfFunctionArg = (
   checker: ts.TypeChecker,
   funcProperty: ts.ObjectLiteralElementLike | undefined,
   argIndex: number
 ) => {
   if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
-    const funcExpression = funcProperty.initializer
-    const funcType = checker.getTypeAtLocation(funcExpression)
+    const funcType = getType(checker, funcProperty.initializer)
     const callSignatures = funcType.getCallSignatures()
 
     if (callSignatures.length > 1) {
@@ -179,7 +193,7 @@ export const getFunctionTypes = (
     }
 
     if (property.initializer) {
-      type = checker.getTypeAtLocation(property.initializer)
+      type = getType(checker, property.initializer)
       if (funcName === 'func') {
         funcName = property.initializer.getText()
       }
@@ -205,13 +219,14 @@ export const getFunctionTypes = (
 
   if (inputIndex !== undefined && inputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[inputIndex]!)
-    if (customAliasedTypes && types.names.length > 1) {
+    const firstName = types.names[0]
+    if (customAliasedTypes && (types.names.length > 1 || (firstName && !isValidVariableName(firstName)))) {
       const aliasType = types.names.join(' | ')
       const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Input`
       customAliasedTypes.set(aliasName, aliasType)
       result.inputs = [aliasName]
       inputTypeSet.add(aliasName)
-      result.inputTypes = []
+      result.inputTypes = types.types
     } else {
       result.inputs = types.names
       result.inputs.forEach((input) => inputTypeSet.add(input))
@@ -223,13 +238,14 @@ export const getFunctionTypes = (
 
   if (outputIndex !== undefined && outputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[outputIndex]!)
-    if (customAliasedTypes && types.names.length > 1) {
+    const firstName = types.names[0]
+    if (customAliasedTypes && (types.names.length > 1 || (firstName && !isValidVariableName(firstName)))) {
       const aliasType = types.names.join(' | ')
       const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Output`
       customAliasedTypes.set(aliasName, aliasType)
       result.outputs = [aliasName]
       outputTypeSet.add(aliasName)
-      result.outputTypes = []
+      result.outputTypes = types.types
     } else {
       result.outputs = types.names
       result.outputs.forEach((output) => outputTypeSet.add(output))
@@ -249,10 +265,8 @@ export const getFunctionTypesSimple = (
   let paramType: ts.Type | null = null
 
   if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
-    const funcExpression = funcProperty.initializer
-
     // Get the type of the 'func' expression
-    const funcType = checker.getTypeAtLocation(funcExpression)
+    const funcType = getType(checker, funcProperty.initializer)
 
     // Get the call signatures of the function type
     const callSignatures = funcType.getCallSignatures()

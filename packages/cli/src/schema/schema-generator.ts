@@ -41,6 +41,7 @@ export async function generateSchemas(
     } catch (e) {
       // Ignore rootless errors
       if (e instanceof RootlessError) {
+        console.log('Error generating schema since it has no root:', schema)
         return
       }
       throw e
