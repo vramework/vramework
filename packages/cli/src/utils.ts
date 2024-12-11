@@ -14,7 +14,7 @@ export const getFileImportRelativePath = (
   }
   let usesPackageName = false
   for (const [path, packageName] of Object.entries(packageMappings)) {
-    if (to.includes(path)) {
+    if (filePath.includes(path)) {
       usesPackageName = true
       filePath = filePath.replace(new RegExp(`.*${path}`), packageName)
       break

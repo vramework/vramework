@@ -130,7 +130,7 @@ export const runChannel = async ({
       `Matched channel: ${channelConfig.channel} | auth: ${requiresSession.toString()}`
     )
 
-    let session = await loadUserSession(
+    const session = await loadUserSession(
       skipUserSession,
       // We may require a session, but we don't actually need it
       // on connect since channels can authenticate later given
@@ -156,7 +156,6 @@ export const runChannel = async ({
     const channelHandler = new VrameworkChannelHandler(
       channelId,
       data,
-      (newSession) => (session = newSession)
     )
     const channel = channelHandler.getChannel()
 

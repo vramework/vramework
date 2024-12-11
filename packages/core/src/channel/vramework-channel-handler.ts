@@ -24,7 +24,7 @@ export class VrameworkChannelHandler<
   OpeningData = unknown,
   Out = unknown,
 > {
-  private userSession?: UserSession
+  userSession?: UserSession
   private onMessageCallback?: (message: unknown) => void
   private openCallBack?: () => void
   private closeCallback?: () => void
@@ -34,7 +34,6 @@ export class VrameworkChannelHandler<
   constructor(
     private channelId: string,
     private openingData: OpeningData,
-    private updateSession: (session: UserSession) => void
   ) {}
 
   public getChannel(): VrameworkChannel<UserSession, OpeningData, Out> {
@@ -92,6 +91,6 @@ export class VrameworkChannelHandler<
   }
 
   public setSession(session: UserSession): void {
-    return this.updateSession(session)
+    this.getChannel().session = session
   }
 }
