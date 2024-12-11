@@ -1,5 +1,16 @@
 ## 0.0.8 - 26.06.2022
 
+## 1.0.0
+
+### Minor Changes
+
+- 59bd1ca: updating all packages to 0.6 to mark channels and subscriptions
+
+### Patch Changes
+
+- Updated dependencies [59bd1ca]
+  - @vramework/core@0.6.0
+
 ## 0.5.5
 
 ### Patch Changes
