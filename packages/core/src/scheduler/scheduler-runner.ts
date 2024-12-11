@@ -24,28 +24,42 @@ export type RunScheduledTasksParams = {
   >
 }
 
-const scheduledTasks = new Map<string, CoreScheduledTask>()
-let scheduledTasksMeta: ScheduledTasksMeta = []
+if (!global.vramework?.scheduledTasks) {
+  global.vramework = global.vramework || {}
+  global.vramework.scheduledTasks = new Map<string, CoreScheduledTask>()
+  global.vramework.scheduledTasksMeta = []
+}
+
+const scheduledTasks = (): Map<string, CoreScheduledTask> => {
+  return global.vramework.scheduledTasks
+}
+
+const scheduledTasksMeta = (data?: ScheduledTasksMeta) => {
+  if (data) {
+    global.vramework.scheduledTasksMeta = data
+  }
+  return global.vramework.scheduledTasksMeta
+}
 
 export const addScheduledTask = <
   APIFunction extends CoreAPIFunctionSessionless<void, void>,
 >(
   scheduledTask: CoreScheduledTask<APIFunction>
 ) => {
-  if (scheduledTasks.has(scheduledTask.name)) {
+  if (scheduledTasks().has(scheduledTask.name)) {
     throw new Error(`Scheduled task already exists: ${scheduledTask.name}`)
   }
-  scheduledTasks.set(scheduledTask.name, scheduledTask)
+  scheduledTasks().set(scheduledTask.name, scheduledTask)
 }
 
 export const clearScheduledTasks = () => {
-  scheduledTasks.clear()
+  scheduledTasks().clear()
 }
 
 export const setScheduledTasksMeta = (
   _scheduledTasksMeta: ScheduledTasksMeta
 ) => {
-  scheduledTasksMeta = _scheduledTasksMeta
+  scheduledTasksMeta(_scheduledTasksMeta)
 }
 
 /**
@@ -54,8 +68,8 @@ export const setScheduledTasksMeta = (
  */
 export const getScheduledTasks = () => {
   return {
-    scheduledTasks,
-    scheduledTasksMeta,
+    scheduledTasks: scheduledTasks(),
+    scheduledTasksMeta: scheduledTasksMeta(),
   }
 }
 
@@ -75,7 +89,7 @@ export async function runScheduledTask({
   const trackerId: string = crypto.randomUUID().toString()
 
   try {
-    const task = scheduledTasks.get(name)
+    const task = scheduledTasks().get(name)
 
     if (!task) {
       throw new ScheduledTaskNotFoundError(`Scheduled task not found: ${name}`)

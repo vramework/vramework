@@ -1,17 +1,8 @@
-import * as expressImp from 'express'
-const express =
-  'default' in expressImp ? (expressImp.default as any) : expressImp
-import * as core from 'express-serve-static-core'
+import express from 'express'
+import core from 'express-serve-static-core'
 import { Server } from 'http'
-import { json, text } from 'body-parser'
-import * as cookieParserImp from 'cookie-parser'
-const cookieParser =
-  'default' in cookieParserImp
-    ? (cookieParserImp.default as any)
-    : cookieParserImp
-import * as bodyParser from 'body-parser'
-import * as corsImp from 'cors'
-const cors = 'default' in corsImp ? (corsImp.default as any) : corsImp
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import { CorsOptions, CorsOptionsDelegate } from 'cors'
 
 import {
@@ -45,20 +36,20 @@ export class VrameworkExpressServer {
     private readonly createSessionServices: CreateSessionServices<any, any, any>
   ) {
     this.app.use(
-      json({
+      express.json({
         limit: this.config.limits?.json || '1mb',
       })
     )
 
     this.app.use(
-      text({
+      express.text({
         limit: this.config.limits?.xml || '1mb',
         type: 'text/xml',
       })
     )
 
     this.app.use(
-      bodyParser.urlencoded({
+      express.urlencoded({
         extended: true,
         limit: this.config.limits?.urlencoded || '1mb',
       })

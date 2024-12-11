@@ -3,10 +3,10 @@
   "compilerOptions": {
     "rootDir": "./src",
     "composite": true,
-    "module": "NodeNext",
+    "module": "Node16",
     "outDir": "dist",
     "target": "esnext",
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "node16",
   },
   "exclude": ["**/*.test.ts", "node_modules", "dist"],
   "references": []

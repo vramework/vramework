@@ -211,9 +211,7 @@ export const getFunctionTypes = (
   if (!typeArguments || typeArguments.length === 0) {
     // This is the case for inline functions. In this case we would want to
     // get the types from the second argument of the function...
-    console.error(
-      `No generic type arguments found for ${funcName}. Support for inline functions is not yet implemented.`
-    )
+    console.error(`\x1b[31m• No generic type arguments found for ${funcName}. Support for inline functions is not yet implemented.\x1b[0m`)
     return result
   }
 

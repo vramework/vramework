@@ -4,10 +4,7 @@ import { runChannel, logChannels } from '@vramework/core/channel'
 import { loadAllSchemas } from '@vramework/core/schema'
 import { RunRouteOptions } from '@vramework/core/http'
 import { VrameworkChannelHandler } from '@vramework/core/channel'
-import {
-  CoreSingletonServices,
-  CreateSessionServices,
-} from '@vramework/core/src/types/core.types.js'
+import { CoreSingletonServices, CreateSessionServices } from '@vramework/core'
 
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
 import { VrameworkDuplexResponse } from './vramework-duplex-response.js'

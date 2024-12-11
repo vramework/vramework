@@ -37,7 +37,7 @@ export class VrameworkActionNextRequest<
 
       const headerStore = await headers()
       this.headers = new Map()
-      for (const [key, value] of headerStore.entries()) {
+      for (const [key, value] of (headerStore as any).entries()) {
         this.headers.set(key, value)
       }
     }

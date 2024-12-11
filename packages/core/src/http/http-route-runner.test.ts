@@ -44,7 +44,7 @@ describe('runHTTPRoute', () => {
         warn: () => {},
         error: () => {},
       },
-      sessionService: {
+      httpSessionService: {
         getUserSession: async () => {},
       },
     }

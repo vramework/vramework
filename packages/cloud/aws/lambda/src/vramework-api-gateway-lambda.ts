@@ -10,7 +10,7 @@ import {
 import {
   runHTTPRoute,
   CoreHTTPFunctionRoutes,
-  HTTPFunctionsMeta,
+  HTTPRoutesMeta,
 } from '@vramework/core/http'
 import { Logger } from '@vramework/core/services'
 import { VrameworkAPIGatewayLambdaRequest } from './vramework-api-gateway-lambda-request.js'
@@ -45,7 +45,7 @@ const generalHandler = async (
     CoreServices
   >,
   routes: CoreHTTPFunctionRoutes,
-  routesMeta: HTTPFunctionsMeta,
+  routesMeta: HTTPRoutesMeta,
   request: VrameworkAPIGatewayLambdaRequest,
   response: VrameworkAPIGatewayLambdaResponse
 ): Promise<APIGatewayProxyResult> => {
@@ -87,7 +87,7 @@ const generalHandler = async (
 export const processCorsless = async (
   event: APIGatewayProxyEvent,
   routes: CoreHTTPFunctionRoutes,
-  routesMeta: HTTPFunctionsMeta,
+  routesMeta: HTTPRoutesMeta,
   config: CoreConfig,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<
@@ -111,7 +111,7 @@ export const processCorsless = async (
 export const processFromAnywhereCors = async (
   event: APIGatewayProxyEvent,
   routes: CoreHTTPFunctionRoutes,
-  routesMeta: HTTPFunctionsMeta,
+  routesMeta: HTTPRoutesMeta,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
@@ -142,7 +142,7 @@ export const processCors = async (
   event: APIGatewayProxyEvent,
   allowedOrigins: string[],
   routes: CoreHTTPFunctionRoutes,
-  routesMeta: HTTPFunctionsMeta,
+  routesMeta: HTTPRoutesMeta,
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,

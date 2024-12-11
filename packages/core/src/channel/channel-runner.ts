@@ -1,6 +1,5 @@
 import {
   CoreAPIChannel,
-  CoreAPIChannels,
   RunChannelOptions,
   RunChannelParams,
   ChannelsMeta,
@@ -16,8 +15,36 @@ import {
 import { registerMessageHandlers } from './channel-handler.js'
 import { VrameworkChannelHandler } from './vramework-channel-handler.js'
 
-let channels: CoreAPIChannels = []
-let channelsMeta: ChannelsMeta = []
+if (!globalThis.vramework?.channels) {
+  globalThis.vramework = globalThis.vramework || {}
+  globalThis.vramework.channels = []
+  globalThis.vramework.channelsMeta = []
+}
+
+const channels = (data?: any) => {
+  if (data) {
+    globalThis.vramework.channels = data
+  }
+  return globalThis.vramework.channels
+}
+
+const channelsMeta = (data?: any) => {
+  if (data) {
+    globalThis.vramework.channels = data
+  }
+  return globalThis.vramework.channelsMeta
+}
+
+/**
+ * Returns all the registered routes and associated metadata.
+ * @internal
+ */
+export const getChannels = () => {
+  return {
+    channels: channels(),
+    channelsMeta: channelsMeta(),
+  }
+}
 
 export const addChannel = <
   In,
@@ -34,39 +61,24 @@ export const addChannel = <
     APIPermission
   >
 ) => {
-  channels.push(channel as any)
-}
-
-export const clearChannels = () => {
-  channels = []
+  channels().push(channel as any)
 }
 
 /**
  * @ignore
  */
 export const setChannelsMeta = (_channelsMeta: ChannelsMeta) => {
-  channelsMeta = _channelsMeta
-}
-
-/**
- * Returns all the registered routes and associated metadata.
- * @internal
- */
-export const getChannels = () => {
-  return {
-    channels,
-    channelsMeta,
-  }
+  channelsMeta(_channelsMeta)
 }
 
 const getMatchingChannelConfig = (requestPath: string) => {
-  for (const channelConfig of channels) {
+  for (const channelConfig of channels()) {
     const matchFunc = match(channelConfig.channel.replace(/^\/\//, '/'), {
       decode: decodeURIComponent,
     })
     const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
     if (matchedPath) {
-      const schemaName = channelsMeta.find(
+      const schemaName = channelsMeta().find(
         (channelMeta) => channelMeta.channel === channelConfig.channel
       )?.input
       return {

@@ -136,7 +136,7 @@ export type HTTPFunctionMetaInputTypes = {
 /**
  * Represents metadata for a set of routes, including route details, methods, input/output types, and documentation.
  */
-export type HTTPFunctionsMeta = Array<{
+export type HTTPRoutesMeta = Array<{
   route: string
   method: HTTPMethod
   params?: string[]

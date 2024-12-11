@@ -2,8 +2,7 @@ import { getErrorResponse } from '../errors/error-handler.js'
 import { verifyPermissions } from '../permissions.js'
 import {
   CoreHTTPFunctionRoute,
-  CoreHTTPFunctionRoutes,
-  HTTPFunctionsMeta,
+  HTTPRoutesMeta,
   RunRouteOptions,
   RunRouteParams,
 } from './http-routes.types.js'
@@ -22,16 +21,32 @@ import {
   NotFoundError,
   NotImplementedError,
 } from '../errors/errors.js'
-import * as cryptoImp from 'crypto'
+import crypto from 'crypto'
 import { closeServices, validateAndCoerce } from '../utils.js'
 import { CoreAPIChannel } from '../channel/channel.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
 import { HTTPSessionService } from './http-session-service.js'
-const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
 
-let routes: CoreHTTPFunctionRoutes = []
-let routesMeta: HTTPFunctionsMeta = []
+if (!globalThis.vramework?.httpRoutes) {
+  globalThis.vramework = globalThis.vramework || {}
+  globalThis.vramework.httpRoutes = []
+  globalThis.vramework.httpRoutesMeta = []
+}
+
+const httpRoutes = (data?: CoreHTTPFunctionRoute<any, any, any>[]): CoreHTTPFunctionRoute<any, any, any>[] => {
+  if (data) {
+    globalThis.vramework.httpRoutes = data
+  }
+  return globalThis.vramework.httpRoutes
+}
+
+const httpRoutesMeta = (data?: HTTPRoutesMeta): HTTPRoutesMeta => {
+  if (data) {
+    globalThis.vramework.httpRoutesMeta = data
+  }
+  return globalThis.vramework.httpRoutesMeta
+}
 
 export const addRoute = <
   In,
@@ -50,18 +65,18 @@ export const addRoute = <
     APIPermission
   >
 ) => {
-  routes.push(route as any)
+  httpRoutes().push(route as any)
 }
 
 export const clearRoutes = () => {
-  routes = []
+  httpRoutes([])
 }
 
 /**
  * @ignore
  */
-export const setHTTPRoutesMeta = (_routeMeta: HTTPFunctionsMeta) => {
-  routesMeta = _routeMeta
+export const setHTTPRoutesMeta = (_routeMeta: HTTPRoutesMeta) => {
+  httpRoutesMeta(_routeMeta)
 }
 
 /**
@@ -70,8 +85,8 @@ export const setHTTPRoutesMeta = (_routeMeta: HTTPFunctionsMeta) => {
  */
 export const getRoutes = () => {
   return {
-    routes,
-    routesMeta,
+    routes: httpRoutes(),
+    routesMeta: httpRoutesMeta(),
   }
 }
 
@@ -80,7 +95,7 @@ const getMatchingRoute = (
   requestType: string,
   requestPath: string
 ) => {
-  for (const route of routes) {
+  for (const route of httpRoutes()) {
     // TODO: This is a performance improvement, but we could
     // run against all routes if we want to return a 405 method.
     // Probably want a cache to support.
@@ -94,7 +109,7 @@ const getMatchingRoute = (
 
     if (matchedPath) {
       // TODO: Cache this loop as a performance improvement
-      const schemaName = routesMeta.find(
+      const schemaName = httpRoutesMeta().find(
         (routeMeta) =>
           routeMeta.method === route.method && routeMeta.route === route.route
       )?.input

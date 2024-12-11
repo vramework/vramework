@@ -1,7 +1,7 @@
 {
   "name": "@vramework/express",
   "version": "0.5.8",
-  "description": "The vramework express server ",
+  "description": "An example vramework express server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",
@@ -18,7 +18,8 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.25"
+    "@vramework/core": "^0.5.25",
+    "@vramework/express-middleware": "^0.5.10"
   },
   "dependencies": {
     "@types/content-type": "^1.1.8",
@@ -26,9 +27,6 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5",
     "@types/express-serve-static-core": "^5.0.0",
-    "@vramework/express-middleware": "^0.5.10",
-    "body-parser": "^1.20.3",
-    "cookie": "^1.0.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5"

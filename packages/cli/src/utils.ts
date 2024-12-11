@@ -1,4 +1,4 @@
-import packageInfo from '../package.json' with { type: 'json' }
+import packageInfo from '../package.json'
 import { relative, dirname } from 'path'
 import { PathToNameAndType, VisitState } from './inspector/visit.js'
 import { mkdir, writeFile } from 'fs/promises'

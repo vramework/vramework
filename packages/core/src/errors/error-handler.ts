@@ -24,7 +24,16 @@ export interface ErrorDetails {
 /**
  * Map of API errors to their details.
  */
-const apiErrors = new Map<any, ErrorDetails>([])
+if (!globalThis.vramework?.apiErrors) {
+  globalThis.vramework = globalThis.vramework || {}
+  globalThis.vramework.apiErrors = new Map<any, ErrorDetails>([])
+}
+
+const apiErrors = (): Map<any, ErrorDetails> => {
+  return globalThis.vramework.apiErrors
+}
+
+export const getErrors = () => apiErrors()
 
 /**
  * Adds an error to the API errors map.
@@ -32,7 +41,7 @@ const apiErrors = new Map<any, ErrorDetails>([])
  * @param details - The details of the error.
  */
 export const addError = (error: any, { status, message }: ErrorDetails) => {
-  apiErrors.set(error, { status, message })
+  apiErrors().set(error, { status, message })
 }
 
 /**
@@ -55,13 +64,11 @@ export const addErrors = (
 export const getErrorResponse = (
   error: Error
 ): { status: number; message: string } | undefined => {
-  const foundError = Array.from(apiErrors.entries()).find(
+  const foundError = Array.from(apiErrors().entries()).find(
     ([e]) => e.name === error.constructor.name
   )
   if (foundError) {
     return foundError[1]
   }
-  return apiErrors.get(error)
+  return apiErrors().get(error)
 }
-
-export const getErrors = () => apiErrors
