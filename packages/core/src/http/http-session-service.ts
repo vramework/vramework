@@ -1,11 +1,11 @@
 import { CoreUserSession } from '../types/core.types.js'
-import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
+import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
 
 /**
  * Interface for handling user sessions.
  * @template UserSession - The type of the user session.
  */
-export interface SessionService<UserSession = CoreUserSession> {
+export interface HTTPSessionService<UserSession = CoreUserSession> {
   /**
    * Retrieves the user session.
    * @param credentialsRequired - A flag indicating whether credentials are required.

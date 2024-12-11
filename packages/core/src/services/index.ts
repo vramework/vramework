@@ -7,8 +7,7 @@ export * from './content-service.js'
 export * from './jwt-service.js'
 export * from './logger.js'
 export * from './logger-console.js'
-export * from './permission-service.js'
-export * from './session-service.js'
+export * from '../http/http-permission-service.js'
 export * from './secret-service.js'
 
 // Local implementations

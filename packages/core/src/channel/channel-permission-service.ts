@@ -1,18 +1,18 @@
-import type { CoreHTTPFunctionRoute } from '../http/http-routes.types.js'
 import type { CoreUserSession } from '../types/core.types.js'
+import { CoreAPIChannel } from './channel.types.js'
 
 /**
  * Interface for handling permission verification.
  */
-export interface PermissionService {
+export interface ChannelPermissionService {
   /**
-   * Verifies access to a route.
-   * @param route - The route to verify access for.
+   * Verifies access to a channel.
+   * @param route - The channel to verify access for.
    * @param session - The user session.
    * @returns A promise that resolves if access is granted.
    */
-  verifyRouteAccess(
-    route: CoreHTTPFunctionRoute<unknown, unknown, any>,
+  verifyChannelAccess(
+    channel: CoreAPIChannel<unknown, any>,
     session?: CoreUserSession
   ): Promise<void>
 }

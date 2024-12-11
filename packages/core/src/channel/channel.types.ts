@@ -72,7 +72,6 @@ export type CoreChannelConnection<
 
 export type CoreChannelDisconnection<
   ChannelData,
-  Out = unknown,
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (

@@ -16,7 +16,7 @@ import {
 import { match } from 'path-to-regexp'
 import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
 import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
-import { Logger, SessionService } from '../services/index.js'
+import { Logger } from '../services/index.js'
 import {
   ForbiddenError,
   NotFoundError,
@@ -27,6 +27,7 @@ import { closeServices, validateAndCoerce } from '../utils.js'
 import { CoreAPIChannel } from '../channel/channel.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
+import { HTTPSessionService } from './http-session-service.js'
 const crypto = 'default' in cryptoImp ? cryptoImp.default : (cryptoImp as any)
 
 let routes: CoreHTTPFunctionRoutes = []
@@ -107,12 +108,12 @@ const getMatchingRoute = (
 }
 
 export const getUserSession = async <UserSession extends CoreUserSession>(
-  sessionService: SessionService<UserSession> | undefined,
+  httpSessionService: HTTPSessionService<UserSession> | undefined,
   auth: boolean,
   request: VrameworkHTTPAbstractRequest
 ): Promise<CoreUserSession | undefined> => {
-  if (sessionService) {
-    return (await sessionService.getUserSession(auth, request)) as UserSession
+  if (httpSessionService) {
+    return (await httpSessionService.getUserSession(auth, request)) as UserSession
   } else if (auth) {
     throw new NotImplementedError('Session service not implemented')
   }
@@ -128,7 +129,7 @@ export const loadUserSession = async (
     | CoreHTTPFunctionRoute<unknown, unknown, any>
     | CoreAPIChannel<unknown, any>,
   logger: Logger,
-  sessionService: SessionService | undefined
+  httpSessionService: HTTPSessionService | undefined
 ) => {
   if (skipUserSession && requiresSession) {
     throw new Error("Can't skip trying to get user session if auth is required")
@@ -138,7 +139,7 @@ export const loadUserSession = async (
     try {
       if (http?.request) {
         return await getUserSession(
-          sessionService,
+          httpSessionService,
           requiresSession,
           http.request
         )
@@ -271,7 +272,7 @@ export const runHTTPRoute = async <In, Out>({
       matchedPath,
       route,
       singletonServices.logger,
-      singletonServices.sessionService
+      singletonServices.httpSessionService
     )
     const data = await request.getData()
 
@@ -283,6 +284,10 @@ export const runHTTPRoute = async <In, Out>({
       session
     )
     const allServices = { ...singletonServices, ...sessionServices, http }
+
+    if (singletonServices.httpPermissionService) {
+      await singletonServices.httpPermissionService.verifyRouteAccess(route, session)
+    }
 
     const permissioned = await verifyPermissions(
       route.permissions,

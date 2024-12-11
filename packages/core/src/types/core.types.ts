@@ -1,7 +1,9 @@
 import { Logger, LogLevel } from '../services/logger.js'
-import { PermissionService, SessionService } from '../services/index.js'
+import { HTTPPermissionService } from '../services/index.js'
 import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
 import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
+import { HTTPSessionService } from '../http/http-session-service.js'
+import { ChannelPermissionService } from '../channel/channel-permission-service.js'
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.
@@ -65,9 +67,11 @@ export type RequestHeaders =
  */
 export interface CoreSingletonServices {
   /** The session service used by the application (optional). */
-  sessionService?: SessionService
-  /** The permission service used for authorization (optional). */
-  permissionService?: PermissionService
+  httpSessionService?: HTTPSessionService
+  /** The http permission service used for authorization (optional). */
+  httpPermissionService?: HTTPPermissionService
+  /** The channel permission service used by the application (optional). */
+  channelPermissionService?: ChannelPermissionService
   /** The core configuration for the application. */
   config: CoreConfig
   /** The logger used by the application. */

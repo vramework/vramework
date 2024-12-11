@@ -1,4 +1,4 @@
-import { SessionService } from '../services/session-service.js'
+import { HTTPSessionService } from './http-session-service.js'
 import { JWTService } from '../services/jwt-service.js'
 import { InvalidSessionError, MissingSessionError } from '../errors/errors.js'
 import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
@@ -11,7 +11,7 @@ import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.
  * @template UserSession - The type representing a user session.
  */
 export class VrameworkHTTPSessionService<UserSession>
-  implements SessionService<UserSession>
+  implements HTTPSessionService<UserSession>
 {
   /**
    * Constructs a new instance of the `VrameworkHTTPSessionService` class.

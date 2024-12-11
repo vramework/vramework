@@ -127,8 +127,12 @@ export const runChannel = async ({
       matchedPath,
       channelConfig,
       singletonServices.logger,
-      singletonServices.sessionService
+      singletonServices.httpSessionService
     )
+
+    if (singletonServices.channelPermissionService) {
+      await singletonServices.channelPermissionService.verifyChannelAccess(matchingChannel.channelConfig, session)
+    }
 
     const data = await request.getData()
     validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
