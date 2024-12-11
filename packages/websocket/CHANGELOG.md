@@ -1,5 +1,11 @@
 # @vramework/websocket
 
+## 0.6.0
+
+### Minor Changes
+
+- 59bd1ca: updating all packages to 0.6 to mark channels and subscriptions
+
 ## 0.5.4
 
 ### Patch Changes
