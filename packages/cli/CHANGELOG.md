@@ -1,5 +1,11 @@
 # @vramework/cli
 
+## 0.5.41
+
+### Patch Changes
+
+- 3f2e365: fix: create custom types if one object thats not a valid alias
+
 ## 0.5.40
 
 ### Patch Changes
