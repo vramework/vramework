@@ -1,5 +1,15 @@
 ## 0.0.8 - 26.06.2022
 
+## 0.5.5
+
+### Patch Changes
+
+- 886a2fb: refactor: moving singletons (like routes and channels) to global to avoid nodemodule overrides
+- Updated dependencies [a768bad]
+- Updated dependencies [886a2fb]
+- Updated dependencies [886a2fb]
+  - @vramework/core@0.5.28
+
 ## 0.5.4
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @vramework/fetch
 
+## 0.5.8
+
+### Patch Changes
+
+- 886a2fb: refactor: moving singletons (like routes and channels) to global to avoid nodemodule overrides
+
 ## 0.5.7
 
 ### Patch Changes

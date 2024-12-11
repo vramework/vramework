@@ -1,6 +1,6 @@
 {
   "name": "@vramework/pino",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "module": "dist/index.js",
@@ -14,7 +14,7 @@
     "release": "npm run build && npm test"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.25",
+    "@vramework/core": "^0.5.28",
     "pino": "^9.5.0"
   },
   "devDependencies": {

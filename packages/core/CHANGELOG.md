@@ -1,5 +1,13 @@
 ## 0.0.18 - 05.09.2022
 
+## 0.5.28
+
+### Patch Changes
+
+- a768bad: feat: adding channel permission service
+- 886a2fb: refactor: moving singletons (like routes and channels) to global to avoid nodemodule overrides
+- 886a2fb: fix: making core routes global to avoid state overrides
+
 ## 0.5.27
 
 ### Patch Changes

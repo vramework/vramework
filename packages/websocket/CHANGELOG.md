@@ -1,5 +1,11 @@
 # @vramework/websocket
 
+## 0.5.4
+
+### Patch Changes
+
+- 886a2fb: refactor: moving singletons (like routes and channels) to global to avoid nodemodule overrides
+
 ## 0.5.3
 
 ### Patch Changes
