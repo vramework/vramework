@@ -1,13 +1,12 @@
-import pinoImp from 'pino'
-const pino = 'default' in pinoImp ? pinoImp.default : (pinoImp as any)
+import * as pino from 'pino'
 
 import { Logger, LogLevel } from '@vramework/core/services'
 
 export class PinoLogger implements Logger {
-  public pino: pinoImp.Logger
+  public pino: pino.Logger
 
   constructor() {
-    this.pino = pino()
+    this.pino = pino.pino()
   }
 
   setLevel(level: LogLevel): void {

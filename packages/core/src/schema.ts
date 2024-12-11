@@ -1,5 +1,4 @@
-import * as AjvImp from 'ajv'
-const Ajv = 'default' in AjvImp ? AjvImp.default : (AjvImp as any)
+import { Ajv } from 'ajv'
 
 import addFormats from 'ajv-formats'
 import { ValidateFunction } from 'ajv'
