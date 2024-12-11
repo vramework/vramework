@@ -1,6 +1,6 @@
 {
   "name": "@vramework/core",
-  "version": "0.5.27",
+  "version": "0.5.28",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "module": "dist/index.js",

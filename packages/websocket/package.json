@@ -1,6 +1,6 @@
 {
   "name": "@vramework/websocket",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "type": "module",

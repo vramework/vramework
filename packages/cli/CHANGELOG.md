@@ -1,5 +1,16 @@
 # @vramework/cli
 
+## 0.5.42
+
+### Patch Changes
+
+- 886a2fb: refactor: moving singletons (like routes and channels) to global to avoid nodemodule overrides
+- 886a2fb: fix: making core routes global to avoid state overrides
+- Updated dependencies [a768bad]
+- Updated dependencies [886a2fb]
+- Updated dependencies [886a2fb]
+  - @vramework/core@0.5.28
+
 ## 0.5.41
 
 ### Patch Changes

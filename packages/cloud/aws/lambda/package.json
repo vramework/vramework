@@ -1,6 +1,6 @@
 {
   "name": "@vramework/lambda",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",
@@ -17,7 +17,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.26"
+    "@vramework/core": "^0.5.28"
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.145",
