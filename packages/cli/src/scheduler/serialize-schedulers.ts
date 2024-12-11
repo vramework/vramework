@@ -34,5 +34,8 @@ export const serializeSchedulerMeta = (
   serializedOutput.push(
     `setScheduledTasksMeta(${JSON.stringify(scheduledTasksMeta, null, 2)})`
   )
+  if (scheduledTasksMeta.length > 0) {
+    serializedOutput.push(`export type ScheduledTaskNames = '${scheduledTasksMeta.map(s => s.name).join('\' | \'')}'`)
+  }
   return serializedOutput.join('\n')
 }

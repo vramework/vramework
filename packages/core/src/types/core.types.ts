@@ -1,8 +1,8 @@
 import { Logger, LogLevel } from '../services/logger.js'
-import { HTTPPermissionService } from '../services/index.js'
+import { HTTPSessionService } from '../http/http-session-service.js'
+import { HTTPPermissionService } from '../http/http-permission-service.js'
 import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
 import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
-import { HTTPSessionService } from '../http/http-session-service.js'
 import { ChannelPermissionService } from '../channel/channel-permission-service.js'
 
 /**

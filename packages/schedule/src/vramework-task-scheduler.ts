@@ -12,19 +12,15 @@ import {
   CoreScheduledTask,
 } from '@vramework/core/scheduler'
 
-export class VrameworkTaskScheduler<
-  SingletonServices extends CoreSingletonServices,
-  Services extends CoreServices<SingletonServices>,
-  UserSession extends CoreUserSession,
-> {
+export class VrameworkTaskScheduler<TaskName extends string> {
   private jobs = new Map<string, CronJob>()
 
   constructor(
-    private singletonServices: SingletonServices,
+    private singletonServices: CoreSingletonServices,
     private createSessionServices?: CreateSessionServices<
-      SingletonServices,
-      UserSession,
-      Services
+      CoreSingletonServices,
+      CoreUserSession,
+      CoreServices
     >
   ) {}
 
@@ -38,7 +34,7 @@ export class VrameworkTaskScheduler<
     this.jobs.clear()
   }
 
-  public start(names: string[]) {
+  public start(names: TaskName[]) {
     const { scheduledTasks } = getScheduledTasks()
     for (const name of names) {
       const task = scheduledTasks.get(name)
@@ -48,7 +44,7 @@ export class VrameworkTaskScheduler<
     }
   }
 
-  public stop(names: string[]) {
+  public stop(names: TaskName[]) {
     for (const name of names) {
       const job = this.jobs.get(name)
       if (job) {
