@@ -1,5 +1,17 @@
 # @vramework/cli
 
+## 0.5.43
+
+### Patch Changes
+
+- 662a6cf: feat: adding scheduled tasks names
+- c8578ea: fix: getting websocket auth to work on individual messages
+- d2f8edf: feat: adding channelId to channels for serverless compatability
+- Updated dependencies [662a6cf]
+- Updated dependencies [c8578ea]
+- Updated dependencies [d2f8edf]
+  - @vramework/core@0.5.29
+
 ## 0.5.42
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @vramework/schedule
 
+## 0.5.5
+
+### Patch Changes
+
+- 662a6cf: feat: adding scheduled tasks names
+- Updated dependencies [662a6cf]
+- Updated dependencies [c8578ea]
+- Updated dependencies [d2f8edf]
+  - @vramework/core@0.5.29
+
 ## 0.5.4
 
 ### Patch Changes
