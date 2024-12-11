@@ -30,7 +30,7 @@ const channels = (data?: any) => {
 
 const channelsMeta = (data?: any) => {
   if (data) {
-    globalThis.vramework.channels = data
+    globalThis.vramework.channelsMeta = data
   }
   return globalThis.vramework.channelsMeta
 }
@@ -95,6 +95,7 @@ const getMatchingChannelConfig = (requestPath: string) => {
 
 export const runChannel = async ({
   singletonServices,
+  channelId,
   request,
   response,
   channel: channelRoute,
@@ -146,10 +147,14 @@ export const runChannel = async ({
       await singletonServices.channelPermissionService.verifyChannelAccess(matchingChannel.channelConfig, session)
     }
 
-    const data = await request.getData()
-    validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
+    let data: any | undefined
+    if (request) {
+      data = await request.getData()
+      validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
+    }
 
     const channelHandler = new VrameworkChannelHandler(
+      channelId,
       data,
       (newSession) => (session = newSession)
     )

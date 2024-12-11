@@ -109,6 +109,7 @@ export const vrameworkWebsocketHandler = ({
 
     // Initialize the channel handler
     const channelHandler = await runChannel({
+      channelId: crypto.randomUUID().toString(),
       request,
       response,
       singletonServices: singletonServices as any,

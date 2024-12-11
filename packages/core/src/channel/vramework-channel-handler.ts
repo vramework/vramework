@@ -1,12 +1,22 @@
 import { CoreUserSession } from '../types/core.types.js'
 
 export interface VrameworkChannel<Session, OpeningData, Out> {
-  session?: Session
-  setSession: (session: Session) => void
-  openingData: OpeningData
-  send: (data: Out) => void
-  close: () => void
-  state: 'initial' | 'open' | 'closed'
+  // The channel identifier
+  channelId: string
+  // The user session, if available
+  session?: Session;
+  // Update the user session, useful if you deal with auth on the
+  // stream side
+  setSession: (session: Session) => void;
+  // The data the channel was created with. This could be query parameters
+  // or parameters in the url.
+  openingData: OpeningData;
+  // The data to send. This will fail is the stream has been closed.
+  send: (data: Out) => void;
+  // This will close the channel.
+  close: () => void;
+  // The current state of the channel
+  state: 'initial' | 'open' | 'closed';
 }
 
 export class VrameworkChannelHandler<
@@ -22,6 +32,7 @@ export class VrameworkChannelHandler<
   private channel?: VrameworkChannel<UserSession, OpeningData, Out>
 
   constructor(
+    private channelId: string,
     private openingData: OpeningData,
     private updateSession: (session: UserSession) => void
   ) {}
@@ -29,6 +40,7 @@ export class VrameworkChannelHandler<
   public getChannel(): VrameworkChannel<UserSession, OpeningData, Out> {
     if (!this.channel) {
       this.channel = {
+        channelId: this.channelId,
         session: this.userSession!,
         openingData: this.openingData,
         setSession: this.setSession.bind(this),

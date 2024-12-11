@@ -66,6 +66,7 @@ export const vrameworkWebsocketHandler = ({
         const request = new VrameworkUWSRequest(req, res)
         const response = new VrameworkUWSResponse(res)
         const channelHandler = await runChannel({
+          channelId: crypto.randomUUID().toString(),
           request,
           response,
           singletonServices,

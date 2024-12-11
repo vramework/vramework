@@ -25,9 +25,9 @@ export type APIFunctionSessionless<In = unknown, Out = never, RequiredServices =
 export type APIFunction<In = unknown, Out = never, RequiredServices = ${servicesTypeName}> = CoreAPIFunction<In, Out, RequiredServices, ${userSessionTypeName}>
 type APIRoute<In, Out, Route extends string> = CoreHTTPFunction<In, Out, Route, APIFunction<In, Out>, APIFunctionSessionless<In, Out>, APIPermission<In>>
 
-export type ChannelConnection<Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<Session, ChannelData, undefined, Out>) => Promise<void>
-export type ChannelDisconnection<ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<Session, ChannelData, undefined, never>) => Promise<void>
-export type ChannelMessage<In, Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<UserSession, ChannelData, In, Out>, data: In) => Promise<void>
+export type ChannelConnection<Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<Session, ChannelData, Out>) => Promise<void>
+export type ChannelDisconnection<ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<Session, ChannelData, never>) => Promise<void>
+export type ChannelMessage<In, Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<UserSession, ChannelData, Out>, data: In) => Promise<void>
 type APIChannel<ChannelData, Channel extends string> = CoreAPIChannel<ChannelData, Channel, ChannelConnection, ChannelDisconnection, ChannelMessage<unknown, unknown, ChannelData>>
 
 type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>, UserSession>

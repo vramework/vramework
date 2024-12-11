@@ -22,11 +22,12 @@ export type RunChannelOptions = Partial<{
 }>
 
 export type RunChannelParams<ChannelData> = {
+  channelId: string
   singletonServices: CoreSingletonServices
-  request:
+  request?:
     | VrameworkRequest<ChannelData>
     | VrameworkHTTPAbstractRequest<ChannelData>
-  response: VrameworkResponse | VrameworkHTTPAbstractResponse
+  response?: VrameworkResponse | VrameworkHTTPAbstractResponse
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
