@@ -17,7 +17,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.28"
+    "@vramework/core": "^0.6.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.676.0",

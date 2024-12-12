@@ -17,7 +17,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.29"
+    "@vramework/core": "^0.6.0"
   },
   "devDependencies": {
     "@types/node": "^22.7.8",

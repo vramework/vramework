@@ -1,7 +1,7 @@
 import { test, beforeEach, afterEach } from 'node:test'
 import * as assert from 'node:assert/strict'
-import { getOpenChannels } from './channel-runner'
-import { LocalSubscriptionService } from './local-subscription-service'
+import { getOpenChannels } from './channel-runner.js'
+import { LocalSubscriptionService } from './local-subscription-service.js'
 
 test('subscribe should add a connection to a topic', async () => {
   const service = new LocalSubscriptionService()

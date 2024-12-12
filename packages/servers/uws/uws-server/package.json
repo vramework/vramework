@@ -18,11 +18,11 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.28"
+    "@vramework/core": "^0.6.0"
   },
   "dependencies": {
     "@types/qs": "^6",
-    "@vramework/uws-handler": "^0.5.13",
+    "@vramework/uws-handler": "^0.6.0",
     "qs": "^6.13.0",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.49.0"
   },

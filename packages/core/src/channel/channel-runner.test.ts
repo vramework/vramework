@@ -1,11 +1,9 @@
 import { test, beforeEach, afterEach } from 'node:test'
 import * as assert from 'node:assert/strict'
-import { getOpenChannels, runChannel } from './channel-runner'
-import {
-  VrameworkHTTPAbstractRequest,
-  VrameworkHTTPAbstractResponse,
-} from '../http'
-import { JSONValue } from '../types/core.types'
+import { getOpenChannels, runChannel } from './channel-runner.js'
+import { JSONValue } from '../types/core.types.js'
+import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
+import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
 
 /**
  * Minimal stubs for dependencies that runChannel expects.

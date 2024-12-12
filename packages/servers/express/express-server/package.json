@@ -18,8 +18,8 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.5.28",
-    "@vramework/express-middleware": "^0.5.12"
+    "@vramework/core": "^0.6.0",
+    "@vramework/express-middleware": "^0.6.0"
   },
   "dependencies": {
     "@types/content-type": "^1.1.8",
