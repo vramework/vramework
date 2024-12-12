@@ -17,7 +17,10 @@ export class VrameworkActionNextRequest<
    *
    * @param body - The request body to be wrapped and converted to a plain object.
    */
-  constructor(body: any, private dynamic: boolean) {
+  constructor(
+    body: any,
+    private dynamic: boolean
+  ) {
     super()
     // Needed to convert the body to a plain object and validate dates
     this.body = JSON.parse(JSON.stringify(body))

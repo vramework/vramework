@@ -34,7 +34,9 @@ if (!globalThis.vramework?.httpRoutes) {
   globalThis.vramework.httpRoutesMeta = []
 }
 
-const httpRoutes = (data?: CoreHTTPFunctionRoute<any, any, any>[]): CoreHTTPFunctionRoute<any, any, any>[] => {
+const httpRoutes = (
+  data?: CoreHTTPFunctionRoute<any, any, any>[]
+): CoreHTTPFunctionRoute<any, any, any>[] => {
   if (data) {
     globalThis.vramework.httpRoutes = data
   }
@@ -128,7 +130,10 @@ export const getUserSession = async <UserSession extends CoreUserSession>(
   request: VrameworkHTTPAbstractRequest
 ): Promise<CoreUserSession | undefined> => {
   if (httpSessionService) {
-    return (await httpSessionService.getUserSession(auth, request)) as UserSession
+    return (await httpSessionService.getUserSession(
+      auth,
+      request
+    )) as UserSession
   } else if (auth) {
     throw new NotImplementedError('Session service not implemented')
   }
@@ -301,7 +306,10 @@ export const runHTTPRoute = async <In, Out>({
     const allServices = { ...singletonServices, ...sessionServices, http }
 
     if (singletonServices.httpPermissionService) {
-      await singletonServices.httpPermissionService.verifyRouteAccess(route, session)
+      await singletonServices.httpPermissionService.verifyRouteAccess(
+        route,
+        session
+      )
     }
 
     const permissioned = await verifyPermissions(

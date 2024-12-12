@@ -9,6 +9,7 @@ import { loadAllSchemas } from '@vramework/core/schema'
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
 import { VrameworkuWSHandlerOptions } from './vramework-uws-http-handler.js'
+import { UWSSubscriptionService } from './uws-subscription-service.js'
 
 const isSerializable = (data: any): boolean => {
   return !(
@@ -46,6 +47,11 @@ export const vrameworkWebsocketHandler = ({
   }
 
   const decoder = new TextDecoder('utf-8')
+  const socketMapper = new Map<
+    string,
+    uWS.WebSocket<{ channelHandler: VrameworkChannelHandler }>
+  >()
+  const subscriptionService = new UWSSubscriptionService(socketMapper)
 
   return {
     upgrade: async (res, req, context) => {
@@ -65,11 +71,13 @@ export const vrameworkWebsocketHandler = ({
 
         const request = new VrameworkUWSRequest(req, res)
         const response = new VrameworkUWSResponse(res)
+
         const channelHandler = await runChannel({
           channelId: crypto.randomUUID().toString(),
           request,
           response,
           singletonServices,
+          subscriptionService,
           createSessionServices,
           channel: req.getUrl() as string,
         })
@@ -105,6 +113,7 @@ export const vrameworkWebsocketHandler = ({
           ws.send(data as any)
         }
       })
+      socketMapper.set(channelHandler.channelId, ws)
       channelHandler.open()
     },
     message: (ws, message, isBinary) => {
@@ -114,6 +123,7 @@ export const vrameworkWebsocketHandler = ({
     },
     close: (ws) => {
       const { channelHandler } = ws.getUserData()
+      socketMapper.delete(channelHandler.channelId)
       channelHandler.close()
     },
   } as uWS.WebSocketBehavior<{ channelHandler: VrameworkChannelHandler }>

@@ -3,6 +3,7 @@ import {
   RunChannelOptions,
   RunChannelParams,
   ChannelsMeta,
+  CoreAPIChannels,
 } from './channel.types.js'
 import { match } from 'path-to-regexp'
 import { closeServices, validateAndCoerce } from '../utils.js'
@@ -19,20 +20,28 @@ if (!globalThis.vramework?.channels) {
   globalThis.vramework = globalThis.vramework || {}
   globalThis.vramework.channels = []
   globalThis.vramework.channelsMeta = []
+  globalThis.vramework.openChannels = new Map<string, VrameworkChannelHandler>()
 }
 
-const channels = (data?: any) => {
+const channels = (data?: any): CoreAPIChannels => {
   if (data) {
     globalThis.vramework.channels = data
   }
   return globalThis.vramework.channels
 }
 
-const channelsMeta = (data?: any) => {
+const channelsMeta = (data?: any): ChannelsMeta => {
   if (data) {
     globalThis.vramework.channelsMeta = data
   }
   return globalThis.vramework.channelsMeta
+}
+
+/**
+ * Returns all the open channels on current server
+ */
+export const getOpenChannels = (): Map<string, VrameworkChannelHandler> => {
+  return globalThis.vramework.openChannels
 }
 
 /**
@@ -100,6 +109,7 @@ export const runChannel = async ({
   response,
   channel: channelRoute,
   createSessionServices,
+  subscriptionService,
   skipUserSession = false,
   respondWith404 = true,
   coerceToArray = false,
@@ -144,18 +154,37 @@ export const runChannel = async ({
     )
 
     if (singletonServices.channelPermissionService) {
-      await singletonServices.channelPermissionService.verifyChannelAccess(matchingChannel.channelConfig, session)
+      await singletonServices.channelPermissionService.verifyChannelAccess(
+        matchingChannel.channelConfig,
+        session
+      )
     }
 
     let data: any | undefined
     if (request) {
       data = await request.getData()
-      validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
+      validateAndCoerce(
+        singletonServices.logger,
+        schemaName,
+        data,
+        coerceToArray
+      )
+    }
+
+    const broadcast = (senderId: string, data: any) => {
+      const channels = getOpenChannels()
+      for (const [channelId, channel] of channels.entries()) {
+        if (channelId !== senderId) {
+          channel.send(data)
+        }
+      }
     }
 
     const channelHandler = new VrameworkChannelHandler(
       channelId,
       data,
+      subscriptionService,
+      broadcast
     )
     const channel = channelHandler.getChannel()
 
@@ -174,6 +203,7 @@ export const runChannel = async ({
     )
 
     channelHandler.registerOnOpen(async () => {
+      getOpenChannels().set(channelId, channelHandler)
       channelConfig.onConnect?.(allServices, channel)
     })
 
@@ -185,6 +215,7 @@ export const runChannel = async ({
     )
 
     channelHandler.registerOnClose(async () => {
+      getOpenChannels().delete(channelId)
       channelConfig.onDisconnect?.(allServices, channel)
       await closeServices(singletonServices.logger, sessionServices)
     })

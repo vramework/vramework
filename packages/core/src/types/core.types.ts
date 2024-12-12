@@ -1,9 +1,9 @@
-import { Logger, LogLevel } from '../services/logger.js'
-import { HTTPSessionService } from '../http/http-session-service.js'
-import { HTTPPermissionService } from '../http/http-permission-service.js'
-import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
-import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
-import { ChannelPermissionService } from '../channel/channel-permission-service.js'
+import type { Logger, LogLevel } from '../services/logger.js'
+import type { HTTPSessionService } from '../http/http-session-service.js'
+import type { HTTPPermissionService } from '../http/http-permission-service.js'
+import type { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
+import type { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
+import type { ChannelPermissionService } from '../channel/channel-permission-service.js'
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.

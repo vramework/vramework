@@ -38,7 +38,7 @@ const getType = (checker: ts.TypeChecker, node: ts.Node) => {
   // const symbol = checker.getSymbolAtLocation(node)
   // if (symbol) {
   //   return checker.getDeclaredTypeOfSymbol(symbol);
-  // } 
+  // }
   // throw new Error('No symbol found')
 }
 
@@ -211,14 +211,19 @@ export const getFunctionTypes = (
   if (!typeArguments || typeArguments.length === 0) {
     // This is the case for inline functions. In this case we would want to
     // get the types from the second argument of the function...
-    console.error(`\x1b[31m• No generic type arguments found for ${funcName}. Support for inline functions is not yet implemented.\x1b[0m`)
+    console.error(
+      `\x1b[31m• No generic type arguments found for ${funcName}. Support for inline functions is not yet implemented.\x1b[0m`
+    )
     return result
   }
 
   if (inputIndex !== undefined && inputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[inputIndex]!)
     const firstName = types.names[0]
-    if (customAliasedTypes && (types.names.length > 1 || (firstName && !isValidVariableName(firstName)))) {
+    if (
+      customAliasedTypes &&
+      (types.names.length > 1 || (firstName && !isValidVariableName(firstName)))
+    ) {
       const aliasType = types.names.join(' | ')
       const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Input`
       customAliasedTypes.set(aliasName, aliasType)
@@ -237,7 +242,10 @@ export const getFunctionTypes = (
   if (outputIndex !== undefined && outputIndex < typeArguments.length) {
     const types = resolveUnionTypes(checker, typeArguments[outputIndex]!)
     const firstName = types.names[0]
-    if (customAliasedTypes && (types.names.length > 1 || (firstName && !isValidVariableName(firstName)))) {
+    if (
+      customAliasedTypes &&
+      (types.names.length > 1 || (firstName && !isValidVariableName(firstName)))
+    ) {
       const aliasType = types.names.join(' | ')
       const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Output`
       customAliasedTypes.set(aliasName, aliasType)

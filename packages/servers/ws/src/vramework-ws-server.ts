@@ -1,6 +1,10 @@
 import { Server } from 'http'
 import { WebSocket, WebSocketServer } from 'ws'
-import { runChannel, logChannels } from '@vramework/core/channel'
+import {
+  runChannel,
+  logChannels,
+  LocalSubscriptionService
+} from '@vramework/core/channel'
 import { loadAllSchemas } from '@vramework/core/schema'
 import { RunRouteOptions } from '@vramework/core/http'
 import { VrameworkChannelHandler } from '@vramework/core/channel'
@@ -74,6 +78,8 @@ export const vrameworkWebsocketHandler = ({
     loadAllSchemas(singletonServices.logger)
   }
 
+  const subscriptionService = new LocalSubscriptionService()
+
   wss.on(
     'connection',
     (ws: WebSocket, channelHandler: VrameworkChannelHandler) => {
@@ -112,7 +118,8 @@ export const vrameworkWebsocketHandler = ({
       channelId: crypto.randomUUID().toString(),
       request,
       response,
-      singletonServices: singletonServices as any,
+      singletonServices,
+      subscriptionService,
       createSessionServices: createSessionServices as any,
       channel: url,
     })

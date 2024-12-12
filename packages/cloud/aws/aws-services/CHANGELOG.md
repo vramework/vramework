@@ -1,4 +1,3 @@
-
 ## 0.6
 
 Marking a major release to include channels and scheduled tasks

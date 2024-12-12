@@ -1,22 +1,27 @@
 import { CoreUserSession } from '../types/core.types.js'
+import { SubscriptionService } from './subscription-service.js'
 
 export interface VrameworkChannel<Session, OpeningData, Out> {
   // The channel identifier
   channelId: string
   // The user session, if available
-  session?: Session;
+  session?: Session
   // Update the user session, useful if you deal with auth on the
   // stream side
-  setSession: (session: Session) => void;
+  setSession: (session: Session) => void
   // The data the channel was created with. This could be query parameters
   // or parameters in the url.
-  openingData: OpeningData;
+  openingData: OpeningData
   // The data to send. This will fail is the stream has been closed.
-  send: (data: Out) => void;
+  send: (data: Out, isBinary?: boolean) => void
+  // Broadcast data to all channels, or a subset of selected ones
+  broadcast: (data: Out) => void
   // This will close the channel.
-  close: () => void;
+  close: () => void
   // The current state of the channel
-  state: 'initial' | 'open' | 'closed';
+  state: 'initial' | 'open' | 'closed'
+  // subscription service
+  subscriptions: SubscriptionService<Out>
 }
 
 export class VrameworkChannelHandler<
@@ -32,8 +37,10 @@ export class VrameworkChannelHandler<
   private channel?: VrameworkChannel<UserSession, OpeningData, Out>
 
   constructor(
-    private channelId: string,
+    public channelId: string,
     private openingData: OpeningData,
+    private subscriptionService: SubscriptionService<Out>,
+    private broadcast: (fromChannelId: string, data: Out) => void
   ) {}
 
   public getChannel(): VrameworkChannel<UserSession, OpeningData, Out> {
@@ -46,6 +53,10 @@ export class VrameworkChannelHandler<
         send: this.send.bind(this),
         close: this.close.bind(this),
         state: 'initial',
+        broadcast: (data: Out) => {
+          this.broadcast(this.channelId, data)
+        },
+        subscriptions: this.subscriptionService,
       }
     }
     return this.channel
@@ -83,7 +94,7 @@ export class VrameworkChannelHandler<
     this.sendCallback = send
   }
 
-  public send(message: Out): void {
+  public send(message: Out, isBinary?: boolean): void {
     if (!this.sendCallback) {
       throw new Error('No send callback registered')
     }

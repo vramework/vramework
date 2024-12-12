@@ -1,5 +1,5 @@
 import type { CoreUserSession } from '../types/core.types.js'
-import { CoreAPIChannel } from './channel.types.js'
+import type { CoreAPIChannel } from './channel.types.js'
 
 /**
  * Interface for handling permission verification.

@@ -64,11 +64,14 @@ export async function saveSchemas(
   )
 
   const desiredSchemas = new Set([
-    ...
-    routesMeta
+    ...routesMeta
       .map(({ input, output }) => [input, output])
       .flat()
-      .filter((s) => !!s && !['boolean', 'string', 'number', 'null', 'undefined'].includes(s)),
+      .filter(
+        (s) =>
+          !!s &&
+          !['boolean', 'string', 'number', 'null', 'undefined'].includes(s)
+      ),
     ...customAliasedTypes.keys(),
   ])
 

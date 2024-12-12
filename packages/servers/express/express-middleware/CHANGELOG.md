@@ -4,7 +4,6 @@
 
 Marking a major release to include channels and scheduled tasks
 
-
 ## 0.5.12
 
 ### Patch Changes

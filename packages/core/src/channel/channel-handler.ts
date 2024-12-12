@@ -45,7 +45,7 @@ const validateAuth = (
       : onMessage.auth === undefined
         ? requiresSession
         : onMessage.auth
-  
+
   if (auth && !channelHandler.getChannel().session) {
     return false
   }
@@ -93,7 +93,9 @@ export const registerMessageHandlers = (
     routerValue?: string
   ): Promise<void> => {
     if (!validateAuth(requiresSession, channelHandler, onMessage)) {
-      const routeMessage = routingProperty ? `route '${routingProperty}:${routerValue}'` : 'the default message route'
+      const routeMessage = routingProperty
+        ? `route '${routingProperty}:${routerValue}'`
+        : 'the default message route'
       logger.error(
         `Channel ${channelConfig.channel} with id ${channelHandler.getChannel().channelId} requires a session for ${routeMessage}`
       )

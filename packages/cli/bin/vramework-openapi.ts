@@ -27,7 +27,11 @@ export const vrameworkOpenAPI = async (
       if (!openAPI?.outputFile) {
         throw new Error('openAPI is required')
       }
-      const schemas = await generateSchemas(tsconfig, http.meta, http.customAliasedTypes)
+      const schemas = await generateSchemas(
+        tsconfig,
+        http.meta,
+        http.customAliasedTypes
+      )
       const openAPISpec = await generateOpenAPISpec(
         http.meta,
         schemas,

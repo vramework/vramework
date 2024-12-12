@@ -12,6 +12,7 @@ import {
 import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
+import { SubscriptionService } from './subscription-service.js'
 import { VrameworkChannel } from './vramework-channel-handler.js'
 
 export type RunChannelOptions = Partial<{
@@ -24,6 +25,7 @@ export type RunChannelOptions = Partial<{
 export type RunChannelParams<ChannelData> = {
   channelId: string
   singletonServices: CoreSingletonServices
+  subscriptionService: SubscriptionService<unknown>
   request?:
     | VrameworkRequest<ChannelData>
     | VrameworkHTTPAbstractRequest<ChannelData>
