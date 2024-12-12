@@ -1,4 +1,6 @@
-## 0.4.2
+## 0.6
+
+Marking a major release to include channels and scheduled tasks
 
 ## 0.5.7
 

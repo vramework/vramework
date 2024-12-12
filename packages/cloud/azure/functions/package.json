@@ -1,6 +1,6 @@
 {
   "name": "@vramework/azure-functions",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",

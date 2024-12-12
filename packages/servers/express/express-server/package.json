@@ -1,6 +1,6 @@
 {
   "name": "@vramework/express",
-  "version": "0.5.9",
+  "version": "0.6.0",
   "description": "An example vramework express server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",

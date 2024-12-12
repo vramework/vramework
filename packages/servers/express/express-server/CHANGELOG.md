@@ -1,5 +1,9 @@
 # @vramework/express
 
+## 0.6
+
+Marking a major release to include channels and scheduled tasks
+
 ## 0.5.9
 
 ### Patch Changes

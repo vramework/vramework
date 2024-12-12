@@ -1,5 +1,9 @@
 # @vramework/uws-handler
 
+## 0.6
+
+Marking a major release to include channels and scheduled tasks
+
 ## 0.5.14
 
 ### Patch Changes

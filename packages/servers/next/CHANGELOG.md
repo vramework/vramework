@@ -1,5 +1,9 @@
 # @vramework/next
 
+## 0.6
+
+Marking a major release to include channels and scheduled tasks
+
 ## 0.5.12
 
 ### Patch Changes

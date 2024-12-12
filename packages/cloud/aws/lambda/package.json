@@ -1,6 +1,6 @@
 {
   "name": "@vramework/lambda",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",

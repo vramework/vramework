@@ -1,5 +1,9 @@
 # @vramework/fetch
 
+## 0.6
+
+Marking a major release to include channels and scheduled tasks
+
 ## 0.5.8
 
 ### Patch Changes

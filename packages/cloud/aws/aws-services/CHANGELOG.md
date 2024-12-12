@@ -1,4 +1,7 @@
-## 0.0.8 - 26.06.2022
+
+## 0.6
+
+Marking a major release to include channels and scheduled tasks
 
 ## 0.5.5
 
@@ -67,6 +70,8 @@
 - Updated dependencies [28f62ea]
 - Updated dependencies [14783ee]
   - @vramework/core@0.4.2
+
+## 0.0.8 - 26.06.2022
 
 chore: Upgrading dependencies
 

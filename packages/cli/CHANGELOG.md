@@ -1,5 +1,9 @@
 # @vramework/cli
 
+## 0.6
+
+Marking a major release to include channels and scheduled tasks
+
 ## 0.5.43
 
 ### Patch Changes

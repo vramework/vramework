@@ -1,5 +1,9 @@
 # @vramework/fastify-plugin
 
+## 0.6
+
+Marking a major release to include channels and scheduled tasks
+
 ## 0.5.11
 
 ### Patch Changes
