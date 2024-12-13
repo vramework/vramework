@@ -1,5 +1,13 @@
 # @vramework/express
 
+## 0.6.1
+
+### Patch Changes
+
+- c459ef5: fix: provide the express-middleware as part of server dependencies
+- Updated dependencies [dee2e9f]
+  - @vramework/core@0.6.1
+
 ## 0.6
 
 Marking a major release to include channels and scheduled tasks
