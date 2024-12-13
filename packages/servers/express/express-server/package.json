@@ -18,8 +18,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.0",
-    "@vramework/express-middleware": "^0.6.0"
+    "@vramework/core": "^0.6.0"
   },
   "dependencies": {
     "@types/content-type": "^1.1.8",
@@ -27,6 +26,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5",
     "@types/express-serve-static-core": "^5.0.0",
+    "@vramework/express-middleware": "^0.6.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5"

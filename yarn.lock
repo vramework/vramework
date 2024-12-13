@@ -2595,7 +2595,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/express-middleware@workspace:packages/servers/express/express-middleware":
+"@vramework/express-middleware@npm:^0.6.0, @vramework/express-middleware@workspace:packages/servers/express/express-middleware":
   version: 0.0.0-use.local
   resolution: "@vramework/express-middleware@workspace:packages/servers/express/express-middleware"
   dependencies:
@@ -2622,13 +2622,13 @@ __metadata:
     "@types/cors": "npm:^2.8.17"
     "@types/express": "npm:^5"
     "@types/express-serve-static-core": "npm:^5.0.0"
+    "@vramework/express-middleware": "npm:^0.6.0"
     cookie-parser: "npm:^1.4.7"
     cors: "npm:^2.8.5"
     express: "npm:^5"
     typescript: "npm:^5.6.3"
   peerDependencies:
     "@vramework/core": ^0.6.0
-    "@vramework/express-middleware": ^0.6.0
   languageName: unknown
   linkType: soft
 
