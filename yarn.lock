@@ -2628,7 +2628,7 @@ __metadata:
     express: "npm:^5"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.6.0
+    "@vramework/core": ^0.6.1
   languageName: unknown
   linkType: soft
 
@@ -2752,7 +2752,7 @@ __metadata:
     qs: "npm:^6.13.0"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.6.0
+    "@vramework/core": ^0.6.1
     uWebSockets.js: "*"
   languageName: unknown
   linkType: soft

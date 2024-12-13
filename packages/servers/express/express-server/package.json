@@ -1,6 +1,6 @@
 {
   "name": "@vramework/express",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "An example vramework express server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -18,7 +18,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.0"
+    "@vramework/core": "^0.6.1"
   },
   "dependencies": {
     "@types/content-type": "^1.1.8",

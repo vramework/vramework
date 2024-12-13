@@ -1,5 +1,13 @@
 # @vramework/uws-handler
 
+## 0.6.1
+
+### Patch Changes
+
+- dee2e9f: feat: adding a subscription service change handler
+- Updated dependencies [dee2e9f]
+  - @vramework/core@0.6.1
+
 ## 0.6
 
 Marking a major release to include channels and scheduled tasks

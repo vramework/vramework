@@ -1,5 +1,11 @@
 ## 0.6
 
+## 0.6.1
+
+### Patch Changes
+
+- dee2e9f: feat: adding a subscription service change handler
+
 Marking a major release to include channels and scheduled tasks
 
 ## 0.5.29
