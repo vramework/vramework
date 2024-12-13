@@ -37,6 +37,7 @@ export const vrameworkWebsocketHandler = ({
   createSessionServices,
   loadSchemas,
   logRoutes,
+  subscriptionService = new UWSSubscriptionService(),
 }: VrameworkuWSHandlerOptions) => {
   if (logRoutes) {
     logChannels(singletonServices.logger)
@@ -47,11 +48,6 @@ export const vrameworkWebsocketHandler = ({
   }
 
   const decoder = new TextDecoder('utf-8')
-  const socketMapper = new Map<
-    string,
-    uWS.WebSocket<{ channelHandler: VrameworkChannelHandler }>
-  >()
-  const subscriptionService = new UWSSubscriptionService(socketMapper)
 
   return {
     upgrade: async (res, req, context) => {
@@ -113,7 +109,7 @@ export const vrameworkWebsocketHandler = ({
           ws.send(data as any)
         }
       })
-      socketMapper.set(channelHandler.channelId, ws)
+      subscriptionService.onChannelOpened(channelHandler.channelId, ws)
       channelHandler.open()
     },
     message: (ws, message, isBinary) => {
@@ -123,7 +119,7 @@ export const vrameworkWebsocketHandler = ({
     },
     close: (ws) => {
       const { channelHandler } = ws.getUserData()
-      socketMapper.delete(channelHandler.channelId)
+      subscriptionService.onChannelClosed(channelHandler.channelId)
       channelHandler.close()
     },
   } as uWS.WebSocketBehavior<{ channelHandler: VrameworkChannelHandler }>

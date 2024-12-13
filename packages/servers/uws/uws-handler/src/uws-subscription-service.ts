@@ -1,16 +1,20 @@
 import {
   SubscriptionService,
-  VrameworkChannelHandler,
+  SubscriptionServiceForwarder
 } from '@vramework/core/channel'
 import * as uWS from 'uWebSockets.js'
 
 export class UWSSubscriptionService implements SubscriptionService<unknown> {
-  public constructor(
-    private sockets: Map<
-      string,
-      uWS.WebSocket<{ channelHandler: VrameworkChannelHandler }>
-    >
-  ) {}
+  private sockets: Map<
+    string,
+    uWS.WebSocket<unknown>
+  > = new Map()
+
+  constructor (uws?: uWS.TemplatedApp, private forwarder?: SubscriptionServiceForwarder) {
+    if (uws) {
+      forwarder?.onForwardedMessage(this.forwardMessage.bind(this, uws))
+    }
+  }
 
   public async subscribe(topic: string, connectionId: string): Promise<void> {
     const socket = this.sockets.get(connectionId)
@@ -29,10 +33,25 @@ export class UWSSubscriptionService implements SubscriptionService<unknown> {
     isBinary?: boolean
   ): Promise<void> {
     const socket = this.sockets.get(connectionId)
-    socket?.publish(topic, JSON.stringify(message), isBinary)
+    if (socket) {
+      this.forwardMessage(socket, topic, message, isBinary)
+    }
+    this.forwarder?.forward(topic, message, isBinary)
+  }
+
+  public async onChannelOpened(channelId: string, socket: uWS.WebSocket<unknown>): Promise<void> {
+    this.sockets.set(channelId, socket)
   }
 
   public async onChannelClosed(channelId: string): Promise<void> {
-    // This is dealt with by uws directly
+    this.sockets.delete(channelId)
+  }
+
+  private forwardMessage(broadcaster: uWS.TemplatedApp | uWS.WebSocket<unknown>, topic: string, message: any, isBinary?: boolean): void {
+    if (isBinary) {
+      broadcaster?.publish(topic, message, true)
+    } else {
+      broadcaster?.publish(topic, JSON.stringify(message), true)
+    }
   }
 }

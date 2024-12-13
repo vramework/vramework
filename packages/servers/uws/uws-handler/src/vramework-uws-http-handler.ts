@@ -10,6 +10,7 @@ import {
   RunRouteOptions,
 } from '@vramework/core/http'
 import { loadAllSchemas } from '@vramework/core/schema'
+import { UWSSubscriptionService } from './uws-subscription-service.js'
 
 /**
  * Options for configuring the `vrameworkHandler`.
@@ -22,6 +23,7 @@ import { loadAllSchemas } from '@vramework/core/schema'
  * @property {RunRouteOptions} - Additional options for running the route.
  */
 export type VrameworkuWSHandlerOptions = {
+  subscriptionService?: UWSSubscriptionService
   singletonServices: CoreSingletonServices
   createSessionServices: CreateSessionServices<any, any, any>
   logRoutes?: boolean
