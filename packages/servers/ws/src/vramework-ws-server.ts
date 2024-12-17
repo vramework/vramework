@@ -1,13 +1,13 @@
 import { Server } from 'http'
 import { WebSocket, WebSocketServer } from 'ws'
+import { logChannels } from '@vramework/core/channel'
 import {
-  runChannel,
-  logChannels,
-  LocalSubscriptionService
-} from '@vramework/core/channel'
+  runLocalChannel,
+  LocalSubscriptionService,
+  VrameworkLocalChannelHandler,
+} from '@vramework/core/channel/local'
 import { loadAllSchemas } from '@vramework/core/schema'
 import { RunRouteOptions } from '@vramework/core/http'
-import { VrameworkChannelHandler } from '@vramework/core/channel'
 import { CoreSingletonServices, CreateSessionServices } from '@vramework/core'
 
 import { VrameworkHTTPRequest } from './vramework-http-request.js'
@@ -82,7 +82,7 @@ export const vrameworkWebsocketHandler = ({
 
   wss.on(
     'connection',
-    (ws: WebSocket, channelHandler: VrameworkChannelHandler) => {
+    (ws: WebSocket, channelHandler: VrameworkLocalChannelHandler) => {
       channelHandler.registerOnSend((data) => {
         if (isSerializable(data)) {
           ws.send(JSON.stringify(data))
@@ -114,7 +114,7 @@ export const vrameworkWebsocketHandler = ({
     const response = new VrameworkDuplexResponse(socket)
 
     // Initialize the channel handler
-    const channelHandler = await runChannel({
+    const channelHandler = await runLocalChannel({
       channelId: crypto.randomUUID().toString(),
       request,
       response,

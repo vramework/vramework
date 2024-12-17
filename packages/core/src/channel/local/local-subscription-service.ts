@@ -1,5 +1,5 @@
-import { getOpenChannels } from './channel-runner.js'
-import { SubscriptionService } from './subscription-service.js'
+import { SubscriptionService } from "../subscription-service.js"
+import { getOpenChannels } from "./local-channel-runner.js"
 
 /**
  * Implementation of the SubscriptionService interface.
@@ -17,25 +17,25 @@ export class LocalSubscriptionService<Data = unknown>
    * Subscribes a connection to a specific topic.
    * Creates the topic if it does not already exist.
    * @param topic - The topic to subscribe to.
-   * @param connectionId - The unique ID of the connection to subscribe.
+   * @param channelId - The unique ID of the connection to subscribe.
    */
-  public async subscribe(topic: string, connectionId: string): Promise<void> {
+  public async subscribe(topic: string, channelId: string): Promise<void> {
     if (!this.subscriptions.has(topic)) {
       this.subscriptions.set(topic, new Set())
     }
-    this.subscriptions.get(topic)!.add(connectionId)
+    this.subscriptions.get(topic)!.add(channelId)
   }
 
   /**
    * Unsubscribes a connection from a specific topic.
    * Removes the topic if it has no more subscribers.
    * @param topic - The topic to unsubscribe from.
-   * @param connectionId - The unique ID of the connection to unsubscribe.
+   * @param channelId - The unique ID of the connection to unsubscribe.
    */
-  public async unsubscribe(topic: string, connectionId: string): Promise<void> {
+  public async unsubscribe(topic: string, channelId: string): Promise<void> {
     const topicSubscriptions = this.subscriptions.get(topic)
     if (topicSubscriptions) {
-      topicSubscriptions.delete(connectionId)
+      topicSubscriptions.delete(channelId)
       if (topicSubscriptions.size === 0) {
         this.subscriptions.delete(topic) // Cleanup empty subscriptions
       }
@@ -48,18 +48,38 @@ export class LocalSubscriptionService<Data = unknown>
    * @param data - The data to send to the subscribers.
    */
   public async broadcast(
+    channelId: string,
+    data: Data,
+    isBinary?: boolean
+  ): Promise<void> {
+    const openChannels = getOpenChannels()
+    const channelIds = new Set(openChannels.keys())
+    for (const toChannelId of channelIds) {
+      if (channelId === toChannelId) continue // Skip sending to the sender
+      const channel = openChannels.get(toChannelId)
+      channel?.send(data, isBinary)
+    }
+  }
+
+  /**
+   * Sends data to all connections subscribed to a topic.
+   * @param topic - The topic to send data to.
+   * @param data - The data to send to the subscribers.
+   */
+  public async publish(
     topic: string,
-    connectionId: string,
+    channelId: string,
     data: Data,
     isBinary?: boolean
   ): Promise<void> {
     const openChannels = getOpenChannels()
     const subscribedChannelIds = this.subscriptions.get(topic)
-    if (!subscribedChannelIds) return
-
-    for (const channelId of subscribedChannelIds) {
-      if (channelId === connectionId) continue // Skip sending to the sender
-      const channel = openChannels.get(channelId)
+    if (!subscribedChannelIds) {
+      return
+    }
+    for (const toChannelId of subscribedChannelIds) {
+      if (channelId === toChannelId) continue // Skip sending to the sender
+      const channel = openChannels.get(toChannelId)
       channel?.send(data, isBinary)
     }
   }

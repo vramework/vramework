@@ -5,10 +5,9 @@ import {
   JSONValue,
 } from '../types/core.types.js'
 import { CoreAPIChannel } from './channel.types.js'
-import { getChannels } from './channel-runner.js'
 import { VrameworkChannelHandler } from './vramework-channel-handler.js'
-import { Logger } from '../services/logger.js'
 import { verifyPermissions } from '../permissions.js'
+import { getChannels } from './channel-runner.js'
 
 const validateSchema = (
   logger: CoreSingletonServices['logger'],
@@ -78,12 +77,12 @@ const runFunction = async (
   await func(services, channelHandler.getChannel(), data)
 }
 
-export const registerMessageHandlers = (
-  logger: Logger,
+export const processMessageHandlers = (
+  services: CoreServices,
   channelConfig: CoreAPIChannel<any, any>,
   channelHandler: VrameworkChannelHandler<CoreUserSession, unknown>,
-  services: CoreServices
 ) => {
+  const logger = services.logger
   const requiresSession = channelConfig.auth !== false
 
   const processMessage = async (
@@ -127,7 +126,7 @@ export const registerMessageHandlers = (
     await runFunction(services, channelHandler, onMessage, data)
   }
 
-  channelHandler.registerOnMessage(async (rawData) => {
+  const onMessage = async (rawData) => {
     let processed = false
 
     try {
@@ -169,5 +168,7 @@ export const registerMessageHandlers = (
         `No handler found for message in channel ${channelConfig.channel} for ${rawData}`
       )
     }
-  })
+  }
+
+  return onMessage
 }

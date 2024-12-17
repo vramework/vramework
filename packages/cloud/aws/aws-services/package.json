@@ -16,17 +16,22 @@
     "test:watch": "bash run-tests.sh --watch",
     "test:coverage": "bash run-tests.sh --coverage"
   },
+  "exports": {
+    ".": "./dist/index.js",
+    "./s3": "./dist/s3-content.js",
+    "./secrets": "./dist/aws-secrets.js"
+  },
   "peerDependencies": {
     "@vramework/core": "^0.6.0"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.676.0",
-    "@aws-sdk/client-secrets-manager": "3.675.0",
-    "@aws-sdk/s3-request-presigner": "3.676.0",
     "aws-cloudfront-sign": "^3.0.2"
   },
   "devDependencies": {
-    "typescript": "^5.6"
+    "@aws-sdk/client-s3": "3.188.0",
+    "@aws-sdk/client-secrets-manager": "3.188.0",
+    "@aws-sdk/s3-request-presigner": "3.188.0",
+    "typescript": "^5.7"
   },
   "engines": {
     "node": ">=18"

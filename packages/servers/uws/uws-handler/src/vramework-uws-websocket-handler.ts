@@ -1,9 +1,11 @@
 import * as uWS from 'uWebSockets.js'
 import {
-  runChannel,
   logChannels,
-  VrameworkChannelHandler,
 } from '@vramework/core/channel'
+import {
+  runLocalChannel,
+  VrameworkLocalChannelHandler
+} from '@vramework/core/channel/local'
 import { loadAllSchemas } from '@vramework/core/schema'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
@@ -68,7 +70,7 @@ export const vrameworkWebsocketHandler = ({
         const request = new VrameworkUWSRequest(req, res)
         const response = new VrameworkUWSResponse(res)
 
-        const channelHandler = await runChannel({
+        const channelHandler = await runLocalChannel({
           channelId: crypto.randomUUID().toString(),
           request,
           response,
@@ -122,5 +124,5 @@ export const vrameworkWebsocketHandler = ({
       subscriptionService.onChannelClosed(channelHandler.channelId)
       channelHandler.close()
     },
-  } as uWS.WebSocketBehavior<{ channelHandler: VrameworkChannelHandler }>
+  } as uWS.WebSocketBehavior<{ channelHandler: VrameworkLocalChannelHandler }>
 }

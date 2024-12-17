@@ -19,6 +19,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./channel": "./dist/channel/index.js",
+    "./channel/local": "./dist/channel/local/index.js",
+    "./channel/serverless": "./dist/channel/serverless/index.js",
     "./http": "./dist/http/index.js",
     "./http/vramework-http-session-service": "./dist/http/vramework-http-session-service.js",
     "./http/vramework-http-abstract-response": "./dist/http/vramework-http-abstract-response.js",

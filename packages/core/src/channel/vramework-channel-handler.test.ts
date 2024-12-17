@@ -2,21 +2,21 @@ import { test, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
 import { CoreUserSession } from '../types/core.types.js'
 import { SubscriptionService } from './subscription-service.js'
-import { VrameworkChannelHandler } from './vramework-channel-handler.js'
+import { VrameworkChannelHandler } from './vramework-abstract-channel-handler.js'
 
 type TestUserSession = CoreUserSession & { userId?: string }
 
 // A stub subscription service for testing
 class MockSubscriptionService<Out> implements SubscriptionService<Out> {
-  subscribe = async (topic: string, connectionId: string) => {
+  subscribe = async (topic: string, channelId: string) => {
     /* stub */
   }
-  unsubscribe = async (topic: string, connectionId: string) => {
+  unsubscribe = async (topic: string, channelId: string) => {
     /* stub */
   }
   broadcast = async (
     topic: string,
-    connectionId: string,
+    channelId: string,
     data: Out,
     isBinary?: boolean
   ) => {

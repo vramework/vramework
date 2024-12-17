@@ -1,10 +1,12 @@
 import { coerceQueryStringToArray, loadSchema, validateJson } from './schema.js'
 import { Logger } from './services/logger.js'
-import { CoreServices } from './types/core.types.js'
 
+// TODO: SessionServices probably needs it's own type
+// but is an issue for the future and will be tackled 
+// with dependency injection
 export const closeServices = async (
   logger: Logger,
-  sessionServices?: CoreServices
+  sessionServices?: Record<string, any>
 ) => {
   if (sessionServices) {
     await Promise.all(

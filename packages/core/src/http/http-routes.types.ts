@@ -49,12 +49,12 @@ export type RunRouteParams<In> = {
 /**
  * Represents the HTTP methods supported for API routes.
  */
-export type HTTPMethod = 'post' | 'get' | 'delete' | 'patch' | 'head'
+export type HTTPMethod = 'post' | 'get' | 'delete' | 'patch' | 'head' | 'put' | 'options'
 
 /**
  * Represents an API route without a function, including metadata such as content type, route, and timeout settings.
  */
-type CoreHTTPFunction = {
+export type CoreHTTPFunction = {
   contentType?: 'xml' | 'json'
   route: string
   eventChannel?: false

@@ -7,19 +7,39 @@ export interface SubscriptionServiceForwarder {
    * @param topic - The topic to send data to.
    * @param data - The data to send to the subscribers.
    */
-  forward (
+  forwardPublish (
     topic: string,
-    connectionId: string,
+    channelId: string,
     data: unknown,
     isBinary?: boolean
   ): Promise<void>
 
+    /**
+   * Sends data to all connections subscribed to a topic.
+   * @param topic - The topic to send data to.
+   * @param data - The data to send to the subscribers.
+   */
+    forwardBroadcast (
+      channelId: string,
+      data: unknown,
+      isBinary?: boolean
+    ): Promise<void>
+  
   /**
    * Sends data to all connections subscribed to a topic.
    * @param topic - The topic to send data to.
    * @param data - The data to send to the subscribers.
    */
-  onForwardedMessage (
+  onForwardedPublishMessage (
     callback: (topic: string, data: unknown, isBinary?: boolean) => void
   ): void
+
+    /**
+   * Sends data to all connections subscribed to a topic.
+   * @param topic - The topic to send data to.
+   * @param data - The data to send to the subscribers.
+   */
+    onForwardedBroadcastMessage (
+      callback: (data: unknown, isBinary?: boolean) => void
+    ): void
 }

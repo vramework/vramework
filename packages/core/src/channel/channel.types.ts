@@ -13,7 +13,6 @@ import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
 import { SubscriptionService } from './subscription-service.js'
-import { VrameworkChannel } from './vramework-channel-handler.js'
 
 export type RunChannelOptions = Partial<{
   skipUserSession: boolean
@@ -149,3 +148,27 @@ export type CoreAPIChannel<
 }
 
 export type CoreAPIChannels = CoreAPIChannel<any, string>[]
+
+
+export interface VrameworkChannel<Session, OpeningData, Out> {
+  // The channel identifier
+  channelId: string
+  // The user session, if available
+  session?: Session
+  // Update the user session, useful if you deal with auth on the
+  // stream side
+  setSession: (session: Session) => void
+  // The data the channel was created with. This could be query parameters
+  // or parameters in the url.
+  openingData: OpeningData
+  // The data to send. This will fail is the stream has been closed.
+  send: (data: Out, isBinary?: boolean) => void
+  // Broadcast data to all channels, or a subset of selected ones
+  broadcast: (data: Out) => void
+  // This will close the channel.
+  close: () => void
+  // The current state of the channel
+  state: 'initial' | 'open' | 'closed'
+  // subscription service
+  subscriptions: SubscriptionService<Out>
+}

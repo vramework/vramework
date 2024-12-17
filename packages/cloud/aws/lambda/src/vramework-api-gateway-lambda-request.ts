@@ -1,5 +1,6 @@
+import type { APIGatewayProxyEvent } from 'aws-lambda'
+import type { HTTPMethod } from '@vramework/core/http'
 import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
-import { APIGatewayProxyEvent } from 'aws-lambda'
 
 export class VrameworkAPIGatewayLambdaRequest extends VrameworkHTTPAbstractRequest {
   constructor(protected event: APIGatewayProxyEvent) {
@@ -11,20 +12,15 @@ export class VrameworkAPIGatewayLambdaRequest extends VrameworkHTTPAbstractReque
   }
 
   public getMethod() {
-    return this.event.httpMethod.toLowerCase() as
-      | 'post'
-      | 'get'
-      | 'delete'
-      | 'patch'
-      | 'head'
-      | 'options'
+    return this.event.httpMethod.toLowerCase() as HTTPMethod
   }
 
   public async getBody() {
-    throw new Error('Method not implemented.')
+    return this.event.body
   }
 
-  public getHeader(_headerName: string): string | undefined {
-    throw new Error('Method not implemented.')
+  public getHeader(headerName: string): string | undefined {
+    return this.event.headers[headerName]
   }
+
 }
