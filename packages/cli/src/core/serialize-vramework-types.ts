@@ -32,21 +32,19 @@ type APIChannel<ChannelData, Channel extends string> = CoreAPIChannel<ChannelDat
 
 type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>, UserSession>
 
-declare module "@vramework/core/channel" {
+declare module "@vramework/core" {
   function addChannel<ChannelData, Channel extends string>(
     channel: APIChannel<ChannelData, Channel> & AssertRouteParams<ChannelData, Channel>
   ): void;
 }
 
-declare module "@vramework/core/http" {
+declare module "@vramework/core" {
   function addRoute<In, Out, Route extends string>(
     route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
   ): void;
-
-  function addScheduledTask(task: ScheduledTask): void;
 }
 
-declare module "@vramework/core/scheduler" {
+declare module "@vramework/core" {
   function addScheduledTask<In, Out, Route extends string>(
     route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
   ): void;

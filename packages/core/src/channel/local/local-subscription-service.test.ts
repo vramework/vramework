@@ -1,156 +1,131 @@
-import { test, beforeEach, afterEach } from 'node:test'
-import * as assert from 'node:assert/strict'
-import { LocalSubscriptionService } from './local-subscription-service.js'
-import { getOpenChannels } from './local-channel-runner.js'
+import { test, beforeEach, afterEach, describe } from 'node:test';
+import * as assert from 'node:assert/strict';
+import { LocalSubscriptionService } from './local-subscription-service.js';
+import { getOpenChannels } from './local-channel-runner.js';
 
-test('subscribe should add a connection to a topic', async () => {
-  const service = new LocalSubscriptionService()
-  await service.subscribe('topicA', 'conn1')
+function createConnection(channelId: string) {
+  const receivedMessages: unknown[] = [];
+  const openChannels = getOpenChannels();
 
-  // Subscribe another connection to the same topic
-  await service.subscribe('topicA', 'conn2')
-
-  const openChannels = getOpenChannels()
-  openChannels.set('conn1', {
+  openChannels.set(channelId, {
     send: (data: unknown) => {
-      /* stub */
+      receivedMessages.push(data);
     },
-  } as any)
+  } as any);
 
-  let sentToConn2 = false
-  openChannels.set('conn2', {
-    send: (data: unknown) => {
-      sentToConn2 = true
+  return {
+    channelId,
+    receivedMessages,
+    assertReceived(expected: unknown[], message?: string) {
+      assert.deepEqual(
+        receivedMessages,
+        expected,
+        message || `Expected to have received: ${JSON.stringify(expected)}`
+      );
     },
-  } as any)
-
-  // Broadcast from conn1, so conn1 should not receive it, conn2 should receive it
-  await service.broadcast('topicA', 'conn1', { msg: 'hello' })
-
-  assert.equal(sentToConn2, true, 'conn2 should receive the broadcast')
-})
-
-test('unsubscribe should remove connection from topic', async () => {
-  const service = new LocalSubscriptionService()
-  await service.subscribe('topicB', 'conn3')
-  await service.subscribe('topicB', 'conn4')
-
-  const openChannels = getOpenChannels()
-  openChannels.set('conn3', {
-    send: (data: unknown) => {
-      /* stub */
+    assertNotReceived(message?: string) {
+      assert.equal(
+        receivedMessages.length,
+        0,
+        message || `Expected to have received nothing, but got: ${JSON.stringify(receivedMessages)}`
+      );
     },
-  } as any)
-  openChannels.set('conn4', {
-    send: (data: unknown) => {
-      /* stub */
+    assertReceivedExactly(expected: unknown[], message?: string) {
+      assert.deepEqual(
+        receivedMessages,
+        expected,
+        message || `Expected exactly: ${JSON.stringify(expected)}, but got: ${JSON.stringify(receivedMessages)}`
+      );
     },
-  } as any)
+  };
+}
 
-  // Unsubscribe conn4
-  await service.unsubscribe('topicB', 'conn4')
+describe('LocalSubscriptionService', () => {
+  beforeEach(() => {
+    const openChannels = getOpenChannels();
+    openChannels.clear();
+  });
 
-  let sentToConn3 = false
-  let sentToConn4 = false
+  afterEach(() => {
+    const openChannels = getOpenChannels();
+    openChannels.clear();
+  });
 
-  // Replace the mocks with spies
-  openChannels.set('conn3', {
-    send: (data: unknown) => {
-      sentToConn3 = true
-    },
-  } as any)
-  openChannels.set('conn4', {
-    send: (data: unknown) => {
-      sentToConn4 = true
-    },
-  } as any)
+  test('subscribe should add a connection to a topic', async () => {
+    const service = new LocalSubscriptionService<any>();
+    await service.subscribe('topicA', 'conn1');
+    await service.subscribe('topicA', 'conn2');
 
-  // Broadcast from conn3
-  await service.broadcast('topicB', 'conn3', { msg: 'test' })
+    const con1 = createConnection('conn1');
+    const con2 = createConnection('conn2');
 
-  // After unsubscribe, only conn3 is subscribed. It shouldn't receive its own broadcast.
-  assert.equal(sentToConn3, false, 'conn3 should not receive its own broadcast')
-  assert.equal(
-    sentToConn4,
-    false,
-    'conn4 is unsubscribed and should not receive anything'
-  )
-})
+    await service.publish('topicA', 'conn1', { msg: 'hello' });
 
-test('broadcast should skip sender and send to others', async () => {
-  const service = new LocalSubscriptionService()
-  await service.subscribe('topicC', 'conn5')
-  await service.subscribe('topicC', 'conn6')
+    con1.assertNotReceived();
+    con2.assertReceivedExactly([{ msg: 'hello' }]);
+  });
 
-  const openChannels = getOpenChannels()
-  openChannels.set('conn5', {
-    send: () => {
-      /* sender, should not receive message */
-    },
-  } as any)
+  test('unsubscribe should remove connection from topic', async () => {
+    const service = new LocalSubscriptionService();
+    await service.subscribe('topicB', 'conn3');
+    await service.subscribe('topicB', 'conn4');
 
-  let receivedByConn6 = false
-  openChannels.set('conn6', {
-    send: (data: unknown) => {
-      receivedByConn6 = true
-    },
-  } as any)
+    await service.unsubscribe('topicB', 'conn4');
 
-  await service.broadcast('topicC', 'conn5', { msg: 'hello conn6' })
-  assert.equal(
-    receivedByConn6,
-    true,
-    'conn6 should receive broadcast from conn5'
-  )
-})
+    const con3 = createConnection('conn3');
+    const con4 = createConnection('conn4');
 
-test('onChannelClosed should remove channel from all topics', async () => {
-  const service = new LocalSubscriptionService()
-  await service.subscribe('topicD', 'conn7')
-  await service.subscribe('topicD', 'conn8')
-  await service.subscribe('topicE', 'conn7')
+    await service.publish('topicB', 'conn3', { msg: 'test' });
 
-  const openChannels = getOpenChannels()
-  openChannels.set('conn7', { send: () => {} } as any)
-  openChannels.set('conn8', { send: () => {} } as any)
+    con3.assertNotReceived();
+    con4.assertNotReceived();
+  });
 
-  // Close conn7
-  await service.onChannelClosed('conn7')
+  test('broadcast should send to all channels except the sender', async () => {
+    const service = new LocalSubscriptionService();
+    await service.subscribe('topicC', 'conn5');
+    await service.subscribe('topicC', 'conn6');
 
-  let sentToConn7 = false
-  let sentToConn8 = false
+    const con5 = createConnection('conn5');
+    const con6 = createConnection('conn6');
 
-  openChannels.set('conn7', {
-    send: () => {
-      sentToConn7 = true
-    },
-  } as any)
-  openChannels.set('conn8', {
-    send: () => {
-      sentToConn8 = true
-    },
-  } as any)
+    await service.broadcast('conn5', { msg: 'hello conn6' });
 
-  // Now broadcast on topicD from conn8
-  await service.broadcast('topicD', 'conn8', { msg: 'test' })
+    con5.assertNotReceived();
+    con6.assertReceivedExactly([{ msg: 'hello conn6' }]);
+  });
 
-  // conn7 was removed from all topics, and conn8 shouldn't receive its own broadcast.
-  assert.equal(
-    sentToConn7,
-    false,
-    'conn7 should have been removed and receive nothing'
-  )
-  assert.equal(sentToConn8, false, 'conn8 should not receive its own broadcast')
-})
+  test('publish should only send to subscribers of a topic', async () => {
+    const service = new LocalSubscriptionService();
+    await service.subscribe('topicD', 'conn7');
+    await service.subscribe('topicD', 'conn8');
+    await service.subscribe('topicE', 'conn9');
 
-beforeEach(() => {
-  // Clear and reset any global state before each test, if needed
-  const openChannels = getOpenChannels()
-  openChannels.clear()
-})
+    const con7 = createConnection('conn7');
+    const con8 = createConnection('conn8');
+    const con9 = createConnection('conn9');
 
-afterEach(() => {
-  // Cleanup after each test
-  const openChannels = getOpenChannels()
-  openChannels.clear()
-})
+    await service.publish('topicD', 'conn7', { msg: 'test publish' });
+
+    con7.assertNotReceived();
+    con8.assertReceivedExactly([{ msg: 'test publish' }]);
+    con9.assertNotReceived();
+  });
+
+  test('onChannelClosed should remove channel from all topics', async () => {
+    const service = new LocalSubscriptionService();
+    await service.subscribe('topicF', 'conn10');
+    await service.subscribe('topicF', 'conn11');
+    await service.subscribe('topicG', 'conn10');
+
+    const con10 = createConnection('conn10');
+    const con11 = createConnection('conn11');
+
+    await service.onChannelClosed('conn10');
+
+    await service.publish('topicF', 'conn11', { msg: 'test' });
+
+    con10.assertNotReceived();
+    con11.assertNotReceived();
+  });
+});

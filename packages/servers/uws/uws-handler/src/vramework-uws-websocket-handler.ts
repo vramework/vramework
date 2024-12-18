@@ -114,10 +114,10 @@ export const vrameworkWebsocketHandler = ({
       subscriptionService.onChannelOpened(channelHandler.channelId, ws)
       channelHandler.open()
     },
-    message: (ws, message, isBinary) => {
+    message: async (ws, message, isBinary) => {
       const { channelHandler } = ws.getUserData()
       const data = isBinary ? message : decoder.decode(message)
-      const result = channelHandler.message(data)
+      const result = await channelHandler.message(data)
       if (result) {
         // TODO: This doesn't deal with binary results
         ws.send(JSON.stringify(result))

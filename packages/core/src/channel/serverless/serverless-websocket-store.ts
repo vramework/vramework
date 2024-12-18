@@ -1,8 +1,6 @@
 import { CoreUserSession } from "../../types/core.types.js";
-import { SubscriptionService } from "../subscription-service.js";
 
 export abstract class ServerlessWebsocketStore<OpeningData = unknown, Session extends CoreUserSession = CoreUserSession> {
-    public abstract getSubscriptionService<Out = unknown>(): SubscriptionService<Out>
     public abstract addChannel(channelId: string, channelRoute: string): Promise<void>
     public abstract removeChannel(channelId: string): Promise<void>
     public abstract setSession(channelId: string, session: any): Promise<void>

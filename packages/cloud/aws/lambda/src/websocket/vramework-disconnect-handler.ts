@@ -1,7 +1,7 @@
 import { CoreSingletonServices, CoreServices, CreateSessionServices, CoreUserSession } from "@vramework/core"
 import { runChannelDisconnect, ServerlessWebsocketStore } from "@vramework/core/channel/serverless"
 import { APIGatewayProxyEvent } from "aws-lambda"
-import { lambdaChannelHandlerFactory } from "./lambda-channel-handler.js"
+import { getServerlessDependencies } from "./utils.js"
 
 export const vrameworkDisconnectHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
   event: APIGatewayProxyEvent,
@@ -13,16 +13,10 @@ export const vrameworkDisconnectHandler = async <SingletonServices extends CoreS
     Services
   >,
 ): Promise<void> => {
-  const channelId = event.requestContext.connectionId
-  if (!channelId) {
-    throw new Error('No connectionId found in requestContext')
-  }
+  const runnerParams = getServerlessDependencies(singletonServices.logger, serverlessWebsocketStore, event)
   try {
     await runChannelDisconnect({
-      channelId,
-      channelHandlerFactory: lambdaChannelHandlerFactory,
-      subscriptionService: serverlessWebsocketStore.getSubscriptionService(),
-      serverlessWebsocketStore,
+      ...runnerParams,
       singletonServices,
       createSessionServices: createSessionServices as any
     })

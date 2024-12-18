@@ -1,7 +1,7 @@
 import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagementapi'
 import { SubscriptionService } from "@vramework/core/channel";
 import { ServerlessWebsocketStore } from "@vramework/core/channel/serverless";
-import { sendMessages } from './send-messages.js';
+import { sendMessages } from './utils.js';
 import { Logger } from '@vramework/core/services';
 
 export class VrameworkLambdaSubscriptionService<Out = unknown> implements SubscriptionService<Out> {
@@ -24,10 +24,6 @@ export class VrameworkLambdaSubscriptionService<Out = unknown> implements Subscr
     async publish(topic: string, fromChannelId: string, data: Out, isBinary?: boolean): Promise<void> {
         const channelIds = await this.serverlessWebsocketStore.getChannelIdsForTopic(topic)
         await this.sendMessages(channelIds, fromChannelId, data)
-    }
-
-    async onChannelClosed(channelId: string): Promise<void> {
-        // This is dealt with by the ServerlessWebsocketStore
     }
 
     private async sendMessages(channelIds: string[], fromChannelId: string, data: Out, isBinary?: boolean): Promise<void> {

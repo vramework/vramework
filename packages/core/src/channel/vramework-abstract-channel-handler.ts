@@ -7,11 +7,11 @@ export abstract class VrameworkAbstractChannelHandler<
   OpeningData = unknown,
   Out = unknown,
 > implements VrameworkChannelHandler<UserSession, OpeningData, Out> {
-  protected userSession?: UserSession
   protected channel?: VrameworkChannel<UserSession, OpeningData, Out>
 
   constructor(
     public channelId: string,
+    protected userSession: UserSession | undefined,
     protected openingData: OpeningData,
     protected subscriptionService: SubscriptionService<Out>
   ) {}

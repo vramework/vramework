@@ -156,7 +156,7 @@ export interface VrameworkChannel<Session, OpeningData, Out> {
   session?: Session
   // Update the user session, useful if you deal with auth on the
   // stream side
-  setSession: (session: Session) => void
+  setSession: (session: Session) => Promise<void>
   // The data the channel was created with. This could be query parameters
   // or parameters in the url.
   openingData: OpeningData
@@ -186,4 +186,4 @@ export type VrameworkChannelHandlerFactory<
 UserSession extends CoreUserSession = CoreUserSession,
 OpeningData = unknown,
 Out = unknown,
-> = (channelId: string, openingData: OpeningData, subscriptionService: SubscriptionService<Out>) => VrameworkChannelHandler<UserSession, OpeningData, Out>
+> = (channelId: string, openingData: OpeningData, session: UserSession, subscriptionService: SubscriptionService<Out>) => VrameworkChannelHandler<UserSession, OpeningData, Out>

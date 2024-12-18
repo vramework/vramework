@@ -12,15 +12,23 @@ export interface RunServerlessChannelParams<ChannelData> extends RunChannelParam
     channelHandlerFactory: VrameworkChannelHandlerFactory
 }
 
-const getVariablesForChannel = async ({ channelId, singletonServices, createSessionServices, subscriptionService, serverlessWebsocketStore, channelHandlerFactory }: {
+const getVariablesForChannel = async ({ channelId, session, channelRoute, singletonServices, createSessionServices, subscriptionService, serverlessWebsocketStore, channelHandlerFactory }: {
     channelId: string,
+    session?: CoreUserSession,
+    channelRoute?: string,
     singletonServices: CoreSingletonServices,
     createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices<CoreSingletonServices>>,
     subscriptionService: SubscriptionService<unknown>
     serverlessWebsocketStore: ServerlessWebsocketStore,
     channelHandlerFactory: VrameworkChannelHandlerFactory
 }) => {
-    const { session, openingData, channelRoute } = await serverlessWebsocketStore.getData(channelId)
+    let openingData: any | undefined
+    if (!channelRoute) {
+        ({ session, openingData, channelRoute } = await serverlessWebsocketStore.getData(channelId));
+    } else {
+        await serverlessWebsocketStore.addChannel(channelId, channelRoute)
+    }
+
     const { channels } = getChannels()
     const channelConfig = channels.find(channelConfig => channelConfig.channel === channelRoute)
     if (!channelConfig) {
@@ -28,6 +36,7 @@ const getVariablesForChannel = async ({ channelId, singletonServices, createSess
     }
     const channelHandler = channelHandlerFactory(
         channelId,
+        session,
         openingData,
         subscriptionService,
     )
@@ -115,7 +124,7 @@ export const runChannelConnect = async ({
             )
         }
 
-        const { allServices, channel } = await getVariablesForChannel({ channelId, singletonServices, createSessionServices, subscriptionService, serverlessWebsocketStore, channelHandlerFactory })
+        const { allServices, channel } = await getVariablesForChannel({ channelId, session, singletonServices, createSessionServices, subscriptionService, serverlessWebsocketStore, channelHandlerFactory, channelRoute })
         await channelConfig.onConnect?.(allServices, channel)
     } catch (e: any) {
         handleError(

@@ -112,6 +112,7 @@ export const runLocalChannel = async ({
 
         const channelHandler = new VrameworkLocalChannelHandler(
             channelId,
+            session,
             data,
             subscriptionService
         )

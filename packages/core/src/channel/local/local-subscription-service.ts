@@ -55,7 +55,9 @@ export class LocalSubscriptionService<Data = unknown>
     const openChannels = getOpenChannels()
     const channelIds = new Set(openChannels.keys())
     for (const toChannelId of channelIds) {
-      if (channelId === toChannelId) continue // Skip sending to the sender
+      if (channelId === toChannelId) {
+        continue // Skip sending to the sender
+      }
       const channel = openChannels.get(toChannelId)
       channel?.send(data, isBinary)
     }
@@ -92,6 +94,7 @@ export class LocalSubscriptionService<Data = unknown>
    */
   public async onChannelClosed(channelId: string): Promise<void> {
     for (const [topic, channelIds] of this.subscriptions.entries()) {
+      console.log('removing', channelId)
       channelIds.delete(channelId)
       if (channelIds.size === 0) {
         this.subscriptions.delete(topic) // Cleanup empty topics

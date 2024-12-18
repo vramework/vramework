@@ -3,7 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { VrameworkAPIGatewayLambdaRequest } from "../vramework-api-gateway-lambda-request.js"
 import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
 import { runChannelConnect, ServerlessWebsocketStore } from "@vramework/core/channel/serverless"
-import { lambdaChannelHandlerFactory } from "./lambda-channel-handler.js"
+import { getServerlessDependencies } from "./utils.js"
 
 export const vrameworkConnectHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
   event: APIGatewayProxyEvent,
@@ -15,20 +15,14 @@ export const vrameworkConnectHandler = async <SingletonServices extends CoreSing
     Services
   >
 ): Promise<APIGatewayProxyResult> => {
-  const channelId = event.requestContext.connectionId
-  if (!channelId) {
-    throw new Error('No connectionId found in requestContext')
-  }
+  const runnerParams = getServerlessDependencies(singletonServices.logger, serverlessWebsocketStore, event)
   const request = new VrameworkAPIGatewayLambdaRequest(event)
   const response = new VrameworkAPIGatewayLambdaResponse()
   try {
     await runChannelConnect({
-      channelId,
+      ...runnerParams,
       request,
       response,
-      channelHandlerFactory: lambdaChannelHandlerFactory,
-      subscriptionService: serverlessWebsocketStore.getSubscriptionService(),
-      serverlessWebsocketStore,
       singletonServices,
       createSessionServices: createSessionServices as any,
       channel: request.getPath(),

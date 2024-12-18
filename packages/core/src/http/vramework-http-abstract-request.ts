@@ -16,9 +16,7 @@ export abstract class VrameworkHTTPAbstractRequest<
    * Retrieves the request body.
    * @returns A promise that resolves to the request body.
    */
-  public getBody(): Promise<In> {
-    throw new Error('Method not implemented.')
-  }
+  public abstract getBody(): Promise<In>
 
   /**
    * Retrieves the raw request body as a Buffer.

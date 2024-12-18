@@ -1,188 +1,105 @@
-import { test, beforeEach } from 'node:test'
-import assert from 'node:assert/strict'
-import { CoreUserSession } from '../types/core.types.js'
-import { SubscriptionService } from './subscription-service.js'
-import { VrameworkChannelHandler } from './vramework-abstract-channel-handler.js'
+import { test, beforeEach } from 'node:test';
+import * as assert from 'node:assert/strict';
+import { CoreUserSession } from '../types/core.types.js';
+import { SubscriptionService } from './subscription-service.js';
+import { VrameworkAbstractChannelHandler } from './vramework-abstract-channel-handler.js';
 
-type TestUserSession = CoreUserSession & { userId?: string }
+// A concrete implementation of the abstract class for testing
+class TestChannelHandler extends VrameworkAbstractChannelHandler<
+  CoreUserSession,
+  { param: string },
+  { msg: string }
+> {
+  public async setSession(session: CoreUserSession): Promise<void> {
+    this.userSession = session;
+  }
 
-// A stub subscription service for testing
-class MockSubscriptionService<Out> implements SubscriptionService<Out> {
-  subscribe = async (topic: string, channelId: string) => {
-    /* stub */
-  }
-  unsubscribe = async (topic: string, channelId: string) => {
-    /* stub */
-  }
-  broadcast = async (
-    topic: string,
-    channelId: string,
-    data: Out,
-    isBinary?: boolean
-  ) => {
-    /* stub */
-  }
-  onChannelClosed = async (channelId: string) => {
-    /* stub */
+  public async send(message: { msg: string }, isBinary = false): Promise<void> {
+    // Mock send implementation
   }
 }
 
-let handler: VrameworkChannelHandler<
-  TestUserSession,
-  { param: string },
-  { msg: string }
->
-let subscriptionService: SubscriptionService<{ msg: string }>
-let broadcastFn: (fromChannelId: string, data: { msg: string }) => void
+// A stub subscription service for testing
+class MockSubscriptionService<Out> implements SubscriptionService<Out> {
+  publish = async (topic: string, channelId: string, data: Out, isBinary?: boolean) => {
+     /* stub */
+  }
+  subscribe = async (topic: string, channelId: string) => {
+    /* stub */
+  };
+  unsubscribe = async (topic: string, channelId: string) => {
+    /* stub */
+  };
+  broadcast = async (topic: string, data: Out) => {
+    /* stub */
+  };
+  onChannelClosed = async (channelId: string) => {
+    /* stub */
+  };
+}
+
+let handler: TestChannelHandler;
+let subscriptionService: MockSubscriptionService<{ msg: string }>;
 
 beforeEach(() => {
-  subscriptionService = new MockSubscriptionService<{ msg: string }>()
-  broadcastFn = () => {
-    /* stub */
-  }
-  handler = new VrameworkChannelHandler<
-    TestUserSession,
-    { param: string },
-    { msg: string }
-  >('test-channel-id', { param: 'testParam' }, subscriptionService, broadcastFn)
-})
+  subscriptionService = new MockSubscriptionService<{ msg: string }>();
+  handler = new TestChannelHandler(
+    'test-channel-id',
+    undefined,
+    { param: 'testParam' },
+    subscriptionService
+  );
+});
 
 test('getChannel should return a channel with initial state', () => {
-  const channel = handler.getChannel()
-  assert.equal(channel.channelId, 'test-channel-id', 'Channel ID should match')
-  assert.equal(channel.state, 'initial', 'Initial state should be "initial"')
-  assert.equal(
-    channel.openingData.param,
-    'testParam',
+  const channel = handler.getChannel();
+  assert.equal(channel.channelId, 'test-channel-id', 'Channel ID should match');
+  assert.equal(channel.state, 'initial', 'Initial state should be "initial"');
+  assert.deepEqual(
+    channel.openingData,
+    { param: 'testParam' },
     'Opening data should be accessible'
-  )
-  assert.equal(
-    channel.session,
-    undefined,
-    'Session should initially be undefined'
-  )
+  );
+  assert.equal(channel.session, undefined, 'Session should initially be undefined');
   assert.equal(
     channel.subscriptions,
     subscriptionService,
     'Subscriptions should match the provided service'
-  )
-})
+  );
+});
 
-test('setSession should update the channel session', () => {
-  const channel = handler.getChannel()
-  handler.setSession({ userId: 'user123' })
-  assert.equal(
-    channel.session?.userId,
-    'user123',
-    'Session userId should be updated'
-  )
-})
-
-test('open should change channel state to open and call open callback', async () => {
-  let openCalled = false
-  handler.registerOnOpen(async () => {
-    openCalled = true
-  })
-
-  handler.open()
-
-  const channel = handler.getChannel()
-  assert.equal(
-    channel.state,
-    'open',
-    'State should be "open" after calling open()'
-  )
-  assert.equal(openCalled, true, 'Open callback should have been called')
-})
-
-test('message should call the registered onMessage callback', () => {
-  let receivedMessage: unknown = null
-  handler.registerOnMessage((msg) => {
-    receivedMessage = msg
-  })
-
-  handler.message({ hello: 'world' })
-
+test('setSession should update the channel session', async () => {
+  const session = { userId: 'user123' } as CoreUserSession;
+  await handler.setSession(session);
+  const channel = handler.getChannel();
   assert.deepEqual(
-    receivedMessage,
-    { hello: 'world' },
-    'onMessage callback should receive the sent message'
-  )
-})
+    channel.session,
+    session,
+    'Session should be updated correctly'
+  );
+});
 
-test('close should change channel state to closed and call close callback', async () => {
-  let closeCalled = false
-  handler.registerOnClose(async () => {
-    closeCalled = true
-  })
+test('open should change channel state to open', () => {
+  handler.open();
+  const channel = handler.getChannel();
+  assert.equal(channel.state, 'open', 'State should be "open" after calling open()');
+});
 
-  handler.close()
+test('close should change channel state to closed', () => {
+  handler.close();
+  const channel = handler.getChannel();
+  assert.equal(channel.state, 'closed', 'State should be "closed" after calling close()');
+});
 
-  const channel = handler.getChannel()
-  assert.equal(
-    channel.state,
-    'closed',
-    'State should be "closed" after calling close()'
-  )
-  assert.equal(closeCalled, true, 'Close callback should have been called')
-})
+test('broadcast should call the subscription service broadcast method', () => {
+  let broadcastCalled = false;
+  subscriptionService.broadcast = async (channelId, data) => {
+    broadcastCalled = true;
+    assert.equal(channelId, 'test-channel-id', 'Channel ID should match');
+    assert.deepEqual(data, { msg: 'test message' }, 'Broadcast data should match');
+  };
 
-test('send should throw if send callback is not registered', () => {
-  const channel = handler.getChannel()
-
-  assert.throws(
-    () => channel.send({ msg: 'test' }),
-    /No send callback registered/,
-    'Should throw an error if no send callback is registered'
-  )
-})
-
-test('send should call the registered send callback', () => {
-  let sentMessage: { msg: string } | null = null
-
-  handler.registerOnSend((message) => {
-    sentMessage = message
-  })
-
-  const channel = handler.getChannel()
-  channel.send({ msg: 'hello' })
-
-  assert.deepEqual(
-    sentMessage,
-    { msg: 'hello' },
-    'Send callback should receive the message'
-  )
-})
-
-test('broadcast should call the provided broadcast function', () => {
-  let fromId: string | null = null
-  let broadcastMessage: { msg: string } | null = null
-
-  const localHandler = new VrameworkChannelHandler<
-    TestUserSession,
-    { param: string },
-    { msg: string }
-  >(
-    'broadcast-channel-id',
-    { param: 'abc' },
-    subscriptionService,
-    (fId, data) => {
-      fromId = fId
-      broadcastMessage = data
-    }
-  )
-
-  const channel = localHandler.getChannel()
-  channel.broadcast({ msg: 'broadcast test' })
-
-  assert.equal(
-    fromId,
-    'broadcast-channel-id',
-    'Should pass the channel ID to broadcast callback'
-  )
-  assert.deepEqual(
-    broadcastMessage,
-    { msg: 'broadcast test' },
-    'Should pass the correct broadcast message'
-  )
-})
+  const channel = handler.getChannel();
+  channel.broadcast({ msg: 'test message' });
+  assert.ok(broadcastCalled, 'Broadcast should be called');
+});

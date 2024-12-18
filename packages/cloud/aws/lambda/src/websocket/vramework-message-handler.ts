@@ -2,7 +2,7 @@ import { CoreSingletonServices, CoreServices, CreateSessionServices, CoreUserSes
 import { runChannelMessage, ServerlessWebsocketStore } from "@vramework/core/channel/serverless"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
-import { lambdaChannelHandlerFactory } from "./lambda-channel-handler.js"
+import { getServerlessDependencies } from "./utils.js"
 
 export const vrameworkMessageHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
   event: APIGatewayProxyEvent,
@@ -14,22 +14,18 @@ export const vrameworkMessageHandler = async <SingletonServices extends CoreSing
     Services
   >
 ): Promise<APIGatewayProxyResult> => {
-  const channelId = event.requestContext.connectionId
-  if (!channelId) {
-    throw new Error('No connectionId found in requestContext')
-  }
+  const runnerParams = getServerlessDependencies(singletonServices.logger, serverlessWebsocketStore, event)
   const response = new VrameworkAPIGatewayLambdaResponse()
   try {
     const result = await runChannelMessage({
-      channelId,
-      channelHandlerFactory: lambdaChannelHandlerFactory,
-      subscriptionService: serverlessWebsocketStore.getSubscriptionService(),
-      serverlessWebsocketStore,
+      ...runnerParams,
       singletonServices,
       createSessionServices: createSessionServices as any
     }, event.body)
-    // TODO: Serialise result here if it isn't a string
-    response.setJson(JSON.stringify(result))
+    if (result) {
+      // TODO: Serialise result here if it isn't a string
+      response.setJson(JSON.stringify(result))
+    }
   } catch {
     // Error should have already been handled by runHTTPRoute
   }

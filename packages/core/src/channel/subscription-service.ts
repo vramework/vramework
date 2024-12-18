@@ -37,10 +37,4 @@ export interface SubscriptionService<Out> {
     data: Out,
     isBinary?: boolean
   ): Promise<void>
-
-  /**
-   * Handles cleanup when a channel is closed.
-   * @param channelId - The ID of the channel that was closed.
-   */
-  onChannelClosed(channelId: string): Promise<void>
 }

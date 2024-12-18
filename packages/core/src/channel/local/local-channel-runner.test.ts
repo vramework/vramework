@@ -1,9 +1,9 @@
 import { test, beforeEach, afterEach } from 'node:test'
 import * as assert from 'node:assert/strict'
-import { getOpenChannels, runChannel } from './channel-runner.js'
-import { JSONValue } from '../types/core.types.js'
-import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
-import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
+import { JSONValue } from '../../types/core.types.js'
+import { VrameworkHTTPAbstractRequest } from '../../http/vramework-http-abstract-request.js'
+import { VrameworkHTTPAbstractResponse } from '../../http/vramework-http-abstract-response.js'
+import { getOpenChannels, runLocalChannel } from './local-channel-runner.js'
 
 /**
  * Minimal stubs for dependencies that runChannel expects.
@@ -26,6 +26,9 @@ const mockSingletonServices = {
 
 // Mock request and response objects
 class MockRequest extends VrameworkHTTPAbstractRequest {
+  public getBody(): Promise<unknown> {
+    throw new Error('Method not implemented.')
+  }
   public getHeader(headerName: string): string | undefined {
     throw new Error('Method not implemented.')
   }
@@ -45,7 +48,6 @@ class MockResponse extends VrameworkHTTPAbstractResponse {
     throw new Error('Method not implemented.')
   }
   public setStatus(code) {
-    console.log('here', code)
     this.statusSet = code
   }
   public end() {
@@ -80,7 +82,7 @@ test('runChannel should return undefined and 404 if no matching channel is found
 
   const mockResponse = new MockResponse()
 
-  const result = await runChannel({
+  const result = await runLocalChannel({
     singletonServices: mockSingletonServices,
     channelId: 'test-channel-id',
     request: new MockRequest(),
@@ -115,7 +117,7 @@ test('runChannel should return a channel handler if channel matches and no auth 
     },
   }
 
-  const result = await runChannel({
+  const result = await runLocalChannel({
     singletonServices: singletonServicesWithPerm,
     channelId: 'test-channel-id',
     request: new MockRequest(),

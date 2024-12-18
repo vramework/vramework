@@ -1,6 +1,7 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 import type { HTTPMethod } from '@vramework/core/http'
 import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
+import { VrameworkQuery } from '@vramework/core'
 
 export class VrameworkAPIGatewayLambdaRequest extends VrameworkHTTPAbstractRequest {
   constructor(protected event: APIGatewayProxyEvent) {
@@ -8,7 +9,8 @@ export class VrameworkAPIGatewayLambdaRequest extends VrameworkHTTPAbstractReque
   }
 
   public getPath() {
-    return this.event.path
+    // TODO: The path can be undefined, types are invalid
+    return this.event.path || '/'
   }
 
   public getMethod() {
@@ -23,4 +25,8 @@ export class VrameworkAPIGatewayLambdaRequest extends VrameworkHTTPAbstractReque
     return this.event.headers[headerName]
   }
 
+  public getQuery () {
+    // TODO: If query isn't defined, it should be an empty object
+    return this.event.queryStringParameters as VrameworkQuery || {}
+  }
 }
