@@ -9,7 +9,7 @@
   "scripts": {
     "tsc": "tsc",
     "build:esm": "tsc -b",
-    "build": "rm -rf dist && yarn build:esm",
+    "build": "yarn build:esm",
     "release": "npm run build && npm test",
     "ncu": "ncu",
     "test": "bash run-tests.sh",

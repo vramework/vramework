@@ -13,7 +13,7 @@
     "tsc": "tsc",
     "build:esm": "tsc -b",
     "schema": "ts-json-schema-generator -o cli.schema.json --path 'src/vramework-cli-config.ts' --type 'VrameworkCLIConfig'",
-    "build": "rm -rf dist && yarn build:esm && yarn schema",
+    "build": "yarn build:esm && yarn schema",
     "ncu": "ncu -x '/.*glob.*/'",
     "release": "yarn build && npm test",
     "test": "bash run-tests.sh",
