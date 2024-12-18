@@ -91,11 +91,16 @@ export const vrameworkWebsocketHandler = ({
         }
       })
 
-      ws.on('message', (message, isBinary) => {
+      ws.on('message', async (message, isBinary) => {
+        let result
         if (isBinary) {
-          channelHandler.message(message)
+          result = await channelHandler.message(message)
         } else {
-          channelHandler.message(message.toString())
+          result = await channelHandler.message(message.toString())
+        }
+        if (result) {
+          // TODO: We don't support binary results as returns just yet 
+          channelHandler.send(JSON.stringify(result))
         }
       })
 

@@ -1,27 +1,32 @@
 import { createHTTPInteraction, loadUserSession, handleError } from "../../http/http-route-runner.js"
 import { CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices } from "../../types/core.types.js"
-import { validateAndCoerce, closeServices } from "../../utils.js"
+import { validateAndCoerce, closeSessionServices } from "../../utils.js"
 import { processMessageHandlers } from "../channel-handler.js"
-import { getMatchingChannelConfig } from "../channel-runner.js"
-import { CoreAPIChannel, RunChannelOptions, RunChannelParams } from "../channel.types.js"
+import { getChannels, getMatchingChannelConfig } from "../channel-runner.js"
+import type { CoreAPIChannel, RunChannelOptions, RunChannelParams, VrameworkChannelHandler, VrameworkChannelHandlerFactory } from "../channel.types.js"
 import { SubscriptionService } from "../subscription-service.js"
-import { VrameworkChannelHandler } from "../vramework-channel-handler.js"
-import { VrameworkServerlessChannelHandler } from "./serverless-channel-handler.js"
 import { ServerlessWebsocketStore } from "./serverless-websocket-store.js"
 
 export interface RunServerlessChannelParams<ChannelData> extends RunChannelParams<ChannelData> {
     serverlessWebsocketStore: ServerlessWebsocketStore
+    channelHandlerFactory: VrameworkChannelHandlerFactory
 }
 
-const getVariablesForChannel = async ({ channelId, singletonServices, createSessionServices, subscriptionService, serverlessWebsocketStore }: {
+const getVariablesForChannel = async ({ channelId, singletonServices, createSessionServices, subscriptionService, serverlessWebsocketStore, channelHandlerFactory }: {
     channelId: string,
     singletonServices: CoreSingletonServices,
     createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices<CoreSingletonServices>>,
     subscriptionService: SubscriptionService<unknown>
-    serverlessWebsocketStore: ServerlessWebsocketStore
+    serverlessWebsocketStore: ServerlessWebsocketStore,
+    channelHandlerFactory: VrameworkChannelHandlerFactory
 }) => {
-    const { session, openingData, channelConfig } = await serverlessWebsocketStore.getData(channelId)
-    const channelHandler = new VrameworkServerlessChannelHandler(
+    const { session, openingData, channelRoute } = await serverlessWebsocketStore.getData(channelId)
+    const { channels } = getChannels()
+    const channelConfig = channels.find(channelConfig => channelConfig.channel === channelRoute)
+    if (!channelConfig) {
+        throw new Error(`Channel not found: ${channelRoute}`)
+    }
+    const channelHandler = channelHandlerFactory(
         channelId,
         openingData,
         subscriptionService,
@@ -49,6 +54,7 @@ export const runChannelConnect = async ({
     createSessionServices,
     subscriptionService,
     serverlessWebsocketStore,
+    channelHandlerFactory,
     skipUserSession = false,
     respondWith404 = true,
     coerceToArray = false,
@@ -109,7 +115,7 @@ export const runChannelConnect = async ({
             )
         }
 
-        const { allServices, channel } = await getVariablesForChannel({ channelId, singletonServices, createSessionServices, subscriptionService, serverlessWebsocketStore })
+        const { allServices, channel } = await getVariablesForChannel({ channelId, singletonServices, createSessionServices, subscriptionService, serverlessWebsocketStore, channelHandlerFactory })
         await channelConfig.onConnect?.(allServices, channel)
     } catch (e: any) {
         handleError(
@@ -121,23 +127,24 @@ export const runChannelConnect = async ({
         )
         throw e
     } finally {
-        await closeServices(singletonServices.logger, sessionServices)
+        await closeSessionServices(singletonServices.logger, sessionServices)
     }
 }
 
 export const runChannelDisconnect = async (params: RunServerlessChannelParams<unknown>): Promise<void> => {
     const { allServices, sessionServices, channel, channelConfig } = await getVariablesForChannel(params)
     await channelConfig.onDisconnect?.(allServices, channel)
-    await closeServices(allServices.logger, sessionServices)
+    await closeSessionServices(allServices.logger, sessionServices)
 }
 
-export const runChannelMessage = async (params: RunServerlessChannelParams<unknown>, data: unknown): Promise<void> => {
+export const runChannelMessage = async (params: RunServerlessChannelParams<unknown>, data: unknown): Promise<unknown> => {
     const { allServices, sessionServices, channelHandler, channelConfig } = await getVariablesForChannel(params)
     const onMessage = processMessageHandlers(
         allServices,
         channelConfig,
         channelHandler,
     )
-    await onMessage(data)
-    await closeServices(allServices.logger, sessionServices)
+    const response = await onMessage(data)
+    await closeSessionServices(allServices.logger, sessionServices)
+    return response
 }

@@ -11,7 +11,7 @@ import type {
 import type { CoreAPIFunctionSessionless } from '../types/functions.types.js'
 
 import { getErrorResponse } from '../errors/error-handler.js'
-import { closeServices } from '../utils.js'
+import { closeSessionServices } from '../utils.js'
 
 export type RunScheduledTasksParams = {
   name: string
@@ -120,6 +120,6 @@ export async function runScheduledTask({
 
     throw e
   } finally {
-    await closeServices(singletonServices.logger, sessionServices)
+    await closeSessionServices(singletonServices.logger, sessionServices)
   }
 }

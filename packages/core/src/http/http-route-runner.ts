@@ -22,7 +22,7 @@ import {
   NotImplementedError,
 } from '../errors/errors.js'
 import crypto from 'crypto'
-import { closeServices, validateAndCoerce } from '../utils.js'
+import { closeSessionServices, validateAndCoerce } from '../utils.js'
 import { CoreAPIChannel } from '../channel/channel.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
@@ -347,6 +347,6 @@ export const runHTTPRoute = async <In, Out>({
     )
     throw e
   } finally {
-    await closeServices(singletonServices.logger, sessionServices)
+    await closeSessionServices(singletonServices.logger, sessionServices)
   }
 }

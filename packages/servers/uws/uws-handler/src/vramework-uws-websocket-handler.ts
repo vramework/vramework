@@ -117,7 +117,11 @@ export const vrameworkWebsocketHandler = ({
     message: (ws, message, isBinary) => {
       const { channelHandler } = ws.getUserData()
       const data = isBinary ? message : decoder.decode(message)
-      channelHandler.message(data)
+      const result = channelHandler.message(data)
+      if (result) {
+        // TODO: This doesn't deal with binary results
+        ws.send(JSON.stringify(result))
+      }
     },
     close: (ws) => {
       const { channelHandler } = ws.getUserData()

@@ -2,11 +2,10 @@ import { match } from "path-to-regexp"
 import { getChannels } from "../channel-runner.js"
 import { createHTTPInteraction, loadUserSession, handleError } from "../../http/http-route-runner.js"
 import { verifyPermissions } from "../../permissions.js"
-import { validateAndCoerce, closeServices } from "../../utils.js"
+import { validateAndCoerce, closeSessionServices } from "../../utils.js"
 import { processMessageHandlers } from "../channel-handler.js"
-import { CoreAPIChannel, RunChannelOptions, RunChannelParams } from "../channel.types.js"
+import { CoreAPIChannel, RunChannelOptions, RunChannelParams, VrameworkChannelHandler } from "../channel.types.js"
 import { VrameworkLocalChannelHandler } from "./local-channel-handler.js"
-import { VrameworkChannelHandler } from "../vramework-channel-handler.js"
 
 if (!globalThis.vramework?.openChannels) {
   globalThis.vramework = globalThis.vramework || {}
@@ -140,7 +139,7 @@ export const runLocalChannel = async ({
         channelHandler.registerOnClose(async () => {
             getOpenChannels().delete(channelId)
             channelConfig.onDisconnect?.(allServices, channel)
-            await closeServices(singletonServices.logger, sessionServices)
+            await closeSessionServices(singletonServices.logger, sessionServices)
         })
 
         channelHandler.registerOnMessage(processMessageHandlers(
@@ -158,7 +157,7 @@ export const runLocalChannel = async ({
             singletonServices.logger,
             logWarningsForStatusCodes
         )
-        await closeServices(singletonServices.logger, sessionServices)
+        await closeSessionServices(singletonServices.logger, sessionServices)
         throw e
     }
 }

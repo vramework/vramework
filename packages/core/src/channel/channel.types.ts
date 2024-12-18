@@ -13,7 +13,6 @@ import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
 import { SubscriptionService } from './subscription-service.js'
-
 export type RunChannelOptions = Partial<{
   skipUserSession: boolean
   respondWith404: boolean
@@ -98,7 +97,7 @@ export type CoreChannelMessage<
   services: Services,
   channel: VrameworkChannel<Session, ChannelData, Out>,
   data: In
-) => Promise<void>
+) => Promise<void | Out>
 
 export type CoreAPIChannelMessage<
   ChannelFunctionMessage = CoreChannelMessage<unknown, unknown, unknown>,
@@ -172,3 +171,19 @@ export interface VrameworkChannel<Session, OpeningData, Out> {
   // subscription service
   subscriptions: SubscriptionService<Out>
 }
+
+export interface VrameworkChannelHandler<
+  UserSession extends CoreUserSession = CoreUserSession,
+  OpeningData = unknown,
+  Out = unknown,
+> {
+  setSession(session: UserSession): Promise<void>
+  send(message: Out, isBinary?: boolean): Promise<void>
+  getChannel(): VrameworkChannel<UserSession, OpeningData, Out>
+}
+
+export type VrameworkChannelHandlerFactory<
+UserSession extends CoreUserSession = CoreUserSession,
+OpeningData = unknown,
+Out = unknown,
+> = (channelId: string, openingData: OpeningData, subscriptionService: SubscriptionService<Out>) => VrameworkChannelHandler<UserSession, OpeningData, Out>

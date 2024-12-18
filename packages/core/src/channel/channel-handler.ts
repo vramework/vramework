@@ -4,8 +4,7 @@ import {
   CoreUserSession,
   JSONValue,
 } from '../types/core.types.js'
-import { CoreAPIChannel } from './channel.types.js'
-import { VrameworkChannelHandler } from './vramework-channel-handler.js'
+import { CoreAPIChannel, VrameworkChannelHandler } from './channel.types.js'
 import { verifyPermissions } from '../permissions.js'
 import { getChannels } from './channel-runner.js'
 
@@ -74,7 +73,7 @@ const runFunction = async (
   data: unknown
 ) => {
   const func: any = typeof onMessage === 'function' ? onMessage : onMessage.func
-  await func(services, channelHandler.getChannel(), data)
+  return await func(services, channelHandler.getChannel(), data)
 }
 
 export const processMessageHandlers = (
@@ -90,7 +89,7 @@ export const processMessageHandlers = (
     onMessage: any,
     routingProperty?: string,
     routerValue?: string
-  ): Promise<void> => {
+  ): Promise<unknown> => {
     if (!validateAuth(requiresSession, channelHandler, onMessage)) {
       const routeMessage = routingProperty
         ? `route '${routingProperty}:${routerValue}'`
@@ -123,10 +122,11 @@ export const processMessageHandlers = (
       )
     }
 
-    await runFunction(services, channelHandler, onMessage, data)
+    return await runFunction(services, channelHandler, onMessage, data)
   }
 
-  const onMessage = async (rawData) => {
+  const onMessage = async (rawData): Promise<unknown> => {
+    let result: unknown
     let processed = false
 
     try {
@@ -138,7 +138,7 @@ export const processMessageHandlers = (
           const routerValue = messageData[routingProperty]
           if (routerValue && routes[routerValue]) {
             processed = true
-            await processMessage(
+            result = await processMessage(
               messageData,
               routes[routerValue],
               routingProperty,
@@ -151,13 +151,13 @@ export const processMessageHandlers = (
         // Default handler if no routes matched but json data was parsed
         if (!processed && channelConfig.onMessage) {
           processed = true
-          await processMessage(messageData, channelConfig.onMessage)
+          result = await processMessage(messageData, channelConfig.onMessage)
         }
       }
 
       // Default handler if no routes matched and json data wasn't parsed
       if (!processed && channelConfig.onMessage) {
-        await processMessage(rawData, channelConfig.onMessage)
+        result = await processMessage(rawData, channelConfig.onMessage)
       }
     } catch (error) {
       // Most likely a json error.. ignore
@@ -168,6 +168,8 @@ export const processMessageHandlers = (
         `No handler found for message in channel ${channelConfig.channel} for ${rawData}`
       )
     }
+
+    return result
   }
 
   return onMessage

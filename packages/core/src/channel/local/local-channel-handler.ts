@@ -1,11 +1,11 @@
 import { CoreUserSession } from "../../types/core.types.js"
-import { VrameworkChannelHandler } from "../vramework-channel-handler.js"
+import { VrameworkAbstractChannelHandler } from "../vramework-abstract-channel-handler.js"
 
 export class VrameworkLocalChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
   OpeningData = unknown,
   Out = unknown,
-> extends VrameworkChannelHandler<UserSession, OpeningData, Out> {
+> extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
   private onMessageCallback?: (message: unknown) => void
   private openCallBack?: () => void
   private closeCallback?: () => void
@@ -22,12 +22,12 @@ export class VrameworkLocalChannelHandler<
     }
   }
 
-  public registerOnMessage(callback: (data: any) => void): void {
+  public registerOnMessage(callback: (data: any) => Promise<unknown>): void {
     this.onMessageCallback = callback
   }
 
-  public message(data: unknown) {
-    this.onMessageCallback?.(data)
+  public async message(data: unknown): Promise<unknown> {
+    return this.onMessageCallback?.(data)
   }
 
   public registerOnClose(callback: () => Promise<void>): void {

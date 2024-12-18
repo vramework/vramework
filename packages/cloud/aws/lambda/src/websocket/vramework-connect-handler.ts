@@ -3,6 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { VrameworkAPIGatewayLambdaRequest } from "../vramework-api-gateway-lambda-request.js"
 import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
 import { runChannelConnect, ServerlessWebsocketStore } from "@vramework/core/channel/serverless"
+import { lambdaChannelHandlerFactory } from "./lambda-channel-handler.js"
 
 export const vrameworkConnectHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
   event: APIGatewayProxyEvent,
@@ -25,6 +26,7 @@ export const vrameworkConnectHandler = async <SingletonServices extends CoreSing
       channelId,
       request,
       response,
+      channelHandlerFactory: lambdaChannelHandlerFactory,
       subscriptionService: serverlessWebsocketStore.getSubscriptionService(),
       serverlessWebsocketStore,
       singletonServices,

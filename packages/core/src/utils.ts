@@ -4,7 +4,7 @@ import { Logger } from './services/logger.js'
 // TODO: SessionServices probably needs it's own type
 // but is an issue for the future and will be tackled 
 // with dependency injection
-export const closeServices = async (
+export const closeSessionServices = async (
   logger: Logger,
   sessionServices?: Record<string, any>
 ) => {
