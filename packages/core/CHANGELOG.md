@@ -1,5 +1,12 @@
 ## 0.6
 
+## 0.6.2
+
+### Patch Changes
+
+- ed45ca9: feat: adding lambda serverless
+- adeb392: feat: more channel improvements, and adding bubble option to runners to avoid all the empty try catches
+
 ## 0.6.1
 
 ### Patch Changes

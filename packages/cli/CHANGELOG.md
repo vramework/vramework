@@ -1,5 +1,14 @@
 # @vramework/cli
 
+## 0.6.1
+
+### Patch Changes
+
+- adeb392: feat: more channel improvements, and adding bubble option to runners to avoid all the empty try catches
+- Updated dependencies [ed45ca9]
+- Updated dependencies [adeb392]
+  - @vramework/core@0.6.2
+
 ## 0.6
 
 Marking a major release to include channels and scheduled tasks
