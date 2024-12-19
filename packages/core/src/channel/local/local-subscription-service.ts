@@ -19,7 +19,7 @@ export class LocalSubscriptionService<Data = unknown>
    * @param topic - The topic to subscribe to.
    * @param channelId - The unique ID of the connection to subscribe.
    */
-  public async subscribe(topic: string, channelId: string): Promise<void> {
+  public subscribe(topic: string, channelId: string): void {
     if (!this.subscriptions.has(topic)) {
       this.subscriptions.set(topic, new Set())
     }
@@ -32,7 +32,7 @@ export class LocalSubscriptionService<Data = unknown>
    * @param topic - The topic to unsubscribe from.
    * @param channelId - The unique ID of the connection to unsubscribe.
    */
-  public async unsubscribe(topic: string, channelId: string): Promise<void> {
+  public unsubscribe(topic: string, channelId: string): void {
     const topicSubscriptions = this.subscriptions.get(topic)
     if (topicSubscriptions) {
       topicSubscriptions.delete(channelId)
@@ -47,11 +47,11 @@ export class LocalSubscriptionService<Data = unknown>
    * @param topic - The topic to send data to.
    * @param data - The data to send to the subscribers.
    */
-  public async broadcast(
+  public broadcast(
     channelId: string,
     data: Data,
     isBinary?: boolean
-  ): Promise<void> {
+  ): void {
     const openChannels = getOpenChannels()
     const channelIds = new Set(openChannels.keys())
     for (const toChannelId of channelIds) {
@@ -68,12 +68,12 @@ export class LocalSubscriptionService<Data = unknown>
    * @param topic - The topic to send data to.
    * @param data - The data to send to the subscribers.
    */
-  public async publish(
+  public publish(
     topic: string,
     channelId: string,
     data: Data,
     isBinary?: boolean
-  ): Promise<void> {
+  ): void {
     const openChannels = getOpenChannels()
     const subscribedChannelIds = this.subscriptions.get(topic)
     if (!subscribedChannelIds) {
@@ -92,9 +92,8 @@ export class LocalSubscriptionService<Data = unknown>
    * Deletes the topic if no more channels are subscribed to it.
    * @param channelId - The ID of the channel that was closed.
    */
-  public async onChannelClosed(channelId: string): Promise<void> {
+  public onChannelClosed(channelId: string): void {
     for (const [topic, channelIds] of this.subscriptions.entries()) {
-      console.log('removing', channelId)
       channelIds.delete(channelId)
       if (channelIds.size === 0) {
         this.subscriptions.delete(topic) // Cleanup empty topics

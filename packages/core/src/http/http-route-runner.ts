@@ -211,8 +211,14 @@ export const handleError = (
   http: VrameworkHTTP | undefined,
   trackerId: string,
   logger: Logger,
-  logWarningsForStatusCodes: number[]
+  logWarningsForStatusCodes: number[],
+  respondWith404: boolean,
+  bubbleError: boolean
 ) => {
+  if (e instanceof NotFoundError && !respondWith404) {
+    return
+  }
+
   const errorResponse = getErrorResponse(e)
 
   if (errorResponse != null) {
@@ -233,6 +239,14 @@ export const handleError = (
     http?.response?.setStatus(500)
     http?.response?.setJson({ errorId: trackerId })
   }
+
+  if (e instanceof NotFoundError) {
+    http?.response?.end()
+  }
+
+  if (bubbleError) {
+    throw e
+  }
 }
 
 /**
@@ -249,9 +263,10 @@ export const runHTTPRoute = async <In, Out>({
   respondWith404 = true,
   logWarningsForStatusCodes = [],
   coerceToArray = false,
+  bubbleErrors = false
 }: Pick<CoreHTTPFunctionRoute<unknown, unknown, any>, 'route' | 'method'> &
   RunRouteOptions &
-  RunRouteParams<In>): Promise<Out> => {
+  RunRouteParams<In>): Promise<Out | void> => {
   let sessionServices: any | undefined
   const trackerId: string = crypto.randomUUID().toString()
 
@@ -263,20 +278,16 @@ export const runHTTPRoute = async <In, Out>({
     apiRoute
   )
 
-  if (!matchedRoute) {
-    if (respondWith404) {
-      http?.response?.setStatus(404)
-      http?.response?.end()
-    }
-    singletonServices.logger.info({
-      message: 'Invalid route',
-      apiRoute,
-      apiType,
-    })
-    throw new NotFoundError(`Route not found: ${apiRoute}`)
-  }
-
   try {
+    if (!matchedRoute) {
+      singletonServices.logger.info({
+        message: 'Invalid route',
+        apiRoute,
+        apiType,
+      })
+      throw new NotFoundError(`Route not found: ${apiRoute}`)
+    }
+
     const { matchedPath, params, route, schemaName } = matchedRoute
     const requiresSession = route.auth !== false
     http?.request?.setParams(params)
@@ -343,9 +354,10 @@ export const runHTTPRoute = async <In, Out>({
       http,
       trackerId,
       singletonServices.logger,
-      logWarningsForStatusCodes
+      logWarningsForStatusCodes,
+      respondWith404,
+      bubbleErrors
     )
-    throw e
   } finally {
     await closeSessionServices(singletonServices.logger, sessionServices)
   }

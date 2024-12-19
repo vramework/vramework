@@ -16,8 +16,8 @@ export abstract class VrameworkAbstractChannelHandler<
     protected subscriptionService: SubscriptionService<Out>
   ) {}
 
-  public abstract setSession(session: UserSession): Promise<void>
-  public abstract send(message: Out, isBinary?: boolean): Promise<void>
+  public abstract setSession(session: UserSession): Promise<void> | void
+  public abstract send(message: Out, isBinary?: boolean): Promise<void> | void
 
   public getChannel(): VrameworkChannel<UserSession, OpeningData, Out> {
     if (!this.channel) {
@@ -29,8 +29,8 @@ export abstract class VrameworkAbstractChannelHandler<
         send: this.send.bind(this),
         close: this.close.bind(this),
         state: 'initial',
-        broadcast: (data: Out) => {
-          this.subscriptionService.broadcast(this.channelId, data)
+        broadcast: async (data: Out) => {
+          await this.subscriptionService.broadcast(this.channelId, data)
         },
         subscriptions: this.subscriptionService,
       }
@@ -38,11 +38,11 @@ export abstract class VrameworkAbstractChannelHandler<
     return this.channel
   }
 
-  public open() {
+  public open(): void {
     this.getChannel().state = 'open'
   }
 
-  public close() {
+  public close(): Promise<void> | void {
     this.getChannel().state = 'closed'
   }
 }

@@ -12,6 +12,9 @@ import {
 } from './http-route-runner.js'
 
 class VrameworkTestRequest extends VrameworkHTTPAbstractRequest {
+  public getBody(): Promise<unknown> {
+    throw new Error('Method not implemented.')
+  }
   public getHeader(_headerName: string): string | undefined {
     throw new Error('Method not implemented.')
   }
@@ -74,6 +77,7 @@ describe('runHTTPRoute', () => {
           createSessionServices,
           route: apiRoute,
           method: apiType,
+          bubbleErrors: true
         }),
       NotFoundError
     )
@@ -148,6 +152,7 @@ describe('runHTTPRoute', () => {
           createSessionServices,
           route: apiRoute,
           method: apiType,
+          bubbleErrors: true
         }),
       error
     )

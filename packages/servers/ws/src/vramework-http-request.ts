@@ -1,11 +1,20 @@
 import { IncomingMessage } from 'http'
 import * as cookie from 'cookie'
-import * as querystring from 'qs'
 import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
+import { VrameworkQuery } from '@vramework/core'
 
 export class VrameworkHTTPRequest extends VrameworkHTTPAbstractRequest {
+  private url: URL
+  private query: VrameworkQuery | undefined
+
   constructor(private request: IncomingMessage) {
     super()
+    // TODO: This is a hack to make the URL object work without caring about the domain
+    this.url = new URL(request.url || '/', 'http://ignore-this.com')
+  }
+
+  public getPath () {
+    return this.url.pathname
   }
 
   public async getBody() {
@@ -22,9 +31,10 @@ export class VrameworkHTTPRequest extends VrameworkHTTPAbstractRequest {
   }
 
   public getQuery() {
-    const url = this.request.url || ''
-    const queryString = url.split('?')[1] || ''
-    return querystring.parse(queryString) as any
+    if (!this.query) {
+      this.query = Object.fromEntries(this.url.searchParams.entries())
+    }
+    return this.query
   }
 
   public getHeader(headerName: string) {

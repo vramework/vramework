@@ -99,7 +99,8 @@ export const addChannel = (
   let paramsValues: string[] | null = []
   let queryValues: string[] | [] = []
   let inputType: string | null = null
-  let channelValue: string | null = null
+  let route: string | null = null
+  let name: string | null = null
 
   state.channels.files.add(node.getSourceFile().fileName)
 
@@ -107,15 +108,24 @@ export const addChannel = (
   if (ts.isObjectLiteralExpression(firstArg)) {
     const obj = firstArg
 
-    channelValue = getPropertyValue(obj, 'channel') as string | null
-    if (channelValue) {
-      const { keys } = pathToRegexp(channelValue)
+    name = getPropertyValue(obj, 'name') as string | null
+    route = getPropertyValue(obj, 'route') as string | null
+  
+    if (!name) {
+      console.error('Channel name is required')
+      return
+    }
+
+    if (route) {
+      const { keys } = pathToRegexp(route)
       paramsValues = keys.reduce((result, { type, name }) => {
         if (type === 'param') {
           result.push(name)
         }
         return result
       }, [] as string[])
+    } else {
+      route = ''
     }
 
     docs = (getPropertyValue(obj, 'docs') as APIDocs) || undefined
@@ -138,12 +148,9 @@ export const addChannel = (
       state.channels.outputTypes
     )
 
-    if (!channelValue) {
-      return
-    }
-
     state.channels.meta.push({
-      channel: channelValue!,
+      name,
+      route,
       input: inputType,
       params: paramsValues.length > 0 ? paramsValues : undefined,
       query: queryValues.length > 0 ? queryValues : undefined,

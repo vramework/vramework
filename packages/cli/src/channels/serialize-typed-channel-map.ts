@@ -56,18 +56,18 @@ function generateChannels(channelsMeta: ChannelsMeta): string {
   > = {}
 
   for (const meta of channelsMeta) {
-    const { channel, messageRoutes, message } = meta
+    const { name, messageRoutes, message } = meta
 
-    if (!channelsObject[channel]) {
-      channelsObject[channel] = { message, routes: {} }
+    if (!channelsObject[name]) {
+      channelsObject[name] = { message, routes: {} }
     }
 
     for (const [key, route] of Object.entries(messageRoutes)) {
-      if (!channelsObject[channel].routes[key]) {
-        channelsObject[channel].routes[key] = {}
+      if (!channelsObject[name].routes[key]) {
+        channelsObject[name].routes[key] = {}
       }
       for (const [method, { inputs, outputs }] of Object.entries(route)) {
-        channelsObject[channel].routes[key][method] = {
+        channelsObject[name].routes[key][method] = {
           inputTypes: inputs || null,
           outputTypes: outputs || null,
         }

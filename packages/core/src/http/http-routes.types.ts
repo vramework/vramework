@@ -32,7 +32,8 @@ export type RunRouteOptions = Partial<{
   skipUserSession: boolean
   respondWith404: boolean
   logWarningsForStatusCodes: number[]
-  coerceToArray: boolean
+  coerceToArray: boolean,
+  bubbleErrors: boolean
 }>
 
 export type RunRouteParams<In> = {

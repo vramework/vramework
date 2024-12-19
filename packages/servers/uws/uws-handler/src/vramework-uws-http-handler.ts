@@ -50,17 +50,13 @@ export const vrameworkHTTPHandler = ({
   }
 
   return async (res: uWS.HttpResponse, req: uWS.HttpRequest): Promise<void> => {
-    try {
-      await runHTTPRoute({
-        request: new VrameworkUWSRequest(req, res),
-        response: new VrameworkUWSResponse(res),
-        singletonServices,
-        createSessionServices,
-        method: req.getMethod() as any,
-        route: req.getUrl() as string,
-      })
-    } catch {
-      // Error should have already been handled by runHTTPRoute
-    }
+    await runHTTPRoute({
+      request: new VrameworkUWSRequest(req, res),
+      response: new VrameworkUWSResponse(res),
+      singletonServices,
+      createSessionServices,
+      method: req.getMethod() as any,
+      route: req.getUrl() as string,
+    })
   }
 }

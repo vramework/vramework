@@ -3,20 +3,20 @@ import { SubscriptionService, VrameworkAbstractChannelHandler, VrameworkChannelH
 import { sendMessage } from "./utils.js";
 import { ApiGatewayManagementApiClient } from "@aws-sdk/client-apigatewaymanagementapi";
 import { Logger } from "@vramework/core/services";
-import { ServerlessWebsocketStore } from "@vramework/core/channel/serverless";
+import { ServerlessChannelStore } from "@vramework/core/channel/serverless";
 
 class LambdaChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
   OpeningData = unknown,
   Out = unknown,
 > extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
-  constructor(private logger: Logger, userSession: UserSession, private serverlessWebsocketStore: ServerlessWebsocketStore, private callbackAPI: ApiGatewayManagementApiClient, channelId: string, openingData: OpeningData, subscriptionService: SubscriptionService<Out>) {
+  constructor(private logger: Logger, userSession: UserSession, private channelStore: ServerlessChannelStore, private callbackAPI: ApiGatewayManagementApiClient, channelId: string, openingData: OpeningData, subscriptionService: SubscriptionService<Out>) {
     super(channelId, userSession, openingData, subscriptionService)
   }
 
   public async setSession(session: UserSession): Promise<void> {
     this.userSession = session
-    await this.serverlessWebsocketStore.setSession(this.channelId, session)
+    await this.channelStore.setSession(this.channelId, session)
   }
 
   public async send(message: Out, isBinary?: boolean) {
@@ -28,7 +28,7 @@ class LambdaChannelHandler<
   }
 }
 
-export const createLambdaChannelHandlerFactory = (logger: Logger, serverlessWebsocketStore: ServerlessWebsocketStore, callbackAPI: ApiGatewayManagementApiClient) => {
-  const factory: VrameworkChannelHandlerFactory = (channelId, openingData, userSession, subscriptionService) => new LambdaChannelHandler(logger, userSession, serverlessWebsocketStore, callbackAPI, channelId, openingData, subscriptionService)
+export const createLambdaChannelHandlerFactory = (logger: Logger, channelStore: ServerlessChannelStore, callbackAPI: ApiGatewayManagementApiClient) => {
+  const factory: VrameworkChannelHandlerFactory = (channelId, openingData, userSession, subscriptionService) => new LambdaChannelHandler(logger, userSession, channelStore, callbackAPI, channelId, openingData, subscriptionService)
   return factory
 }

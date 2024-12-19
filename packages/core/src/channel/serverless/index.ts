@@ -1,2 +1,2 @@
-export * from './channel-serverless-runner.js'
-export * from './serverless-websocket-store.js'
+export * from './serverless-channel-runner.js'
+export * from './serverless-channel-store.js'

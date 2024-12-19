@@ -11,7 +11,7 @@ export class VrameworkLocalChannelHandler<
   private closeCallback?: () => void
   private sendCallback?: (message: Out, isBinary?: boolean) => void
 
-  public registerOnOpen(callback: () => Promise<void>): void {
+  public registerOnOpen(callback: () => void): void {
     this.openCallBack = callback
   }
 
@@ -30,7 +30,7 @@ export class VrameworkLocalChannelHandler<
     return this.onMessageCallback?.(data)
   }
 
-  public registerOnClose(callback: () => Promise<void>): void {
+  public registerOnClose(callback: () => void): void {
     this.closeCallback = callback
   }
 
@@ -43,14 +43,14 @@ export class VrameworkLocalChannelHandler<
     this.sendCallback = send
   }
 
-  public async send(message: Out, isBinary?: boolean): Promise<void> {
+  public send(message: Out, isBinary?: boolean): void {
     if (!this.sendCallback) {
       throw new Error('No send callback registered')
     }
     return this.sendCallback?.(message, isBinary)
   }
 
-  public async setSession(session: UserSession): Promise<void> {
+  public setSession(session: UserSession): void {
     this.getChannel().session = session
   }
 }

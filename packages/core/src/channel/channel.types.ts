@@ -8,16 +8,19 @@ import {
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
+  VrameworkHTTP,
 } from '../types/core.types.js'
 import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
 import { SubscriptionService } from './subscription-service.js'
+
 export type RunChannelOptions = Partial<{
   skipUserSession: boolean
   respondWith404: boolean
   coerceToArray: boolean
   logWarningsForStatusCodes: number[]
+  bubbleErrors: boolean
 }>
 
 export type RunChannelParams<ChannelData> = {
@@ -28,6 +31,7 @@ export type RunChannelParams<ChannelData> = {
     | VrameworkRequest<ChannelData>
     | VrameworkHTTPAbstractRequest<ChannelData>
   response?: VrameworkResponse | VrameworkHTTPAbstractResponse
+  http?: VrameworkHTTP,
   createSessionServices: CreateSessionServices<
     CoreSingletonServices,
     CoreUserSession,
@@ -38,7 +42,8 @@ export type RunChannelParams<ChannelData> = {
 export interface HandlerMeta {}
 
 export interface ChannelMeta {
-  channel: string
+  name: string
+  route: string
   params?: string[]
   query?: string[]
   input: string | null
@@ -114,7 +119,8 @@ export type CoreAPIChannel<
   ChannelFunctionMessage = CoreChannelMessage<unknown, unknown, unknown>,
   APIPermission = CoreAPIPermission<ChannelData>,
 > = {
-  channel: string
+  name: string
+  route: Channel
   onConnect?: ChannelFunctionConnection
   onDisconnect?: ChannelFunctionDisconnection
   onMessage?:
@@ -156,16 +162,16 @@ export interface VrameworkChannel<Session, OpeningData, Out> {
   session?: Session
   // Update the user session, useful if you deal with auth on the
   // stream side
-  setSession: (session: Session) => Promise<void>
+  setSession: (session: Session) => Promise<void> | void
   // The data the channel was created with. This could be query parameters
   // or parameters in the url.
   openingData: OpeningData
   // The data to send. This will fail is the stream has been closed.
-  send: (data: Out, isBinary?: boolean) => void
+  send: (data: Out, isBinary?: boolean) => Promise<void> | void
   // Broadcast data to all channels, or a subset of selected ones
-  broadcast: (data: Out) => void
+  broadcast: (data: Out) => Promise<void> | void
   // This will close the channel.
-  close: () => void
+  close: () => Promise<void> | void
   // The current state of the channel
   state: 'initial' | 'open' | 'closed'
   // subscription service
@@ -177,8 +183,8 @@ export interface VrameworkChannelHandler<
   OpeningData = unknown,
   Out = unknown,
 > {
-  setSession(session: UserSession): Promise<void>
-  send(message: Out, isBinary?: boolean): Promise<void>
+  setSession(session: UserSession): Promise<void> | void
+  send(message: Out, isBinary?: boolean): Promise<void> | void
   getChannel(): VrameworkChannel<UserSession, OpeningData, Out>
 }
 

@@ -114,7 +114,6 @@ export const vrameworkWebsocketHandler = ({
 
   server.on('upgrade', async (req, socket, head) => {
     // Handle WebSocket connection upgrade
-    const url = req.url || ''
     const request = new VrameworkHTTPRequest(req)
     const response = new VrameworkDuplexResponse(socket)
 
@@ -126,7 +125,7 @@ export const vrameworkWebsocketHandler = ({
       singletonServices,
       subscriptionService,
       createSessionServices: createSessionServices as any,
-      channel: url,
+      route: request.getPath(),
     })
 
     if (!channelHandler) {

@@ -47,20 +47,16 @@ export const vrameworkMiddleware = (
   }
 
   return async (req, res, next) => {
-    try {
-      await runHTTPRoute({
-        request: new VrameworkExpressRequest(req),
-        response: new VrameworkExpressResponse(res),
-        singletonServices,
-        createSessionServices,
-        method: req.method.toLowerCase() as any,
-        route: req.path,
-        respondWith404,
-        coerceToArray,
-      })
-    } catch {
-      // Error should have already been handled by runHTTPRoute
-    }
+    await runHTTPRoute({
+      request: new VrameworkExpressRequest(req),
+      response: new VrameworkExpressResponse(res),
+      singletonServices,
+      createSessionServices,
+      method: req.method.toLowerCase() as any,
+      route: req.path,
+      respondWith404,
+      coerceToArray,
+    })
 
     next()
   }

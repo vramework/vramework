@@ -46,19 +46,15 @@ const vrameworkPlugin: FastifyPluginAsync<
     loadAllSchemas(vramework.singletonServices.logger)
   }
   fastify.all('/*', async (req, res) => {
-    try {
-      await runHTTPRoute({
-        request: new VrameworkFastifyRequest(req),
-        response: new VrameworkFastifyResponse(res),
-        singletonServices: vramework.singletonServices,
-        createSessionServices: vramework.createSessionServices,
-        method: req.method as any,
-        route: req.url as string,
-        respondWith404: vramework.respondWith404,
-      })
-    } catch {
-      // Error should have already been handled by runHTTPRoute
-    }
+    await runHTTPRoute({
+      request: new VrameworkFastifyRequest(req),
+      response: new VrameworkFastifyResponse(res),
+      singletonServices: vramework.singletonServices,
+      createSessionServices: vramework.createSessionServices,
+      method: req.method as any,
+      route: req.url as string,
+      respondWith404: vramework.respondWith404,
+    })
   })
 }
 

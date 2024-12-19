@@ -65,7 +65,8 @@ export class VrameworkNextJS {
       createSessionServices: this.createSessionServices,
       route: injectIntoUrl(route as string, data),
       method: method as HTTPMethod,
-    })
+      bubbleErrors: true
+    }) as Out
   }
 
   /**
@@ -90,7 +91,8 @@ export class VrameworkNextJS {
       route: injectIntoUrl(route as string, data),
       method: method as HTTPMethod,
       skipUserSession: true,
-    })
+      bubbleErrors: true
+    }) as Out
   }
 
   /**

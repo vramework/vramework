@@ -1,3 +1,4 @@
+import { VrameworkQuery } from '@vramework/core'
 import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 import * as cookie from 'cookie'
 import { FastifyRequest } from 'fastify'
@@ -8,11 +9,11 @@ export class VrameworkFastifyRequest extends VrameworkHTTPAbstractRequest {
   }
 
   public async getBody() {
-    return this.request.body as any
+    return this.request.body as unknown
   }
 
   public getQuery() {
-    return this.request.query as any
+    return this.request.query as VrameworkQuery
   }
 
   public getIP(): string {

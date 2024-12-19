@@ -27,7 +27,7 @@ type APIRoute<In, Out, Route extends string> = CoreHTTPFunction<In, Out, Route, 
 
 export type ChannelConnection<Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<Session, ChannelData, Out>) => Promise<void>
 export type ChannelDisconnection<ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<Session, ChannelData, never>) => Promise<void>
-export type ChannelMessage<In, Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<UserSession, ChannelData, Out>, data: In) => Promise<void>
+export type ChannelMessage<In, Out = never, ChannelData = unknown, RequiredServices extends ${servicesTypeName} = ${servicesTypeName}> = (services: Services, channel: VrameworkChannel<UserSession, ChannelData, Out>, data: In) => Promise<Out | void>
 type APIChannel<ChannelData, Channel extends string> = CoreAPIChannel<ChannelData, Channel, ChannelConnection, ChannelDisconnection, ChannelMessage<unknown, unknown, ChannelData>>
 
 type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>, UserSession>

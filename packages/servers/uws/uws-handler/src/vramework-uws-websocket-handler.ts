@@ -77,7 +77,7 @@ export const vrameworkWebsocketHandler = ({
           singletonServices,
           subscriptionService,
           createSessionServices,
-          channel: req.getUrl() as string,
+          route: req.getUrl() as string,
         })
 
         if (upgradeAborted.aborted) {

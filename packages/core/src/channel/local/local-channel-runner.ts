@@ -1,15 +1,13 @@
-import { match } from "path-to-regexp"
-import { getChannels } from "../channel-runner.js"
-import { createHTTPInteraction, loadUserSession, handleError } from "../../http/http-route-runner.js"
-import { verifyPermissions } from "../../permissions.js"
-import { validateAndCoerce, closeSessionServices } from "../../utils.js"
+import { openChannel } from "../channel-runner.js"
+import { createHTTPInteraction, handleError } from "../../http/http-route-runner.js"
+import { closeSessionServices } from "../../utils.js"
 import { processMessageHandlers } from "../channel-handler.js"
 import { CoreAPIChannel, RunChannelOptions, RunChannelParams, VrameworkChannelHandler } from "../channel.types.js"
 import { VrameworkLocalChannelHandler } from "./local-channel-handler.js"
 
 if (!globalThis.vramework?.openChannels) {
-  globalThis.vramework = globalThis.vramework || {}
-  globalThis.vramework.openChannels = new Map<string, VrameworkChannelHandler>()
+    globalThis.vramework = globalThis.vramework || {}
+    globalThis.vramework.openChannels = new Map<string, VrameworkChannelHandler>()
 }
 
 /**
@@ -19,100 +17,40 @@ export const getOpenChannels = (): Map<string, VrameworkChannelHandler> => {
     return globalThis.vramework.openChannels
 }
 
-const getMatchingChannelConfig = (requestPath: string) => {
-    const { channels, channelsMeta } = getChannels()
-    for (const channelConfig of channels) {
-        const matchFunc = match(channelConfig.channel.replace(/^\/\//, '/'), {
-            decode: decodeURIComponent,
-        })
-        const matchedPath = matchFunc(requestPath.replace(/^\/\//, '/'))
-        if (matchedPath) {
-            const schemaName = channelsMeta.find(
-                (channelMeta) => channelMeta.channel === channelConfig.channel
-            )?.input
-            return {
-                matchedPath,
-                params: matchedPath.params,
-                channelConfig,
-                schemaName,
-            }
-        }
-    }
-
-    return null
-}
-
 export const runLocalChannel = async ({
     singletonServices,
     channelId,
     request,
     response,
-    channel: channelRoute,
+    route,
     createSessionServices,
     subscriptionService,
     skipUserSession = false,
     respondWith404 = true,
     coerceToArray = false,
     logWarningsForStatusCodes = [],
-}: Pick<CoreAPIChannel<unknown, any>, 'channel'> &
+    bubbleErrors = false,
+}: Pick<CoreAPIChannel<unknown, any>, 'route'> &
     RunChannelOptions &
-    RunChannelParams<unknown>): Promise<VrameworkLocalChannelHandler | undefined> => {
+    RunChannelParams<unknown>): Promise<VrameworkLocalChannelHandler | void> => {
     let sessionServices: any | undefined
     const http = createHTTPInteraction(request, response)
-
-    const matchingChannel = getMatchingChannelConfig(channelRoute)
-    if (!matchingChannel) {
-        if (respondWith404) {
-            http?.response?.setStatus(404)
-            http?.response?.end()
-        }
-        return
-    }
-
     try {
-        const { matchedPath, params, channelConfig, schemaName } = matchingChannel
-
-        const requiresSession = channelConfig.auth !== false
-        http?.request?.setParams(params)
-
-        singletonServices.logger.info(
-            `Matched channel: ${channelConfig.channel} | auth: ${requiresSession.toString()}`
-        )
-
-        const session = await loadUserSession(
-            skipUserSession,
-            // We may require a session, but we don't actually need it
-            // on connect since channels can authenticate later given
-            // how websocket sessions work (cookie or queryParam based)
-            false,
+        const { userSession, data, channelConfig } = await openChannel({
+            channelId,
+            subscriptionService,
+            createSessionServices,
+            respondWith404,
             http,
-            matchedPath,
-            channelConfig,
-            singletonServices.logger,
-            singletonServices.httpSessionService
-        )
-
-        if (singletonServices.channelPermissionService) {
-            await singletonServices.channelPermissionService.verifyChannelAccess(
-                matchingChannel.channelConfig,
-                session
-            )
-        }
-
-        let data: any | undefined
-        if (request) {
-            data = await request.getData()
-            validateAndCoerce(
-                singletonServices.logger,
-                schemaName,
-                data,
-                coerceToArray
-            )
-        }
+            route,
+            singletonServices,
+            skipUserSession,
+            coerceToArray,
+        })
 
         const channelHandler = new VrameworkLocalChannelHandler(
             channelId,
-            session,
+            userSession,
             data,
             subscriptionService
         )
@@ -121,18 +59,11 @@ export const runLocalChannel = async ({
         sessionServices = await createSessionServices(
             singletonServices,
             { http },
-            session
+            userSession
         )
         const allServices = { ...singletonServices, ...sessionServices }
 
-        await verifyPermissions(
-            channelConfig.permissions,
-            allServices,
-            data,
-            session
-        )
-
-        channelHandler.registerOnOpen(async () => {
+        channelHandler.registerOnOpen(() => {
             getOpenChannels().set(channelId, channelHandler)
             channelConfig.onConnect?.(allServices, channel)
         })
@@ -151,14 +82,17 @@ export const runLocalChannel = async ({
 
         return channelHandler
     } catch (e: any) {
+        console.error(e)
         handleError(
             e,
             http,
             channelId,
             singletonServices.logger,
-            logWarningsForStatusCodes
+            logWarningsForStatusCodes,
+            respondWith404,
+            bubbleErrors
         )
+    } finally {
         await closeSessionServices(singletonServices.logger, sessionServices)
-        throw e
     }
 }

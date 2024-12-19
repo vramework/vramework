@@ -42,10 +42,8 @@ class MockResponse extends VrameworkHTTPAbstractResponse {
   public ended: boolean | undefined
 
   public setJson(body: JSONValue): void {
-    throw new Error('Method not implemented.')
   }
   public setResponse(response: string | Buffer): void {
-    throw new Error('Method not implemented.')
   }
   public setStatus(code) {
     this.statusSet = code
@@ -87,7 +85,7 @@ test('runChannel should return undefined and 404 if no matching channel is found
     channelId: 'test-channel-id',
     request: new MockRequest(),
     response: mockResponse,
-    channel: '/non-existent-channel',
+    route: '/non-existent-channel',
     createSessionServices: mockCreateSessionServices,
     subscriptionService: mockSubscriptionService,
   })
@@ -104,7 +102,7 @@ test('runChannel should return undefined and 404 if no matching channel is found
 test('runChannel should return a channel handler if channel matches and no auth required', async () => {
   resetGlobalChannels([
     {
-      channel: '/test-channel',
+      route: '/test-channel',
       auth: false,
     },
   ])
@@ -122,7 +120,7 @@ test('runChannel should return a channel handler if channel matches and no auth 
     channelId: 'test-channel-id',
     request: new MockRequest(),
     response: new MockResponse(),
-    channel: '/test-channel',
+    route: '/test-channel',
     createSessionServices: mockCreateSessionServices,
     subscriptionService: mockSubscriptionService,
   })

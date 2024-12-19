@@ -2,6 +2,7 @@ import { test, beforeEach, afterEach, describe } from 'node:test';
 import * as assert from 'node:assert/strict';
 import { LocalSubscriptionService } from './local-subscription-service.js';
 import { getOpenChannels } from './local-channel-runner.js';
+import { SubscriptionService } from '../subscription-service.js';
 
 function createConnection(channelId: string) {
   const receivedMessages: unknown[] = [];
@@ -66,7 +67,7 @@ describe('LocalSubscriptionService', () => {
   });
 
   test('unsubscribe should remove connection from topic', async () => {
-    const service = new LocalSubscriptionService();
+    const service: SubscriptionService<unknown> = new LocalSubscriptionService();
     await service.subscribe('topicB', 'conn3');
     await service.subscribe('topicB', 'conn4');
 

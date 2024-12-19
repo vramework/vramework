@@ -1,12 +1,12 @@
 import { CoreSingletonServices, CoreServices, CreateSessionServices, CoreUserSession } from "@vramework/core"
-import { runChannelMessage, ServerlessWebsocketStore } from "@vramework/core/channel/serverless"
+import { runChannelMessage, ServerlessChannelStore } from "@vramework/core/channel/serverless"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
 import { getServerlessDependencies } from "./utils.js"
 
 export const vrameworkMessageHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
   event: APIGatewayProxyEvent,
-  serverlessWebsocketStore: ServerlessWebsocketStore,
+  channelStore: ServerlessChannelStore,
   singletonServices: SingletonServices,
   createSessionServices: CreateSessionServices<
     SingletonServices,
@@ -14,7 +14,7 @@ export const vrameworkMessageHandler = async <SingletonServices extends CoreSing
     Services
   >
 ): Promise<APIGatewayProxyResult> => {
-  const runnerParams = getServerlessDependencies(singletonServices.logger, serverlessWebsocketStore, event)
+  const runnerParams = getServerlessDependencies(singletonServices.logger, channelStore, event)
   const response = new VrameworkAPIGatewayLambdaResponse()
   try {
     const result = await runChannelMessage({

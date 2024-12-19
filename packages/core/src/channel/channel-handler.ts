@@ -23,6 +23,7 @@ const validateSchema = (
       if (channelRoute) {
         const schemaNames = channelRoute.inputs
         if (schemaNames) {
+          // TODO
           // loadSchema(schemaNames, logger)
           // validateJson(schemaNames, data)
         }
@@ -95,7 +96,7 @@ export const processMessageHandlers = (
         ? `route '${routingProperty}:${routerValue}'`
         : 'the default message route'
       logger.error(
-        `Channel ${channelConfig.channel} with id ${channelHandler.getChannel().channelId} requires a session for ${routeMessage}`
+        `Channel ${channelConfig.name} with id ${channelHandler.getChannel().channelId} requires a session for ${routeMessage}`
       )
       // TODO: Send error message back breaks typescript, but should be implemented somehow
       channelHandler.getChannel().send(`Unauthorized for ${routeMessage}`)
@@ -105,7 +106,7 @@ export const processMessageHandlers = (
     validateSchema(
       services.logger,
       data,
-      channelConfig.channel,
+      channelConfig.name,
       routingProperty,
       routerValue
     )
@@ -118,7 +119,7 @@ export const processMessageHandlers = (
     )
     if (!hasPermission) {
       logger.error(
-        `Channel ${channelConfig.channel} requires permissions for ${routingProperty || 'default message route'}`
+        `Channel ${channelConfig.name} requires permissions for ${routingProperty || 'default message route'}`
       )
     }
 
@@ -166,7 +167,7 @@ export const processMessageHandlers = (
 
     if (!processed) {
       logger.error(
-        `No handler found for message in channel ${channelConfig.channel} for ${rawData}`
+        `No handler found for message in channel ${channelConfig.name} for ${rawData}`
       )
       logger.error(`Channel ${channelConfig}`)
     }
