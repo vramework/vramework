@@ -1,3 +1,12 @@
+## 0.6.1
+
+### Patch Changes
+
+- ed45ca9: feat: adding lambda serverless
+- adeb392: feat: more channel improvements, and adding bubble option to runners to avoid all the empty try catches
+- Updated dependencies [ed45ca9]
+- Updated dependencies [adeb392]
+  - @vramework/core@0.6.2
 
 ## 0.0.2 - 28.07.2021
 
