@@ -1,0 +1,33 @@
+{
+  "name": "@vramework/cloudflare",
+  "version": "0.6.0",
+  "license": "MIT",
+  "author": "yasser.fadl@gmail.com",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "tsc": "tsc",
+    "build:esm": "tsc -b",
+    "build": "yarn build:esm",
+    "release": "npm run build && npm test",
+    "ncu": "ncu",
+    "test": "bash run-tests.sh",
+    "test:watch": "bash run-tests.sh --watch",
+    "test:coverage": "bash run-tests.sh --coverage"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "@vramework/core": "^0.6.2"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.2",
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

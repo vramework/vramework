@@ -2,6 +2,7 @@ import { HTTPSessionService } from './http-session-service.js'
 import { JWTService } from '../services/jwt-service.js'
 import { InvalidSessionError, MissingSessionError } from '../errors/errors.js'
 import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
+import { VrameworkQuery } from '../types/core.types.js'
 
 /**
  * The `VrameworkHTTPSessionService` class provides session management capabilities, including handling JWT-based sessions,
@@ -27,8 +28,8 @@ export class VrameworkHTTPSessionService<UserSession>
         cookieValue: string,
         cookieName: string
       ) => Promise<UserSession>
-      getSessionForQueryValue?: (queryValue: unknown) => Promise<UserSession>
-      getSessionForAPIKey?: (apiKey: string) => Promise<UserSession>
+      getSessionForQueryValue?: (queryValue: VrameworkQuery) => Promise<UserSession> | undefined
+      getSessionForAPIKey?: (apiKey: string) => Promise<UserSession> | undefined
       transformSession?: (session: any) => Promise<UserSession>
     }
   ) {}

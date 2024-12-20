@@ -76,7 +76,6 @@ export const getMatchingChannelConfig = (request: string) => {
             decode: decodeURIComponent,
         })
         const matchedPath = matchFunc(cleanedRequest)
-        console.log(cleanedRoute, cleanedRequest, matchedPath)
         if (matchedPath) {
             const schemaName = channelsMeta.find(
                 (channelMeta) => channelMeta.route === channelConfig.route

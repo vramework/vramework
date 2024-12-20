@@ -23,6 +23,17 @@ export class VrameworkActionNextResponse extends VrameworkHTTPAbstractResponse {
   }
 
   /**
+   * 
+   * Sets the response header.
+   *
+   * @remarks
+   * This method is currently a placeholder and should be implemented as needed.
+   */
+  public setRedirect(path: string, status: number) {
+    throw new Error('Method not implemented.')
+  }
+
+  /**
    * Sets the status of the response.
    *
    * @remarks

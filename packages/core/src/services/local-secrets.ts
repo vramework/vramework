@@ -1,4 +1,6 @@
+import { LocalVariablesService } from './local-variables.js'
 import { SecretService } from './secret-service.js'
+import { VariablesService } from './variables-service.js'
 
 /**
  * Service for retrieving secrets from environment variables.
@@ -7,7 +9,9 @@ export class LocalSecretService implements SecretService {
   /**
    * Creates an instance of LocalSecretService.
    */
-  constructor() {}
+  constructor(private variablesService: VariablesService = new LocalVariablesService()) { 
+
+  }
 
   /**
    * Retrieves a secret by key.
@@ -16,7 +20,7 @@ export class LocalSecretService implements SecretService {
    * @throws {Error} If the secret is not found.
    */
   public async getSecretJSON<R>(key: string): Promise<R> {
-    const value = process.env[key]
+    const value = await this.variablesService.get(key)
     if (value) {
       return JSON.parse(value)
     }
@@ -30,7 +34,7 @@ export class LocalSecretService implements SecretService {
    * @throws {Error} If the secret is not found.
    */
   public async getSecret(key: string): Promise<string> {
-    const value = process.env[key]
+    const value = await this.variablesService.get(key)
     if (value) {
       return value
     }

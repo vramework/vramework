@@ -46,6 +46,10 @@ export class VrameworkUWSResponse extends VrameworkHTTPAbstractResponse {
     )
   }
 
+  public clearCookie(name: string): void {
+    throw new Error('Method not implemented for uws.')
+  }
+
   public end() {
     this.response((response) => response.endWithoutBody())
   }

@@ -19,6 +19,7 @@
       "packages/servers/fastify/*",
       "packages/servers/uws/*",
       "packages/servers/ws/*",
+      "packages/cloud/cloudflare",
       "packages/cloud/aws/*",
       "packages/cloud/azure/*"
     ]

@@ -1,8 +1,7 @@
 import { JSONValue } from '@vramework/core'
 import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
-import { APIGatewayProxyResult } from 'aws-lambda'
 
-export class VrameworkAPIGatewayLambdaResponse extends VrameworkHTTPAbstractResponse {
+export class VrameworkCloudflareHTTPResponse extends VrameworkHTTPAbstractResponse {
   public headers: Record<string, string> = {}
   private status: number = 200
   private body: any
@@ -11,12 +10,11 @@ export class VrameworkAPIGatewayLambdaResponse extends VrameworkHTTPAbstractResp
     super()
   }
 
-  public getLambdaResponse(): APIGatewayProxyResult {
-    return {
-      headers: this.headers,
-      statusCode: this.status,
-      body: this.body,
-    }
+  public getCloudflareResponse (): Response {
+    return new Response(this.body, {
+        status: this.status,
+        headers: this.headers,
+    })
   }
 
   public setStatus(status: number): void {
@@ -31,7 +29,7 @@ export class VrameworkAPIGatewayLambdaResponse extends VrameworkHTTPAbstractResp
     this.body = JSON.stringify(value)
   }
 
-  public setResponse(response: string | Buffer): void {
+  public setResponse(response: string): void {
     this.body = response
   }
 

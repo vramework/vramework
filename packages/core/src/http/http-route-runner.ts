@@ -176,7 +176,6 @@ export const loadUserSession = async (
         logger.info({
           action: 'Rejecting route (invalid session)',
           path: matchedPath,
-          route,
         })
         throw e
       }
@@ -220,7 +219,6 @@ export const handleError = (
   }
 
   const errorResponse = getErrorResponse(e)
-
   if (errorResponse != null) {
     http?.response?.setStatus(errorResponse.status)
     http?.response?.setJson({
@@ -281,7 +279,7 @@ export const runHTTPRoute = async <In, Out>({
   try {
     if (!matchedRoute) {
       singletonServices.logger.info({
-        message: 'Invalid route',
+        message: 'Route not found',
         apiRoute,
         apiType,
       })

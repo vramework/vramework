@@ -1,4 +1,4 @@
-import { SerializeOptions } from 'cookie'
+import { SerializeOptions, serialize } from 'cookie'
 import { JSONValue } from '../types/core.types.js'
 import { VrameworkResponse } from '../vramework-response.js'
 
@@ -51,15 +51,18 @@ export abstract class VrameworkHTTPAbstractResponse extends VrameworkResponse {
    * @param options - Options for cookie serialization.
    */
   public setCookie(name: string, value: string, options: SerializeOptions) {
-    throw new Error('Method not implemented.')
+    this.setHeader('set-cookie', serialize(name, value, options))
   }
 
   /**
    * Clears a cookie from the response.
    * @param name - The name of the cookie to clear.
    */
-  public clearCookie(name: string) {
-    throw new Error('Method not implemented.')
+  public clearCookie(name: string): void {
+    this.setHeader(
+      'set-cookie',
+      serialize(name, '', { expires: new Date(0) })
+    )
   }
 
   /**
@@ -75,5 +78,5 @@ export abstract class VrameworkHTTPAbstractResponse extends VrameworkResponse {
    * Informs the response that it has ended, useful for when setting
    * a status without a body or response.
    */
-  public end() {}
+  public end() { }
 }

@@ -1,3 +1,4 @@
+import { VrameworkQuery } from '@vramework/core'
 import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
 import { Request } from 'express-serve-static-core'
 import getRawBody from 'raw-body'
@@ -17,7 +18,7 @@ export class VrameworkExpressRequest extends VrameworkHTTPAbstractRequest {
 
   public getQuery() {
     // TODO: Verify query is a Record<string, string | string[]>
-    return this.request.query as Record<string, string | string[]>
+    return this.request.query as VrameworkQuery
   }
 
   public getHeader(headerName: string) {

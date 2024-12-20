@@ -1,6 +1,7 @@
 import { Duplex } from 'stream' // Assuming `Duplex` is from Node.js' 'stream' module
 import type { JSONValue } from '@vramework/core'
 import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
+import { SerializeOptions } from 'cookie'
 
 export class VrameworkDuplexResponse extends VrameworkHTTPAbstractResponse {
   private aborted = false
@@ -29,6 +30,18 @@ export class VrameworkDuplexResponse extends VrameworkHTTPAbstractResponse {
     if (!this.aborted) {
       this.writeBody(body)
     }
+  }
+
+  public setCookie(name: string, value: string, options: SerializeOptions): void {
+    throw new Error(`We don't cookies from a websocket response`)
+  }
+
+  public clearCookie(name: string): void {
+    throw new Error(`We don't cookies from a websocket response`)
+  }
+
+  public setRedirect(path: string, status: number) {
+    throw new Error('Method not implemented.')
   }
 
   // Helper function to write the body

@@ -4,6 +4,7 @@ import type { HTTPPermissionService } from '../http/http-permission-service.js'
 import type { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
 import type { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
 import type { ChannelPermissionService } from '../channel/channel-permission-service.js'
+import { VariablesService } from '../services/variables-service.js'
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.
@@ -125,12 +126,12 @@ export type CreateSessionServices<
 /**
  * Defines a function type for creating config.
  */
-export type CreateConfig<Config extends CoreConfig> = () => Promise<Config>
+export type CreateConfig<Config extends CoreConfig> = (variablesService?: VariablesService) => Promise<Config>
 
 /**
  * Represents a query object for Vramework, where each key can be a string, a value, or an array of values.
  */
-export type VrameworkQuery<T = unknown> = Record<
+export type VrameworkQuery<T = Record<string, string | undefined>> = Record<
   string,
   string | T | null | Array<T | null>
 >
