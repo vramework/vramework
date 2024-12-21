@@ -1,5 +1,13 @@
 ## 0.6.1
 
+## 0.6.2
+
+### Patch Changes
+
+- adecb52: feat: changes required to get cloudflare functions to work
+- Updated dependencies [adecb52]
+  - @vramework/core@0.6.3
+
 ### Patch Changes
 
 - ed45ca9: feat: adding lambda serverless
