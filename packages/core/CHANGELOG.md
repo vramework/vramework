@@ -1,5 +1,11 @@
 ## 0.6
 
+## 0.6.3
+
+### Patch Changes
+
+- adecb52: feat: changes required to get cloudflare functions to work
+
 ## 0.6.2
 
 ### Patch Changes
