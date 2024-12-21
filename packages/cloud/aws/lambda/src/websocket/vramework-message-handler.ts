@@ -10,8 +10,8 @@ export const vrameworkMessageHandler = async <SingletonServices extends CoreSing
   singletonServices: SingletonServices,
   createSessionServices: CreateSessionServices<
     SingletonServices,
-    UserSession,
-    Services
+    Services,
+    UserSession
   >
 ): Promise<APIGatewayProxyResult> => {
   const runnerParams = getServerlessDependencies(singletonServices.logger, channelStore, event)

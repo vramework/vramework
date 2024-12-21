@@ -9,8 +9,8 @@ export const vrameworkDisconnectHandler = async <SingletonServices extends CoreS
   singletonServices: SingletonServices,
   createSessionServices: CreateSessionServices<
     SingletonServices,
-    UserSession,
-    Services
+    Services,
+    UserSession
   >,
 ): Promise<APIGatewayProxyResult> => {
   const runnerParams = getServerlessDependencies(singletonServices.logger, channelStore, event)

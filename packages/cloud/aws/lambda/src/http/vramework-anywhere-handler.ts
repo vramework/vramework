@@ -9,8 +9,8 @@ export const vrameworkAnywhereHandler = async <SingletonServices extends CoreSin
     singletonServices: SingletonServices,
     createSessionServices: CreateSessionServices<
       SingletonServices,
-      CoreUserSession,
-      Services
+      Services,
+      CoreUserSession
     >
   ) => {
     const request = new VrameworkAPIGatewayLambdaRequest(event)

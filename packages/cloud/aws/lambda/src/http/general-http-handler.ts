@@ -8,8 +8,8 @@ export const generalHTTPHandler = async <SingletonServices extends CoreSingleton
   singletonServices: SingletonServices,
   createSessionServices: CreateSessionServices<
     SingletonServices,
-    UserSession,
-    Services
+    Services,
+    UserSession
   >,
   request: VrameworkAPIGatewayLambdaRequest,
   response: VrameworkAPIGatewayLambdaResponse

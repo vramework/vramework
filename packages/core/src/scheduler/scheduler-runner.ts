@@ -19,8 +19,8 @@ export type RunScheduledTasksParams = {
   singletonServices: CoreSingletonServices
   createSessionServices?: CreateSessionServices<
     CoreSingletonServices,
-    CoreUserSession,
-    CoreServices
+    CoreServices<CoreSingletonServices>,
+    CoreUserSession
   >
 }
 
@@ -79,7 +79,7 @@ class ScheduledTaskNotFoundError extends Error {
   }
 }
 
-export async function runScheduledTask({
+export async function runScheduledTask<SingletonServices extends CoreSingletonServices = CoreSingletonServices, UserSession extends CoreUserSession = CoreUserSession, Services extends CoreServices<SingletonServices> = CoreServices<SingletonServices>>({
   name,
   session,
   singletonServices,

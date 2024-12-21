@@ -1,4 +1,4 @@
-import { CoreServices, CoreSingletonServices, CoreUserSession, CreateSessionServices, VrameworkHTTP } from "../../types/core.types.js"
+import { CoreSingletonServices, CoreUserSession, CreateSessionServices, VrameworkHTTP } from "../../types/core.types.js"
 import { closeSessionServices } from "../../utils.js"
 import { processMessageHandlers } from "../channel-handler.js"
 import { getChannels, openChannel } from "../channel-runner.js"
@@ -17,7 +17,7 @@ const getVariablesForChannel = async ({ channelId, userSession, name, singletonS
     userSession?: CoreUserSession,
     name?: string,
     singletonServices: CoreSingletonServices,
-    createSessionServices: CreateSessionServices<CoreSingletonServices, CoreUserSession, CoreServices<CoreSingletonServices>>,
+    createSessionServices: CreateSessionServices,
     subscriptionService: SubscriptionService<unknown>
     channelStore: ServerlessChannelStore,
     channelHandlerFactory: VrameworkChannelHandlerFactory,

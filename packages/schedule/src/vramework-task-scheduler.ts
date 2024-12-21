@@ -19,8 +19,8 @@ export class VrameworkTaskScheduler<TaskName extends string> {
     private singletonServices: CoreSingletonServices,
     private createSessionServices?: CreateSessionServices<
       CoreSingletonServices,
-      CoreUserSession,
-      CoreServices
+      CoreServices,
+      CoreUserSession
     >
   ) {}
 

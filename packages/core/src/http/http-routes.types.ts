@@ -40,11 +40,7 @@ export type RunRouteParams<In> = {
   singletonServices: CoreSingletonServices
   request: VrameworkRequest<In> | VrameworkHTTPAbstractRequest<In>
   response?: VrameworkResponse | VrameworkHTTPAbstractResponse | undefined
-  createSessionServices: CreateSessionServices<
-    CoreSingletonServices,
-    CoreUserSession,
-    CoreServices
-  >
+  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreServices<CoreSingletonServices>, CoreUserSession>
 }
 
 /**

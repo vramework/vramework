@@ -112,9 +112,9 @@ export type CreateSingletonServices<
  * Defines a function type for creating session-specific services.
  */
 export type CreateSessionServices<
-  SingletonServices extends CoreSingletonServices,
-  UserSession extends CoreUserSession,
-  Services extends CoreServices<SingletonServices>,
+  SingletonServices extends CoreSingletonServices = CoreSingletonServices,
+  Services extends CoreServices<SingletonServices> = CoreServices<SingletonServices>,
+  UserSession extends CoreUserSession = CoreUserSession,
 > = (
   services: SingletonServices,
   interaction: VrameworkInteractions,

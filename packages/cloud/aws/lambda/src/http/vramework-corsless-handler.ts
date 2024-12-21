@@ -14,8 +14,8 @@ export const vrameworkCorslessHandler = async <SingletonServices extends CoreSin
   singletonServices: SingletonServices,
   createSessionServices: CreateSessionServices<
     SingletonServices,
-    UserSession,
-    Services
+    Services,
+    UserSession
   >
 ) => {
   const request = new VrameworkAPIGatewayLambdaRequest(event)

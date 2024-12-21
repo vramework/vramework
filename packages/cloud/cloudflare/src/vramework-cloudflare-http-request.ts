@@ -3,7 +3,7 @@ import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-htt
 import type { Request, IncomingRequestCfProperties } from '@cloudflare/workers-types'
 import { VrameworkQuery } from '@vramework/core'
 
-export class VrameworkCloudflareHTTPRequest extends VrameworkHTTPAbstractRequest {
+export class CloudflareHTTPRequest extends VrameworkHTTPAbstractRequest {
   private url: URL
 
   constructor(private request: Request<unknown, IncomingRequestCfProperties<unknown>>) {

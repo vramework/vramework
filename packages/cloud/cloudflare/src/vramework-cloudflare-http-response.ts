@@ -1,7 +1,7 @@
 import { JSONValue } from '@vramework/core'
 import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
 
-export class VrameworkCloudflareHTTPResponse extends VrameworkHTTPAbstractResponse {
+export class CloudfrontHTTPResponse extends VrameworkHTTPAbstractResponse {
   public headers: Record<string, string> = {}
   private status: number = 200
   private body: any

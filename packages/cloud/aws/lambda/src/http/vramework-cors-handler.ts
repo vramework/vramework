@@ -34,8 +34,8 @@ export const vrameworkCorsHandler = async <SingletonServices extends CoreSinglet
     singletonServices: SingletonServices,
     createSessionServices: CreateSessionServices<
         SingletonServices,
-        UserSession,
-        Services
+        Services,
+        UserSession
     >
 ) => {
     const request = new VrameworkAPIGatewayLambdaRequest(event)
