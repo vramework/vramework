@@ -3,11 +3,11 @@ import { getOpenChannels } from "./local-channel-runner.js"
 
 /**
  * Implementation of the SubscriptionService interface.
- * Manages subscriptions and broadcasts messages to subscribers.
+ * Manages subscriptions and publishes messages to subscribers.
  */
 export class LocalSubscriptionService<Data = unknown>
-  implements SubscriptionService<Data>
-{
+  implements SubscriptionService<Data> {
+
   /**
    * A map storing topics and their associated connection IDs.
    */
@@ -39,27 +39,6 @@ export class LocalSubscriptionService<Data = unknown>
       if (topicSubscriptions.size === 0) {
         this.subscriptions.delete(topic) // Cleanup empty subscriptions
       }
-    }
-  }
-
-  /**
-   * Sends data to all connections subscribed to a topic.
-   * @param topic - The topic to send data to.
-   * @param data - The data to send to the subscribers.
-   */
-  public broadcast(
-    channelId: string,
-    data: Data,
-    isBinary?: boolean
-  ): void {
-    const openChannels = getOpenChannels()
-    const channelIds = new Set(openChannels.keys())
-    for (const toChannelId of channelIds) {
-      if (channelId === toChannelId) {
-        continue // Skip sending to the sender
-      }
-      const channel = openChannels.get(toChannelId)
-      channel?.send(data, isBinary)
     }
   }
 

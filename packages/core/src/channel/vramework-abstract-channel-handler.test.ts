@@ -10,7 +10,7 @@ class TestChannelHandler extends VrameworkAbstractChannelHandler<
   { param: string },
   { msg: string }
 > {
-  public async setSession(session: CoreUserSession): Promise<void> {
+  public async setUserSession(session: CoreUserSession): Promise<void> {
     this.userSession = session;
   }
 
@@ -28,9 +28,6 @@ class MockSubscriptionService<Out> implements SubscriptionService<Out> {
     /* stub */
   };
   unsubscribe = async (topic: string, channelId: string) => {
-    /* stub */
-  };
-  broadcast = async (topic: string, data: Out) => {
     /* stub */
   };
   onChannelClosed = async (channelId: string) => {
@@ -60,7 +57,7 @@ test('getChannel should return a channel with initial state', () => {
     { param: 'testParam' },
     'Opening data should be accessible'
   );
-  assert.equal(channel.session, undefined, 'Session should initially be undefined');
+  assert.equal(channel.userSession, undefined, 'Session should initially be undefined');
   assert.equal(
     channel.subscriptions,
     subscriptionService,
@@ -73,7 +70,7 @@ test('setSession should update the channel session', async () => {
   await handler.setSession(session);
   const channel = handler.getChannel();
   assert.deepEqual(
-    channel.session,
+    channel.userSession,
     session,
     'Session should be updated correctly'
   );
@@ -89,17 +86,4 @@ test('close should change channel state to closed', () => {
   handler.close();
   const channel = handler.getChannel();
   assert.equal(channel.state, 'closed', 'State should be "closed" after calling close()');
-});
-
-test('broadcast should call the subscription service broadcast method', () => {
-  let broadcastCalled = false;
-  subscriptionService.broadcast = async (channelId, data) => {
-    broadcastCalled = true;
-    assert.equal(channelId, 'test-channel-id', 'Channel ID should match');
-    assert.deepEqual(data, { msg: 'test message' }, 'Broadcast data should match');
-  };
-
-  const channel = handler.getChannel();
-  channel.broadcast({ msg: 'test message' });
-  assert.ok(broadcastCalled, 'Broadcast should be called');
 });

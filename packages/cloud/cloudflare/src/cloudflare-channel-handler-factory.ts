@@ -25,25 +25,25 @@ class CloudflareChannelHandler<
   Out = unknown,
 > extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
   constructor(
-    _logger: Logger, 
-    userSession: UserSession, 
-    private channelStore: ServerlessChannelStore, 
     channelId: string, 
     openingData: OpeningData, 
+    userSession: UserSession | undefined, 
     subscriptionService: SubscriptionService<Out>, 
-    private websocket: WebSocket
+    private websocket: WebSocket,
+    _logger: Logger, 
+    private channelStore: ServerlessChannelStore, 
   ) {
     super(channelId, userSession, openingData, subscriptionService)
   }
 
-  public async setSession(session: UserSession): Promise<void> {
-    console.log('Setting session', session)
-    await this.channelStore.setSession(this.channelId, session)
+  public async setUserSession(userSession: UserSession): Promise<void> {
+    this.getChannel().userSession = userSession
+    await this.channelStore.setUserSession(this.channelId, userSession)
   }
 
   public async send(message: Out, isBinary?: boolean) {
     if (isBinary) {
-      throw new Error("Binary data is not supported on serverless lambdas")
+      throw new Error("Binary data is not supported on serverless")
     }
     if (isSerializable(message)) {
         this.websocket.send(JSON.stringify(message))
@@ -54,6 +54,6 @@ class CloudflareChannelHandler<
 }
 
 export const createCloudflareChannelHandlerFactory = (logger: Logger, channelStore: ServerlessChannelStore, websocket: WebSocket) => {
-  const factory: VrameworkChannelHandlerFactory = (channelId, openingData, userSession, subscriptionService) => new CloudflareChannelHandler(logger, userSession, channelStore, channelId, openingData, subscriptionService, websocket)
+  const factory: VrameworkChannelHandlerFactory = (channelId, openingData, userSession, subscriptionService) => new CloudflareChannelHandler(channelId, openingData, userSession, subscriptionService, websocket, logger, channelStore)
   return factory
 }

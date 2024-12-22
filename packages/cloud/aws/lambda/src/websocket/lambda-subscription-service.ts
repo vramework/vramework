@@ -16,11 +16,6 @@ export class LambdaSubscriptionService<Out = unknown> implements SubscriptionSer
         await this.subscriptionStore.unsubscribe(topic, channelId)
     }
 
-    async broadcast(channelId: string, data: Out, isBinary?: boolean): Promise<void> {
-        const channelIds = await this.subscriptionStore.getAllChannelIds()
-        await this.sendMessages(channelIds, channelId, data)
-    }
-
     async publish(topic: string, fromChannelId: string, data: Out, isBinary?: boolean): Promise<void> {
         const channelIds = await this.subscriptionStore.getChannelIdsForTopic(topic)
         await this.sendMessages(channelIds, fromChannelId, data)

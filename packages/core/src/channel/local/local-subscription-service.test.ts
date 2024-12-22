@@ -82,20 +82,6 @@ describe('LocalSubscriptionService', () => {
     con4.assertNotReceived();
   });
 
-  test('broadcast should send to all channels except the sender', async () => {
-    const service = new LocalSubscriptionService();
-    await service.subscribe('topicC', 'conn5');
-    await service.subscribe('topicC', 'conn6');
-
-    const con5 = createConnection('conn5');
-    const con6 = createConnection('conn6');
-
-    await service.broadcast('conn5', { msg: 'hello conn6' });
-
-    con5.assertNotReceived();
-    con6.assertReceivedExactly([{ msg: 'hello conn6' }]);
-  });
-
   test('publish should only send to subscribers of a topic', async () => {
     const service = new LocalSubscriptionService();
     await service.subscribe('topicD', 'conn7');
