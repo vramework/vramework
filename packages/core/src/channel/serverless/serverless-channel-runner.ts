@@ -13,11 +13,11 @@ export interface RunServerlessChannelParams<ChannelData> extends RunChannelParam
     channelObject?: unknown
 }
 
-const getVariablesForChannel = async ({ channelId, channelObject, userSession, name, singletonServices, createSessionServices, subscriptionService, channelStore, channelHandlerFactory, http }: {
+const getVariablesForChannel = async ({ channelId, channelObject, userSession, channelName, singletonServices, createSessionServices, subscriptionService, channelStore, channelHandlerFactory, http }: {
     channelId: string,
+    channelName?: string,
     channelObject?: unknown,
     userSession?: CoreUserSession,
-    name?: string,
     singletonServices: CoreSingletonServices,
     createSessionServices: CreateSessionServices,
     subscriptionService: SubscriptionService<unknown>
@@ -26,21 +26,21 @@ const getVariablesForChannel = async ({ channelId, channelObject, userSession, n
     http?: VrameworkHTTP
 }) => {
     let openingData: any | undefined
-    if (!name) {
-        ({ userSession, openingData, name } = await channelStore.getData(channelId));
+    if (!channelName) {
+        ({ userSession, openingData, channelName } = await channelStore.getChannel(channelId));
     } else {
-        await channelStore.addChannel(channelId, name, openingData, channelObject)
+        await channelStore.addChannel({ channelId, channelName, openingData, channelObject })
     }
 
     const { channels } = getChannels()
-    const channelConfig = channels.find(channelConfig => channelConfig.name === name)
+    const channelConfig = channels.find(channelConfig => channelConfig.name === channelName)
     if (!channelConfig) {
-        throw new Error(`Channel not found: ${name}`)
+        throw new Error(`Channel not found: ${channelName}`)
     }
     const channelHandler = channelHandlerFactory(
         channelId,
-        userSession,
         openingData,
+        userSession,
         subscriptionService,
     )
     const sessionServices = await createSessionServices(
@@ -74,7 +74,7 @@ export const runChannelConnect = async ({
     bubbleErrors = false
 }: Pick<CoreAPIChannel<unknown, any>, 'route'> &
     RunChannelOptions &
-    RunServerlessChannelParams<unknown>): Promise<void | { name: string, userSession?: CoreUserSession }> => {
+    RunServerlessChannelParams<unknown>) => {
     let sessionServices: any | undefined
 
     const http = createHTTPInteraction(request, response)
@@ -96,7 +96,7 @@ export const runChannelConnect = async ({
             createSessionServices, 
             subscriptionService, channelStore, 
             channelHandlerFactory, 
-            name: channelConfig.name, 
+            channelName: channelConfig.name, 
             http 
         })
         await channelConfig.onConnect?.(allServices, channel)

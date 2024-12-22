@@ -17,16 +17,6 @@ export interface SubscriptionService<Out> {
   unsubscribe(topic: string, channelId: string): Promise<void> | void
 
   /**
-   * Sends data to all connections.
-   * @param data - The data to send to all sockets.
-   */
-  broadcast(
-    channelId: string,
-    data: Out,
-    isBinary?: boolean
-  ): Promise<void> | void
-
-  /**
    * Sends data to all connections subscribed to a topic.
    * @param topic - The topic to send data to.
    * @param data - The data to send to the subscribers.

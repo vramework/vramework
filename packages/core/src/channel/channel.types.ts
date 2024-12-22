@@ -151,21 +151,19 @@ export type CoreAPIChannel<
 export type CoreAPIChannels = CoreAPIChannel<any, string>[]
 
 
-export interface VrameworkChannel<Session, OpeningData, Out> {
+export interface VrameworkChannel<UserSession, OpeningData, Out> {
   // The channel identifier
   channelId: string
   // The user session, if available
-  session?: Session
+  userSession?: UserSession
   // Update the user session, useful if you deal with auth on the
   // stream side
-  setSession: (session: Session) => Promise<void> | void
+  setUserSession: (userSession: UserSession) => Promise<void> | void
   // The data the channel was created with. This could be query parameters
   // or parameters in the url.
   openingData: OpeningData
   // The data to send. This will fail is the stream has been closed.
   send: (data: Out, isBinary?: boolean) => Promise<void> | void
-  // Broadcast data to all channels, or a subset of selected ones
-  broadcast: (data: Out) => Promise<void> | void
   // This will close the channel.
   close: () => Promise<void> | void
   // The current state of the channel
@@ -179,13 +177,13 @@ export interface VrameworkChannelHandler<
   OpeningData = unknown,
   Out = unknown,
 > {
-  setSession(session: UserSession): Promise<void> | void
+  setUserSession(session: UserSession): Promise<void> | void
   send(message: Out, isBinary?: boolean): Promise<void> | void
   getChannel(): VrameworkChannel<UserSession, OpeningData, Out>
 }
 
 export type VrameworkChannelHandlerFactory<
-UserSession extends CoreUserSession = CoreUserSession,
 OpeningData = unknown,
+UserSession extends CoreUserSession = CoreUserSession,
 Out = unknown,
-> = (channelId: string, openingData: OpeningData, session: UserSession, subscriptionService: SubscriptionService<Out>) => VrameworkChannelHandler<UserSession, OpeningData, Out>
+> = (channelId: string, openingData: OpeningData, userSession: UserSession | undefined, subscriptionService: SubscriptionService<Out>) => VrameworkChannelHandler<UserSession, OpeningData, Out>

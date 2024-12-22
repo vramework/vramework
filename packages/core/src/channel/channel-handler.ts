@@ -45,7 +45,7 @@ const validateAuth = (
         ? requiresSession
         : onMessage.auth
 
-  if (auth && !channelHandler.getChannel().session) {
+  if (auth && !channelHandler.getChannel().userSession) {
     return false
   }
   return true
@@ -63,7 +63,7 @@ const validatePermissions = async (
     permissions,
     services,
     data,
-    channelHandler.getChannel().session
+    channelHandler.getChannel().userSession
   )
 }
 

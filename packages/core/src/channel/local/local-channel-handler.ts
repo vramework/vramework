@@ -50,7 +50,7 @@ export class VrameworkLocalChannelHandler<
     return this.sendCallback?.(message, isBinary)
   }
 
-  public setSession(session: UserSession): void {
-    this.getChannel().session = session
+  public setUserSession(userSession: UserSession): void {
+    this.getChannel().userSession = userSession
   }
 }

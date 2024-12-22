@@ -13,7 +13,6 @@ export class UWSSubscriptionService implements SubscriptionService<unknown> {
   constructor(uws?: uWS.TemplatedApp, private forwarder?: SubscriptionServiceForwarder) {
     if (uws) {
       forwarder?.onForwardedPublishMessage(this.forwardPublishMessage.bind(this, uws))
-      forwarder?.onForwardedBroadcastMessage(this.forwardBroadcastMessage.bind(this, undefined))
     }
   }
 
@@ -25,16 +24,6 @@ export class UWSSubscriptionService implements SubscriptionService<unknown> {
   public async unsubscribe(topic: string, channelId: string): Promise<void> {
     const socket = this.sockets.get(channelId)
     socket?.unsubscribe(topic)
-  }
-
-  public async broadcast(channelId: string, message: any, isBinary?: boolean) {
-    const data = isBinary ? message : JSON.stringify(message)
-    for (const [toChannelId, socket] of this.sockets) {
-      if (toChannelId !== channelId) {
-        socket.send(data, isBinary)
-      }
-    }
-    this.forwarder?.forwardBroadcast(message, isBinary)
   }
 
   public async publish(
@@ -58,20 +47,12 @@ export class UWSSubscriptionService implements SubscriptionService<unknown> {
     this.sockets.delete(channelId)
   }
 
-  private forwardPublishMessage(broadcaster: uWS.TemplatedApp | uWS.WebSocket<unknown>, topic: string, message: any, isBinary?: boolean): void {
+  private forwardPublishMessage(source: uWS.TemplatedApp | uWS.WebSocket<unknown>, topic: string, message: any, isBinary?: boolean): void {
     if (isBinary) {
-      broadcaster?.publish(topic, message, true)
+      source?.publish(topic, message, true)
     } else {
-      broadcaster?.publish(topic, JSON.stringify(message), false)
+      source?.publish(topic, JSON.stringify(message), false)
     }
   }
 
-  private forwardBroadcastMessage(channelId: string | undefined, message: any, isBinary?: boolean): void {
-    const data = isBinary ? message : JSON.stringify(message)
-    for (const [toChannelId, socket] of this.sockets) {
-      if (toChannelId !== channelId) {
-        socket.send(data, isBinary)
-      }
-    }
-  }
 }

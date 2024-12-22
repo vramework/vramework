@@ -10,13 +10,13 @@ class LambdaChannelHandler<
   OpeningData = unknown,
   Out = unknown,
 > extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
-  constructor(private logger: Logger, userSession: UserSession, private channelStore: ServerlessChannelStore, private callbackAPI: ApiGatewayManagementApiClient, channelId: string, openingData: OpeningData, subscriptionService: SubscriptionService<Out>) {
+  constructor(private logger: Logger, userSession: UserSession | undefined, private channelStore: ServerlessChannelStore, private callbackAPI: ApiGatewayManagementApiClient, channelId: string, openingData: OpeningData, subscriptionService: SubscriptionService<Out>) {
     super(channelId, userSession, openingData, subscriptionService)
   }
 
-  public async setSession(session: UserSession): Promise<void> {
-    this.userSession = session
-    await this.channelStore.setSession(this.channelId, session)
+  public async setUserSession(userSession: UserSession): Promise<void> {
+    this.userSession = userSession
+    await this.channelStore.setUserSession(this.channelId, userSession)
   }
 
   public async send(message: Out, isBinary?: boolean) {
