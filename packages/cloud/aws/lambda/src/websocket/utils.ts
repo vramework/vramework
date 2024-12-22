@@ -2,7 +2,7 @@ import { ApiGatewayManagementApiClient, PostToConnectionCommand } from "@aws-sdk
 import { Logger } from "@vramework/core/services";
 import { APIGatewayEvent } from "aws-lambda";
 import { VrameworkLambdaSubscriptionService } from "./vramework-lambda-subscription-service.js";
-import { ServerlessChannelStore } from "@vramework/core/channel/serverless";
+import { ServerlessChannelStore, ServerlessSubscriptionStore } from "@vramework/core/channel/serverless";
 import { createLambdaChannelHandlerFactory } from "./lambda-channel-handler.js";
 
 export const sendMessage = async (logger: Logger, callbackAPI: ApiGatewayManagementApiClient, ConnectionId: string, Data: string): Promise<boolean> => {
@@ -36,7 +36,7 @@ export const sendMessages = async (logger: Logger, channelStore: ServerlessChann
     }
 }
 
-export const getServerlessDependencies = (logger: Logger, channelStore: ServerlessChannelStore, event: APIGatewayEvent) => {
+export const getServerlessDependencies = (logger: Logger, channelStore: ServerlessChannelStore, subscriptionStore: ServerlessSubscriptionStore, event: APIGatewayEvent) => {
     const channelId = event.requestContext.connectionId
     if (!channelId) {
         throw new Error('No connectionId found in requestContext')
@@ -57,7 +57,7 @@ export const getServerlessDependencies = (logger: Logger, channelStore: Serverle
         apiVersion: '2018-11-29',
         endpoint
     })
-    const subscriptionService = new VrameworkLambdaSubscriptionService(logger, channelStore, callbackAPI)
+    const subscriptionService = new VrameworkLambdaSubscriptionService(logger, channelStore, subscriptionStore, callbackAPI)
     const channelHandlerFactory = createLambdaChannelHandlerFactory(logger, channelStore, callbackAPI)
     return { channelId, callbackAPI, subscriptionService, channelHandlerFactory, channelStore }
 }

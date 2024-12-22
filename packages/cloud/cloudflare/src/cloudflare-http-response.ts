@@ -1,12 +1,13 @@
 import { JSONValue } from '@vramework/core'
 import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
+import { WebSocket} from '@cloudflare/workers-types'
 
 export class CloudfrontHTTPResponse extends VrameworkHTTPAbstractResponse {
   public headers: Record<string, string> = {}
   private status: number = 200
   private body: any
 
-  constructor() {
+  constructor(private websocket?: WebSocket) {
     super()
   }
 
@@ -14,7 +15,8 @@ export class CloudfrontHTTPResponse extends VrameworkHTTPAbstractResponse {
     return new Response(this.body, {
         status: this.status,
         headers: this.headers,
-    })
+        webSocket: this.status === 101 ? this.websocket : undefined
+    } as any)
   }
 
   public setStatus(status: number): void {
@@ -35,5 +37,9 @@ export class CloudfrontHTTPResponse extends VrameworkHTTPAbstractResponse {
 
   public setRedirect(path: string, status: number) {
     throw new Error('Method not implemented.')
+  }
+
+  public setWebsocket (websocket: WebSocket) {
+    this.websocket = websocket 
   }
 }

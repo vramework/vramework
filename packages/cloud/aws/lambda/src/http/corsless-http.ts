@@ -9,7 +9,7 @@ import { generalHTTPHandler } from './general-http-handler.js'
 import { VrameworkAPIGatewayLambdaRequest } from '../vramework-api-gateway-lambda-request.js'
 import { VrameworkAPIGatewayLambdaResponse } from '../vramework-api-gateway-lambda-response.js'
 
-export const vrameworkCorslessHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
+export const corslessHTTP = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
   event: APIGatewayProxyEvent,
   singletonServices: SingletonServices,
   createSessionServices: CreateSessionServices<

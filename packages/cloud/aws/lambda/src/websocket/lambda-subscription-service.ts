@@ -4,7 +4,7 @@ import { ServerlessChannelStore, ServerlessSubscriptionStore } from "@vramework/
 import { sendMessages } from './utils.js';
 import { Logger } from '@vramework/core/services';
 
-export class VrameworkLambdaSubscriptionService<Out = unknown> implements SubscriptionService<Out> {
+export class LambdaSubscriptionService<Out = unknown> implements SubscriptionService<Out> {
     constructor(private logger: Logger, private channelStore: ServerlessChannelStore, private subscriptionStore: ServerlessSubscriptionStore, private callbackAPI: ApiGatewayManagementApiClient) {
     }
 
@@ -17,7 +17,7 @@ export class VrameworkLambdaSubscriptionService<Out = unknown> implements Subscr
     }
 
     async broadcast(channelId: string, data: Out, isBinary?: boolean): Promise<void> {
-        const channelIds = await this.channelStore.getAllChannelIds()
+        const channelIds = await this.subscriptionStore.getAllChannelIds()
         await this.sendMessages(channelIds, channelId, data)
     }
 
