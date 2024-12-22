@@ -4,8 +4,8 @@ import type { Logger } from "@vramework/core/services"
 
 import { generalHTTPHandler } from "./general-http-handler.js"
 import { InvalidOriginError } from "@vramework/core/errors"
-import { VrameworkAPIGatewayLambdaRequest } from "../vramework-api-gateway-lambda-request.js"
 import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
+import { VrameworkAPIGatewayLambdaRequest } from "../vramework-api-gateway-lambda-request.js"
 
 const validateOrigin = (
     allowsOrigins: string[],
@@ -28,7 +28,7 @@ const validateOrigin = (
     return origin
 }
 
-export const vrameworkCorsHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
+export const corsHTTP = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
     event: APIGatewayProxyEvent,
     allowedOrigins: string[],
     singletonServices: SingletonServices,

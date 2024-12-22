@@ -4,7 +4,7 @@ import { generalHTTPHandler } from "./general-http-handler.js"
 import { VrameworkAPIGatewayLambdaRequest } from "../vramework-api-gateway-lambda-request.js"
 import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
 
-export const vrameworkAnywhereHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>>(
+export const anywhereHTTP = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>>(
     event: APIGatewayProxyEvent,
     singletonServices: SingletonServices,
     createSessionServices: CreateSessionServices<

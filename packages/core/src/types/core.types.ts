@@ -77,6 +77,8 @@ export interface CoreSingletonServices {
   config: CoreConfig
   /** The logger used by the application. */
   logger: Logger
+  /** The variable service to be used */
+  variablesService: VariablesService
 }
 
 /**

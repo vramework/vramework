@@ -36,7 +36,7 @@ export const runLocalChannel = async ({
     let sessionServices: any | undefined
     const http = createHTTPInteraction(request, response)
     try {
-        const { userSession, data, channelConfig } = await openChannel({
+        const { userSession, openingData, channelConfig } = await openChannel({
             channelId,
             subscriptionService,
             createSessionServices,
@@ -51,7 +51,7 @@ export const runLocalChannel = async ({
         const channelHandler = new VrameworkLocalChannelHandler(
             channelId,
             userSession,
-            data,
+            openingData,
             subscriptionService
         )
         const channel = channelHandler.getChannel()

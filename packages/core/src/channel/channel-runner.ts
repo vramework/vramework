@@ -98,7 +98,7 @@ export const openChannel = async ({
     skipUserSession = false,
     coerceToArray = false,
     http
-}: Pick<CoreAPIChannel<unknown, string>, 'route'> & Omit<RunChannelParams<unknown>, 'response' | 'request'> & RunChannelOptions): Promise<{ userSession?: CoreUserSession, data: unknown, channelConfig: CoreAPIChannel<unknown, any> }> => {
+}: Pick<CoreAPIChannel<unknown, string>, 'route'> & Omit<RunChannelParams<unknown>, 'response' | 'request'> & RunChannelOptions): Promise<{ userSession?: CoreUserSession, openingData: unknown, channelConfig: CoreAPIChannel<unknown, any> }> => {
     const matchingChannel = getMatchingChannelConfig(route)
     if (!matchingChannel) {
         singletonServices.logger.info(`Channel not found: ${route}`)
@@ -134,16 +134,16 @@ export const openChannel = async ({
         )
     }
 
-    let data: any | undefined
+    let openingData: any | undefined
     if (http?.request) {
-        data = await http.request.getData()
+        openingData = await http.request.getData()
         validateAndCoerce(
             singletonServices.logger,
             schemaName,
-            data,
+            openingData,
             coerceToArray
         )
     }
 
-    return { userSession, data, channelConfig }
+    return { userSession, openingData, channelConfig }
 }
