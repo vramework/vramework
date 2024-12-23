@@ -1,13 +1,15 @@
-import { SubscriptionService } from "../subscription-service.js"
-import { getOpenChannels } from "./local-channel-runner.js"
+import { VrameworkChannelHandler } from "../channel.types.js"
+import { EventHubService } from "../eventhub-service.js"
 
 /**
  * Implementation of the SubscriptionService interface.
  * Manages subscriptions and publishes messages to subscribers.
  */
-export class LocalSubscriptionService<Data = unknown>
-  implements SubscriptionService<Data> {
+export class LocalEventHubService<Data = unknown>
+  implements EventHubService<Data> {
 
+  private channels = new Map<string, VrameworkChannelHandler>()
+    
   /**
    * A map storing topics and their associated connection IDs.
    */
@@ -53,16 +55,22 @@ export class LocalSubscriptionService<Data = unknown>
     data: Data,
     isBinary?: boolean
   ): void {
-    const openChannels = getOpenChannels()
     const subscribedChannelIds = this.subscriptions.get(topic)
     if (!subscribedChannelIds) {
       return
     }
     for (const toChannelId of subscribedChannelIds) {
       if (channelId === toChannelId) continue // Skip sending to the sender
-      const channel = openChannels.get(toChannelId)
+      const channel = this.channels.get(toChannelId)
       channel?.send(data, isBinary)
     }
+  }
+
+  /**
+   * Registers a channel on open
+   */
+  public onChannelOpened(channelHandler: VrameworkChannelHandler): void {
+    this.channels.set(channelHandler.getChannel().channelId, channelHandler)
   }
 
   /**
@@ -78,5 +86,6 @@ export class LocalSubscriptionService<Data = unknown>
         this.subscriptions.delete(topic) // Cleanup empty topics
       }
     }
+    this.channels.delete(channelId)
   }
 }

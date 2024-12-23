@@ -1,16 +1,13 @@
-import {
-  SubscriptionService,
-  SubscriptionServiceForwarder
-} from '@vramework/core/channel'
+import { EventHubForwarder, EventHubService } from '@vramework/core/channel'
 import * as uWS from 'uWebSockets.js'
 
-export class UWSSubscriptionService implements SubscriptionService<unknown> {
+export class UWSEventHubService<Mappings = unknown> implements EventHubService<Mappings> {
   private sockets: Map<
     string,
     uWS.WebSocket<unknown>
   > = new Map()
 
-  constructor(uws?: uWS.TemplatedApp, private forwarder?: SubscriptionServiceForwarder) {
+  constructor(uws?: uWS.TemplatedApp, private forwarder?: EventHubForwarder) {
     if (uws) {
       forwarder?.onForwardedPublishMessage(this.forwardPublishMessage.bind(this, uws))
     }

@@ -1,17 +1,16 @@
 import { CoreUserSession } from "@vramework/core";
-import { SubscriptionService, VrameworkAbstractChannelHandler, VrameworkChannelHandlerFactory } from "@vramework/core/channel";
+import { ChannelStore, VrameworkAbstractChannelHandler, VrameworkChannelHandlerFactory } from "@vramework/core/channel";
 import { sendMessage } from "./utils.js";
 import { ApiGatewayManagementApiClient } from "@aws-sdk/client-apigatewaymanagementapi";
 import { Logger } from "@vramework/core/services";
-import { ServerlessChannelStore } from "@vramework/core/channel/serverless";
 
 class LambdaChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
   OpeningData = unknown,
   Out = unknown,
 > extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
-  constructor(private logger: Logger, userSession: UserSession | undefined, private channelStore: ServerlessChannelStore, private callbackAPI: ApiGatewayManagementApiClient, channelId: string, openingData: OpeningData, subscriptionService: SubscriptionService<Out>) {
-    super(channelId, userSession, openingData, subscriptionService)
+  constructor(private logger: Logger, userSession: UserSession | undefined, private channelStore: ChannelStore, private callbackAPI: ApiGatewayManagementApiClient, channelId: string, channelName: string, openingData: OpeningData) {
+    super(channelId, channelName, userSession, openingData)
   }
 
   public async setUserSession(userSession: UserSession): Promise<void> {
@@ -28,7 +27,7 @@ class LambdaChannelHandler<
   }
 }
 
-export const createLambdaChannelHandlerFactory = (logger: Logger, channelStore: ServerlessChannelStore, callbackAPI: ApiGatewayManagementApiClient) => {
-  const factory: VrameworkChannelHandlerFactory = (channelId, openingData, userSession, subscriptionService) => new LambdaChannelHandler(logger, userSession, channelStore, callbackAPI, channelId, openingData, subscriptionService)
+export const createLambdaChannelHandlerFactory = (logger: Logger, channelStore: ChannelStore, callbackAPI: ApiGatewayManagementApiClient) => {
+  const factory: VrameworkChannelHandlerFactory = (channelId, channelName, openingData, userSession) => new LambdaChannelHandler(logger, userSession, channelStore, callbackAPI, channelId, channelName, openingData)
   return factory
 }

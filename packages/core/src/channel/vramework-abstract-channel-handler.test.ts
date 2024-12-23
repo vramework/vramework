@@ -1,7 +1,6 @@
 import { test, beforeEach } from 'node:test';
 import * as assert from 'node:assert/strict';
 import { CoreUserSession } from '../types/core.types.js';
-import { SubscriptionService } from './subscription-service.js';
 import { VrameworkAbstractChannelHandler } from './vramework-abstract-channel-handler.js';
 
 // A concrete implementation of the abstract class for testing
@@ -19,32 +18,14 @@ class TestChannelHandler extends VrameworkAbstractChannelHandler<
   }
 }
 
-// A stub subscription service for testing
-class MockSubscriptionService<Out> implements SubscriptionService<Out> {
-  publish = async (topic: string, channelId: string, data: Out, isBinary?: boolean) => {
-     /* stub */
-  }
-  subscribe = async (topic: string, channelId: string) => {
-    /* stub */
-  };
-  unsubscribe = async (topic: string, channelId: string) => {
-    /* stub */
-  };
-  onChannelClosed = async (channelId: string) => {
-    /* stub */
-  };
-}
-
 let handler: TestChannelHandler;
-let subscriptionService: MockSubscriptionService<{ msg: string }>;
 
 beforeEach(() => {
-  subscriptionService = new MockSubscriptionService<{ msg: string }>();
   handler = new TestChannelHandler(
     'test-channel-id',
+    'channel-name',
     undefined,
-    { param: 'testParam' },
-    subscriptionService
+    { param: 'testParam' }
   );
 });
 
@@ -58,16 +39,11 @@ test('getChannel should return a channel with initial state', () => {
     'Opening data should be accessible'
   );
   assert.equal(channel.userSession, undefined, 'Session should initially be undefined');
-  assert.equal(
-    channel.subscriptions,
-    subscriptionService,
-    'Subscriptions should match the provided service'
-  );
 });
 
-test('setSession should update the channel session', async () => {
+test('setUserSession should update the channel session', async () => {
   const session = { userId: 'user123' } as CoreUserSession;
-  await handler.setSession(session);
+  await handler.setUserSession(session);
   const channel = handler.getChannel();
   assert.deepEqual(
     channel.userSession,

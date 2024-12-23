@@ -8,12 +8,12 @@ import {
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
+  MakeRequired,
   VrameworkHTTP,
 } from '../types/core.types.js'
 import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
-import { SubscriptionService } from './subscription-service.js'
 
 export type RunChannelOptions = Partial<{
   skipUserSession: boolean
@@ -25,8 +25,7 @@ export type RunChannelOptions = Partial<{
 
 export type RunChannelParams<ChannelData> = {
   channelId: string
-  singletonServices: CoreSingletonServices
-  subscriptionService: SubscriptionService<unknown>
+  singletonServices: MakeRequired<CoreSingletonServices, 'eventHub'>
   request?:
     | VrameworkRequest<ChannelData>
     | VrameworkHTTPAbstractRequest<ChannelData>
@@ -68,7 +67,7 @@ export type CoreChannelConnection<
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
-  services: Services,
+  services: MakeRequired<Services, 'eventHub'>,
   channel: VrameworkChannel<Session, ChannelData, Out>
 ) => Promise<void>
 
@@ -77,7 +76,7 @@ export type CoreChannelDisconnection<
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
-  services: Services,
+  services: MakeRequired<Services, 'eventHub'>,
   channel: VrameworkChannel<Session, ChannelData, never>
 ) => Promise<void>
 
@@ -95,7 +94,7 @@ export type CoreChannelMessage<
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
-  services: Services,
+  services: MakeRequired<Services, 'eventHub'>,
   channel: VrameworkChannel<Session, ChannelData, Out>,
   data: In
 ) => Promise<void | Out>
@@ -168,8 +167,6 @@ export interface VrameworkChannel<UserSession, OpeningData, Out> {
   close: () => Promise<void> | void
   // The current state of the channel
   state: 'initial' | 'open' | 'closed'
-  // subscription service
-  subscriptions: SubscriptionService<Out>
 }
 
 export interface VrameworkChannelHandler<
@@ -186,4 +183,4 @@ export type VrameworkChannelHandlerFactory<
 OpeningData = unknown,
 UserSession extends CoreUserSession = CoreUserSession,
 Out = unknown,
-> = (channelId: string, openingData: OpeningData, userSession: UserSession | undefined, subscriptionService: SubscriptionService<Out>) => VrameworkChannelHandler<UserSession, OpeningData, Out>
+> = (channelId: string, channelName: string, openingData: OpeningData, userSession: UserSession | undefined) => VrameworkChannelHandler<UserSession, OpeningData, Out>

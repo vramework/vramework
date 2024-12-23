@@ -1,9 +1,8 @@
 import { ApiGatewayManagementApiClient, PostToConnectionCommand } from "@aws-sdk/client-apigatewaymanagementapi";
 import { Logger } from "@vramework/core/services";
 import { APIGatewayEvent } from "aws-lambda";
-import { VrameworkLambdaSubscriptionService } from "./vramework-lambda-subscription-service.js";
-import { ServerlessChannelStore, ServerlessSubscriptionStore } from "@vramework/core/channel/serverless";
 import { createLambdaChannelHandlerFactory } from "./lambda-channel-handler.js";
+import { ChannelStore } from "@vramework/core/channel";
 
 export const sendMessage = async (logger: Logger, callbackAPI: ApiGatewayManagementApiClient, ConnectionId: string, Data: string): Promise<boolean> => {
     try {
@@ -12,12 +11,12 @@ export const sendMessage = async (logger: Logger, callbackAPI: ApiGatewayManagem
     } catch (e: any) {
         // TODO: We need to check if it's a 410 and remove the connection if it is
         // Otherwise we need to log the error
-        console.log(e.message);
+        logger.error(e.message);
         return false
     }
 }
 
-export const sendMessages = async (logger: Logger, channelStore: ServerlessChannelStore, callbackAPI: ApiGatewayManagementApiClient, fromChannelId: string, channelIds: string[], data: unknown, isBinary?: boolean): Promise<void> => {
+export const sendMessages = async (logger: Logger, channelStore: ChannelStore, callbackAPI: ApiGatewayManagementApiClient, fromChannelId: string, channelIds: string[], data: unknown, isBinary?: boolean): Promise<void> => {
     if (isBinary) {
         throw new Error("Binary data is not supported on serverless lambdas")
     }
@@ -36,11 +35,7 @@ export const sendMessages = async (logger: Logger, channelStore: ServerlessChann
     }
 }
 
-export const getServerlessDependencies = (logger: Logger, channelStore: ServerlessChannelStore, subscriptionStore: ServerlessSubscriptionStore, event: APIGatewayEvent) => {
-    const channelId = event.requestContext.connectionId
-    if (!channelId) {
-        throw new Error('No connectionId found in requestContext')
-    }
+export const getApiGatewayManagementApiClient = (logger: Logger, event: APIGatewayEvent) => {
     let endpoint: string
     if (process.env.IS_OFFLINE) {
         logger.info('Assuming serverless offline mode due to IS_OFFLINE')
@@ -52,12 +47,17 @@ export const getServerlessDependencies = (logger: Logger, channelStore: Serverle
         logger.info('Assuming we are using a custom domain mode')
         endpoint = `https://${event.requestContext.domainName}`
     }
-
-    const callbackAPI = new ApiGatewayManagementApiClient({
+    return new ApiGatewayManagementApiClient({
         apiVersion: '2018-11-29',
         endpoint
     })
-    const subscriptionService = new VrameworkLambdaSubscriptionService(logger, channelStore, subscriptionStore, callbackAPI)
+}
+export const getServerlessDependencies = (logger: Logger, channelStore: ChannelStore, event: APIGatewayEvent) => {
+    const channelId = event.requestContext.connectionId
+    if (!channelId) {
+        throw new Error('No connectionId found in requestContext')
+    }
+    const callbackAPI = getApiGatewayManagementApiClient(logger, event)
     const channelHandlerFactory = createLambdaChannelHandlerFactory(logger, channelStore, callbackAPI)
-    return { channelId, callbackAPI, subscriptionService, channelHandlerFactory, channelStore }
+    return { channelId, callbackAPI, channelHandlerFactory, channelStore }
 }

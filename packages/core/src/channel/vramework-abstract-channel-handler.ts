@@ -1,6 +1,5 @@
 import { CoreUserSession } from '../types/core.types.js'
 import { VrameworkChannel, VrameworkChannelHandler } from './channel.types.js'
-import { SubscriptionService } from './subscription-service.js'
 
 export abstract class VrameworkAbstractChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
@@ -11,9 +10,9 @@ export abstract class VrameworkAbstractChannelHandler<
 
   constructor(
     public channelId: string,
+    public channelName: string,
     protected userSession: UserSession | undefined,
-    protected openingData: OpeningData,
-    protected subscriptionService: SubscriptionService<Out>
+    protected openingData: OpeningData
   ) {
   }
 
@@ -29,8 +28,7 @@ export abstract class VrameworkAbstractChannelHandler<
         setUserSession: this.setUserSession.bind(this),
         send: this.send.bind(this),
         close: this.close.bind(this),
-        state: 'initial',
-        subscriptions: this.subscriptionService,
+        state: 'initial'
       }
     }
     return this.channel

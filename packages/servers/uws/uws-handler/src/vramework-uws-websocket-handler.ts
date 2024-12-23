@@ -11,7 +11,7 @@ import { loadAllSchemas } from '@vramework/core/schema'
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
 import { VrameworkuWSHandlerOptions } from './vramework-uws-http-handler.js'
-import { UWSSubscriptionService } from './uws-subscription-service.js'
+import { UWSEventHubService } from './uws-event-hub-service.js'
 
 const isSerializable = (data: any): boolean => {
   return !(
@@ -39,7 +39,6 @@ export const vrameworkWebsocketHandler = ({
   createSessionServices,
   loadSchemas,
   logRoutes,
-  subscriptionService = new UWSSubscriptionService(),
 }: VrameworkuWSHandlerOptions) => {
   if (logRoutes) {
     logChannels(singletonServices.logger)
@@ -49,6 +48,12 @@ export const vrameworkWebsocketHandler = ({
     loadAllSchemas(singletonServices.logger)
   }
 
+  const eventHub = new UWSEventHubService()
+  const singletonServicesWithEventHub = {
+    ...singletonServices,
+    eventHub
+  }
+  
   const decoder = new TextDecoder('utf-8')
 
   return {
@@ -74,8 +79,7 @@ export const vrameworkWebsocketHandler = ({
           channelId: crypto.randomUUID().toString(),
           request,
           response,
-          singletonServices,
-          subscriptionService,
+          singletonServices: singletonServicesWithEventHub,
           createSessionServices,
           route: req.getUrl() as string,
         })
@@ -111,7 +115,7 @@ export const vrameworkWebsocketHandler = ({
           ws.send(data as any)
         }
       })
-      subscriptionService.onChannelOpened(channelHandler.channelId, ws)
+      eventHub.onChannelOpened(channelHandler.channelId, ws)
       channelHandler.open()
     },
     message: async (ws, message, isBinary) => {
@@ -125,7 +129,7 @@ export const vrameworkWebsocketHandler = ({
     },
     close: (ws) => {
       const { channelHandler } = ws.getUserData()
-      subscriptionService.onChannelClosed(channelHandler.channelId)
+      eventHub.onChannelClosed(channelHandler.channelId)
       channelHandler.close()
     },
   } as uWS.WebSocketBehavior<{ channelHandler: VrameworkLocalChannelHandler }>

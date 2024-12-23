@@ -2,20 +2,9 @@ import { openChannel } from "../channel-runner.js"
 import { createHTTPInteraction, handleError } from "../../http/http-route-runner.js"
 import { closeSessionServices } from "../../utils.js"
 import { processMessageHandlers } from "../channel-handler.js"
-import { CoreAPIChannel, RunChannelOptions, RunChannelParams, VrameworkChannelHandler } from "../channel.types.js"
+import { CoreAPIChannel, RunChannelOptions, RunChannelParams } from "../channel.types.js"
 import { VrameworkLocalChannelHandler } from "./local-channel-handler.js"
-
-if (!globalThis.vramework?.openChannels) {
-    globalThis.vramework = globalThis.vramework || {}
-    globalThis.vramework.openChannels = new Map<string, VrameworkChannelHandler>()
-}
-
-/**
- * Returns all the open channels on current server
- */
-export const getOpenChannels = (): Map<string, VrameworkChannelHandler> => {
-    return globalThis.vramework.openChannels
-}
+import { SessionServices } from "../../types/core.types.js"
 
 export const runLocalChannel = async ({
     singletonServices,
@@ -24,7 +13,6 @@ export const runLocalChannel = async ({
     response,
     route,
     createSessionServices,
-    subscriptionService,
     skipUserSession = false,
     respondWith404 = true,
     coerceToArray = false,
@@ -33,12 +21,12 @@ export const runLocalChannel = async ({
 }: Pick<CoreAPIChannel<unknown, any>, 'route'> &
     RunChannelOptions &
     RunChannelParams<unknown>): Promise<VrameworkLocalChannelHandler | void> => {
-    let sessionServices: any | undefined
+    let sessionServices: SessionServices<typeof singletonServices> | undefined
+
     const http = createHTTPInteraction(request, response)
     try {
         const { userSession, openingData, channelConfig } = await openChannel({
             channelId,
-            subscriptionService,
             createSessionServices,
             respondWith404,
             http,
@@ -50,9 +38,9 @@ export const runLocalChannel = async ({
 
         const channelHandler = new VrameworkLocalChannelHandler(
             channelId,
+            channelConfig.name,
             userSession,
             openingData,
-            subscriptionService
         )
         const channel = channelHandler.getChannel()
 
@@ -66,14 +54,14 @@ export const runLocalChannel = async ({
         const allServices = { ...singletonServices, ...sessionServices }
 
         channelHandler.registerOnOpen(() => {
-            getOpenChannels().set(channelId, channelHandler)
             channelConfig.onConnect?.(allServices, channel)
         })
 
         channelHandler.registerOnClose(async () => {
-            getOpenChannels().delete(channelId)
             channelConfig.onDisconnect?.(allServices, channel)
-            await closeSessionServices(singletonServices.logger, sessionServices)
+            if (sessionServices) {
+                await closeSessionServices(singletonServices.logger, sessionServices)
+            }
         })
 
         channelHandler.registerOnMessage(processMessageHandlers(
@@ -84,7 +72,6 @@ export const runLocalChannel = async ({
 
         return channelHandler
     } catch (e: any) {
-        console.error(e)
         handleError(
             e,
             http,
@@ -95,6 +82,8 @@ export const runLocalChannel = async ({
             bubbleErrors
         )
     } finally {
-        await closeSessionServices(singletonServices.logger, sessionServices)
+        if (sessionServices) {
+            await closeSessionServices(singletonServices.logger, sessionServices)
+        }
     }
 }

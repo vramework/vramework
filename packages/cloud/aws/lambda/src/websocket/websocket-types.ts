@@ -1,13 +1,10 @@
-import { CoreSingletonServices, CoreServices, CoreUserSession, CreateSessionServices } from "@vramework/core"
-import { ServerlessChannelStore, ServerlessSubscriptionStore } from "@vramework/core/channel/serverless"
-import { APIGatewayProxyEvent } from "aws-lambda"
+import { CoreSingletonServices, CoreServices, CoreUserSession, CreateSessionServices, MakeRequired } from "@vramework/core"
+import { ChannelStore } from "@vramework/core/channel"
 
 export type WebsocketParams<SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession> = {
-    event: APIGatewayProxyEvent,
-    channelStore: ServerlessChannelStore,
-    subscriptionStore: ServerlessSubscriptionStore,
-    singletonServices: SingletonServices,
-    createSessionServices: CreateSessionServices<
+    channelStore: ChannelStore,
+    singletonServices: MakeRequired<SingletonServices, 'eventHub'>,
+    createSessionServices?: CreateSessionServices<
       SingletonServices,
       Services,
       UserSession
