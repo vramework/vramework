@@ -33,10 +33,10 @@ export class CloudflareEventHubService<Data = unknown>
             }
             this.state = 'ready';
         } else if (this.state === 'loading') {
+            this.loadedCallbacks = [];
             await new Promise<void>((resolve) => {
                 this.loadedCallbacks.push(resolve);
             })
-            this.loadedCallbacks = [];
         }
     }
 
