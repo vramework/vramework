@@ -1,4 +1,4 @@
-import { CoreSingletonServices, CoreUserSession, CreateSessionServices, VrameworkHTTP } from "../../types/core.types.js"
+import { CoreUserSession, SessionServices } from "../../types/core.types.js"
 import { closeSessionServices } from "../../utils.js"
 import { processMessageHandlers } from "../channel-handler.js"
 import { getChannels, openChannel } from "../channel-runner.js"
@@ -13,25 +13,14 @@ export interface RunServerlessChannelParams<ChannelData> extends RunChannelParam
     channelObject?: unknown
 }
 
-const getVariablesForChannel = async ({ channelId, channelObject, userSession, channelName, singletonServices, createSessionServices, subscriptionService, channelStore, channelHandlerFactory, http }: {
+const getVariablesForChannel = ({ channelId, userSession, channelName, subscriptionService, channelHandlerFactory, openingData }: {
     channelId: string,
-    channelName?: string,
-    channelObject?: unknown,
+    channelName: string,
     userSession?: CoreUserSession,
-    singletonServices: CoreSingletonServices,
-    createSessionServices: CreateSessionServices,
     subscriptionService: SubscriptionService<unknown>
-    channelStore: ServerlessChannelStore,
     channelHandlerFactory: VrameworkChannelHandlerFactory,
-    http?: VrameworkHTTP
+    openingData?: unknown
 }) => {
-    let openingData: any | undefined
-    if (!channelName) {
-        ({ userSession, openingData, channelName } = await channelStore.getChannel(channelId));
-    } else {
-        await channelStore.addChannel({ channelId, channelName, openingData, channelObject })
-    }
-
     const { channels } = getChannels()
     const channelConfig = channels.find(channelConfig => channelConfig.name === channelName)
     if (!channelConfig) {
@@ -43,17 +32,10 @@ const getVariablesForChannel = async ({ channelId, channelObject, userSession, c
         userSession,
         subscriptionService,
     )
-    const sessionServices = await createSessionServices(
-        singletonServices,
-        { http },
-        userSession
-    )
     return {
         channelConfig,
         channelHandler,
-        channel: channelHandler.getChannel(),
-        sessionServices,
-        allServices: { ...singletonServices, ...sessionServices }
+        channel: channelHandler.getChannel()
     }
 }
 
@@ -75,11 +57,10 @@ export const runChannelConnect = async ({
 }: Pick<CoreAPIChannel<unknown, any>, 'route'> &
     RunChannelOptions &
     RunServerlessChannelParams<unknown>) => {
-    let sessionServices: any | undefined
-
+    let sessionServices: SessionServices<typeof singletonServices> | undefined
     const http = createHTTPInteraction(request, response)
     try {
-        const { userSession, channelConfig } = await openChannel({
+        const { userSession, channelConfig, openingData } = await openChannel({
             channelId,
             subscriptionService,
             createSessionServices,
@@ -88,18 +69,18 @@ export const runChannelConnect = async ({
             singletonServices,
             coerceToArray
         })
-        const { allServices, channel } = await getVariablesForChannel({ 
+        await channelStore.addChannel({ channelId, channelName: channelConfig.name, openingData, channelObject })
+        const { channel } = getVariablesForChannel({ 
             channelId, 
-            channelObject,
             userSession, 
-            singletonServices, 
-            createSessionServices, 
-            subscriptionService, channelStore, 
+            subscriptionService, 
             channelHandlerFactory, 
-            channelName: channelConfig.name, 
-            http 
+            channelName: channelConfig.name
         })
-        await channelConfig.onConnect?.(allServices, channel)
+        if (createSessionServices) {
+            sessionServices = await createSessionServices(singletonServices, { http }, userSession)
+        }
+        await channelConfig.onConnect?.({ ...singletonServices, ...sessionServices }, channel)
         http?.response?.setStatus(101)
         return { name: channelConfig.name, userSession }
     } catch (e: any) {
@@ -113,25 +94,51 @@ export const runChannelConnect = async ({
             bubbleErrors
         )
     } finally {
+        if (sessionServices) {
+            await closeSessionServices(singletonServices.logger, sessionServices)
+        }
+    }
+}
+
+export const runChannelDisconnect = async ({ singletonServices, ...params }: RunServerlessChannelParams<unknown>): Promise<void> => {
+    let sessionServices: SessionServices<typeof singletonServices> | undefined
+    const { userSession, openingData, channelName } = await params.channelStore.getChannel(params.channelId)
+    const { channel, channelConfig } = getVariablesForChannel({
+        ...params,
+        userSession,
+        openingData,
+        channelName
+    })
+    if (!sessionServices && params.createSessionServices) {
+        sessionServices = await params.createSessionServices(singletonServices, {}, userSession)
+    }
+    await channelConfig.onDisconnect?.({ ...singletonServices, ...sessionServices }, channel)
+    await params.channelStore.removeChannels([channel.channelId])
+    if (sessionServices) {
         await closeSessionServices(singletonServices.logger, sessionServices)
     }
 }
 
-export const runChannelDisconnect = async (params: RunServerlessChannelParams<unknown>): Promise<void> => {
-    const { allServices, sessionServices, channel, channelConfig } = await getVariablesForChannel(params)
-    await channelConfig.onDisconnect?.(allServices, channel)
-    await params.channelStore.removeChannels([channel.channelId])
-    await closeSessionServices(allServices.logger, sessionServices)
-}
-
-export const runChannelMessage = async (params: RunServerlessChannelParams<unknown>, data: unknown): Promise<unknown> => {
-    const { allServices, sessionServices, channelHandler, channelConfig } = await getVariablesForChannel(params)
+export const runChannelMessage = async ({ singletonServices, ...params }: RunServerlessChannelParams<unknown>, data: unknown): Promise<unknown> => {
+    let sessionServices: SessionServices<typeof singletonServices> | undefined
+    const { userSession, openingData, channelName } = await params.channelStore.getChannel(params.channelId)
+    const { channelHandler, channelConfig } = getVariablesForChannel({
+        ...params,
+        userSession,
+        openingData,
+        channelName
+    })
+    if (params.createSessionServices) {
+        sessionServices = await params.createSessionServices(singletonServices, {}, userSession)
+    }
     const onMessage = processMessageHandlers(
-        allServices,
+        { ...singletonServices, ...sessionServices },
         channelConfig,
         channelHandler,
     )
     const response = await onMessage(data)
-    await closeSessionServices(allServices.logger, sessionServices)
+    if (sessionServices) {
+        await closeSessionServices(singletonServices.logger, sessionServices)
+    }
     return response
 }

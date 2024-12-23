@@ -120,6 +120,8 @@ export async function runScheduledTask<SingletonServices extends CoreSingletonSe
 
     throw e
   } finally {
-    await closeSessionServices(singletonServices.logger, sessionServices)
+    if (sessionServices) {
+      await closeSessionServices(singletonServices.logger, sessionServices)      
+    }
   }
 }
