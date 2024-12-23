@@ -18,7 +18,7 @@ export const runFetch = async <SingletonServices extends CoreSingletonServices, 
     Services,
     UserSession
   >,
-  websocketHibernationServer?: CloudflareWebSocketHibernationServer
+  websocketHibernationServer?: CloudflareWebSocketHibernationServer<SingletonServices>
 ) => {
   const request = new CloudflareHTTPRequest(cloudflareRequest)
 

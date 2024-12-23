@@ -5,14 +5,14 @@ import { CloudfrontHTTPResponse } from "./cloudflare-http-response.js";
 import { CloudflareWebsocketStore } from "./cloudflare-channel-store.js";
 import { createCloudflareChannelHandlerFactory } from "./cloudflare-channel-handler-factory.js";
 import { CloudflareEventHubService } from "./cloudflare-eventhub-service.js";
+import { CoreSingletonServices } from "@vramework/core";
 
-export abstract class CloudflareWebSocketHibernationServer implements DurableObject {
-  private eventHub: CloudflareEventHubService<unknown>;
+export abstract class CloudflareWebSocketHibernationServer<SingletonServices extends CoreSingletonServices = CoreSingletonServices> implements DurableObject {
+  private eventHub: CloudflareEventHubService<unknown> | undefined
   private channelStore: CloudflareWebsocketStore;
   
   constructor(protected ctx: DurableObjectState, protected env: Record<string, string | undefined>) {
     this.channelStore = new CloudflareWebsocketStore(this.ctx)
-    this.eventHub = new CloudflareEventHubService(this.ctx)
   }
 
   public async fetch(cloudflareRequest: Request) {    
@@ -40,7 +40,6 @@ export abstract class CloudflareWebSocketHibernationServer implements DurableObj
       this.ctx.acceptWebSocket(server, [channelId])
     } catch (e) {
       // Something went wrong, the cloudflare response will deal with it.
-      console.error(e)
     }
 
     return response.getCloudflareResponse() as any
@@ -66,22 +65,26 @@ export abstract class CloudflareWebSocketHibernationServer implements DurableObj
       ...params,
       channelId
     })
+    this.eventHub?.onChannelClosed(channelId)
   }
 
   private async getAllParams (websocket: WebSocket) {
     const params = await this.getParams()
+    if (!this.eventHub) {
+      this.eventHub = new CloudflareEventHubService(params.singletonServices.logger, this.ctx)
+    }
     const channelHandlerFactory = createCloudflareChannelHandlerFactory(params.singletonServices.logger, this.channelStore, websocket)
     return {
       ...params,
       channelStore: this.channelStore,
-      eventHub: this.eventHub,
+      singletonServices: { ...params.singletonServices, eventHub: this.eventHub },
       channelHandlerFactory,
     }
   }
 
   protected abstract getParams (): Promise<{
-    singletonServices: any,
-    createSessionServices: any
+    singletonServices: SingletonServices,
+    createSessionServices?: any
   }> 
 
 }
