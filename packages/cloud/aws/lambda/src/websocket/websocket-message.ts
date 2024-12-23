@@ -19,11 +19,12 @@ export const processWebsocketMessage = async <SingletonServices extends CoreSing
       createSessionServices: createSessionServices as any
     }, event.body)
     if (result) {
-      // TODO: Serialise result here if it isn't a string
-      response.setJson(JSON.stringify(result))
+      // TODO: Support non json
+      response.setJson(result as any)
     }
-  } catch {
+  } catch (e) {
     // Error should have already been handled by runHTTPRoute
+    console.error(e)
   }
   return response.getLambdaResponse()
 }
