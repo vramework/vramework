@@ -125,14 +125,18 @@ export const runChannelMessage = async ({ singletonServices, ...params }: RunSer
     if (params.createSessionServices) {
         sessionServices = await params.createSessionServices(singletonServices, {}, userSession)
     }
-    const onMessage = processMessageHandlers(
-        { ...singletonServices, ...sessionServices },
-        channelConfig,
-        channelHandler,
-    )
-    const response = await onMessage(data)
-    if (sessionServices) {
-        await closeSessionServices(singletonServices.logger, sessionServices)
+    let response: unknown
+    try {
+        const onMessage = processMessageHandlers(
+            { ...singletonServices, ...sessionServices },
+            channelConfig,
+            channelHandler,
+        )
+        response = await onMessage(data)
+    } finally {
+        if (sessionServices) {
+            await closeSessionServices(singletonServices.logger, sessionServices)
+        }
     }
     return response
 }

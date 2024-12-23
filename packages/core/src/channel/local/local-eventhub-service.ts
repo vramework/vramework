@@ -62,7 +62,11 @@ export class LocalEventHubService<Data = unknown>
     for (const toChannelId of subscribedChannelIds) {
       if (channelId === toChannelId) continue // Skip sending to the sender
       const channel = this.channels.get(toChannelId)
-      channel?.send(data, isBinary)
+      if (channel) {
+        channel.send(data, isBinary)
+      } else {
+        // TODO: Websocket is closed, remove the channel from the topic
+      }
     }
   }
 
