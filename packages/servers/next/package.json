@@ -1,6 +1,6 @@
 {
   "name": "@vramework/next",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",
@@ -21,7 +21,7 @@
     "./vramework-next-request": "./dist/vramework-next-request.js"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.2",
+    "@vramework/core": "^0.6.3",
     "next": "^15"
   },
   "dependencies": {

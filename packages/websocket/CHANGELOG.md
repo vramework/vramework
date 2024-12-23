@@ -1,5 +1,12 @@
 # @vramework/websocket
 
+## 0.6.1
+
+### Patch Changes
+
+- 09fc52c: feat: adding cloudflare and lambda websockets
+  breaking change: moved subscription from channel to services and renamed to event hub
+
 ## 0.6
 
 Marking a major release to include channels and scheduled tasks
