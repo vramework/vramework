@@ -37,10 +37,6 @@ export class CloudflareWebsocketStore extends ChannelStore {
         return websocket.deserializeAttachment()
     }
 
-    public async getAllChannelIds(): Promise<string[]> {
-        return this.ctx.getWebSockets().map((ws) => this.ctx.getTags(ws)[0]).filter(t => !!t) as string[]
-    }
-
     private getWebsocket(channelId: string) {
         const [websocket] = this.ctx.getWebSockets(channelId)
         if (!websocket) {

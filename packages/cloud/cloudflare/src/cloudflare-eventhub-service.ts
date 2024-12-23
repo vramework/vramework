@@ -1,5 +1,6 @@
 import { DurableObjectState, WebSocket } from "@cloudflare/workers-types";
 import { EventHubService } from "@vramework/core/channel";
+import { Logger } from "@vramework/core/services";
 
 export class CloudflareEventHubService<Data = unknown>
     implements EventHubService<Data> {
@@ -8,7 +9,7 @@ export class CloudflareEventHubService<Data = unknown>
     private state: 'initial' | 'loading' | 'ready' = 'initial'
     private loadedCallbacks: (() => void)[] = []
 
-    constructor(private ctx: DurableObjectState) {
+    constructor(private logger: Logger, private ctx: DurableObjectState) {
         // Ensure state is saved before hibernation
         ctx.blockConcurrencyWhile(async () => {
             if (this.isDirty) {
@@ -94,7 +95,7 @@ export class CloudflareEventHubService<Data = unknown>
 
         const channelIds = this.subscriptions.get(topic);
         if (!channelIds) {
-            console.warn(`No subscribers for topic: ${topic}`);
+            this.logger.warn(`No subscribers for topic: ${topic}`);
             return;
         }
         for (const channelId of channelIds) {
@@ -103,9 +104,16 @@ export class CloudflareEventHubService<Data = unknown>
             }
             try {
                 const websocket = this.getWebsocket(channelId);
-                websocket.send(JSON.stringify(data))
+                if (!websocket) {
+                    // The socket doesn't exist, which means
+                    // we should clean it up
+                    console.error(`Socket ${channelId} doesn't exist, cleaning up`)
+                    this.onChannelClosed(channelId)
+                } else {
+                    websocket.send(JSON.stringify(data))
+                }
             } catch (error) {
-                console.error(`Failed to send message to ${channelId} on topic ${topic}:`, error);
+                this.logger.error(`Failed to send message to ${channelId} on topic ${topic}:`, error);
             }
         }
     }
@@ -129,11 +137,8 @@ export class CloudflareEventHubService<Data = unknown>
  * @param channelId - The channel ID to get the WebSocket for.
  * @returns The WebSocket instance.
  */
-    private getWebsocket(channelId: string): WebSocket {
+    private getWebsocket(channelId: string): WebSocket | undefined {
         const [websocket] = this.ctx.getWebSockets(channelId);
-        if (!websocket) {
-            throw new Error(`WebSocket not found for channel ID: ${channelId}`);
-        }
-        return websocket;
+        return websocket
     }
 }
