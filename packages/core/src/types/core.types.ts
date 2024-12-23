@@ -96,6 +96,8 @@ export interface VrameworkInteractions {
   http?: VrameworkHTTP
 }
 
+export type SessionServices<Services> = Omit<Services, keyof CoreSingletonServices | keyof VrameworkInteractions>
+
 /**
  * Represents the core services used by Vramework, including singleton services and the request/response interaction.
  */
@@ -121,9 +123,7 @@ export type CreateSessionServices<
   services: SingletonServices,
   interaction: VrameworkInteractions,
   session: UserSession | undefined
-) => Promise<
-  Omit<Services, keyof SingletonServices | keyof VrameworkInteractions>
->
+) => Promise<SessionServices<Services>>
 
 /**
  * Defines a function type for creating config.

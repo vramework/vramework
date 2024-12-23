@@ -32,7 +32,7 @@ export type RunChannelParams<ChannelData> = {
     | VrameworkHTTPAbstractRequest<ChannelData>
   response?: VrameworkResponse | VrameworkHTTPAbstractResponse
   http?: VrameworkHTTP,
-  createSessionServices: CreateSessionServices
+  createSessionServices?: CreateSessionServices
 }
 
 export interface HandlerMeta {}

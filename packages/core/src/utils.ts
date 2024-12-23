@@ -6,21 +6,19 @@ import { Logger } from './services/logger.js'
 // with dependency injection
 export const closeSessionServices = async (
   logger: Logger,
-  sessionServices?: Record<string, any>
+  sessionServices: Record<string, any>
 ) => {
-  if (sessionServices) {
-    await Promise.all(
-      Object.values(sessionServices).map(async (service) => {
-        if (service?.close) {
-          try {
-            await service.close()
-          } catch (e: any) {
-            logger.error(e)
-          }
+  await Promise.all(
+    Object.values(sessionServices).map(async (service) => {
+      if (service?.close) {
+        try {
+          await service.close()
+        } catch (e: any) {
+          logger.error(e)
         }
-      })
-    )
-  }
+      }
+    })
+  )
 }
 
 export const validateAndCoerce = (

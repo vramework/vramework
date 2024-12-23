@@ -56,11 +56,13 @@ export const runLocalChannel = async ({
         )
         const channel = channelHandler.getChannel()
 
-        sessionServices = await createSessionServices(
-            singletonServices,
-            { http },
-            userSession
-        )
+        if (createSessionServices) {
+            sessionServices = await createSessionServices(
+                singletonServices,
+                { http },
+                userSession
+            )
+        }
         const allServices = { ...singletonServices, ...sessionServices }
 
         channelHandler.registerOnOpen(() => {
