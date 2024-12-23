@@ -3,7 +3,7 @@ import * as assert from 'node:assert/strict'
 import { JSONValue } from '../../types/core.types.js'
 import { VrameworkHTTPAbstractRequest } from '../../http/vramework-http-abstract-request.js'
 import { VrameworkHTTPAbstractResponse } from '../../http/vramework-http-abstract-response.js'
-import { getOpenChannels, runLocalChannel } from './local-channel-runner.js'
+import { runLocalChannel } from './local-channel-runner.js'
 
 /**
  * Minimal stubs for dependencies that runChannel expects.
@@ -54,8 +54,6 @@ class MockResponse extends VrameworkHTTPAbstractResponse {
 }
 
 const mockCreateSessionServices = async () => ({ sessionServiceMock: true })
-const mockSubscriptionService = {} as any
-
 function resetGlobalChannels(channels: any[] = [], channelsMeta: any[] = []) {
   // If necessary, reinitialize globalThis.vramework
   if (!globalThis.vramework) {
@@ -86,8 +84,7 @@ test('runChannel should return undefined and 404 if no matching channel is found
     request: new MockRequest(),
     response: mockResponse,
     route: '/non-existent-channel',
-    createSessionServices: mockCreateSessionServices,
-    subscriptionService: mockSubscriptionService,
+    createSessionServices: mockCreateSessionServices
   })
 
   assert.equal(
@@ -121,27 +118,13 @@ test('runChannel should return a channel handler if channel matches and no auth 
     request: new MockRequest(),
     response: new MockResponse(),
     route: '/test-channel',
-    createSessionServices: mockCreateSessionServices,
-    subscriptionService: mockSubscriptionService,
+    createSessionServices: mockCreateSessionServices
   })
 
   assert.ok(result, 'Should return a VrameworkChannelHandler instance')
-  const openChannels = getOpenChannels()
-  assert.equal(
-    openChannels.size,
-    0,
-    'Channel should not be open until onOpen is called'
-  )
 
   // Simulate opening the channel
   result.open()
-  assert.equal(
-    openChannels.size,
-    1,
-    'Channel should be added to open channels after open is called'
-  )
-  assert.ok(
-    openChannels.has('test-channel-id'),
-    'Should have the opened channel in openChannels'
-  )
+
+  // TODO: Test that the opened channel works
 })

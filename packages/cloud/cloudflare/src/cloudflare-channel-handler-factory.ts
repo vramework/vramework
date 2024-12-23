@@ -1,7 +1,6 @@
 import { CoreUserSession } from "@vramework/core";
-import { SubscriptionService, VrameworkAbstractChannelHandler, VrameworkChannelHandlerFactory } from "@vramework/core/channel";
+import { ChannelStore, VrameworkAbstractChannelHandler, VrameworkChannelHandlerFactory } from "@vramework/core/channel";
 import { Logger } from "@vramework/core/services";
-import { ServerlessChannelStore } from "@vramework/core/channel/serverless";
 import { WebSocket } from "@cloudflare/workers-types";
 
 const isSerializable = (data: any): boolean => {
@@ -26,14 +25,14 @@ class CloudflareChannelHandler<
 > extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
   constructor(
     channelId: string, 
+    channelName: string,
     openingData: OpeningData, 
     userSession: UserSession | undefined, 
-    subscriptionService: SubscriptionService<Out>, 
     private websocket: WebSocket,
     _logger: Logger, 
-    private channelStore: ServerlessChannelStore, 
+    private channelStore: ChannelStore, 
   ) {
-    super(channelId, userSession, openingData, subscriptionService)
+    super(channelId, channelName, userSession, openingData)
   }
 
   public async setUserSession(userSession: UserSession): Promise<void> {
@@ -53,7 +52,7 @@ class CloudflareChannelHandler<
   }
 }
 
-export const createCloudflareChannelHandlerFactory = (logger: Logger, channelStore: ServerlessChannelStore, websocket: WebSocket) => {
-  const factory: VrameworkChannelHandlerFactory = (channelId, openingData, userSession, subscriptionService) => new CloudflareChannelHandler(channelId, openingData, userSession, subscriptionService, websocket, logger, channelStore)
+export const createCloudflareChannelHandlerFactory = (logger: Logger, channelStore: ChannelStore, websocket: WebSocket) => {
+  const factory: VrameworkChannelHandlerFactory = (channelId, channelName, openingData, userSession) => new CloudflareChannelHandler(channelId, channelName, openingData, userSession, websocket, logger, channelStore)
   return factory
 }

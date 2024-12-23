@@ -1,7 +1,7 @@
 /**
- * Interface defining the methods of a Subscription Service.
+ * Interface defining the methods of a EventHub Service.
  */
-export interface SubscriptionServiceForwarder {
+export interface EventHubForwarder {
   /**
    * Sends data to all connections subscribed to a topic.
    * @param topic - The topic to send data to.

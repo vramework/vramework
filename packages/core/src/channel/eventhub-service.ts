@@ -1,7 +1,7 @@
 /**
- * Interface defining the methods of a Subscription Service.
+ * Interface defining the methods of a EventHub Service.
  */
-export interface SubscriptionService<Out> {
+export interface EventHubService<Out = unknown> {
   /**
    * Subscribes a connection to a specific topic.
    * @param topic - The topic to subscribe to.
@@ -23,7 +23,7 @@ export interface SubscriptionService<Out> {
    */
   publish(
     topic: string,
-    channelId: string,
+    channelId: string | null,
     data: Out,
     isBinary?: boolean
   ): Promise<void> | void

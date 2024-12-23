@@ -5,6 +5,9 @@ import type { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstra
 import type { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
 import type { ChannelPermissionService } from '../channel/channel-permission-service.js'
 import { VariablesService } from '../services/variables-service.js'
+import { EventHubService } from '../channel/eventhub-service.js'
+
+export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.
@@ -79,6 +82,8 @@ export interface CoreSingletonServices {
   logger: Logger
   /** The variable service to be used */
   variablesService: VariablesService
+  /** The subscription service that is passed to streams */
+  eventHub?: EventHubService<unknown>
 }
 
 /**
@@ -96,7 +101,7 @@ export interface VrameworkInteractions {
   http?: VrameworkHTTP
 }
 
-export type SessionServices<Services> = Omit<Services, keyof CoreSingletonServices | keyof VrameworkInteractions>
+export type SessionServices<SingletonServices extends CoreSingletonServices = CoreSingletonServices, Services = CoreServices<SingletonServices>> = Omit<Services, keyof SingletonServices | keyof VrameworkInteractions>
 
 /**
  * Represents the core services used by Vramework, including singleton services and the request/response interaction.
@@ -123,7 +128,7 @@ export type CreateSessionServices<
   services: SingletonServices,
   interaction: VrameworkInteractions,
   session: UserSession | undefined
-) => Promise<SessionServices<Services>>
+) => Promise<SessionServices<Services, SingletonServices>>
 
 /**
  * Defines a function type for creating config.

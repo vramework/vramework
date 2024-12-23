@@ -4,15 +4,15 @@ import { CloudflareHTTPRequest } from "./cloudflare-http-request.js";
 import { CloudfrontHTTPResponse } from "./cloudflare-http-response.js";
 import { CloudflareWebsocketStore } from "./cloudflare-channel-store.js";
 import { createCloudflareChannelHandlerFactory } from "./cloudflare-channel-handler-factory.js";
-import { CloudflareSubscriptionService } from "./cloudflare-subscription-service.js";
+import { CloudflareEventHubService } from "./cloudflare-eventhub-service.js";
 
 export abstract class CloudflareWebSocketHibernationServer implements DurableObject {
-  private subscriptionService: CloudflareSubscriptionService<unknown>;
+  private eventHub: CloudflareEventHubService<unknown>;
   private channelStore: CloudflareWebsocketStore;
   
-  constructor(private ctx: DurableObjectState, protected env: Record<string, string | undefined>) {
+  constructor(protected ctx: DurableObjectState, protected env: Record<string, string | undefined>) {
     this.channelStore = new CloudflareWebsocketStore(this.ctx)
-    this.subscriptionService = new CloudflareSubscriptionService(this.ctx)
+    this.eventHub = new CloudflareEventHubService(this.ctx)
   }
 
   public async fetch(cloudflareRequest: Request) {    
@@ -74,7 +74,7 @@ export abstract class CloudflareWebSocketHibernationServer implements DurableObj
     return {
       ...params,
       channelStore: this.channelStore,
-      subscriptionService: this.subscriptionService,
+      eventHub: this.eventHub,
       channelHandlerFactory,
     }
   }

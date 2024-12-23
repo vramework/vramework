@@ -1,8 +1,8 @@
 import { DurableObjectState, WebSocket } from "@cloudflare/workers-types";
-import { SubscriptionService } from "@vramework/core/channel";
+import { EventHubService } from "@vramework/core/channel";
 
-export class CloudflareSubscriptionService<Data = unknown>
-    implements SubscriptionService<Data> {
+export class CloudflareEventHubService<Data = unknown>
+    implements EventHubService<Data> {
     private subscriptions: Map<string, Set<string>> = new Map()
     private isDirty = false
     private state: 'initial' | 'loading' | 'ready' = 'initial'

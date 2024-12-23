@@ -1,23 +1,21 @@
 import { CoreSingletonServices, CoreServices, CoreUserSession } from "@vramework/core"
 import { runChannelMessage } from "@vramework/core/channel/serverless"
-import { APIGatewayProxyResult } from "aws-lambda"
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
 import { getServerlessDependencies } from "./utils.js"
 import { WebsocketParams } from "./websocket-types.js"
 
-export const processWebsocketMessage = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>({
-  event,
+export const processWebsocketMessage = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(event: APIGatewayProxyEvent, {
   singletonServices,
   createSessionServices,
   channelStore,
-  subscriptionStore,
 }: WebsocketParams<SingletonServices, Services, UserSession>): Promise<APIGatewayProxyResult> => {
-  const runnerParams = getServerlessDependencies(singletonServices.logger, channelStore, subscriptionStore, event)
+  const runnerParams = getServerlessDependencies(singletonServices.logger, channelStore, event)
   const response = new VrameworkAPIGatewayLambdaResponse()
   try {
     const result = await runChannelMessage({
       ...runnerParams,
-      singletonServices,
+      singletonServices: singletonServices as any,
       createSessionServices: createSessionServices as any
     }, event.body)
     if (result) {

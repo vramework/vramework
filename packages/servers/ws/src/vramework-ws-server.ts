@@ -2,8 +2,8 @@ import { Server } from 'http'
 import { WebSocket, WebSocketServer } from 'ws'
 import { logChannels } from '@vramework/core/channel'
 import {
+  LocalEventHubService,
   runLocalChannel,
-  LocalSubscriptionService,
   VrameworkLocalChannelHandler,
 } from '@vramework/core/channel/local'
 import { loadAllSchemas } from '@vramework/core/schema'
@@ -27,7 +27,7 @@ export type VrameworkWSHandlerOptions = {
   server: Server
   wss: WebSocketServer
   singletonServices: CoreSingletonServices
-  createSessionServices: CreateSessionServices<any, any, any>
+  createSessionServices?: CreateSessionServices<any, any, any>
   logRoutes?: boolean
   loadSchemas?: boolean
 } & RunRouteOptions
@@ -78,11 +78,17 @@ export const vrameworkWebsocketHandler = ({
     loadAllSchemas(singletonServices.logger)
   }
 
-  const subscriptionService = new LocalSubscriptionService()
+  const eventHub = new LocalEventHubService()
+  const singletonServicesWithEventHub = {
+    ...singletonServices,
+    eventHub 
+  }
 
   wss.on(
     'connection',
     (ws: WebSocket, channelHandler: VrameworkLocalChannelHandler) => {
+      eventHub.onChannelOpened(channelHandler)
+
       channelHandler.registerOnSend((data) => {
         if (isSerializable(data)) {
           ws.send(JSON.stringify(data))
@@ -105,6 +111,7 @@ export const vrameworkWebsocketHandler = ({
       })
 
       ws.on('close', () => {
+        eventHub.onChannelClosed(channelHandler.channelId)
         channelHandler.close()
       })
 
@@ -122,8 +129,7 @@ export const vrameworkWebsocketHandler = ({
       channelId: crypto.randomUUID().toString(),
       request,
       response,
-      singletonServices,
-      subscriptionService,
+      singletonServices: singletonServicesWithEventHub,
       createSessionServices: createSessionServices as any,
       route: request.getPath(),
     })

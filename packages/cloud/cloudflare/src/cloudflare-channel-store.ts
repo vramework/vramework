@@ -1,7 +1,7 @@
 import { DurableObjectState, WebSocket } from "@cloudflare/workers-types";
-import { Channel, ServerlessChannelStore } from "@vramework/core/channel/serverless";
+import { Channel, ChannelStore } from "@vramework/core/channel";
 
-export class CloudflareWebsocketStore extends ServerlessChannelStore {
+export class CloudflareWebsocketStore extends ChannelStore {
     constructor (private ctx: DurableObjectState) {
         super()
     }
@@ -30,10 +30,6 @@ export class CloudflareWebsocketStore extends ServerlessChannelStore {
             channelName,
             userSession
         })
-    }
-
-    public async setLastInteraction(channelId: string, lastPing: Date): Promise<void> {
-        // Not used either...
     }
 
     public async getChannel (channelId: string) {
