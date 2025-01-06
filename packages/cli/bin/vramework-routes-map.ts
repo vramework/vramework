@@ -3,8 +3,7 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { VisitState } from '../src/inspector/visit.js'
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { InspectorState } from '@vramework/inspector'
 import {
   logCommandInfoAndTime,
   logVrameworkLogo,
@@ -12,23 +11,23 @@ import {
   writeFileInDir,
 } from '../src/utils.js'
 import { serializeTypedRoutesMap } from '../src/http/serialize-typed-route-map.js'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const vrameworkHTTPMap = async (
   { routesMapDeclarationFile, packageMappings }: VrameworkCLIConfig,
-  visitState: VisitState
+  { http }: InspectorState
 ) => {
   return await logCommandInfoAndTime(
     'Creating routes map',
     'Created routes map',
-    [visitState.http.files.size === 0],
+    [http.files.size === 0],
     async () => {
       const content = serializeTypedRoutesMap(
         routesMapDeclarationFile,
         packageMappings,
-        visitState.http.importMap,
-        visitState.http.meta,
-        visitState.http.customAliasedTypes,
-        visitState.http.metaInputTypes
+        http.typesMap,
+        http.meta,
+        http.metaInputTypes,
       )
       await writeFileInDir(routesMapDeclarationFile, content)
     }

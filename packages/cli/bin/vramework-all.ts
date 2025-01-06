@@ -6,19 +6,19 @@ import {
   writeFileInDir,
 } from '../src/utils.js'
 import { getVrameworkCLIConfig } from '../src/vramework-cli-config.js'
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import { vrameworkRoutes } from './vramework-routes.js'
-import { vrameworkSchemas } from './vramework-schemas.js'
-import { vrameworkNext } from './vramework-nextjs.js'
 import { vrameworkFunctionTypes } from './vramework-function-types.js'
 import { vrameworkHTTPMap } from './vramework-routes-map.js'
 import { existsSync } from 'fs'
-import { vrameworkOpenAPI } from './vramework-openapi.js'
 import { vrameworkFetch } from './vramework-fetch.js'
-import { vrameworkScheduler } from './vramework-scheduler.js'
-import { vrameworkChannels } from './vramework-channels.js'
 import { vrameworkChannelsMap } from './vramework-channels-map.js'
+import { vrameworkChannels } from './vramework-channels.js'
+import { vrameworkNext } from './vramework-nextjs.js'
+import { vrameworkOpenAPI } from './vramework-openapi.js'
+import { vrameworkScheduler } from './vramework-scheduler.js'
+import { vrameworkSchemas } from './vramework-schemas.js'
 import { vrameworkWebSocket } from './vramework-websocket.js'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const action = async (options: VrameworkCLIOptions): Promise<void> => {
   logVrameworkLogo()
@@ -37,6 +37,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
     cliConfig.rootDir,
     cliConfig.routeDirectories
   )
+
   if (!existsSync(cliConfig.typesDeclarationFile)) {
     typesDeclarationFileExists = false
   }

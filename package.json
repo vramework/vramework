@@ -9,6 +9,7 @@
   "workspaces": {
     "packages": [
       "packages/core",
+      "packages/inspector",
       "packages/cli",
       "packages/fetch",
       "packages/websocket",

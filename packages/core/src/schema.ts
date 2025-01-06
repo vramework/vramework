@@ -4,7 +4,7 @@ import addFormats from 'ajv-formats'
 import { ValidateFunction } from 'ajv'
 
 import { Logger } from './services/logger.js'
-// import { BadRequestError } from './errors/errors.js'
+import { BadRequestError } from './errors/errors.js'
 import { getRoutes } from './http/http-route-runner.js'
 
 const ajv = new Ajv({
@@ -81,17 +81,17 @@ export const addSchema = (name: string, value: any) => {
  * @param logger - A logger for logging information.
  */
 export const loadSchema = (schema: string, logger: Logger): void => {
-  // if (!validators.has(schema)) {
-  //   logger.debug(`Adding json schema for ${schema}`)
-  //   const json = getSchemas().get(schema)
-  //   try {
-  //     const validator = ajv.compile(json)
-  //     validators.set(schema, validator)
-  //   } catch (e: any) {
-  //     console.error(e.name, schema, json)
-  //     throw e
-  //   }
-  // }
+  if (!validators.has(schema)) {
+    logger.debug(`Adding json schema for ${schema}`)
+    const json = getSchemas().get(schema)
+    try {
+      const validator = ajv.compile(json)
+      validators.set(schema, validator)
+    } catch (e: any) {
+      console.error(e.name, schema, json)
+      throw e
+    }
+  }
 }
 
 /**
@@ -112,20 +112,20 @@ export const loadAllSchemas = (logger: Logger): void => {
  * @throws {BadRequestError} If the JSON data is invalid.
  */
 export const validateJson = (schema: string, json: unknown): void => {
-  // const validator = validators.get(schema)
-  // if (validator == null) {
-  //   throw `Missing validator for ${schema}`
-  // }
-  // const result = validator(json)
-  // if (!result) {
-  //   console.log(
-  //     `failed to validate request data against schema '${schema}'`,
-  //     json,
-  //     validator.errors
-  //   )
-  //   const errorText = ajv.errorsText(validator.errors)
-  //   throw new BadRequestError(errorText)
-  // }
+  const validator = validators.get(schema)
+  if (validator == null) {
+    throw `Missing validator for ${schema}`
+  }
+  const result = validator(json)
+  if (!result) {
+    console.log(
+      `failed to validate request data against schema '${schema}'`,
+      json,
+      validator.errors
+    )
+    const errorText = ajv.errorsText(validator.errors)
+    throw new BadRequestError(errorText)
+  }
 }
 
 export const coerceQueryStringToArray = (schemaName: string, data: any) => {

@@ -1,6 +1,5 @@
 import { CoreUserSession } from '../types/core.types.js'
 import { VrameworkChannel, VrameworkChannelHandler } from './channel.types.js'
-import { SubscriptionService } from './subscription-service.js'
 
 export abstract class VrameworkAbstractChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
@@ -11,28 +10,25 @@ export abstract class VrameworkAbstractChannelHandler<
 
   constructor(
     public channelId: string,
+    public channelName: string,
     protected userSession: UserSession | undefined,
-    protected openingData: OpeningData,
-    protected subscriptionService: SubscriptionService<Out>
-  ) {}
+    protected openingData: OpeningData
+  ) {
+  }
 
-  public abstract setSession(session: UserSession): Promise<void> | void
+  public abstract setUserSession(userSession: UserSession): Promise<void> | void
   public abstract send(message: Out, isBinary?: boolean): Promise<void> | void
 
   public getChannel(): VrameworkChannel<UserSession, OpeningData, Out> {
     if (!this.channel) {
       this.channel = {
         channelId: this.channelId,
-        session: this.userSession!,
+        userSession: this.userSession,
         openingData: this.openingData,
-        setSession: this.setSession.bind(this),
+        setUserSession: this.setUserSession.bind(this),
         send: this.send.bind(this),
         close: this.close.bind(this),
-        state: 'initial',
-        broadcast: async (data: Out) => {
-          await this.subscriptionService.broadcast(this.channelId, data)
-        },
-        subscriptions: this.subscriptionService,
+        state: 'initial'
       }
     }
     return this.channel

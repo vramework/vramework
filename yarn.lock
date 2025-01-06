@@ -3634,6 +3634,7 @@ __metadata:
     "@types/node": "npm:^22.7.8"
     "@types/uuid": "npm:^10.0.0"
     "@vramework/core": "npm:^0.6.2"
+    "@vramework/inspector": "npm:^0.6.0"
     commander: "npm:^12"
     glob: "npm:^10"
     path-to-regexp: "npm:^8.2.0"
@@ -3738,6 +3739,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vramework/fetch@workspace:packages/fetch"
   dependencies:
+    typescript: "npm:^5.6"
+  languageName: unknown
+  linkType: soft
+
+"@vramework/inspector@npm:^0.6.0, @vramework/inspector@workspace:packages/inspector":
+  version: 0.0.0-use.local
+  resolution: "@vramework/inspector@workspace:packages/inspector"
+  dependencies:
+    "@types/node": "npm:^22.7.8"
+    "@vramework/core": "npm:^0.6.2"
+    path-to-regexp: "npm:^8.2.0"
     typescript: "npm:^5.6"
   languageName: unknown
   linkType: soft

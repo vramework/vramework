@@ -1,21 +1,31 @@
-import { ImportMap } from '../inspector/inspector.js'
+import { TypesMap } from '@vramework/inspector'
 import { getFileImportRelativePath } from '../utils.js'
 
 export const serializeImportMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,
-  importMap: ImportMap,
-  filterTypes?: string[]
+  typesMap: TypesMap,
+  requiredTypes: Set<string>
 ) => {
-  let imports: string[] = []
-  for (const [importPath, { variableNames }] of importMap) {
-    const variables = filterTypes
-      ? Array.from(variableNames).filter((variable) =>
-          filterTypes.includes(variable)
-        )
-      : Array.from(variableNames)
+  const paths = new Map<string, string[]>()
+  Array.from(requiredTypes).forEach((requiredType) => {
+    const { originalName, uniqueName, path } = typesMap.getTypeMeta(requiredType)
+    if (!path) {
+      return
+    }
+    const variables = paths.get(path) || []
+    if (originalName === uniqueName) {
+      variables.push(originalName)
+    } else {
+      variables.push(`${originalName} as ${uniqueName}`)
+    }
+    paths.set(path, variables)
+  })
+
+  const imports: string[] = []
+  for (const [path, variables] of paths.entries()) {
     imports.push(
-      `import type { ${variables.join(', ')} } from '${getFileImportRelativePath(relativeToPath, importPath, packageMappings)}'`
+      `import type { ${variables.join(', ')} } from '${getFileImportRelativePath(relativeToPath, path, packageMappings)}'`
     )
   }
   return imports.join('\n')

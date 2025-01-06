@@ -65,6 +65,13 @@ export class CoreVrameworkWebsocket {
 
   private handleMessage(event: MessageEvent) {
     let parsed = false
+
+    if (!event.data) {
+      // This occurs because aws seems to be returning
+      // a message with no data
+      return
+    }
+
     try {
       if (typeof event.data === 'string') {
         const json = JSON.parse(event.data)

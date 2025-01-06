@@ -1,7 +1,6 @@
 import { test, beforeEach } from 'node:test';
 import * as assert from 'node:assert/strict';
 import { CoreUserSession } from '../types/core.types.js';
-import { SubscriptionService } from './subscription-service.js';
 import { VrameworkAbstractChannelHandler } from './vramework-abstract-channel-handler.js';
 
 // A concrete implementation of the abstract class for testing
@@ -10,7 +9,7 @@ class TestChannelHandler extends VrameworkAbstractChannelHandler<
   { param: string },
   { msg: string }
 > {
-  public async setSession(session: CoreUserSession): Promise<void> {
+  public async setUserSession(session: CoreUserSession): Promise<void> {
     this.userSession = session;
   }
 
@@ -19,35 +18,14 @@ class TestChannelHandler extends VrameworkAbstractChannelHandler<
   }
 }
 
-// A stub subscription service for testing
-class MockSubscriptionService<Out> implements SubscriptionService<Out> {
-  publish = async (topic: string, channelId: string, data: Out, isBinary?: boolean) => {
-     /* stub */
-  }
-  subscribe = async (topic: string, channelId: string) => {
-    /* stub */
-  };
-  unsubscribe = async (topic: string, channelId: string) => {
-    /* stub */
-  };
-  broadcast = async (topic: string, data: Out) => {
-    /* stub */
-  };
-  onChannelClosed = async (channelId: string) => {
-    /* stub */
-  };
-}
-
 let handler: TestChannelHandler;
-let subscriptionService: MockSubscriptionService<{ msg: string }>;
 
 beforeEach(() => {
-  subscriptionService = new MockSubscriptionService<{ msg: string }>();
   handler = new TestChannelHandler(
     'test-channel-id',
+    'channel-name',
     undefined,
-    { param: 'testParam' },
-    subscriptionService
+    { param: 'testParam' }
   );
 });
 
@@ -60,20 +38,15 @@ test('getChannel should return a channel with initial state', () => {
     { param: 'testParam' },
     'Opening data should be accessible'
   );
-  assert.equal(channel.session, undefined, 'Session should initially be undefined');
-  assert.equal(
-    channel.subscriptions,
-    subscriptionService,
-    'Subscriptions should match the provided service'
-  );
+  assert.equal(channel.userSession, undefined, 'Session should initially be undefined');
 });
 
-test('setSession should update the channel session', async () => {
+test('setUserSession should update the channel session', async () => {
   const session = { userId: 'user123' } as CoreUserSession;
-  await handler.setSession(session);
+  await handler.setUserSession(session);
   const channel = handler.getChannel();
   assert.deepEqual(
-    channel.session,
+    channel.userSession,
     session,
     'Session should be updated correctly'
   );
@@ -89,17 +62,4 @@ test('close should change channel state to closed', () => {
   handler.close();
   const channel = handler.getChannel();
   assert.equal(channel.state, 'closed', 'State should be "closed" after calling close()');
-});
-
-test('broadcast should call the subscription service broadcast method', () => {
-  let broadcastCalled = false;
-  subscriptionService.broadcast = async (channelId, data) => {
-    broadcastCalled = true;
-    assert.equal(channelId, 'test-channel-id', 'Channel ID should match');
-    assert.deepEqual(data, { msg: 'test message' }, 'Broadcast data should match');
-  };
-
-  const channel = handler.getChannel();
-  channel.broadcast({ msg: 'test message' });
-  assert.ok(broadcastCalled, 'Broadcast should be called');
 });

@@ -12,8 +12,8 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { VisitState } from '../src/inspector/visit.js'
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { InspectorState } from '@vramework/inspector'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const vrameworkNext = async (
   {
@@ -23,7 +23,7 @@ export const vrameworkNext = async (
     schemaDirectory,
     packageMappings,
   }: VrameworkCLIConfig,
-  visitState: VisitState,
+  visitState: InspectorState,
   options: VrameworkCLIOptions
 ) => {
   return await logCommandInfoAndTime(

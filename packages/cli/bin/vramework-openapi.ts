@@ -7,17 +7,17 @@ import {
 } from '../src/utils.js'
 import { generateSchemas } from '../src/schema/schema-generator.js'
 import { generateOpenAPISpec } from '../src/openapi/openapi-spec-generator.js'
-import { VisitState } from '../src/inspector/visit.js'
 import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { InspectorState } from '@vramework/inspector'
 import { stringify } from 'yaml'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const vrameworkOpenAPI = async (
   { tsconfig, openAPI }: VrameworkCLIConfig,
-  { http }: VisitState
+  { http }: InspectorState
 ) => {
   await logCommandInfoAndTime(
     'Creating OpenAPI spec',
@@ -29,8 +29,8 @@ export const vrameworkOpenAPI = async (
       }
       const schemas = await generateSchemas(
         tsconfig,
+        http.typesMap,
         http.meta,
-        http.customAliasedTypes
       )
       const openAPISpec = await generateOpenAPISpec(
         http.meta,

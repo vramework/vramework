@@ -10,6 +10,7 @@ import { loadSchema } from '../schema.js'
 import {
   CoreSingletonServices,
   CoreUserSession,
+  SessionServices,
   VrameworkHTTP,
 } from '../types/core.types.js'
 import { match } from 'path-to-regexp'
@@ -265,7 +266,7 @@ export const runHTTPRoute = async <In, Out>({
 }: Pick<CoreHTTPFunctionRoute<unknown, unknown, any>, 'route' | 'method'> &
   RunRouteOptions &
   RunRouteParams<In>): Promise<Out | void> => {
-  let sessionServices: any | undefined
+  let sessionServices: SessionServices<typeof singletonServices> | undefined
   const trackerId: string = crypto.randomUUID().toString()
 
   const http = createHTTPInteraction(request, response)
@@ -357,6 +358,8 @@ export const runHTTPRoute = async <In, Out>({
       bubbleErrors
     )
   } finally {
-    await closeSessionServices(singletonServices.logger, sessionServices)
+    if (sessionServices) {
+      await closeSessionServices(singletonServices.logger, sessionServices)
+    }
   }
 }

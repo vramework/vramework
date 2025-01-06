@@ -1,17 +1,17 @@
 import { Command } from 'commander'
 import { saveSchemas, generateSchemas } from '../src/schema/schema-generator.js'
 
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
 import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { VisitState } from '../src/inspector/visit.js'
+import { InspectorState } from '@vramework/inspector'
 import { logCommandInfoAndTime, logVrameworkLogo } from '../src/utils.js'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const vrameworkSchemas = async (
   { tsconfig, schemaDirectory, supportsImportAttributes }: VrameworkCLIConfig,
-  { http }: VisitState
+  { http }: InspectorState
 ) => {
   return await logCommandInfoAndTime(
     'Creating schemas',
@@ -20,14 +20,14 @@ export const vrameworkSchemas = async (
     async () => {
       const schemas = await generateSchemas(
         tsconfig,
+        http.typesMap,
         http.meta,
-        http.customAliasedTypes
       )
       await saveSchemas(
         schemaDirectory,
         schemas,
+        http.typesMap,
         http.meta,
-        http.customAliasedTypes,
         supportsImportAttributes
       )
     }

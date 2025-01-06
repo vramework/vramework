@@ -8,12 +8,12 @@ import {
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
+  MakeRequired,
   VrameworkHTTP,
 } from '../types/core.types.js'
 import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
-import { SubscriptionService } from './subscription-service.js'
 
 export type RunChannelOptions = Partial<{
   skipUserSession: boolean
@@ -25,14 +25,13 @@ export type RunChannelOptions = Partial<{
 
 export type RunChannelParams<ChannelData> = {
   channelId: string
-  singletonServices: CoreSingletonServices
-  subscriptionService: SubscriptionService<unknown>
+  singletonServices: MakeRequired<CoreSingletonServices, 'eventHub'>
   request?:
     | VrameworkRequest<ChannelData>
     | VrameworkHTTPAbstractRequest<ChannelData>
   response?: VrameworkResponse | VrameworkHTTPAbstractResponse
   http?: VrameworkHTTP,
-  createSessionServices: CreateSessionServices
+  createSessionServices?: CreateSessionServices
 }
 
 export interface HandlerMeta {}
@@ -68,7 +67,7 @@ export type CoreChannelConnection<
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
-  services: Services,
+  services: MakeRequired<Services, 'eventHub'>,
   channel: VrameworkChannel<Session, ChannelData, Out>
 ) => Promise<void>
 
@@ -77,7 +76,7 @@ export type CoreChannelDisconnection<
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
-  services: Services,
+  services: MakeRequired<Services, 'eventHub'>,
   channel: VrameworkChannel<Session, ChannelData, never>
 ) => Promise<void>
 
@@ -95,7 +94,7 @@ export type CoreChannelMessage<
   Services extends CoreServices = CoreServices,
   Session extends CoreUserSession = CoreUserSession,
 > = (
-  services: Services,
+  services: MakeRequired<Services, 'eventHub'>,
   channel: VrameworkChannel<Session, ChannelData, Out>,
   data: In
 ) => Promise<void | Out>
@@ -151,27 +150,23 @@ export type CoreAPIChannel<
 export type CoreAPIChannels = CoreAPIChannel<any, string>[]
 
 
-export interface VrameworkChannel<Session, OpeningData, Out> {
+export interface VrameworkChannel<UserSession, OpeningData, Out> {
   // The channel identifier
   channelId: string
   // The user session, if available
-  session?: Session
+  userSession?: UserSession
   // Update the user session, useful if you deal with auth on the
   // stream side
-  setSession: (session: Session) => Promise<void> | void
+  setUserSession: (userSession: UserSession) => Promise<void> | void
   // The data the channel was created with. This could be query parameters
   // or parameters in the url.
   openingData: OpeningData
   // The data to send. This will fail is the stream has been closed.
   send: (data: Out, isBinary?: boolean) => Promise<void> | void
-  // Broadcast data to all channels, or a subset of selected ones
-  broadcast: (data: Out) => Promise<void> | void
   // This will close the channel.
   close: () => Promise<void> | void
   // The current state of the channel
   state: 'initial' | 'open' | 'closed'
-  // subscription service
-  subscriptions: SubscriptionService<Out>
 }
 
 export interface VrameworkChannelHandler<
@@ -179,13 +174,13 @@ export interface VrameworkChannelHandler<
   OpeningData = unknown,
   Out = unknown,
 > {
-  setSession(session: UserSession): Promise<void> | void
+  setUserSession(session: UserSession): Promise<void> | void
   send(message: Out, isBinary?: boolean): Promise<void> | void
   getChannel(): VrameworkChannel<UserSession, OpeningData, Out>
 }
 
 export type VrameworkChannelHandlerFactory<
-UserSession extends CoreUserSession = CoreUserSession,
 OpeningData = unknown,
+UserSession extends CoreUserSession = CoreUserSession,
 Out = unknown,
-> = (channelId: string, openingData: OpeningData, session: UserSession, subscriptionService: SubscriptionService<Out>) => VrameworkChannelHandler<UserSession, OpeningData, Out>
+> = (channelId: string, channelName: string, openingData: OpeningData, userSession: UserSession | undefined) => VrameworkChannelHandler<UserSession, OpeningData, Out>

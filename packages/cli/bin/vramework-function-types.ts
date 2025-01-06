@@ -3,8 +3,7 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { VisitState } from '../src/inspector/visit.js'
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { InspectorState } from '@vramework/inspector'
 import {
   getFileImportRelativePath,
   getVrameworkFilesAndMethods,
@@ -15,11 +14,12 @@ import {
 } from '../src/utils.js'
 import { serializeVrameworkTypes } from '../src/core/serialize-vramework-types.js'
 import { vrameworkRoutes } from './vramework-routes.js'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const vrameworkFunctionTypes = async (
   { typesDeclarationFile: typesFile, packageMappings }: VrameworkCLIConfig,
   options: VrameworkCLIOptions,
-  visitState: VisitState
+  visitState: InspectorState
 ) => {
   await logCommandInfoAndTime(
     'Creating api types',
