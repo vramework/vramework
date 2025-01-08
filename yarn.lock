@@ -3611,7 +3611,7 @@ __metadata:
     aws-cloudfront-sign: "npm:^3.0.2"
     typescript: "npm:^5.7"
   peerDependencies:
-    "@vramework/core": ^0.6.0
+    "@vramework/core": ^0.6.3
   languageName: unknown
   linkType: soft
 
@@ -3633,7 +3633,7 @@ __metadata:
     "@types/cookie": "npm:^0.6.0"
     "@types/node": "npm:^22.7.8"
     "@types/uuid": "npm:^10.0.0"
-    "@vramework/core": "npm:^0.6.2"
+    "@vramework/core": "npm:^0.6.3"
     "@vramework/inspector": "npm:^0.6.0"
     commander: "npm:^12"
     glob: "npm:^10"
@@ -3654,11 +3654,11 @@ __metadata:
     "@cloudflare/workers-types": "npm:^4.20241218.0"
     typescript: "npm:^5.7.2"
   peerDependencies:
-    "@vramework/core": ^0.6.2
+    "@vramework/core": ^0.6.3
   languageName: unknown
   linkType: soft
 
-"@vramework/core@npm:^0.6.2, @vramework/core@workspace:packages/core":
+"@vramework/core@npm:^0.6.2, @vramework/core@npm:^0.6.3, @vramework/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@vramework/core@workspace:packages/core"
   dependencies:
@@ -3680,14 +3680,14 @@ __metadata:
   dependencies:
     "@types/express": "npm:^5"
     "@types/express-serve-static-core": "npm:^5.0.0"
-    "@vramework/core": "npm:^0.6.2"
+    "@vramework/core": "npm:^0.6.3"
     express: "npm:^5"
     raw-body: "npm:^3.0.0"
     typescript: "npm:^5.6.3"
   peerDependencies:
     "@types/express": ^5
     "@types/express-serve-static-core": ^5.0.0
-    "@vramework/core": ^0.6.2
+    "@vramework/core": ^0.6.3
     express: ^5
   languageName: unknown
   linkType: soft
@@ -3719,7 +3719,7 @@ __metadata:
     fastify-plugin: "npm:^5.0.1"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.6.2
+    "@vramework/core": ^0.6.3
   languageName: unknown
   linkType: soft
 
@@ -3775,7 +3775,7 @@ __metadata:
   peerDependencies:
     "@aws-sdk/client-apigatewaymanagementapi": ^3.713.0
     "@types/aws-lambda": ^8.10.146
-    "@vramework/core": ^0.6.2
+    "@vramework/core": ^0.6.3
   languageName: unknown
   linkType: soft
 
@@ -3805,7 +3805,7 @@ __metadata:
     react: "npm:^19"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.6.2
+    "@vramework/core": ^0.6.3
     next: ^15
   languageName: unknown
   linkType: soft
@@ -3842,7 +3842,7 @@ __metadata:
     qs: "npm:^6.13.0"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.6.2
+    "@vramework/core": ^0.6.3
     uWebSockets.js: "*"
   languageName: unknown
   linkType: soft
@@ -3881,7 +3881,7 @@ __metadata:
     cookie: "npm:^1.0.1"
     typescript: "npm:^5.6.3"
   peerDependencies:
-    "@vramework/core": ^0.6.2
+    "@vramework/core": ^0.6.3
     ws: ^8.18.0
   languageName: unknown
   linkType: soft

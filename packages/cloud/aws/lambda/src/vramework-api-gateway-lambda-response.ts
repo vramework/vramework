@@ -5,7 +5,7 @@ import { APIGatewayProxyResult } from 'aws-lambda'
 export class VrameworkAPIGatewayLambdaResponse extends VrameworkHTTPAbstractResponse {
   public headers: Record<string, string> = {}
   private status: number = 200
-  private body: any
+  private body: any | undefined
 
   constructor() {
     super()

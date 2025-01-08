@@ -1,5 +1,14 @@
 ## 0.6
 
+## 0.6.1
+
+### Patch Changes
+
+- ecc3660: fix: exporting files in index.ts for aws-services
+- Updated dependencies [09fc52c]
+- Updated dependencies [adecb52]
+  - @vramework/core@0.6.3
+
 Marking a major release to include channels and scheduled tasks
 
 ## 0.5.5

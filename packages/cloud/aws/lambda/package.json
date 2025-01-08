@@ -1,6 +1,6 @@
 {
   "name": "@vramework/lambda",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",
@@ -24,7 +24,7 @@
   "peerDependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.713.0",
     "@types/aws-lambda": "^8.10.146",
-    "@vramework/core": "^0.6.2"
+    "@vramework/core": "^0.6.3"
   },
   "devDependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.713.0",

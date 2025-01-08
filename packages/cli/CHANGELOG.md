@@ -1,5 +1,15 @@
 # @vramework/cli
 
+## 0.6.2
+
+### Patch Changes
+
+- 09fc52c: feat: adding cloudflare and lambda websockets
+  breaking change: moved subscription from channel to services and renamed to event hub
+- Updated dependencies [09fc52c]
+- Updated dependencies [adecb52]
+  - @vramework/core@0.6.3
+
 ## 0.6.1
 
 ### Patch Changes
