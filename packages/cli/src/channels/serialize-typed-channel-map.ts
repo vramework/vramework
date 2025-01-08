@@ -1,25 +1,32 @@
 import { ChannelsMeta } from '@vramework/core/channel'
-import { ImportMap } from '../inspector/inspector.js'
 import { serializeImportMap } from '../core/serialize-import-map.js'
+import { TypesMap } from '@vramework/inspector'
 
 export const serializeTypedChannelsMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,
-  importMap: ImportMap,
-  channelsMeta: ChannelsMeta
+  typesMap: TypesMap,
+  channelsMeta: ChannelsMeta,
 ): string => {
+    const { channels, requiredTypes } = generateChannels(channelsMeta) 
+    typesMap.customTypes.forEach(({ references }) => {
+      for (const reference of references) {
+        requiredTypes.add(reference)
+      }
+    })
+    const imports = serializeImportMap(relativeToPath, packageMappings, typesMap, requiredTypes)
   return `/**
  * This provides the structure needed for TypeScript to be aware of channels
  */
     
-${serializeImportMap(relativeToPath, packageMappings, importMap)}
+${imports}
 
 interface ChannelHandler<I, O> {
     input: I;
     output: O;
 }
 
-${generateChannels(channelsMeta)}
+${channels}
 
 export type ChannelDefaultHandlerOf<Channel extends keyof ChannelsMap> =
     ChannelsMap[Channel]['defaultMessage'] extends { input: infer I; output: infer O }
@@ -37,7 +44,8 @@ export type ChannelRouteHandlerOf<
 `
 }
 
-function generateChannels(channelsMeta: ChannelsMeta): string {
+function generateChannels(channelsMeta: ChannelsMeta) {
+  const requiredTypes = new Set<string>()
   const channelsObject: Record<
     string,
     {
@@ -67,10 +75,14 @@ function generateChannels(channelsMeta: ChannelsMeta): string {
         channelsObject[name].routes[key] = {}
       }
       for (const [method, { inputs, outputs }] of Object.entries(route)) {
+        const inputTypes = inputs || null
+        const outputTypes = outputs || null
         channelsObject[name].routes[key][method] = {
-          inputTypes: inputs || null,
-          outputTypes: outputs || null,
+          inputTypes,
+          outputTypes,
         }
+        inputTypes?.forEach((type) => requiredTypes.add(type))
+        outputTypes?.forEach((type) => requiredTypes.add(type))
       }
     }
   }
@@ -107,7 +119,7 @@ function generateChannels(channelsMeta: ChannelsMeta): string {
 
   routesStr += '};'
 
-  return routesStr
+  return { channels: routesStr, requiredTypes }
 }
 
 // Utility to format type arrays

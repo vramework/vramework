@@ -3,8 +3,7 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { VisitState } from '../src/inspector/visit.js'
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { InspectorState } from '@vramework/inspector'
 import {
   logCommandInfoAndTime,
   logVrameworkLogo,
@@ -12,21 +11,22 @@ import {
   writeFileInDir,
 } from '../src/utils.js'
 import { serializeTypedChannelsMap } from '../src/channels/serialize-typed-channel-map.js'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const vrameworkChannelsMap = async (
   { channelsMapDeclarationFile, packageMappings }: VrameworkCLIConfig,
-  visitState: VisitState
+  state: InspectorState
 ) => {
   return await logCommandInfoAndTime(
     'Creating channels map',
     'Created channels map',
-    [visitState.channels.files.size === 0],
+    [state.channels.files.size === 0],
     async () => {
       const content = serializeTypedChannelsMap(
         channelsMapDeclarationFile,
         packageMappings,
-        visitState.channels.importMap,
-        visitState.channels.meta
+        state.channels.typesMap,
+        state.channels.meta,
       )
       await writeFileInDir(channelsMapDeclarationFile, content)
     }

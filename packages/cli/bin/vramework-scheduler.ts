@@ -3,8 +3,7 @@ import {
   getVrameworkCLIConfig,
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
-import { VisitState } from '../src/inspector/visit.js'
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { InspectorState } from '@vramework/inspector'
 import {
   logCommandInfoAndTime,
   logVrameworkLogo,
@@ -15,10 +14,11 @@ import {
   serializeSchedulerMeta,
   serializeSchedulers,
 } from '../src/scheduler/serialize-schedulers.js'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const vrameworkScheduler = async (
   cliConfig: VrameworkCLIConfig,
-  visitState: VisitState
+  visitState: InspectorState
 ) => {
   return await logCommandInfoAndTime(
     'Finding scheduled tasks',

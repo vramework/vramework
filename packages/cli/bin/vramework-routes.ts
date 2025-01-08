@@ -4,19 +4,19 @@ import {
   VrameworkCLIConfig,
 } from '../src/vramework-cli-config.js'
 import { serializeHTTPRoutesMeta } from '../src/http/serialize-route-meta.js'
-import { VisitState } from '../src/inspector/visit.js'
-import { inspectorGlob } from '../src/inspector/inspector-glob.js'
+import { InspectorState } from '@vramework/inspector'
 import {
   logCommandInfoAndTime,
   logVrameworkLogo,
   VrameworkCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import { serializeRoutes } from '../src/http/serialize-routes.js'
+import { serializeRoutes } from '../src/http/serialize-route-imports.js'
+import { inspectorGlob } from '../src/inspector-glob.js'
 
 export const vrameworkRoutes = async (
   cliConfig: VrameworkCLIConfig,
-  visitState: VisitState
+  visitState: InspectorState
 ) => {
   return await logCommandInfoAndTime(
     'Finding routes',

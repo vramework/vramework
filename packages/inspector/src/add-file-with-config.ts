@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 import { doesTypeExtendsCore } from './does-type-extend-core-type.js'
-import { PathToNameAndType } from './visit.js'
+import { PathToNameAndType } from './types.js'
 
 export const addFileWithConfig = (
   node: ts.Node,

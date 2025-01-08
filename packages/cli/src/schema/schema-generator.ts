@@ -3,13 +3,14 @@ import { writeFileInDir } from '../utils.js'
 import { mkdir, writeFile } from 'fs/promises'
 import { JSONValue } from '@vramework/core'
 import { HTTPRoutesMeta } from '@vramework/core/http'
+import { TypesMap } from '@vramework/inspector'
 
 export async function generateSchemas(
   tsconfig: string,
+  typesMap: TypesMap,
   routesMeta: HTTPRoutesMeta,
-  customAliasedTypes: Map<string, string>
 ): Promise<Record<string, JSONValue>> {
-  const schemasSet = new Set(customAliasedTypes.keys())
+  const schemasSet = new Set(typesMap.customTypes.keys())
   for (const { input, output, inputTypes } of routesMeta) {
     if (input) {
       schemasSet.add(input)
@@ -54,8 +55,8 @@ export async function generateSchemas(
 export async function saveSchemas(
   schemaParentDir: string,
   schemas: Record<string, JSONValue>,
+  typesMap: TypesMap,
   routesMeta: HTTPRoutesMeta,
-  customAliasedTypes: Map<string, string>,
   supportsImportAttributes: boolean
 ) {
   await writeFileInDir(
@@ -72,7 +73,7 @@ export async function saveSchemas(
           !!s &&
           !['boolean', 'string', 'number', 'null', 'undefined'].includes(s)
       ),
-    ...customAliasedTypes.keys(),
+    ...typesMap.customTypes.keys(),
   ])
 
   if (desiredSchemas.size === 0) {

@@ -25,6 +25,7 @@
     "@types/cookie": "^0.6.0",
     "@types/uuid": "^10.0.0",
     "@vramework/core": "^0.6.3",
+    "@vramework/inspector": "^0.6.0",
     "commander": "^12",
     "glob": "^10",
     "path-to-regexp": "^8.2.0",

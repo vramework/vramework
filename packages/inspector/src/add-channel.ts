@@ -1,17 +1,17 @@
 import * as ts from 'typescript'
-import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
 import { APIDocs } from '@vramework/core'
 import { getInputTypes } from './add-route.js'
 import { getPropertyAssignment, getFunctionTypes } from './utils.js'
 import { ChannelMeta } from '@vramework/core/channel'
+import { TypesMap } from './types-map.js'
+import { InspectorState } from './types.js'
 
 const addMessagesRoutes = (
   obj: ts.ObjectLiteralExpression,
   checker: ts.TypeChecker,
-  inputTypeSet: Set<string>,
-  outputTypeSet: Set<string>
+  typesMap: TypesMap
 ) => {
   const messageTypes: ChannelMeta['messageRoutes'] = {}
 
@@ -52,8 +52,7 @@ const addMessagesRoutes = (
               funcName: route,
               inputIndex: 0,
               outputIndex: 1,
-              inputTypeSet,
-              outputTypeSet,
+              typesMap
             })
             const inputs = result?.inputs || null
             const outputs = result?.outputs || null
@@ -76,7 +75,7 @@ const addMessagesRoutes = (
 export const addChannel = (
   node: ts.Node,
   checker: ts.TypeChecker,
-  state: VisitState
+  state: InspectorState
 ) => {
   if (!ts.isCallExpression(node)) {
     return
@@ -137,15 +136,13 @@ export const addChannel = (
       funcName: 'onMessage',
       inputIndex: 0,
       outputIndex: 1,
-      inputTypeSet: state.channels.inputTypes,
-      outputTypeSet: state.channels.outputTypes,
+      typesMap: state.channels.typesMap
     })
     const message = { inputs, outputs }
     const messageRoutes = addMessagesRoutes(
       obj,
       checker,
-      state.channels.inputTypes,
-      state.channels.outputTypes
+      state.channels.typesMap,
     )
 
     state.channels.meta.push({

@@ -1,0 +1,30 @@
+{
+  "name": "@vramework/inspector",
+  "version": "0.6.0",
+  "author": "yasser.fadl@gmail.com",
+  "license": "MIT",
+  "type": "module",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build:esm": "tsc -b",
+    "build": "yarn build:esm",
+    "ncu": "ncu -x '/.*glob.*/'",
+    "release": "yarn build && npm test",
+    "test": "bash run-tests.sh",
+    "test:watch": "bash run-tests.sh --watch",
+    "test:coverage": "bash run-tests.sh --coverage"
+  },
+  "dependencies": {
+    "@vramework/core": "^0.6.2",
+    "path-to-regexp": "^8.2.0",
+    "typescript": "^5.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.8"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

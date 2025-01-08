@@ -36,17 +36,13 @@ declare module "@vramework/core" {
   function addChannel<ChannelData, Channel extends string>(
     channel: APIChannel<ChannelData, Channel> & AssertRouteParams<ChannelData, Channel>
   ): void;
-}
 
-declare module "@vramework/core" {
   function addRoute<In, Out, Route extends string>(
     route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
   ): void;
-}
 
-declare module "@vramework/core" {
-  function addScheduledTask<In, Out, Route extends string>(
-    route: APIRoute<In, Out, Route> & AssertRouteParams<In, Route>
+  function addScheduledTask(
+    task: ScheduledTask
   ): void;
 }
 `

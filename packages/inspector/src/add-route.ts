@@ -1,13 +1,13 @@
 import * as ts from 'typescript'
-import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
 import { HTTPMethod } from '@vramework/core/http'
 import { APIDocs } from '@vramework/core'
 import { extractTypeKeys, getFunctionTypes } from './utils.js'
+import { MetaInputTypes, InspectorState } from './types.js'
 
 export const getInputTypes = (
-  metaTypes: Map<string, string>,
+  metaTypes: MetaInputTypes,
   methodType: string,
   inputType: string | null,
   queryValues: string[],
@@ -16,50 +16,22 @@ export const getInputTypes = (
   if (!inputType) {
     return undefined
   }
-  const query =
-    queryValues.length > 0
-      ? `Pick<${inputType}, '${queryValues.join("' | '")}'>`
-      : undefined
-  const params =
-    paramsValues.length > 0
-      ? `Pick<${inputType}, '${paramsValues.join("' | '")}'>`
-      : undefined
-  const body =
-    queryValues.length > 0 || paramsValues.length > 0
-      ? `Omit<${inputType}, '${[...new Set([...queryValues, ...paramsValues])].join("' | '")}'>`
-      : inputType!
+
   if (inputType) {
-    let queryTypeName: string | undefined
-    if (query) {
-      queryTypeName = `${inputType}Query`
-      metaTypes.set(queryTypeName, query)
-    }
-
-    let paramsTypeName: string | undefined
-    if (params) {
-      paramsTypeName = `${inputType}Params`
-      metaTypes.set(paramsTypeName, params)
-    }
-
-    let bodyTypeName: string | undefined
-    if (body && ['post', 'put', 'patch'].includes(methodType)) {
-      bodyTypeName = `${inputType}Body`
-      metaTypes.set(bodyTypeName, body)
-    }
-
-    return {
-      query: queryTypeName,
-      params: paramsTypeName,
-      body: bodyTypeName,
-    }
+    metaTypes.set(inputType, {
+      query: queryValues,
+      params: paramsValues,
+      body: ['post', 'put', 'patch'].includes(methodType) ? [...new Set([...queryValues, ...paramsValues])] : []
+    })
   }
+
   return undefined
 }
 
 export const addRoute = (
   node: ts.Node,
   checker: ts.TypeChecker,
-  state: VisitState
+  state: InspectorState
 ) => {
   if (!ts.isCallExpression(node)) {
     return
@@ -109,9 +81,7 @@ export const addRoute = (
       funcName: 'func',
       inputIndex: 0,
       outputIndex: 1,
-      inputTypeSet: state.http.inputTypes,
-      outputTypeSet: state.http.outputTypes,
-      customAliasedTypes: state.http.customAliasedTypes,
+      typesMap: state.http.typesMap,
     })
 
     const input = inputs ? inputs[0] || null : null

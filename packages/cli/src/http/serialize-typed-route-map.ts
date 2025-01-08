@@ -1,38 +1,34 @@
 import { HTTPRoutesMeta } from '@vramework/core/http'
-import { ImportMap } from '../inspector/inspector.js'
 import { serializeImportMap } from '../core/serialize-import-map.js'
+import { MetaInputTypes, TypesMap } from '@vramework/inspector'
 
 export const serializeTypedRoutesMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,
-  importMap: ImportMap,
+  typesMap: TypesMap,
   routesMeta: HTTPRoutesMeta,
-  customTypes: Map<string, string>,
-  metaTypes: Map<string, string>
+  metaTypes: MetaInputTypes
 ) => {
+  const requiredTypes = new Set<string>()
+  const serializedRoutes = generateRoutes(routesMeta, typesMap, requiredTypes)
+  const serializedCustomTypes = generateCustomTypes(typesMap, requiredTypes)
+  const serializedMetaTypes = generateMetaTypes(metaTypes, typesMap)
+  const serializedImportMap = serializeImportMap(relativeToPath, packageMappings, typesMap, requiredTypes)
+
   return `/**
  * This provides the structure needed for typescript to be aware of routes and their return types
  */
     
-${serializeImportMap(relativeToPath, packageMappings, importMap)}
-
-// Custom types are those that are defined directly within generics
-// or are broken into simpler types
-${Array.from(customTypes.entries())
-  .map(([name, schema]) => `export type ${name} = ${schema}`)
-  .join('\n')}
-
-// The '& {}' is a workaround for not directly refering to a type since it confuses typescript
-${Array.from(metaTypes.entries())
-  .map(([name, schema]) => `export type ${name} = ${schema} & {}`)
-  .join('\n')}
+${serializedImportMap}
+${serializedMetaTypes}
+${serializedCustomTypes}
 
 interface RouteHandler<I, O> {
     input: I;
     output: O;
 }
 
-${generateRoutes(routesMeta)}
+${serializedRoutes}
 
 export type RouteHandlerOf<Route extends keyof RoutesMap, Method extends keyof RoutesMap[Route]> =
     RoutesMap[Route][Method] extends { input: infer I; output: infer O }
@@ -41,7 +37,22 @@ export type RouteHandlerOf<Route extends keyof RoutesMap, Method extends keyof R
   `
 }
 
-function generateRoutes(routesMeta: HTTPRoutesMeta): string {
+function generateCustomTypes(typesMap: TypesMap, requiredTypes: Set<string>) {
+  return `
+// Custom types are those that are defined directly within generics
+// or are broken into simpler types
+${Array.from(typesMap.customTypes.entries())
+      .map(([name, { type, references }]) => {
+        references.forEach(name => {
+          const originalName = typesMap.getTypeMeta(name).originalName
+          requiredTypes.add(originalName)
+      })
+        return `export type ${name} = ${type}`
+      })
+      .join('\n')}`
+}
+
+function generateRoutes(routesMeta: HTTPRoutesMeta, typesMap: TypesMap, requiredTypes: Set<string>) {
   // Initialize an object to collect routes
   const routesObj: Record<
     string,
@@ -57,8 +68,11 @@ function generateRoutes(routesMeta: HTTPRoutesMeta): string {
     }
 
     // Store the input and output types separately for RouteHandler
-    const inputType = input ? input : 'null'
-    const outputType = output ? output : 'null'
+    const inputType = input ? typesMap.getTypeMeta(input).uniqueName : 'null'
+    const outputType = output ? typesMap.getTypeMeta(output).uniqueName : 'null'
+
+    requiredTypes.add(inputType)
+    requiredTypes.add(outputType)
 
     // Add method entry
     routesObj[route][method] = {
@@ -81,4 +95,31 @@ function generateRoutes(routesMeta: HTTPRoutesMeta): string {
   routesStr += '};'
 
   return routesStr
+}
+
+const generateMetaTypes = (metaTypes: MetaInputTypes, typesMap: TypesMap) => {
+  const nameToTypeMap = Array.from(metaTypes.entries())
+  .reduce<Map<string, string>>((result, [_name, { query, body, params }]) => {
+    const { uniqueName } = typesMap.getTypeMeta(_name)
+    const queryType = query && query.length > 0 ? `Pick<${uniqueName}, '${query?.join("' | '")}'>` : undefined
+    if (queryType) {
+      result.set(`${uniqueName}Query`, queryType)
+    }
+    const paramsType = params && params.length > 0 ? `Pick<${uniqueName}, '${params.join("' | '")}'>` : undefined
+    if (paramsType) {
+      result.set(`${uniqueName}Params`, paramsType)
+    }
+    const bodyType = body && body.length > 0 || (params && params.length > 0) ? `Omit<${uniqueName}, '${[...new Set([...(query || []), ...(params || [])])].join("' | '")}'>` : uniqueName!
+    if (bodyType) {
+      result.set(`${uniqueName}Body`, bodyType)
+    }
+    return result
+  }, new Map())
+
+  return `
+// The '& {}' is a workaround for not directly refering to a type since it confuses typescript
+  ${Array.from(nameToTypeMap.entries())
+      .map(([name, type]) => `export type ${name} = ${type} & {}`)
+      .join('\n')
+    }`
 }

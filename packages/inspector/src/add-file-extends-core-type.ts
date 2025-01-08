@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { PathToNameAndType } from './visit.js'
+import { PathToNameAndType } from './types.js'
 
 // const VRAMEWORK_TYPES = ['CoreConfig', 'CoreService', 'CoreServices', 'CoreSingletonService', 'CoreSessionService']
 

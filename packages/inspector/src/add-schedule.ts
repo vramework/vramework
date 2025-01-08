@@ -1,12 +1,12 @@
 import * as ts from 'typescript'
-import { VisitState } from './visit.js'
 import { getPropertyValue } from './get-property-value.js'
 import { APIDocs } from '@vramework/core'
+import { InspectorState } from './types.js'
 
 export const addSchedule = (
   node: ts.Node,
   _checker: ts.TypeChecker,
-  state: VisitState
+  state: InspectorState
 ) => {
   if (!ts.isCallExpression(node)) {
     return

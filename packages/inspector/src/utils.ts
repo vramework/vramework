@@ -1,9 +1,91 @@
 import * as ts from 'typescript'
+import { TypesMap } from './types-map.js'
+
+type FunctionTypes = {
+  inputTypes: ts.Type[]
+  inputs: null | string[]
+  outputTypes: ts.Type[]
+  outputs: null | string[]
+}
+
+
+export const extractTypeKeys = (type: ts.Type): string[] => {
+  return type.getProperties().map((symbol) => symbol.getName())
+}
+
+export const nullifyTypes = (type: string | null) => {
+  if (
+    type === 'void' ||
+    type === 'undefined' ||
+    type === 'unknown' ||
+    type === 'any'
+  ) {
+    return null
+  }
+  return type
+}
 
 const isValidVariableName = (name: string) => {
   const regex = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
   return regex.test(name)
 }
+
+const getNamesAndTypes = (checker: ts.TypeChecker, typesMap: TypesMap, direction: 'Input' | 'Output', funcName: string, type: ts.Type) => {
+  const result: {
+    names: Set<string>
+    types: ts.Type[]
+  } = {
+    names: new Set(),
+    types: []
+  }
+
+  const { names, types } = resolveUnionTypes(checker, type)
+  const firstName = names[0]
+  if (names.length > 1 || (firstName && !isValidVariableName(firstName))) {
+    const aliasType = names.join(' | ')
+    const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}${direction}`
+
+    result.names = new Set([aliasName])
+    result.types = types
+
+    const references = types.map((t) => resolveTypeImports(t, typesMap, true)).flat()
+    typesMap.addCustomType(aliasName, aliasType, references)
+  } else {
+    const uniqueNames = names.map((name, i) => {
+      const type = types[i]
+      if (!type) {
+        throw new Error('TODO: Expected a type here to match name')
+      }
+      if (isPrimitiveType(type)) {
+        return name
+      }
+      return resolveTypeImports(type, typesMap, false)
+    }).flat()
+    result.names = new Set(uniqueNames)
+    result.types = types
+  }
+
+  return {
+    names: Array.from(result.names),
+    types: result.types
+  }
+}
+
+export const isPrimitiveType = (type: ts.Type): boolean => {
+  const primitiveFlags =
+    ts.TypeFlags.Number |
+    ts.TypeFlags.String |
+    ts.TypeFlags.Boolean |
+    ts.TypeFlags.BigInt |
+    ts.TypeFlags.ESSymbol |
+    ts.TypeFlags.Void |
+    ts.TypeFlags.Undefined |
+    ts.TypeFlags.Null |
+    ts.TypeFlags.Any |
+    ts.TypeFlags.Unknown;
+
+  return (type.flags & primitiveFlags) !== 0;
+};
 
 export const resolveUnionTypes = (
   checker: ts.TypeChecker,
@@ -32,15 +114,66 @@ export const resolveUnionTypes = (
   return { types, names }
 }
 
-// This allows aliases to be preserved
-const getType = (checker: ts.TypeChecker, node: ts.Node) => {
-  return checker.getTypeAtLocation(node)
-  // const symbol = checker.getSymbolAtLocation(node)
-  // if (symbol) {
-  //   return checker.getDeclaredTypeOfSymbol(symbol);
-  // }
-  // throw new Error('No symbol found')
-}
+export const resolveTypeImports = (
+  type: ts.Type,
+  resolvedTypes: TypesMap,
+  isCustom: boolean
+): string[] => {
+  const types: string[] = []
+
+  const visitType = (currentType: ts.Type) => {
+    const symbol = currentType.aliasSymbol || currentType.getSymbol();
+
+    if (symbol) {
+      const declarations = symbol.getDeclarations();
+      const declaration = declarations?.[0]
+      if (declaration) {
+        const sourceFile = declaration.getSourceFile();
+        const path = sourceFile.fileName;
+
+        // Skip built-in utility types or TypeScript lib types
+        if (!path.includes('node_modules/typescript') && symbol.getName() !== '__type' && !isPrimitiveType(currentType)) {
+            const originalName = symbol.getName()
+            // Check if the type is already in the map
+            let uniqueName = resolvedTypes.exists(originalName, path)
+            if (!uniqueName) {
+              if (isCustom) {
+                uniqueName = resolvedTypes.addUniqueType(originalName, path)
+              } else {
+                resolvedTypes.addType(originalName, path)
+                uniqueName = originalName
+              }
+            }
+            types.push(uniqueName)
+        }
+      }
+    }
+
+    if (isCustom) {
+      // Handle nested utility types like Partial, Pick, etc.
+      if (currentType.aliasTypeArguments) {
+        currentType.aliasTypeArguments.forEach(visitType);
+      }
+
+      // Handle intersections and unions
+      if (currentType.isUnionOrIntersection()) {
+        currentType.types.forEach(visitType);
+      }
+
+      // Handle object types with type arguments
+      if (
+        currentType.flags & ts.TypeFlags.Object &&
+        (currentType as ts.ObjectType).objectFlags & ts.ObjectFlags.Reference
+      ) {
+        const typeRef = currentType as ts.TypeReference;
+        typeRef.typeArguments?.forEach(visitType);
+      }
+    }
+  };
+
+  visitType(type);
+  return types
+};
 
 export const getTypeOfFunctionArg = (
   checker: ts.TypeChecker,
@@ -48,7 +181,7 @@ export const getTypeOfFunctionArg = (
   argIndex: number
 ) => {
   if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
-    const funcType = getType(checker, funcProperty.initializer)
+    const funcType = checker.getTypeAtLocation(funcProperty.initializer)
     const callSignatures = funcType.getCallSignatures()
 
     if (callSignatures.length > 1) {
@@ -127,31 +260,21 @@ export const getTypeArgumentsOfType = (
   return null
 }
 
-type FunctionTypes = {
-  inputTypes: ts.Type[]
-  inputs: null | string[]
-  outputTypes: ts.Type[]
-  outputs: null | string[]
-}
 export const getFunctionTypes = (
   checker: ts.TypeChecker,
   obj: ts.ObjectLiteralExpression,
   {
+    typesMap,
     funcName,
     subFunctionName = funcName,
     inputIndex,
     outputIndex,
-    inputTypeSet,
-    outputTypeSet,
-    customAliasedTypes,
   }: {
+    typesMap: TypesMap
     subFunctionName?: string
     funcName: string
     inputIndex: number
     outputIndex: number
-    inputTypeSet: Set<string>
-    outputTypeSet: Set<string>
-    customAliasedTypes?: Map<string, string>
   }
 ): FunctionTypes => {
   const result: FunctionTypes = {
@@ -182,18 +305,16 @@ export const getFunctionTypes = (
   else if (ts.isPropertyAssignment(property)) {
     if (ts.isObjectLiteralExpression(property.initializer)) {
       return getFunctionTypes(checker, property.initializer, {
+        typesMap,
         funcName,
         subFunctionName: 'func',
         inputIndex,
         outputIndex,
-        inputTypeSet,
-        outputTypeSet,
-        customAliasedTypes,
       })
     }
 
     if (property.initializer) {
-      type = getType(checker, property.initializer)
+      type = checker.getTypeAtLocation(property.initializer)
       if (funcName === 'func') {
         funcName = property.initializer.getText()
       }
@@ -218,112 +339,20 @@ export const getFunctionTypes = (
   }
 
   if (inputIndex !== undefined && inputIndex < typeArguments.length) {
-    const types = resolveUnionTypes(checker, typeArguments[inputIndex]!)
-    const firstName = types.names[0]
-    if (
-      customAliasedTypes &&
-      (types.names.length > 1 || (firstName && !isValidVariableName(firstName)))
-    ) {
-      const aliasType = types.names.join(' | ')
-      const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Input`
-      customAliasedTypes.set(aliasName, aliasType)
-      result.inputs = [aliasName]
-      inputTypeSet.add(aliasName)
-      result.inputTypes = types.types
-    } else {
-      result.inputs = types.names
-      result.inputs.forEach((input) => inputTypeSet.add(input))
-      result.inputTypes = types.types
-    }
+    const { names, types } = getNamesAndTypes(checker, typesMap, 'Input', funcName, typeArguments[inputIndex]!)
+    result.inputs = names
+    result.inputTypes = types
   } else {
-    console.error(`Input index ${inputIndex} is out of bounds`)
+    console.log(`No input defined for ${funcName}`)
   }
 
   if (outputIndex !== undefined && outputIndex < typeArguments.length) {
-    const types = resolveUnionTypes(checker, typeArguments[outputIndex]!)
-    const firstName = types.names[0]
-    if (
-      customAliasedTypes &&
-      (types.names.length > 1 || (firstName && !isValidVariableName(firstName)))
-    ) {
-      const aliasType = types.names.join(' | ')
-      const aliasName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Output`
-      customAliasedTypes.set(aliasName, aliasType)
-      result.outputs = [aliasName]
-      outputTypeSet.add(aliasName)
-      result.outputTypes = types.types
-    } else {
-      result.outputs = types.names
-      result.outputs.forEach((output) => outputTypeSet.add(output))
-      result.outputTypes = types.types
-    }
+    const { names, types } = getNamesAndTypes(checker, typesMap, 'Output', funcName, typeArguments[outputIndex]!)
+    result.outputs = names
+    result.outputTypes = types
+  } else {
+    console.info(`No output defined for ${funcName}`)
   }
 
   return result
-}
-
-export const getFunctionTypesSimple = (
-  checker: ts.TypeChecker,
-  funcProperty: ts.ObjectLiteralElementLike
-) => {
-  let inputType: string | null = null
-  let outputType: string | null = null
-  let paramType: ts.Type | null = null
-
-  if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
-    // Get the type of the 'func' expression
-    const funcType = getType(checker, funcProperty.initializer)
-
-    // Get the call signatures of the function type
-    const callSignatures = funcType.getCallSignatures()
-
-    if (callSignatures.length > 1) {
-      console.error('Multiple call signatures found')
-    }
-
-    const signature = callSignatures[0]
-
-    if (!signature) {
-      console.error('No call signatures found')
-      return { inputType: null, outputType: null, paramType: null }
-    }
-
-    const parameters = signature.getParameters()
-    const returnType = checker.getReturnTypeOfSignature(signature)
-
-    const dataParameter = parameters[1]
-    if (dataParameter) {
-      paramType = checker.getTypeOfSymbolAtLocation(
-        dataParameter,
-        dataParameter.valueDeclaration!
-      )
-      inputType = checker.typeToString(paramType)
-    }
-    outputType = checker
-      .typeToString(returnType)
-      .replace('Promise<', '')
-      .replace('>', '')
-  }
-
-  return {
-    inputType: nullifyTypes(inputType),
-    outputType: nullifyTypes(outputType),
-    paramType,
-  }
-}
-
-export const extractTypeKeys = (type: ts.Type): string[] => {
-  return type.getProperties().map((symbol) => symbol.getName())
-}
-
-export const nullifyTypes = (type: string | null) => {
-  if (
-    type === 'void' ||
-    type === 'undefined' ||
-    type === 'unknown' ||
-    type === 'any'
-  ) {
-    return null
-  }
-  return type
 }
