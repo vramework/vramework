@@ -1,5 +1,11 @@
 ## 0.6
 
+## 0.6.4
+
+### Patch Changes
+
+- f26880f: feat: extracting inspector and adding unique type references
+
 ## 0.6.3
 
 ### Patch Changes

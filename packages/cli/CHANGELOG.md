@@ -1,5 +1,14 @@
 # @vramework/cli
 
+## 0.6.3
+
+### Patch Changes
+
+- f26880f: feat: extracting inspector and adding unique type references
+- Updated dependencies [f26880f]
+  - @vramework/inspector@0.6.1
+  - @vramework/core@0.6.4
+
 ## 0.6.2
 
 ### Patch Changes
