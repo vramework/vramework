@@ -99,7 +99,7 @@ export class VrameworkExpressServer {
   }
 
   public async stop(): Promise<void> {
-    return await new Promise<void>((resolve) => {
+    return await new Promise<void>(async (resolve) => {
       if (this.server == null) {
         throw 'Unable to stop server as it hasn`t been correctly started'
       }
@@ -112,6 +112,12 @@ export class VrameworkExpressServer {
   public async enableExitOnSigInt() {
     process.removeAllListeners('SIGINT').on('SIGINT', async () => {
       this.singletonServices.logger.info('Stopping server...')
+      for (const [name, service] of Object.entries(this.singletonServices)) {
+        if (service.stop) {
+          this.singletonServices.logger.info(`Stopping singleton service ${name}`)
+          await service.stop()
+        }
+      }
       await this.stop()
       this.singletonServices.logger.info('Server stopped')
       process.exit(0)

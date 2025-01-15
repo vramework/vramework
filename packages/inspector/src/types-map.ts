@@ -16,6 +16,11 @@ export class TypesMap {
       return uniqueName
     }
 
+    public getUniqueName (name: string): string {
+      const meta = this.getTypeMeta(name)
+      return meta.uniqueName
+    }
+
     public getTypeMeta (name: string): { originalName: string, uniqueName: string, path: string | null } {
       if (['string', 'number', 'boolean', 'null'].includes(name)) {
         return { 
