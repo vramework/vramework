@@ -12,7 +12,7 @@ export const coreVrameworkFetch = async (
   data: any,
   options?: Omit<RequestInit, 'body'>
 ) => {
-  const method = options?.method || 'GET'
+  const method = options?.method?.toUpperCase() || 'GET'
   let body: any | undefined
 
   if (data) {
