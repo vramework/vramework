@@ -111,34 +111,34 @@ const _getVrameworkCLIConfig = async (
         result.schemaDirectory = join(result.outDir, 'vramework-schemas')
       }
       if (!result.routesFile) {
-        result.routesFile = join(result.outDir, 'vramework-routes.ts')
+        result.routesFile = join(result.outDir, 'vramework-routes.gen.ts')
       }
       if (!result.schedulersFile) {
-        result.schedulersFile = join(result.outDir, 'vramework-schedules.ts')
+        result.schedulersFile = join(result.outDir, 'vramework-schedules.gen.ts')
       }
       if (!result.channelsFile) {
-        result.channelsFile = join(result.outDir, 'vramework-channels.ts')
+        result.channelsFile = join(result.outDir, 'vramework-channels.gen.ts')
       }
       if (!result.typesDeclarationFile) {
         result.typesDeclarationFile = join(
           result.outDir,
-          'vramework-types.d.ts'
+          'vramework-types.gen.d.ts'
         )
       }
       if (!result.routesMapDeclarationFile) {
         result.routesMapDeclarationFile = join(
           result.outDir,
-          'vramework-routes-map.d.ts'
+          'vramework-routes-map.gen.d.ts'
         )
       }
       if (!result.channelsMapDeclarationFile) {
         result.channelsMapDeclarationFile = join(
           result.outDir,
-          'vramework-channels-map.d.ts'
+          'vramework-channels-map.gen.d.ts'
         )
       }
       if (!result.bootstrapFile) {
-        result.bootstrapFile = join(result.outDir, 'vramework-bootstrap.ts')
+        result.bootstrapFile = join(result.outDir, 'vramework-bootstrap.gen.ts')
       }
     }
 

@@ -60,7 +60,7 @@ export async function saveSchemas(
   supportsImportAttributes: boolean
 ) {
   await writeFileInDir(
-    `${schemaParentDir}/register.ts`,
+    `${schemaParentDir}/register.gen.ts`,
     'export const empty = null;'
   )
 
@@ -104,7 +104,7 @@ addSchema('${schema}', require('./schemas/${schema}.schema.json'))
     .join('\n')
 
   await writeFileInDir(
-    `${schemaParentDir}/register.ts`,
+    `${schemaParentDir}/register.gen.ts`,
     `import { addSchema } from '@vramework/core/schema'
 import { createRequire } from "module"
 const require = createRequire(import.meta.url)

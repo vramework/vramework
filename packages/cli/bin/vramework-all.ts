@@ -73,7 +73,7 @@ export const action = async (options: VrameworkCLIOptions): Promise<void> => {
 
   const schemas = await vrameworkSchemas(cliConfig, visitState)
   if (schemas) {
-    addImport(`${cliConfig.schemaDirectory}/register.ts`)
+    addImport(`${cliConfig.schemaDirectory}/register.gen.ts`)
   }
 
   await vrameworkNext(cliConfig, visitState, options)

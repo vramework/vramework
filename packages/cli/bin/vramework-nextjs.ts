@@ -67,7 +67,7 @@ export const vrameworkNext = async (
       )
       const schemasPath = getFileImportRelativePath(
         nextJSfile,
-        `${schemaDirectory}/register.ts`,
+        `${schemaDirectory}/register.gen.ts`,
         packageMappings
       )
 
