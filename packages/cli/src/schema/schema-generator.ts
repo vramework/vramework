@@ -13,10 +13,10 @@ export async function generateSchemas(
   const schemasSet = new Set(typesMap.customTypes.keys())
   for (const { input, output, inputTypes } of routesMeta) {
     if (input) {
-      schemasSet.add(input)
+      schemasSet.add(typesMap.getTypeMeta(input).uniqueName)
     }
     if (output) {
-      schemasSet.add(output)
+      schemasSet.add(typesMap.getTypeMeta(output).uniqueName)
     }
     if (inputTypes?.body) {
       schemasSet.add(inputTypes.body)
@@ -66,7 +66,7 @@ export async function saveSchemas(
 
   const desiredSchemas = new Set([
     ...routesMeta
-      .map(({ input, output }) => [input, output])
+      .map(({ input, output }) => [input ? typesMap.getUniqueName(input) : undefined, output ? typesMap.getUniqueName(output) : undefined])
       .flat()
       .filter(
         (s) =>
@@ -97,14 +97,17 @@ export async function saveSchemas(
   const schemaImports = Array.from(desiredSchemas)
     .map(
       (schema) => `
-import * as ${schema} from './schemas/${schema}.schema.json' ${supportsImportAttributes ? `with { type: 'json' }` : ''}
-addSchema('${schema}', ${schema})
+// import * as ${schema} from './schemas/${schema}.schema.json' ${supportsImportAttributes ? `with { type: 'json' }` : ''}
+addSchema('${schema}', require('./schemas/${schema}.schema.json'))
 `
     )
     .join('\n')
 
   await writeFileInDir(
     `${schemaParentDir}/register.ts`,
-    `import { addSchema } from '@vramework/core/schema'\n${schemaImports}`
+    `import { addSchema } from '@vramework/core/schema'
+import { createRequire } from "module"
+const require = createRequire(import.meta.url)
+${schemaImports}`
   )
 }
