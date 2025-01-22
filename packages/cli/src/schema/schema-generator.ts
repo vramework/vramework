@@ -97,8 +97,9 @@ export async function saveSchemas(
   const schemaImports = Array.from(desiredSchemas)
     .map(
       (schema) => `
-// import * as ${schema} from './schemas/${schema}.schema.json' ${supportsImportAttributes ? `with { type: 'json' }` : ''}
-addSchema('${schema}', require('./schemas/${schema}.schema.json'))
+import * as ${schema} from './schemas/${schema}.schema.json' ${supportsImportAttributes ? `with { type: 'json' }` : ''}
+addSchema('${schema}', ${schema})
+// addSchema('${schema}', require('./schemas/${schema}.schema.json'))
 `
     )
     .join('\n')
@@ -106,8 +107,8 @@ addSchema('${schema}', require('./schemas/${schema}.schema.json'))
   await writeFileInDir(
     `${schemaParentDir}/register.gen.ts`,
     `import { addSchema } from '@vramework/core/schema'
-import { createRequire } from "module"
-const require = createRequire(import.meta.url)
+// import { createRequire } from "module"
+// const require = createRequire(import.meta.url)
 ${schemaImports}`
   )
 }
