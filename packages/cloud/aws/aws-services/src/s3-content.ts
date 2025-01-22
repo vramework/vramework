@@ -6,10 +6,8 @@ import {
 } from '@aws-sdk/client-s3'
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 import { ContentService, Logger } from '@vramework/core/services'
-
-// @ts-ignore
-import { getSignedUrl as getCDNSignedUrl } from 'aws-cloudfront-sign'
 import { readFile } from 'fs/promises'
+import { getSignedUrl } from "@aws-sdk/cloudfront-signer"
 
 export interface S3ContentConfig {
   bucketName: string
@@ -23,7 +21,7 @@ export class S3Content implements ContentService {
   constructor(
     private config: S3ContentConfig,
     private logger: Logger,
-    private signConfig: { keypairId: string; privateKeyString: string }
+    private signConfig: { keyPairId: string; privateKey: string }
   ) {
     this.s3 = new S3Client([
       {
@@ -33,11 +31,13 @@ export class S3Content implements ContentService {
     ])
   }
 
-  public async signURL(url: string) {
+  public async signURL(url: string, dateLessThan: Date, dateGreaterThan?: Date) {
     try {
-      return getCDNSignedUrl(url, {
+      return getSignedUrl({
         ...this.signConfig,
-        expireTime: Math.round(Date.now() + 3600000),
+        url,
+        dateLessThan: dateLessThan.toString(),
+        dateGreaterThan: dateGreaterThan?.toString(),
       })
     } catch {
       this.logger.error(`Error signing url: ${url}`)
@@ -45,8 +45,8 @@ export class S3Content implements ContentService {
     }
   }
 
-  public async signContentKey(key: string) {
-    return this.signURL(`https://${this.config.bucketName}/${key}`)
+  public async signContentKey(key: string, dateLessThan: Date, dateGreaterThan?: Date) {
+    return this.signURL(`https://${this.config.bucketName}/${key}`, dateLessThan, dateGreaterThan)
   }
 
   public async getUploadURL(Key: string, ContentType: string) {

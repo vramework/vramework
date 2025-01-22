@@ -449,6 +449,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/cloudfront-signer@npm:^3.723.0":
+  version: 3.723.0
+  resolution: "@aws-sdk/cloudfront-signer@npm:3.723.0"
+  dependencies:
+    "@smithy/url-parser": "npm:^4.0.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10/793da9f9cf55ad559ab189e2028e16da5cfeb38a8b5263855e6421f468b087e7b443efb99c7a47aa1693633e8a4a69abf067d56b9c1892dfe82b06a6d8b33737
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/core@npm:3.713.0":
   version: 3.713.0
   resolution: "@aws-sdk/core@npm:3.713.0"
@@ -3668,12 +3678,13 @@ __metadata:
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.732.0"
     "@aws-sdk/client-secrets-manager": "npm:^3.714.0"
+    "@aws-sdk/cloudfront-signer": "npm:^3.723.0"
     "@aws-sdk/s3-request-presigner": "npm:^3.732.0"
-    aws-cloudfront-sign: "npm:^3.0.2"
     typescript: "npm:^5.7"
   peerDependencies:
     "@aws-sdk/client-s3": ^3.732.0
     "@aws-sdk/client-secrets-manager": ^3.714.0
+    "@aws-sdk/cloudfront-signer": ^3.723.0
     "@aws-sdk/s3-request-presigner": ^3.732.0
     "@vramework/core": ^0.6.7
   languageName: unknown
@@ -4130,13 +4141,6 @@ __metadata:
     "@fastify/error": "npm:^4.0.0"
     fastq: "npm:^1.17.1"
   checksum: 10/4bc7c0ac1b9e3a814db4bc5b89fd6a38b082614677d9a4e2d2b9c11bc830deac81dd0e5bdae4ba31b1e165c19de9f2772564fd3b840b3bfa5048f757bb6a4eda
-  languageName: node
-  linkType: hard
-
-"aws-cloudfront-sign@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "aws-cloudfront-sign@npm:3.0.2"
-  checksum: 10/bc3a010e65bad9f8cf2c2e6f1fbd0ba5b6fe229fd8d87cd7e7a979f4e6b26a7b94690298cbb4b2543d9cb5ee84414447f0eef8124c25471c83b6f69487422c33
   languageName: node
   linkType: hard
 

@@ -7,14 +7,14 @@ export interface ContentService {
    * @param contentKey - The key of the content to sign.
    * @returns A promise that resolves to the signed content key URL.
    */
-  signContentKey: (contentKey: string) => Promise<string>
+  signContentKey: (contentKey: string, dateLessThan: Date, dateGreaterThan?: Date) => Promise<string>
 
   /**
    * Signs a URL to provide secure access.
    * @param url - The URL to sign.
    * @returns A promise that resolves to the signed URL.
    */
-  signURL: (url: string) => Promise<string>
+  signURL: (url: string, dateLessThan: Date, dateGreaterThan?: Date) => Promise<string>
 
   /**
    * Gets an upload URL for a file.
