@@ -1,5 +1,11 @@
 ## 0.6
 
+## 0.6.8
+
+### Patch Changes
+
+- b19aa86: refactor: switching aws to using @aws-sdk/cloudfront-signer
+
 ## 0.6.7
 
 ### Patch Changes
