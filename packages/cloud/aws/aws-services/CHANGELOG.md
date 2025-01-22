@@ -1,5 +1,14 @@
 ## 0.6
 
+## 0.6.2
+
+### Patch Changes
+
+- 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
+- 780d7c2: revert: using import for json
+- Updated dependencies [0a92fa7]
+  - @vramework/core@0.6.7
+
 ## 0.6.1
 
 ### Patch Changes

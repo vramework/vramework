@@ -1,5 +1,11 @@
 ## 0.6
 
+## 0.6.7
+
+### Patch Changes
+
+- 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
+
 ## 0.6.6
 
 ### Patch Changes
