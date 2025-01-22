@@ -26,6 +26,10 @@
     ]
   },
   "scripts": {
+    "postinstall": "husky",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
+    "pre-commit": "yarn test && yarn prettier && yarn lint && yarn typedoc",
     "tsc": "yarn workspaces foreach -A -p run tsc",
     "build:esm": "yarn workspaces foreach -p -A run build:esm",
     "build:cjs": "yarn workspaces foreach -p -A run build:cjs",
@@ -42,6 +46,7 @@
   "packageManager": "yarn@4.5.0",
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "husky": "^9.1.7",
     "prettier": "3.3.3",
     "tsx": "^4.19.2",
     "typedoc": "^0.26.7"

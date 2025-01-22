@@ -3786,6 +3786,7 @@ __metadata:
     "@azure/functions": "npm:^4.6.0"
     "@changesets/cli": "npm:^2.27.9"
     "@types/node": "npm:^20.11.30"
+    husky: "npm:^9.1.7"
     prettier: "npm:3.3.3"
     tsx: "npm:^4.19.2"
     typedoc: "npm:^0.26.7"
@@ -5457,6 +5458,15 @@ __metadata:
   version: 1.0.2
   resolution: "human-id@npm:1.0.2"
   checksum: 10/16b116ef68c3fc3f65c90b32a338abd0f9ee656a6257baa92c4d7e1154c66469bb6bd4ee840018c35e972aa817f5ae3f0cbabffb78f2ac90aaf02d88a299a371
+  languageName: node
+  linkType: hard
+
+"husky@npm:^9.1.7":
+  version: 9.1.7
+  resolution: "husky@npm:9.1.7"
+  bin:
+    husky: bin.js
+  checksum: 10/c2412753f15695db369634ba70f50f5c0b7e5cb13b673d0826c411ec1bd9ddef08c1dad89ea154f57da2521d2605bd64308af748749b27d08c5f563bcd89975f
   languageName: node
   linkType: hard
 
