@@ -3686,7 +3686,7 @@ __metadata:
     "@aws-sdk/client-secrets-manager": ^3.714.0
     "@aws-sdk/cloudfront-signer": ^3.723.0
     "@aws-sdk/s3-request-presigner": ^3.732.0
-    "@vramework/core": ^0.6.7
+    "@vramework/core": ^0.6.8
   languageName: unknown
   linkType: soft
 

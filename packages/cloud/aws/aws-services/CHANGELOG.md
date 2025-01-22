@@ -1,5 +1,13 @@
 ## 0.6
 
+## 0.6.3
+
+### Patch Changes
+
+- b19aa86: refactor: switching aws to using @aws-sdk/cloudfront-signer
+- Updated dependencies [b19aa86]
+  - @vramework/core@0.6.8
+
 ## 0.6.2
 
 ### Patch Changes
