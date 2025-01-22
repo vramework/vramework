@@ -1,6 +1,6 @@
 {
   "name": "@vramework/cloudflare",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",
@@ -20,7 +20,7 @@
     ".": "./dist/index.js"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.3"
+    "@vramework/core": "^0.6.5"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.5.2",
