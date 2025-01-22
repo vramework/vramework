@@ -4,25 +4,7 @@ Welcome to **Vramework**, a lightweight, TypeScript-powered framework that norma
 
 You can see the documentation on [vramework.dev](https://vramework.dev)
 
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Features](#features)
-- [Getting Started](#getting-started)
-  - [Installation](#installation)
-  - [Setup](#setup)
-- [Examples](#examples)
-  - [Creating an API Function](#creating-an-api-function)
-  - [Adding a Route](#adding-a-route)
-- [Integrations](#integrations)
-  - [Next.js Integration](#nextjs-integration)
-  - [Middleware and Plugins](#middleware-and-plugins)
-- [Documentation](#documentation)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Introduction
+## Brief Introduction
 
 Vramework is designed to simplify the development of Node.js servers by providing a unified approach to handling different types of interactions. It leverages TypeScript's static typing and modern JavaScript features to offer a developer-friendly experience.
 
@@ -38,7 +20,6 @@ Think of it like a multi-tool that simplifies handling different types of data s
 - **HTTP Client**: Use `@vramework/fetch` for validated API calls.
 - **OpenAPI Documentation**: Automatically generate OpenAPI docs for your server routes.
 - **Modular Design**: Easily integrate with existing servers using middleware and plugins.
-- **ES6 Modules**: Supports both ES modules and CommonJS for broader compatibility.
 
 ## Getting Started
 

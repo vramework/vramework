@@ -118,7 +118,7 @@ export type CoreServices<SingletonServices = CoreSingletonServices> =
 export type CreateSingletonServices<
   Config extends CoreConfig,
   SingletonServices extends CoreSingletonServices,
-> = (config: Config, ...args: any[]) => Promise<SingletonServices>
+> = (config: Config, existingServices?: Partial<SingletonServices>) => Promise<SingletonServices>
 
 /**
  * Defines a function type for creating session-specific services.
