@@ -1,5 +1,11 @@
 ## 0.6
 
+## 0.6.9
+
+### Patch Changes
+
+- f3550d8: feat: changing singleton constructor to accept a prtial map of existing services
+
 ## 0.6.8
 
 ### Patch Changes
