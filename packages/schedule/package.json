@@ -1,6 +1,6 @@
 {
   "name": "@vramework/schedule",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "module": "dist/index.js",
@@ -17,7 +17,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.3"
+    "@vramework/core": "^0.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.7.8",

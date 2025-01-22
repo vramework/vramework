@@ -1,5 +1,14 @@
 # @vramework/uws
 
+## 0.6.1
+
+### Patch Changes
+
+- 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
+- Updated dependencies [0a92fa7]
+  - @vramework/uws-handler@0.6.4
+  - @vramework/core@0.6.7
+
 ## 0.6
 
 Marking a major release to include channels and scheduled tasks

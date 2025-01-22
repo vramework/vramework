@@ -1,6 +1,6 @@
 {
   "name": "@vramework/jose",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "module": "dist/index.js",
@@ -14,7 +14,7 @@
     "release": "npm run build && npm test"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.3"
+    "@vramework/core": "^0.6.7"
   },
   "dependencies": {
     "jose": "^5.9.6"
