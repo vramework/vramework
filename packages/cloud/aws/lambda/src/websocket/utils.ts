@@ -52,6 +52,7 @@ export const getApiGatewayManagementApiClient = (logger: Logger, event: APIGatew
         endpoint
     })
 }
+
 export const getServerlessDependencies = (logger: Logger, channelStore: ChannelStore, event: APIGatewayEvent) => {
     const channelId = event.requestContext.connectionId
     if (!channelId) {

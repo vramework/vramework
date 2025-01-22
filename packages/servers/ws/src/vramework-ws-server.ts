@@ -6,7 +6,7 @@ import {
   runLocalChannel,
   VrameworkLocalChannelHandler,
 } from '@vramework/core/channel/local'
-import { loadAllSchemas } from '@vramework/core/schema'
+import { compileAllSchemas } from '@vramework/core/schema'
 import { RunRouteOptions } from '@vramework/core/http'
 import { CoreSingletonServices, CreateSessionServices } from '@vramework/core'
 
@@ -73,9 +73,8 @@ export const vrameworkWebsocketHandler = ({
   if (logRoutes) {
     logChannels(singletonServices.logger)
   }
-
   if (loadSchemas) {
-    loadAllSchemas(singletonServices.logger)
+    compileAllSchemas(singletonServices.logger)
   }
 
   const eventHub = new LocalEventHubService()

@@ -6,9 +6,7 @@ import {
   RunRouteOptions,
   RunRouteParams,
 } from './http-routes.types.js'
-import { loadSchema } from '../schema.js'
 import {
-  CoreSingletonServices,
   CoreUserSession,
   SessionServices,
   VrameworkHTTP,
@@ -16,18 +14,19 @@ import {
 import { match } from 'path-to-regexp'
 import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
 import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
-import { Logger } from '../services/index.js'
+import { Logger, SchemaService } from '../services/index.js'
 import {
   ForbiddenError,
   NotFoundError,
   NotImplementedError,
 } from '../errors/errors.js'
 import crypto from 'crypto'
-import { closeSessionServices, validateAndCoerce } from '../utils.js'
+import { closeSessionServices } from '../utils.js'
 import { CoreAPIChannel } from '../channel/channel.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
 import { VrameworkResponse } from '../vramework-response.js'
 import { HTTPSessionService } from './http-session-service.js'
+import { getSchema, validateAndCoerce } from '../schema.js'
 
 if (!globalThis.vramework?.httpRoutes) {
   globalThis.vramework = globalThis.vramework || {}
@@ -94,7 +93,7 @@ export const getRoutes = () => {
 }
 
 const getMatchingRoute = (
-  logger: CoreSingletonServices['logger'],
+  schemaService: SchemaService | undefined,
   requestType: string,
   requestPath: string
 ) => {
@@ -116,8 +115,9 @@ const getMatchingRoute = (
         (routeMeta) =>
           routeMeta.method === route.method && routeMeta.route === route.route
       )?.input
-      if (schemaName) {
-        loadSchema(schemaName, logger)
+      if (schemaName && schemaService) {
+        const schema = getSchema(schemaName)
+        schemaService.compileSchema(schemaName, schema)
       }
       return { matchedPath, params: matchedPath.params, route, schemaName }
     }
@@ -272,7 +272,7 @@ export const runHTTPRoute = async <In, Out>({
   const http = createHTTPInteraction(request, response)
 
   const matchedRoute = getMatchingRoute(
-    singletonServices.logger,
+    singletonServices.schemaService,
     apiType,
     apiRoute
   )
@@ -306,7 +306,7 @@ export const runHTTPRoute = async <In, Out>({
     )
     const data = await request.getData()
 
-    validateAndCoerce(singletonServices.logger, schemaName, data, coerceToArray)
+    validateAndCoerce(singletonServices.schemaService, schemaName, data, coerceToArray)
 
     sessionServices = await createSessionServices(
       singletonServices,

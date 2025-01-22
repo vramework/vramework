@@ -9,7 +9,7 @@ import {
   logRoutes as logRegisterRoutes,
   RunRouteOptions,
 } from '@vramework/core/http'
-import { loadAllSchemas } from '@vramework/core/schema'
+import { compileAllSchemas } from '@vramework/core/schema'
 
 /**
  * Options for configuring the `vrameworkHandler`.
@@ -44,7 +44,7 @@ export const vrameworkHTTPHandler = ({
     logRegisterRoutes(singletonServices.logger)
   }
   if (loadSchemas) {
-    loadAllSchemas(singletonServices.logger)
+    compileAllSchemas(singletonServices.logger, singletonServices.schemaService)
   }
 
   return async (res: uWS.HttpResponse, req: uWS.HttpRequest): Promise<void> => {

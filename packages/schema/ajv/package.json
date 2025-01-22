@@ -1,8 +1,9 @@
 {
-  "name": "@vramework/schedule",
+  "name": "@vramework/schema-ajv",
   "version": "0.6.0",
-  "author": "yasser.fadl@gmail.com",
+  "description": "The vramework schema ajv package",
   "license": "MIT",
+  "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",
   "main": "dist/index.js",
   "type": "module",
@@ -10,8 +11,8 @@
     "tsc": "tsc",
     "build:esm": "tsc -b",
     "build": "yarn build:esm",
-    "ncu": "ncu",
     "release": "npm run build && npm test",
+    "ncu": "ncu",
     "test": "bash run-tests.sh",
     "test:watch": "bash run-tests.sh --watch",
     "test:coverage": "bash run-tests.sh --coverage"
@@ -19,15 +20,14 @@
   "peerDependencies": {
     "@vramework/core": "^0.6.3"
   },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
   "devDependencies": {
-    "@types/node": "^22.7.8",
-    "typescript": "^5.6"
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=18"
-  },
-  "dependencies": {
-    "cron": "^3.2.1",
-    "cron-schedule": "^5.0.4"
   }
 }

@@ -6,7 +6,7 @@ import {
   runLocalChannel,
   VrameworkLocalChannelHandler
 } from '@vramework/core/channel/local'
-import { loadAllSchemas } from '@vramework/core/schema'
+import { compileAllSchemas } from '@vramework/core/schema'
 
 import { VrameworkUWSRequest } from './vramework-uws-request.js'
 import { VrameworkUWSResponse } from './vramework-uws-response.js'
@@ -43,9 +43,8 @@ export const vrameworkWebsocketHandler = ({
   if (logRoutes) {
     logChannels(singletonServices.logger)
   }
-
   if (loadSchemas) {
-    loadAllSchemas(singletonServices.logger)
+    compileAllSchemas(singletonServices.logger, singletonServices.schemaService)
   }
 
   const eventHub = new UWSEventHubService()

@@ -1,6 +1,6 @@
 import { test, describe, before } from 'node:test'
-import assert from 'assert'
-import { coerceQueryStringToArray, addSchema } from './schema.js'
+import * as assert from 'assert'
+import { addSchema, coerceQueryStringToArray } from './schema.js'
 
 describe('Schema', () => {
   describe('coerceQueryStringToArray', () => {

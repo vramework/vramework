@@ -9,6 +9,7 @@
   "workspaces": {
     "packages": [
       "packages/core",
+      "packages/schema/ajv",
       "packages/inspector",
       "packages/cli",
       "packages/fetch",

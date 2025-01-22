@@ -1,5 +1,5 @@
 import { CoreSingletonServices, CreateSessionServices } from '@vramework/core'
-import { loadAllSchemas } from '@vramework/core/schema'
+import { compileAllSchemas } from '@vramework/core/schema'
 import { runHTTPRoute, RunRouteOptions } from '@vramework/core/http'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
@@ -43,7 +43,10 @@ const vrameworkPlugin: FastifyPluginAsync<
     logRoutes(vramework.singletonServices.logger)
   }
   if (vramework.loadSchemas) {
-    loadAllSchemas(vramework.singletonServices.logger)
+    if (!vramework.singletonServices.schemaService) {
+      throw new Error('SchemaService needs to be defined to load schemas')
+    }
+    compileAllSchemas(vramework.singletonServices.logger, vramework.singletonServices.schemaService)
   }
   fastify.all('/*', async (req, res) => {
     await runHTTPRoute({

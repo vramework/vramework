@@ -4,7 +4,7 @@ import { RequestHandler } from 'express'
 import { VrameworkExpressRequest } from './vramework-express-request.js'
 import { VrameworkExpressResponse } from './vramework-express-response.js'
 import { logRoutes as logRegisterRoutes } from '@vramework/core/http'
-import { loadAllSchemas } from '@vramework/core/schema'
+import { compileAllSchemas } from '@vramework/core/schema'
 
 /**
  * Arguments for configuring the Vramework middleware.
@@ -43,7 +43,7 @@ export const vrameworkMiddleware = (
     logRegisterRoutes(singletonServices.logger)
   }
   if (loadSchemas) {
-    loadAllSchemas(singletonServices.logger)
+    compileAllSchemas(singletonServices.logger, singletonServices.schemaService)
   }
 
   return async (req, res, next) => {

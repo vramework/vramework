@@ -6,6 +6,7 @@ import type { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstr
 import type { ChannelPermissionService } from '../channel/channel-permission-service.js'
 import { VariablesService } from '../services/variables-service.js'
 import { EventHubService } from '../channel/eventhub-service.js'
+import { SchemaService } from '../services/schema-service.js'
 
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -76,6 +77,8 @@ export interface CoreSingletonServices {
   httpPermissionService?: HTTPPermissionService
   /** The channel permission service used by the application (optional). */
   channelPermissionService?: ChannelPermissionService
+  /** The schema library used to validate data */
+  schemaService?: SchemaService;
   /** The core configuration for the application. */
   config: CoreConfig
   /** The logger used by the application. */

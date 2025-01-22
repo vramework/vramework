@@ -1,25 +1,12 @@
-import { Ajv } from 'ajv'
-
-import addFormats from 'ajv-formats'
-import { ValidateFunction } from 'ajv'
-
 import { Logger } from './services/logger.js'
-import { BadRequestError } from './errors/errors.js'
 import { getRoutes } from './http/http-route-runner.js'
-
-const ajv = new Ajv({
-  removeAdditional: false,
-  coerceTypes: true,
-})
-addFormats.default(ajv as any)
-
-const validators = new Map<string, ValidateFunction>()
+import { SchemaService } from './services/schema-service.js'
 
 /**
  * Retrieves the global schemas map.
  * @returns A map of schemas.
  */
-const getSchemas = () => {
+export const getSchemas = () => {
   if (!global.vrameworkSchemas) {
     global.vrameworkSchemas = new Map<string, any>()
   }
@@ -30,7 +17,7 @@ const getSchemas = () => {
  * Retrieves a schema from the schemas map.
  * @returns A schema.
  */
-const getSchema = (schemaName: string): any => {
+export const getSchema = (schemaName: string): any => {
   const schemas = getSchemas()
   const schema = schemas.get(schemaName)
   if (!schema) {
@@ -40,10 +27,32 @@ const getSchema = (schemaName: string): any => {
 }
 
 /**
- * Validate all the schemas have been loaded.
+ * Adds a schema to the global schemas map.
+ * @param name - The name of the schema.
+ * @param value - The schema value.
+ * @ignore
  */
-const validateAllSchemasLoaded = (logger: Logger) => {
+export const addSchema = (name: string, value: any) => {
+  getSchemas().set(name, value)
+}
+
+/**
+ * Loads a schema and compiles it into a validator.
+ * @param logger - A logger for logging information.
+ */
+export const compileAllSchemas = (logger: Logger, schemaService?: SchemaService) => {
+  if (!schemaService) {
+    throw new Error('SchemaService needs to be defined to load schemas')
+  }
+  for (const [name, schema] of getSchemas()) {
+    schemaService.compileSchema(name, schema)
+  }
+  validateAllSchemasLoaded(logger, schemaService)
+}
+
+const validateAllSchemasLoaded = (logger: Logger, schemaService: SchemaService) => {
   const { routesMeta } = getRoutes()
+  const validators = schemaService.getSchemaNames()
 
   const missingSchemas: string[] = []
 
@@ -65,69 +74,6 @@ const validateAllSchemasLoaded = (logger: Logger) => {
   }
 }
 
-/**
- * Adds a schema to the global schemas map.
- * @param name - The name of the schema.
- * @param value - The schema value.
- * @ignore
- */
-export const addSchema = (name: string, value: any) => {
-  getSchemas().set(name, value)
-}
-
-/**
- * Loads a schema and compiles it into a validator.
- * @param schema - The name of the schema to load.
- * @param logger - A logger for logging information.
- */
-export const loadSchema = (schema: string, logger: Logger): void => {
-  if (!validators.has(schema)) {
-    logger.debug(`Adding json schema for ${schema}`)
-    const json = getSchemas().get(schema)
-    try {
-      const validator = ajv.compile(json)
-      validators.set(schema, validator)
-    } catch (e: any) {
-      console.error(e.name, schema, json)
-      throw e
-    }
-  }
-}
-
-/**
- * Loads a schema and compiles it into a validator.
- * @param logger - A logger for logging information.
- */
-export const loadAllSchemas = (logger: Logger): void => {
-  for (const [name] of getSchemas()) {
-    loadSchema(name, logger)
-  }
-  validateAllSchemasLoaded(logger)
-}
-
-/**
- * Validates JSON data against a schema.
- * @param schema - The name of the schema to validate against.
- * @param json - The JSON data to validate.
- * @throws {BadRequestError} If the JSON data is invalid.
- */
-export const validateJson = (schema: string, json: unknown): void => {
-  const validator = validators.get(schema)
-  if (validator == null) {
-    throw `Missing validator for ${schema}`
-  }
-  const result = validator(json)
-  if (!result) {
-    console.log(
-      `failed to validate request data against schema '${schema}'`,
-      json,
-      validator.errors
-    )
-    const errorText = ajv.errorsText(validator.errors)
-    throw new BadRequestError(errorText)
-  }
-}
-
 export const coerceQueryStringToArray = (schemaName: string, data: any) => {
   const schema = getSchema(schemaName)
   for (const key in schema.properties) {
@@ -142,5 +88,21 @@ export const coerceQueryStringToArray = (schemaName: string, data: any) => {
     if (type === 'array' && typeof data[key] === 'string') {
       data[key] = data[key].split(',')
     }
+  }
+}
+
+export const validateAndCoerce = (
+  schemaService: SchemaService | undefined,
+  schemaName: string | undefined | null,
+  data: any,
+  coerceToArray: boolean
+) => {
+  if (schemaName && schemaService) {
+    const schema = getSchema(schemaName)
+    schemaService.compileSchema(schemaName, schema)
+    if (coerceToArray) {
+      coerceQueryStringToArray(schemaName, data)
+    }
+    schemaService.validateSchema(schemaName, data)
   }
 }

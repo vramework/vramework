@@ -14,7 +14,7 @@
     "release": "npm run build && npm test"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.0",
+    "@vramework/core": "^0.6.3",
     "pino": "^9.5.0"
   },
   "devDependencies": {

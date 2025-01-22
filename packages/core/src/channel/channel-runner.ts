@@ -1,7 +1,7 @@
 import { NotFoundError } from '../errors/errors.js'
 import { loadUserSession } from '../http/http-route-runner.js'
+import { validateAndCoerce } from '../schema.js'
 import { CoreUserSession } from '../types/core.types.js'
-import { validateAndCoerce } from '../utils.js'
 import {
     CoreAPIChannel,
     ChannelsMeta,
@@ -138,7 +138,7 @@ export const openChannel = async ({
     if (http?.request) {
         openingData = await http.request.getData()
         validateAndCoerce(
-            singletonServices.logger,
+            singletonServices.schemaService,
             schemaName,
             openingData,
             coerceToArray

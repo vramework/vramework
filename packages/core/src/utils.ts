@@ -1,4 +1,3 @@
-import { coerceQueryStringToArray, loadSchema, validateJson } from './schema.js'
 import { Logger } from './services/logger.js'
 
 // TODO: SessionServices probably needs it's own type
@@ -21,17 +20,3 @@ export const closeSessionServices = async (
   )
 }
 
-export const validateAndCoerce = (
-  logger: Logger,
-  schemaName: string | undefined | null,
-  data: any,
-  coerceToArray: boolean
-) => {
-  if (schemaName) {
-    loadSchema(schemaName, logger)
-    if (coerceToArray) {
-      coerceQueryStringToArray(schemaName, data)
-    }
-    validateJson(schemaName, data)
-  }
-}
