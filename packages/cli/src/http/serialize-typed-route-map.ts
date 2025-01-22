@@ -10,18 +10,18 @@ export const serializeTypedRoutesMap = (
   metaTypes: MetaInputTypes
 ) => {
   const requiredTypes = new Set<string>()
-  const serializedRoutes = generateRoutes(routesMeta, typesMap, requiredTypes)
   const serializedCustomTypes = generateCustomTypes(typesMap, requiredTypes)
   const serializedMetaTypes = generateMetaTypes(metaTypes, typesMap)
   const serializedImportMap = serializeImportMap(relativeToPath, packageMappings, typesMap, requiredTypes)
+  const serializedRoutes = generateRoutes(routesMeta, typesMap, requiredTypes)
 
   return `/**
  * This provides the structure needed for typescript to be aware of routes and their return types
  */
     
 ${serializedImportMap}
-${serializedMetaTypes}
 ${serializedCustomTypes}
+${serializedMetaTypes}
 
 interface RouteHandler<I, O> {
     input: I;
@@ -34,6 +34,10 @@ export type RouteHandlerOf<Route extends keyof RoutesMap, Method extends keyof R
     RoutesMap[Route][Method] extends { input: infer I; output: infer O }
         ? RouteHandler<I, O>
         : never;
+
+export type RoutesWithMethod<Method extends string> = {
+  [Route in keyof RoutesMap]: Method extends keyof RoutesMap[Route] ? Route : never;
+}[keyof RoutesMap];
   `
 }
 
@@ -87,7 +91,7 @@ function generateRoutes(routesMeta: HTTPRoutesMeta, typesMap: TypesMap, required
   for (const [routePath, methods] of Object.entries(routesObj)) {
     routesStr += `  readonly '${routePath}': {\n`
     for (const [method, handler] of Object.entries(methods)) {
-      routesStr += `    readonly ${method}: RouteHandler<${handler.inputType}, ${handler.outputType}>,\n`
+      routesStr += `    readonly ${method.toUpperCase()}: RouteHandler<${handler.inputType}, ${handler.outputType}>,\n`
     }
     routesStr += '  },\n'
   }
@@ -118,8 +122,5 @@ const generateMetaTypes = (metaTypes: MetaInputTypes, typesMap: TypesMap) => {
 
   return `
 // The '& {}' is a workaround for not directly refering to a type since it confuses typescript
-  ${Array.from(nameToTypeMap.entries())
-      .map(([name, type]) => `export type ${name} = ${type} & {}`)
-      .join('\n')
-    }`
+${Array.from(nameToTypeMap.entries()).map(([name, type]) => `export type ${name} = ${type} & {}`).join('\n')}`
 }

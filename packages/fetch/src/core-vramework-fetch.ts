@@ -98,6 +98,38 @@ export class CoreVrameworkFetch {
     }
   }
 
+  public async post(
+    uri: string,
+    data: any,
+    options?: RequestInit
+  ) {
+    return await this.api(uri, 'POST', data, options)
+  }
+
+  public async get(
+    uri: string,
+    data: any,
+    options?: RequestInit
+  ) {
+    return await this.api(uri, 'GET', data, options)
+  }
+
+  public async patch(
+    uri: string,
+    data: any,
+    options?: RequestInit
+  ) {
+    return await this.api(uri, 'PATCH', data, options)
+  }
+
+  public async head(
+    uri: string,
+    data: any,
+    options?: RequestInit
+  ) {
+    return await this.api(uri, 'HEAD', data, options)
+  }
+
   /**
    * Makes an API request with the specified URI, method, and data, and optionally transforms dates in the response.
    *
@@ -115,7 +147,7 @@ export class CoreVrameworkFetch {
     options?: RequestInit
   ) {
     const response = await this.fetch(uri, method, data, options)
-    if (response.status > 400) {
+    if (response.status >= 400) {
       throw response
     }
     try {

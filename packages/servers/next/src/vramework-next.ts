@@ -57,7 +57,7 @@ export class VrameworkNextJS {
     const request = new VrameworkActionNextRequest<In>(data, true)
     await request.init()
     const response = new VrameworkActionNextResponse(true)
-    await request.init()
+    await response.init()
     return await runHTTPRoute<In, Out>({
       request,
       response,
