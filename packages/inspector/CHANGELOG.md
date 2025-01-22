@@ -1,5 +1,13 @@
 # @vramework/inspector
 
+## 0.6.2
+
+### Patch Changes
+
+- a40a508: fix: Fixing some generation bugs and other minors
+- Updated dependencies [a40a508]
+  - @vramework/core@0.6.5
+
 ## 0.6.1
 
 ### Patch Changes

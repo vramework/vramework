@@ -1,5 +1,12 @@
 # @vramework/fetch
 
+## 0.6.1
+
+### Patch Changes
+
+- 2bc64fd: feat: adding methods to fetch wrapper (and small fixes)
+- a40a508: fix: Fixing some generation bugs and other minors
+
 ## 0.6
 
 Marking a major release to include channels and scheduled tasks

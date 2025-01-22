@@ -1,5 +1,16 @@
 # @vramework/cli
 
+## 0.6.4
+
+### Patch Changes
+
+- 2bc64fd: feat: adding methods to fetch wrapper (and small fixes)
+- a40a508: fix: Fixing some generation bugs and other minors
+- 4855e68: refactor: changing all generated files to have a .gen in the default name suffix
+- Updated dependencies [a40a508]
+  - @vramework/inspector@0.6.2
+  - @vramework/core@0.6.5
+
 ## 0.6.3
 
 ### Patch Changes
