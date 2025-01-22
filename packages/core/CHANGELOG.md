@@ -1,5 +1,11 @@
 ## 0.6
 
+## 0.6.6
+
+### Patch Changes
+
+- 4357bca: feat: fixing up nextjs apis
+
 ## 0.6.5
 
 ### Patch Changes

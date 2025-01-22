@@ -1,5 +1,13 @@
 # @vramework/cli
 
+## 0.6.5
+
+### Patch Changes
+
+- 4357bca: feat: fixing up nextjs apis
+- Updated dependencies [4357bca]
+  - @vramework/core@0.6.6
+
 ## 0.6.4
 
 ### Patch Changes
