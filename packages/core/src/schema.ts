@@ -1,6 +1,7 @@
 import { Logger } from './services/logger.js'
 import { getRoutes } from './http/http-route-runner.js'
 import { SchemaService } from './services/schema-service.js'
+import { BadRequestError } from './errors/errors.js'
 
 /**
  * Retrieves the global schemas map.
@@ -92,12 +93,21 @@ export const coerceQueryStringToArray = (schemaName: string, data: any) => {
 }
 
 export const validateAndCoerce = (
+  logger: Logger,
   schemaService: SchemaService | undefined,
   schemaName: string | undefined | null,
   data: any,
   coerceToArray: boolean
 ) => {
-  if (schemaName && schemaService) {
+  if (schemaService) {
+    if (!schemaName) {
+      if (data && (data.length > 0 || Object.keys(data).length > 0)) {
+        logger.warn('No schema provided, but data was passed')
+        throw new BadRequestError('No data expected')
+      } else {
+        return
+      }
+    }
     const schema = getSchema(schemaName)
     schemaService.compileSchema(schemaName, schema)
     if (coerceToArray) {

@@ -34,7 +34,7 @@ export class AjvSchemaService implements SchemaService {
         }
         const result = validator(json)
         if (!result) {
-            console.log(
+            this.logger.error(
                 `failed to validate request data against schema '${schemaName}'`,
                 json,
                 validator.errors

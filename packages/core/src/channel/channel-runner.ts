@@ -138,6 +138,7 @@ export const openChannel = async ({
     if (http?.request) {
         openingData = await http.request.getData()
         validateAndCoerce(
+            singletonServices.logger,
             singletonServices.schemaService,
             schemaName,
             openingData,

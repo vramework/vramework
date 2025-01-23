@@ -306,7 +306,13 @@ export const runHTTPRoute = async <In, Out>({
     )
     const data = await request.getData()
 
-    validateAndCoerce(singletonServices.schemaService, schemaName, data, coerceToArray)
+    validateAndCoerce(
+      singletonServices.logger, 
+      singletonServices.schemaService, 
+      schemaName, 
+      data, 
+      coerceToArray
+    )
 
     sessionServices = await createSessionServices(
       singletonServices,
