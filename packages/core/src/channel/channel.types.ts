@@ -1,5 +1,5 @@
 import { EError } from '../errors/error-handler.js'
-import { HTTPFunctionMetaInputTypes } from '../http/http-routes.types.js'
+import { HTTPFunctionMetaInputTypes, VrameworkHTTP } from '../http/http-routes.types.js'
 import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
 import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
 import {
@@ -9,7 +9,6 @@ import {
   CoreUserSession,
   CreateSessionServices,
   MakeRequired,
-  VrameworkHTTP,
 } from '../types/core.types.js'
 import { CoreAPIPermission } from '../types/functions.types.js'
 import { VrameworkRequest } from '../vramework-request.js'
@@ -185,3 +184,11 @@ OpeningData = unknown,
 UserSession extends CoreUserSession = CoreUserSession,
 Out = unknown,
 > = (channelId: string, channelName: string, openingData: OpeningData, userSession: UserSession | undefined) => VrameworkChannelHandler<UserSession, OpeningData, Out>
+
+/**
+ * Enfore access to a channel.
+ * @param route - The channel to verify access for.
+ * @param session - The user session.
+ * @returns A promise that resolves if access is granted.
+ */
+export type enforceChannelAccess = (channel: CoreAPIChannel<unknown, any>, session?: CoreUserSession) => Promise<void> | void

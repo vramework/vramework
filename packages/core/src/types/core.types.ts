@@ -1,12 +1,11 @@
 import type { Logger, LogLevel } from '../services/logger.js'
 import type { HTTPSessionService } from '../http/http-session-service.js'
-import type { HTTPPermissionService } from '../http/http-permission-service.js'
-import type { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
-import type { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
-import type { ChannelPermissionService } from '../channel/channel-permission-service.js'
 import { VariablesService } from '../services/variables-service.js'
 import { EventHubService } from '../channel/eventhub-service.js'
 import { SchemaService } from '../services/schema-service.js'
+import { enforceChannelAccess } from '../channel/channel.types.js'
+import { enforceHTTPAccess, VrameworkHTTP } from '../http/http-routes.types.js'
+import { UserSessionService } from '../services/user-session-service.js'
 
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -48,7 +47,7 @@ export type RequireAtLeastOne<T> = {
  */
 export interface CoreConfig {
   /** The log level for the application. */
-  logLevel: LogLevel
+  logLevel?: LogLevel
   /** The maximum compute time allowed, in milliseconds (optional). */
   maximumComputeTime?: number
   /** Secrets used by the application (optional). */
@@ -61,22 +60,15 @@ export interface CoreConfig {
 export interface CoreUserSession {}
 
 /**
- * Represents request headers as either a record or a function to get headers by name.
- */
-export type RequestHeaders =
-  | Record<string, string | string[] | undefined>
-  | ((headerName: string) => string | string[] | undefined)
-
-/**
  * Interface for core singleton services provided by Vramework.
  */
 export interface CoreSingletonServices {
+  /** The http permission service used for authorization (optional). */
+  enforceHTTPAccess?: enforceHTTPAccess
+  /** The channel permission service used by the application (optional). */
+  enforceChannelAccess?: enforceChannelAccess
   /** The session service used by the application (optional). */
   httpSessionService?: HTTPSessionService
-  /** The http permission service used for authorization (optional). */
-  httpPermissionService?: HTTPPermissionService
-  /** The channel permission service used by the application (optional). */
-  channelPermissionService?: ChannelPermissionService
   /** The schema library used to validate data */
   schemaService?: SchemaService;
   /** The core configuration for the application. */
@@ -90,27 +82,19 @@ export interface CoreSingletonServices {
 }
 
 /**
- * Represents a http interaction within Vramework, including a request and response.
- */
-export interface VrameworkHTTP {
-  request?: VrameworkHTTPAbstractRequest
-  response?: VrameworkHTTPAbstractResponse
-}
-
-/**
  * Represents different forms of interaction within Vramework and the outside world.
  */
 export interface VrameworkInteractions {
   http?: VrameworkHTTP
 }
 
-export type SessionServices<SingletonServices extends CoreSingletonServices = CoreSingletonServices, Services = CoreServices<SingletonServices>> = Omit<Services, keyof SingletonServices | keyof VrameworkInteractions>
-
 /**
  * Represents the core services used by Vramework, including singleton services and the request/response interaction.
  */
-export type CoreServices<SingletonServices = CoreSingletonServices> =
-  SingletonServices & VrameworkInteractions
+export type CoreServices<SingletonServices = CoreSingletonServices, UserSession extends CoreUserSession = CoreUserSession> =
+  SingletonServices & VrameworkInteractions & { userSession?: UserSessionService<UserSession> }
+
+export type SessionServices<SingletonServices extends CoreSingletonServices = CoreSingletonServices, Services = CoreServices<SingletonServices>> = Omit<Services, keyof SingletonServices | keyof VrameworkInteractions | 'session'>
 
 /**
  * Defines a function type for creating singleton services from the given configuration.
@@ -137,14 +121,6 @@ export type CreateSessionServices<
  * Defines a function type for creating config.
  */
 export type CreateConfig<Config extends CoreConfig> = (variablesService?: VariablesService) => Promise<Config>
-
-/**
- * Represents a query object for Vramework, where each key can be a string, a value, or an array of values.
- */
-export type VrameworkQuery<T = Record<string, string | undefined>> = Record<
-  string,
-  string | T | null | Array<T | null>
->
 
 /**
  * Represents the documentation for a route, including summary, description, tags, and errors.

@@ -2,7 +2,7 @@ import { HTTPSessionService } from './http-session-service.js'
 import { JWTService } from '../services/jwt-service.js'
 import { InvalidSessionError, MissingSessionError } from '../errors/errors.js'
 import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
-import { VrameworkQuery } from '../types/core.types.js'
+import { VrameworkQuery } from './http-routes.types.js'
 
 /**
  * The `VrameworkHTTPSessionService` class provides session management capabilities, including handling JWT-based sessions,

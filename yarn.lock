@@ -3672,9 +3672,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vramework/aws-services@workspace:packages/cloud/aws/aws-services":
+"@vramework/aws-services@workspace:packages/services/aws-services":
   version: 0.0.0-use.local
-  resolution: "@vramework/aws-services@workspace:packages/cloud/aws/aws-services"
+  resolution: "@vramework/aws-services@workspace:packages/services/aws-services"
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.732.0"
     "@aws-sdk/client-secrets-manager": "npm:^3.714.0"
@@ -3690,9 +3690,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/azure-functions@workspace:packages/cloud/azure/functions":
+"@vramework/azure-functions@workspace:packages/runtimes/azure-functions":
   version: 0.0.0-use.local
-  resolution: "@vramework/azure-functions@workspace:packages/cloud/azure/functions"
+  resolution: "@vramework/azure-functions@workspace:packages/runtimes/azure-functions"
   dependencies:
     typescript: "npm:^5.6.3"
   peerDependencies:
@@ -3721,9 +3721,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/cloudflare@workspace:packages/cloud/cloudflare":
+"@vramework/cloudflare@workspace:packages/runtimes/cloudflare":
   version: 0.0.0-use.local
-  resolution: "@vramework/cloudflare@workspace:packages/cloud/cloudflare"
+  resolution: "@vramework/cloudflare@workspace:packages/runtimes/cloudflare"
   dependencies:
     "@cloudflare/vitest-pool-workers": "npm:^0.5.2"
     "@cloudflare/workers-types": "npm:^4.20241218.0"
@@ -3747,9 +3747,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/express-middleware@npm:^0.6.0, @vramework/express-middleware@workspace:packages/servers/express/express-middleware":
+"@vramework/express-middleware@npm:^0.6.0, @vramework/express-middleware@workspace:packages/runtimes/express-middleware":
   version: 0.0.0-use.local
-  resolution: "@vramework/express-middleware@workspace:packages/servers/express/express-middleware"
+  resolution: "@vramework/express-middleware@workspace:packages/runtimes/express-middleware"
   dependencies:
     "@types/express": "npm:^5"
     "@types/express-serve-static-core": "npm:^5.0.0"
@@ -3765,9 +3765,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/express@workspace:packages/servers/express/express-server":
+"@vramework/express@workspace:packages/runtimes/express-server":
   version: 0.0.0-use.local
-  resolution: "@vramework/express@workspace:packages/servers/express/express-server"
+  resolution: "@vramework/express@workspace:packages/runtimes/express-server"
   dependencies:
     "@types/content-type": "npm:^1.1.8"
     "@types/cookie-parser": "npm:^1.4.7"
@@ -3784,9 +3784,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/fastify-plugin@npm:^0.6.3, @vramework/fastify-plugin@workspace:packages/servers/fastify/fastify-plugin":
+"@vramework/fastify-plugin@npm:^0.6.3, @vramework/fastify-plugin@workspace:packages/runtimes/fastify-plugin":
   version: 0.0.0-use.local
-  resolution: "@vramework/fastify-plugin@workspace:packages/servers/fastify/fastify-plugin"
+  resolution: "@vramework/fastify-plugin@workspace:packages/runtimes/fastify-plugin"
   dependencies:
     fastify: "npm:^5.0.0"
     fastify-plugin: "npm:^5.0.1"
@@ -3796,9 +3796,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/fastify@workspace:packages/servers/fastify/fastify-server":
+"@vramework/fastify@workspace:packages/runtimes/fastify-server":
   version: 0.0.0-use.local
-  resolution: "@vramework/fastify@workspace:packages/servers/fastify/fastify-server"
+  resolution: "@vramework/fastify@workspace:packages/runtimes/fastify-server"
   dependencies:
     "@vramework/core": "npm:^0.6.7"
     "@vramework/fastify-plugin": "npm:^0.6.3"
@@ -3809,9 +3809,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/fetch@workspace:packages/fetch":
+"@vramework/fetch@workspace:packages/client-fetch":
   version: 0.0.0-use.local
-  resolution: "@vramework/fetch@workspace:packages/fetch"
+  resolution: "@vramework/fetch@workspace:packages/client-fetch"
   dependencies:
     typescript: "npm:^5.6"
   languageName: unknown
@@ -3839,9 +3839,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/lambda@workspace:packages/cloud/aws/lambda":
+"@vramework/lambda@workspace:packages/runtimes/aws-lambda":
   version: 0.0.0-use.local
-  resolution: "@vramework/lambda@workspace:packages/cloud/aws/lambda"
+  resolution: "@vramework/lambda@workspace:packages/runtimes/aws-lambda"
   dependencies:
     "@aws-sdk/client-apigatewaymanagementapi": "npm:^3.713.0"
     "@types/aws-lambda": "npm:^8.10.146"
@@ -3868,9 +3868,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/next@workspace:packages/servers/next":
+"@vramework/next@workspace:packages/runtimes/next":
   version: 0.0.0-use.local
-  resolution: "@vramework/next@workspace:packages/servers/next"
+  resolution: "@vramework/next@workspace:packages/runtimes/next"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     "@types/react": "npm:^19"
@@ -3911,9 +3911,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/schema-ajv@workspace:packages/schema/ajv":
+"@vramework/schema-ajv@workspace:packages/schema-ajv":
   version: 0.0.0-use.local
-  resolution: "@vramework/schema-ajv@workspace:packages/schema/ajv"
+  resolution: "@vramework/schema-ajv@workspace:packages/schema-ajv"
   dependencies:
     ajv: "npm:^8.17.1"
     ajv-formats: "npm:^3.0.1"
@@ -3923,9 +3923,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/uws-handler@npm:^0.6.4, @vramework/uws-handler@workspace:packages/servers/uws/uws-handler":
+"@vramework/uws-handler@npm:^0.6.4, @vramework/uws-handler@workspace:packages/runtimes/uws-handler":
   version: 0.0.0-use.local
-  resolution: "@vramework/uws-handler@workspace:packages/servers/uws/uws-handler"
+  resolution: "@vramework/uws-handler@workspace:packages/runtimes/uws-handler"
   dependencies:
     "@types/qs": "npm:^6"
     qs: "npm:^6.13.0"
@@ -3936,9 +3936,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/uws@workspace:packages/servers/uws/uws-server":
+"@vramework/uws@workspace:packages/runtimes/uws-server":
   version: 0.0.0-use.local
-  resolution: "@vramework/uws@workspace:packages/servers/uws/uws-server"
+  resolution: "@vramework/uws@workspace:packages/runtimes/uws-server"
   dependencies:
     "@types/qs": "npm:^6"
     "@vramework/core": "npm:^0.6.7"
@@ -3951,9 +3951,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/websocket@workspace:packages/websocket":
+"@vramework/websocket@workspace:packages/client-websocket":
   version: 0.0.0-use.local
-  resolution: "@vramework/websocket@workspace:packages/websocket"
+  resolution: "@vramework/websocket@workspace:packages/client-websocket"
   dependencies:
     typescript: "npm:^5.6"
     ws: "npm:^8.18.0"
@@ -3963,9 +3963,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vramework/ws@workspace:packages/servers/ws":
+"@vramework/ws@workspace:packages/runtimes/ws":
   version: 0.0.0-use.local
-  resolution: "@vramework/ws@workspace:packages/servers/ws"
+  resolution: "@vramework/ws@workspace:packages/runtimes/ws"
   dependencies:
     "@types/ws": "npm:^8"
     cookie: "npm:^1.0.1"

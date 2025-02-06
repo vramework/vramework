@@ -30,7 +30,7 @@ const isValidVariableName = (name: string) => {
   return regex.test(name)
 }
 
-const getNamesAndTypes = (checker: ts.TypeChecker, typesMap: TypesMap, direction: 'Input' | 'Output', funcName: string, type: ts.Type) => {
+export const getNamesAndTypes = (checker: ts.TypeChecker, typesMap: TypesMap, direction: 'Input' | 'Output', funcName: string, type: ts.Type) => {
   const result: {
     names: Set<string>
     types: ts.Type[]
@@ -174,40 +174,6 @@ export const resolveTypeImports = (
   visitType(type);
   return types
 };
-
-export const getTypeOfFunctionArg = (
-  checker: ts.TypeChecker,
-  funcProperty: ts.ObjectLiteralElementLike | undefined,
-  argIndex: number
-) => {
-  if (funcProperty && ts.isPropertyAssignment(funcProperty)) {
-    const funcType = checker.getTypeAtLocation(funcProperty.initializer)
-    const callSignatures = funcType.getCallSignatures()
-
-    if (callSignatures.length > 1) {
-      console.error('Multiple call signatures found')
-    }
-
-    const signature = callSignatures[0]
-    if (!signature) {
-      console.log('No api signature found')
-      return null
-    }
-
-    const parameters = signature.getParameters()
-    const parameter = parameters[argIndex]
-    if (!parameter) {
-      console.log('No parameter found')
-      return null
-    }
-    const paramType = checker.getTypeOfSymbolAtLocation(
-      parameter,
-      parameter.valueDeclaration!
-    )
-    return checker.typeToString(paramType)
-  }
-  return null
-}
 
 export const getPropertyAssignment = (
   obj: ts.ObjectLiteralExpression,

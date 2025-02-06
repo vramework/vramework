@@ -127,8 +127,8 @@ export const openChannel = async ({
         singletonServices.httpSessionService
     )
 
-    if (singletonServices.channelPermissionService) {
-        await singletonServices.channelPermissionService.verifyChannelAccess(
+    if (singletonServices.enforceChannelAccess) {
+        await singletonServices.enforceChannelAccess(
             matchingChannel.channelConfig,
             userSession
         )

@@ -8,22 +8,9 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/core",
-      "packages/schema/ajv",
-      "packages/inspector",
-      "packages/cli",
-      "packages/fetch",
-      "packages/websocket",
-      "packages/schedule",
+      "packages/*",
       "packages/services/*",
-      "packages/servers/*",
-      "packages/servers/express/*",
-      "packages/servers/fastify/*",
-      "packages/servers/uws/*",
-      "packages/servers/ws/*",
-      "packages/cloud/cloudflare",
-      "packages/cloud/aws/*",
-      "packages/cloud/azure/*"
+      "packages/runtimes/*"
     ]
   },
   "scripts": {

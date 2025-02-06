@@ -5,11 +5,11 @@ import {
   HTTPRoutesMeta,
   RunRouteOptions,
   RunRouteParams,
+  VrameworkHTTP,
 } from './http-routes.types.js'
 import {
   CoreUserSession,
   SessionServices,
-  VrameworkHTTP,
 } from '../types/core.types.js'
 import { match } from 'path-to-regexp'
 import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
@@ -321,8 +321,8 @@ export const runHTTPRoute = async <In, Out>({
     )
     const allServices = { ...singletonServices, ...sessionServices, http }
 
-    if (singletonServices.httpPermissionService) {
-      await singletonServices.httpPermissionService.verifyRouteAccess(
+    if (singletonServices.enforceHTTPAccess) {
+      await singletonServices.enforceHTTPAccess(
         route,
         session
       )

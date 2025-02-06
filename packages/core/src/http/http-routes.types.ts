@@ -18,15 +18,15 @@ import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-respons
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
-    ? Param | ExtractRouteParams<`/${Rest}`>
-    : S extends `${string}:${infer Param}`
-      ? Param
-      : never
+  ? Param | ExtractRouteParams<`/${Rest}`>
+  : S extends `${string}:${infer Param}`
+  ? Param
+  : never
 
 export type AssertRouteParams<In, Route extends string> =
   ExtractRouteParams<Route> extends keyof In
-    ? unknown
-    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
+  ? unknown
+  : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
 
 export type RunRouteOptions = Partial<{
   skipUserSession: boolean
@@ -64,6 +64,28 @@ export type CoreHTTPFunction = {
     tags: string[]
   }>
 }
+/**
+ * Represents a http interaction within Vramework, including a request and response.
+ */
+export interface VrameworkHTTP {
+  request?: VrameworkHTTPAbstractRequest
+  response?: VrameworkHTTPAbstractResponse
+}
+
+/**
+ * Represents request headers as either a record or a function to get headers by name.
+ */
+export type RequestHeaders =
+  | Record<string, string | string[] | undefined>
+  | ((headerName: string) => string | string[] | undefined)
+
+/**
+* Represents a query object for Vramework, where each key can be a string, a value, or an array of values.
+*/
+export type VrameworkQuery<T = Record<string, string | undefined>> = Record<
+  string,
+  string | T | null | Array<T | null>
+>
 
 /**
  * Represents a core API route, which can have different configurations depending on whether it requires authentication and permissions.
@@ -84,35 +106,35 @@ export type CoreHTTPFunctionRoute<
   APIPermission = CoreAPIPermission<In>,
 > =
   | (CoreHTTPFunction & {
-      route: R
-      method: HTTPMethod
-      func: APIFunction
-      permissions?: Record<string, APIPermission[] | APIPermission>
-      auth?: true
-    })
+    route: R
+    method: HTTPMethod
+    func: APIFunction
+    permissions?: Record<string, APIPermission[] | APIPermission>
+    auth?: true
+  })
   | (CoreHTTPFunction & {
-      route: R
-      method: HTTPMethod
-      func: APIFunctionSessionless
-      permissions?: undefined
-      auth?: false
-    })
+    route: R
+    method: HTTPMethod
+    func: APIFunctionSessionless
+    permissions?: undefined
+    auth?: false
+  })
   | (CoreHTTPFunction & {
-      route: R
-      method: 'post'
-      func: APIFunction
-      permissions?: Record<string, APIPermission[] | APIPermission>
-      auth?: true
-      query?: Array<keyof In>
-    })
+    route: R
+    method: 'post'
+    func: APIFunction
+    permissions?: Record<string, APIPermission[] | APIPermission>
+    auth?: true
+    query?: Array<keyof In>
+  })
   | (CoreHTTPFunction & {
-      route: R
-      method: 'post'
-      func: APIFunctionSessionless
-      permissions?: undefined
-      auth?: false
-      query?: Array<keyof In>
-    })
+    route: R
+    method: 'post'
+    func: APIFunctionSessionless
+    permissions?: undefined
+    auth?: false
+    query?: Array<keyof In>
+  })
 
 /**
  * Represents an array of core API routes.
@@ -143,3 +165,14 @@ export type HTTPRoutesMeta = Array<{
   inputTypes?: HTTPFunctionMetaInputTypes
   docs?: APIDocs
 }>
+
+/**
+ * Verifies access to a route.
+ * @param route - The route to verify access for.
+ * @param session - The user session.
+ * @returns A promise that resolves if access is granted.
+ */
+export type enforceHTTPAccess = (
+  route: CoreHTTPFunctionRoute<unknown, unknown, any>,
+  session?: CoreUserSession
+) => Promise<void> | void

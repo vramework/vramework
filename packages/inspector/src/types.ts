@@ -10,6 +10,18 @@ export type PathToNameAndType = Map<
 
 export type MetaInputTypes = Map<string, { query: string[] | undefined, params: string[] | undefined, body: string[] | undefined }>
 
+export type APIFunctionMeta = Array<{
+  name: string
+  input: string
+  output: string
+  file: string
+}>
+
+export type InspectorAPIFunction = {
+  typesMap: TypesMap,
+  meta: APIFunctionMeta
+}
+
 export interface InspectorHTTPState {
   typesMap: TypesMap
   metaInputTypes: MetaInputTypes
