@@ -1,8 +1,8 @@
-export * from './vramework-http-session-service.js'
+export * from './pikku-http-session-service.js'
 
-export * from './vramework-http-abstract-request.js'
+export * from './pikku-http-abstract-request.js'
 
-export * from './vramework-http-abstract-response.js'
+export * from './pikku-http-abstract-response.js'
 
 export * from './log-http-routes.js'
 

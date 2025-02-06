@@ -1,8 +1,8 @@
 import { test, describe, beforeEach, afterEach } from 'node:test'
 import * as assert from 'assert'
 import { NotFoundError, NotImplementedError } from '../errors/errors.js'
-import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
-import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
+import { PikkuHTTPAbstractRequest } from './pikku-http-abstract-request.js'
+import { PikkuHTTPAbstractResponse } from './pikku-http-abstract-response.js'
 import { JSONValue } from '../types/core.types.js'
 import {
   getUserSession,
@@ -11,7 +11,7 @@ import {
   addRoute,
 } from './http-route-runner.js'
 
-class VrameworkTestRequest extends VrameworkHTTPAbstractRequest {
+class PikkuTestRequest extends PikkuHTTPAbstractRequest {
   public getBody(): Promise<unknown> {
     throw new Error('Method not implemented.')
   }
@@ -20,7 +20,7 @@ class VrameworkTestRequest extends VrameworkHTTPAbstractRequest {
   }
 }
 
-class VrameworkTestResponse extends VrameworkHTTPAbstractResponse {
+class PikkuTestResponse extends PikkuHTTPAbstractResponse {
   public setStatus(_status: number): void {
     throw new Error('Method not implemented.')
   }
@@ -53,8 +53,8 @@ describe('runHTTPRoute', () => {
     }
 
     createSessionServices = async () => ({})
-    request = new VrameworkTestRequest()
-    response = new VrameworkTestResponse()
+    request = new PikkuTestRequest()
+    response = new PikkuTestResponse()
 
     request.getData = async () => ({})
     request.getHeader = () => 'application/json'
@@ -167,7 +167,7 @@ describe('getUserSession', () => {
     sessionService = {
       getUserSession: async () => ({}),
     }
-    request = new VrameworkTestRequest()
+    request = new PikkuTestRequest()
   })
 
   test('should return user session when sessionService is provided', async () => {

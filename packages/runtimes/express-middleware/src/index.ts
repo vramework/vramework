@@ -1,9 +1,9 @@
 /**
- * This module provides an Express middleware for integrating the Vramework framework with Express applications.
- * It exports the `vrameworkMiddleware` function, allowing developers to easily manage request handling
- * using Vramework's core features in an Express environment.
+ * This module provides an Express middleware for integrating the Pikku framework with Express applications.
+ * It exports the `pikkuMiddleware` function, allowing developers to easily manage request handling
+ * using Pikku's core features in an Express environment.
  *
- * @module @vramework/express-middleware
+ * @module @pikku/express-middleware
  */
 
-export * from './vramework-express-middleware.js'
+export * from './pikku-express-middleware.js'

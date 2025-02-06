@@ -24,13 +24,13 @@ export interface ErrorDetails {
 /**
  * Map of API errors to their details.
  */
-if (!globalThis.vramework?.apiErrors) {
-  globalThis.vramework = globalThis.vramework || {}
-  globalThis.vramework.apiErrors = new Map<any, ErrorDetails>([])
+if (!globalThis.pikku?.apiErrors) {
+  globalThis.pikku = globalThis.pikku || {}
+  globalThis.pikku.apiErrors = new Map<any, ErrorDetails>([])
 }
 
 const apiErrors = (): Map<any, ErrorDetails> => {
-  return globalThis.vramework.apiErrors
+  return globalThis.pikku.apiErrors
 }
 
 export const getErrors = () => apiErrors()

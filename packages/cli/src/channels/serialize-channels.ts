@@ -1,4 +1,4 @@
-import { ChannelsMeta } from '@vramework/core/channel'
+import { ChannelsMeta } from '@pikku/core/channel'
 import { getFileImportRelativePath } from '../utils.js'
 
 export const serializeChannels = (
@@ -27,7 +27,7 @@ export const serializeChannels = (
 export const serializeChannelMeta = (channelsMeta: ChannelsMeta) => {
   const serializedOutput: string[] = []
   serializedOutput.push(
-    "import { setChannelsMeta } from '@vramework/core/channel'"
+    "import { setChannelsMeta } from '@pikku/core/channel'"
   )
   serializedOutput.push(
     `setChannelsMeta(${JSON.stringify(channelsMeta, null, 2)})`

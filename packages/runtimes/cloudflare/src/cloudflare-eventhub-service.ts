@@ -1,6 +1,6 @@
 import { DurableObjectState, WebSocket } from "@cloudflare/workers-types";
-import { EventHubService } from "@vramework/core/channel";
-import { Logger } from "@vramework/core/services";
+import { EventHubService } from "@pikku/core/channel";
+import { Logger } from "@pikku/core/services";
 
 export class CloudflareEventHubService<Data = unknown>
     implements EventHubService<Data> {

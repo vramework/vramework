@@ -1,9 +1,9 @@
 export const serializeFetchWrapper = (routesMapPath: string) => {
   return `
-import { CoreVrameworkFetch, HTTPMethod } from '@vramework/fetch'
+import { CorePikkuFetch, HTTPMethod } from '@pikku/fetch'
 import type { RoutesMap, RouteHandlerOf, RoutesWithMethod } from '${routesMapPath}'
 
-export class VrameworkFetch extends CoreVrameworkFetch {
+export class PikkuFetch extends AbstractPikkuFetch {
     public async post<Route extends RoutesWithMethod<'POST'>>(
         route: Route,
         data: RouteHandlerOf<Route, 'POST'>['input'] = null,
@@ -52,6 +52,6 @@ export class VrameworkFetch extends CoreVrameworkFetch {
     }
 }
 
-export const vrameworkFetch = new VrameworkFetch()
+export const pikkuFetch = new PikkuFetch()
 `
 }

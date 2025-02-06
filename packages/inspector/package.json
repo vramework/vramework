@@ -1,5 +1,5 @@
 {
-  "name": "@vramework/inspector",
+  "name": "@pikku/inspector",
   "version": "0.6.2",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "dependencies": {
-    "@vramework/core": "^0.6.5",
+    "@pikku/core": "^0.6.5",
     "path-to-regexp": "^8.2.0",
     "typescript": "^5.6"
   },

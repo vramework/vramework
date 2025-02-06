@@ -8,10 +8,10 @@ import { BadRequestError } from './errors/errors.js'
  * @returns A map of schemas.
  */
 export const getSchemas = () => {
-  if (!global.vrameworkSchemas) {
-    global.vrameworkSchemas = new Map<string, any>()
+  if (!global.pikkuSchemas) {
+    global.pikkuSchemas = new Map<string, any>()
   }
-  return global.vrameworkSchemas
+  return global.pikkuSchemas
 }
 
 /**
@@ -69,7 +69,7 @@ const validateAllSchemasLoaded = (logger: Logger, schemaService: SchemaService) 
       `Error: Failed to load schemas:\n.${missingSchemas.join('\n')}`
     )
     logger.error('\tHave you run the schema generation?')
-    logger.error('\tnpx @vramework/cli schemas')
+    logger.error('\tnpx @pikku/cli schemas')
   } else {
     logger.info('All schemas loaded')
   }

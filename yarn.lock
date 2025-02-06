@@ -2310,6 +2310,310 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pikku/aws-services@workspace:packages/services/aws-services":
+  version: 0.0.0-use.local
+  resolution: "@pikku/aws-services@workspace:packages/services/aws-services"
+  dependencies:
+    "@aws-sdk/client-s3": "npm:^3.732.0"
+    "@aws-sdk/client-secrets-manager": "npm:^3.714.0"
+    "@aws-sdk/cloudfront-signer": "npm:^3.723.0"
+    "@aws-sdk/s3-request-presigner": "npm:^3.732.0"
+    typescript: "npm:^5.7"
+  peerDependencies:
+    "@aws-sdk/client-s3": ^3.732.0
+    "@aws-sdk/client-secrets-manager": ^3.714.0
+    "@aws-sdk/cloudfront-signer": ^3.723.0
+    "@aws-sdk/s3-request-presigner": ^3.732.0
+    "@pikku/core": ^0.6.8
+  languageName: unknown
+  linkType: soft
+
+"@pikku/azure-functions@workspace:packages/runtimes/azure-functions":
+  version: 0.0.0-use.local
+  resolution: "@pikku/azure-functions@workspace:packages/runtimes/azure-functions"
+  dependencies:
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+  languageName: unknown
+  linkType: soft
+
+"@pikku/cli@workspace:packages/cli":
+  version: 0.0.0-use.local
+  resolution: "@pikku/cli@workspace:packages/cli"
+  dependencies:
+    "@openapi-contrib/json-schema-to-openapi-schema": "npm:^3.0.2"
+    "@pikku/core": "npm:^0.6.7"
+    "@pikku/inspector": "npm:^0.6.2"
+    "@types/cookie": "npm:^0.6.0"
+    "@types/node": "npm:^22.7.8"
+    "@types/uuid": "npm:^10.0.0"
+    commander: "npm:^12"
+    glob: "npm:^10"
+    path-to-regexp: "npm:^8.2.0"
+    ts-json-schema-generator: "npm:^2.3.0"
+    typescript: "npm:^5.6"
+    yaml: "npm:^2.6.0"
+  bin:
+    pikku: dist/bin/pikku.js
+  languageName: unknown
+  linkType: soft
+
+"@pikku/cloudflare@workspace:packages/runtimes/cloudflare":
+  version: 0.0.0-use.local
+  resolution: "@pikku/cloudflare@workspace:packages/runtimes/cloudflare"
+  dependencies:
+    "@cloudflare/vitest-pool-workers": "npm:^0.5.2"
+    "@cloudflare/workers-types": "npm:^4.20241218.0"
+    typescript: "npm:^5.7.2"
+  peerDependencies:
+    "@pikku/core": ^0.6.5
+  languageName: unknown
+  linkType: soft
+
+"@pikku/core@npm:^0.6.5, @pikku/core@npm:^0.6.7, @pikku/core@workspace:packages/core":
+  version: 0.0.0-use.local
+  resolution: "@pikku/core@workspace:packages/core"
+  dependencies:
+    "@types/cookie": "npm:^0.6.0"
+    "@types/node": "npm:^22.7.8"
+    "@types/uuid": "npm:^10.0.0"
+    cookie: "npm:^1.0.1"
+    path-to-regexp: "npm:^8.2.0"
+    tsx: "npm:^4.19.2"
+    typescript: "npm:^5.6"
+  languageName: unknown
+  linkType: soft
+
+"@pikku/express-middleware@npm:^0.6.0, @pikku/express-middleware@workspace:packages/runtimes/express-middleware":
+  version: 0.0.0-use.local
+  resolution: "@pikku/express-middleware@workspace:packages/runtimes/express-middleware"
+  dependencies:
+    "@pikku/core": "npm:^0.6.7"
+    "@types/express": "npm:^5"
+    "@types/express-serve-static-core": "npm:^5.0.0"
+    express: "npm:^5"
+    raw-body: "npm:^3.0.0"
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+    "@types/express": ^5
+    "@types/express-serve-static-core": ^5.0.0
+    express: ^5
+  languageName: unknown
+  linkType: soft
+
+"@pikku/express@workspace:packages/runtimes/express-server":
+  version: 0.0.0-use.local
+  resolution: "@pikku/express@workspace:packages/runtimes/express-server"
+  dependencies:
+    "@pikku/express-middleware": "npm:^0.6.0"
+    "@types/content-type": "npm:^1.1.8"
+    "@types/cookie-parser": "npm:^1.4.7"
+    "@types/cors": "npm:^2.8.17"
+    "@types/express": "npm:^5"
+    "@types/express-serve-static-core": "npm:^5.0.0"
+    cookie-parser: "npm:^1.4.7"
+    cors: "npm:^2.8.5"
+    express: "npm:^5"
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.5
+  languageName: unknown
+  linkType: soft
+
+"@pikku/fastify-plugin@npm:^0.6.3, @pikku/fastify-plugin@workspace:packages/runtimes/fastify-plugin":
+  version: 0.0.0-use.local
+  resolution: "@pikku/fastify-plugin@workspace:packages/runtimes/fastify-plugin"
+  dependencies:
+    fastify: "npm:^5.0.0"
+    fastify-plugin: "npm:^5.0.1"
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+  languageName: unknown
+  linkType: soft
+
+"@pikku/fastify@workspace:packages/runtimes/fastify-server":
+  version: 0.0.0-use.local
+  resolution: "@pikku/fastify@workspace:packages/runtimes/fastify-server"
+  dependencies:
+    "@pikku/core": "npm:^0.6.7"
+    "@pikku/fastify-plugin": "npm:^0.6.3"
+    fastify: "npm:^5.0.0"
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+  languageName: unknown
+  linkType: soft
+
+"@pikku/fetch@workspace:packages/client-fetch":
+  version: 0.0.0-use.local
+  resolution: "@pikku/fetch@workspace:packages/client-fetch"
+  dependencies:
+    typescript: "npm:^5.6"
+  languageName: unknown
+  linkType: soft
+
+"@pikku/inspector@npm:^0.6.2, @pikku/inspector@workspace:packages/inspector":
+  version: 0.0.0-use.local
+  resolution: "@pikku/inspector@workspace:packages/inspector"
+  dependencies:
+    "@pikku/core": "npm:^0.6.5"
+    "@types/node": "npm:^22.7.8"
+    path-to-regexp: "npm:^8.2.0"
+    typescript: "npm:^5.6"
+  languageName: unknown
+  linkType: soft
+
+"@pikku/jose@workspace:packages/services/jose":
+  version: 0.0.0-use.local
+  resolution: "@pikku/jose@workspace:packages/services/jose"
+  dependencies:
+    jose: "npm:^5.9.6"
+    typescript: "npm:^5.6"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+  languageName: unknown
+  linkType: soft
+
+"@pikku/lambda@workspace:packages/runtimes/aws-lambda":
+  version: 0.0.0-use.local
+  resolution: "@pikku/lambda@workspace:packages/runtimes/aws-lambda"
+  dependencies:
+    "@aws-sdk/client-apigatewaymanagementapi": "npm:^3.713.0"
+    "@types/aws-lambda": "npm:^8.10.146"
+    typescript: "npm:^5.7.2"
+  peerDependencies:
+    "@aws-sdk/client-apigatewaymanagementapi": ^3.713.0
+    "@pikku/core": ^0.6.7
+    "@types/aws-lambda": ^8.10.146
+  languageName: unknown
+  linkType: soft
+
+"@pikku/mono@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@pikku/mono@workspace:."
+  dependencies:
+    "@azure/functions": "npm:^4.6.0"
+    "@changesets/cli": "npm:^2.27.9"
+    "@types/node": "npm:^20.11.30"
+    husky: "npm:^9.1.7"
+    prettier: "npm:3.3.3"
+    tsx: "npm:^4.19.2"
+    typedoc: "npm:^0.26.7"
+    typescript: "npm:^5.6"
+  languageName: unknown
+  linkType: soft
+
+"@pikku/next@workspace:packages/runtimes/next":
+  version: 0.0.0-use.local
+  resolution: "@pikku/next@workspace:packages/runtimes/next"
+  dependencies:
+    "@types/cookie": "npm:^0.6.0"
+    "@types/react": "npm:^19"
+    cookie: "npm:^1.0.1"
+    eventemitter3: "npm:^5.0.1"
+    next: "npm:^15"
+    react: "npm:^19"
+    react-dom: "npm:^19"
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+    next: ^15
+    react-dom: "*"
+  languageName: unknown
+  linkType: soft
+
+"@pikku/pino@workspace:packages/services/pino":
+  version: 0.0.0-use.local
+  resolution: "@pikku/pino@workspace:packages/services/pino"
+  dependencies:
+    typescript: "npm:^5.6"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+    pino: ^9.5.0
+  languageName: unknown
+  linkType: soft
+
+"@pikku/schedule@workspace:packages/schedule":
+  version: 0.0.0-use.local
+  resolution: "@pikku/schedule@workspace:packages/schedule"
+  dependencies:
+    "@types/node": "npm:^22.7.8"
+    cron: "npm:^3.2.1"
+    cron-schedule: "npm:^5.0.4"
+    typescript: "npm:^5.6"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+  languageName: unknown
+  linkType: soft
+
+"@pikku/schema-ajv@workspace:packages/schema-ajv":
+  version: 0.0.0-use.local
+  resolution: "@pikku/schema-ajv@workspace:packages/schema-ajv"
+  dependencies:
+    ajv: "npm:^8.17.1"
+    ajv-formats: "npm:^3.0.1"
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+  languageName: unknown
+  linkType: soft
+
+"@pikku/uws-handler@npm:^0.6.4, @pikku/uws-handler@workspace:packages/runtimes/uws-handler":
+  version: 0.0.0-use.local
+  resolution: "@pikku/uws-handler@workspace:packages/runtimes/uws-handler"
+  dependencies:
+    "@types/qs": "npm:^6"
+    qs: "npm:^6.13.0"
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+    uWebSockets.js: "*"
+  languageName: unknown
+  linkType: soft
+
+"@pikku/uws@workspace:packages/runtimes/uws-server":
+  version: 0.0.0-use.local
+  resolution: "@pikku/uws@workspace:packages/runtimes/uws-server"
+  dependencies:
+    "@pikku/core": "npm:^0.6.7"
+    "@pikku/uws-handler": "npm:^0.6.4"
+    "@types/qs": "npm:^6"
+    qs: "npm:^6.13.0"
+    typescript: "npm:^5.6.3"
+    uWebSockets.js: "uNetworking/uWebSockets.js#v20.49.0"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+  languageName: unknown
+  linkType: soft
+
+"@pikku/websocket@workspace:packages/client-websocket":
+  version: 0.0.0-use.local
+  resolution: "@pikku/websocket@workspace:packages/client-websocket"
+  dependencies:
+    typescript: "npm:^5.6"
+    ws: "npm:^8.18.0"
+  dependenciesMeta:
+    ws:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@pikku/ws@workspace:packages/runtimes/ws":
+  version: 0.0.0-use.local
+  resolution: "@pikku/ws@workspace:packages/runtimes/ws"
+  dependencies:
+    "@types/ws": "npm:^8"
+    cookie: "npm:^1.0.1"
+    typescript: "npm:^5.6.3"
+  peerDependencies:
+    "@pikku/core": ^0.6.7
+    ws: ^8.18.0
+  languageName: unknown
+  linkType: soft
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -3671,310 +3975,6 @@ __metadata:
   checksum: 10/c6fe89a505e513a7592e1438280db1c075764793a2397877ff1351721fe8792a966a5359769e30242b3cd023f2efb9e63ca2ca88019d73b564488cc20e3eab12
   languageName: node
   linkType: hard
-
-"@vramework/aws-services@workspace:packages/services/aws-services":
-  version: 0.0.0-use.local
-  resolution: "@vramework/aws-services@workspace:packages/services/aws-services"
-  dependencies:
-    "@aws-sdk/client-s3": "npm:^3.732.0"
-    "@aws-sdk/client-secrets-manager": "npm:^3.714.0"
-    "@aws-sdk/cloudfront-signer": "npm:^3.723.0"
-    "@aws-sdk/s3-request-presigner": "npm:^3.732.0"
-    typescript: "npm:^5.7"
-  peerDependencies:
-    "@aws-sdk/client-s3": ^3.732.0
-    "@aws-sdk/client-secrets-manager": ^3.714.0
-    "@aws-sdk/cloudfront-signer": ^3.723.0
-    "@aws-sdk/s3-request-presigner": ^3.732.0
-    "@vramework/core": ^0.6.8
-  languageName: unknown
-  linkType: soft
-
-"@vramework/azure-functions@workspace:packages/runtimes/azure-functions":
-  version: 0.0.0-use.local
-  resolution: "@vramework/azure-functions@workspace:packages/runtimes/azure-functions"
-  dependencies:
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-  languageName: unknown
-  linkType: soft
-
-"@vramework/cli@workspace:packages/cli":
-  version: 0.0.0-use.local
-  resolution: "@vramework/cli@workspace:packages/cli"
-  dependencies:
-    "@openapi-contrib/json-schema-to-openapi-schema": "npm:^3.0.2"
-    "@types/cookie": "npm:^0.6.0"
-    "@types/node": "npm:^22.7.8"
-    "@types/uuid": "npm:^10.0.0"
-    "@vramework/core": "npm:^0.6.7"
-    "@vramework/inspector": "npm:^0.6.2"
-    commander: "npm:^12"
-    glob: "npm:^10"
-    path-to-regexp: "npm:^8.2.0"
-    ts-json-schema-generator: "npm:^2.3.0"
-    typescript: "npm:^5.6"
-    yaml: "npm:^2.6.0"
-  bin:
-    vramework: dist/bin/vramework.js
-  languageName: unknown
-  linkType: soft
-
-"@vramework/cloudflare@workspace:packages/runtimes/cloudflare":
-  version: 0.0.0-use.local
-  resolution: "@vramework/cloudflare@workspace:packages/runtimes/cloudflare"
-  dependencies:
-    "@cloudflare/vitest-pool-workers": "npm:^0.5.2"
-    "@cloudflare/workers-types": "npm:^4.20241218.0"
-    typescript: "npm:^5.7.2"
-  peerDependencies:
-    "@vramework/core": ^0.6.5
-  languageName: unknown
-  linkType: soft
-
-"@vramework/core@npm:^0.6.5, @vramework/core@npm:^0.6.7, @vramework/core@workspace:packages/core":
-  version: 0.0.0-use.local
-  resolution: "@vramework/core@workspace:packages/core"
-  dependencies:
-    "@types/cookie": "npm:^0.6.0"
-    "@types/node": "npm:^22.7.8"
-    "@types/uuid": "npm:^10.0.0"
-    cookie: "npm:^1.0.1"
-    path-to-regexp: "npm:^8.2.0"
-    tsx: "npm:^4.19.2"
-    typescript: "npm:^5.6"
-  languageName: unknown
-  linkType: soft
-
-"@vramework/express-middleware@npm:^0.6.0, @vramework/express-middleware@workspace:packages/runtimes/express-middleware":
-  version: 0.0.0-use.local
-  resolution: "@vramework/express-middleware@workspace:packages/runtimes/express-middleware"
-  dependencies:
-    "@types/express": "npm:^5"
-    "@types/express-serve-static-core": "npm:^5.0.0"
-    "@vramework/core": "npm:^0.6.7"
-    express: "npm:^5"
-    raw-body: "npm:^3.0.0"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@types/express": ^5
-    "@types/express-serve-static-core": ^5.0.0
-    "@vramework/core": ^0.6.7
-    express: ^5
-  languageName: unknown
-  linkType: soft
-
-"@vramework/express@workspace:packages/runtimes/express-server":
-  version: 0.0.0-use.local
-  resolution: "@vramework/express@workspace:packages/runtimes/express-server"
-  dependencies:
-    "@types/content-type": "npm:^1.1.8"
-    "@types/cookie-parser": "npm:^1.4.7"
-    "@types/cors": "npm:^2.8.17"
-    "@types/express": "npm:^5"
-    "@types/express-serve-static-core": "npm:^5.0.0"
-    "@vramework/express-middleware": "npm:^0.6.0"
-    cookie-parser: "npm:^1.4.7"
-    cors: "npm:^2.8.5"
-    express: "npm:^5"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@vramework/core": ^0.6.5
-  languageName: unknown
-  linkType: soft
-
-"@vramework/fastify-plugin@npm:^0.6.3, @vramework/fastify-plugin@workspace:packages/runtimes/fastify-plugin":
-  version: 0.0.0-use.local
-  resolution: "@vramework/fastify-plugin@workspace:packages/runtimes/fastify-plugin"
-  dependencies:
-    fastify: "npm:^5.0.0"
-    fastify-plugin: "npm:^5.0.1"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-  languageName: unknown
-  linkType: soft
-
-"@vramework/fastify@workspace:packages/runtimes/fastify-server":
-  version: 0.0.0-use.local
-  resolution: "@vramework/fastify@workspace:packages/runtimes/fastify-server"
-  dependencies:
-    "@vramework/core": "npm:^0.6.7"
-    "@vramework/fastify-plugin": "npm:^0.6.3"
-    fastify: "npm:^5.0.0"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-  languageName: unknown
-  linkType: soft
-
-"@vramework/fetch@workspace:packages/client-fetch":
-  version: 0.0.0-use.local
-  resolution: "@vramework/fetch@workspace:packages/client-fetch"
-  dependencies:
-    typescript: "npm:^5.6"
-  languageName: unknown
-  linkType: soft
-
-"@vramework/inspector@npm:^0.6.2, @vramework/inspector@workspace:packages/inspector":
-  version: 0.0.0-use.local
-  resolution: "@vramework/inspector@workspace:packages/inspector"
-  dependencies:
-    "@types/node": "npm:^22.7.8"
-    "@vramework/core": "npm:^0.6.5"
-    path-to-regexp: "npm:^8.2.0"
-    typescript: "npm:^5.6"
-  languageName: unknown
-  linkType: soft
-
-"@vramework/jose@workspace:packages/services/jose":
-  version: 0.0.0-use.local
-  resolution: "@vramework/jose@workspace:packages/services/jose"
-  dependencies:
-    jose: "npm:^5.9.6"
-    typescript: "npm:^5.6"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-  languageName: unknown
-  linkType: soft
-
-"@vramework/lambda@workspace:packages/runtimes/aws-lambda":
-  version: 0.0.0-use.local
-  resolution: "@vramework/lambda@workspace:packages/runtimes/aws-lambda"
-  dependencies:
-    "@aws-sdk/client-apigatewaymanagementapi": "npm:^3.713.0"
-    "@types/aws-lambda": "npm:^8.10.146"
-    typescript: "npm:^5.7.2"
-  peerDependencies:
-    "@aws-sdk/client-apigatewaymanagementapi": ^3.713.0
-    "@types/aws-lambda": ^8.10.146
-    "@vramework/core": ^0.6.7
-  languageName: unknown
-  linkType: soft
-
-"@vramework/mono@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@vramework/mono@workspace:."
-  dependencies:
-    "@azure/functions": "npm:^4.6.0"
-    "@changesets/cli": "npm:^2.27.9"
-    "@types/node": "npm:^20.11.30"
-    husky: "npm:^9.1.7"
-    prettier: "npm:3.3.3"
-    tsx: "npm:^4.19.2"
-    typedoc: "npm:^0.26.7"
-    typescript: "npm:^5.6"
-  languageName: unknown
-  linkType: soft
-
-"@vramework/next@workspace:packages/runtimes/next":
-  version: 0.0.0-use.local
-  resolution: "@vramework/next@workspace:packages/runtimes/next"
-  dependencies:
-    "@types/cookie": "npm:^0.6.0"
-    "@types/react": "npm:^19"
-    cookie: "npm:^1.0.1"
-    eventemitter3: "npm:^5.0.1"
-    next: "npm:^15"
-    react: "npm:^19"
-    react-dom: "npm:^19"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-    next: ^15
-    react-dom: "*"
-  languageName: unknown
-  linkType: soft
-
-"@vramework/pino@workspace:packages/services/pino":
-  version: 0.0.0-use.local
-  resolution: "@vramework/pino@workspace:packages/services/pino"
-  dependencies:
-    typescript: "npm:^5.6"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-    pino: ^9.5.0
-  languageName: unknown
-  linkType: soft
-
-"@vramework/schedule@workspace:packages/schedule":
-  version: 0.0.0-use.local
-  resolution: "@vramework/schedule@workspace:packages/schedule"
-  dependencies:
-    "@types/node": "npm:^22.7.8"
-    cron: "npm:^3.2.1"
-    cron-schedule: "npm:^5.0.4"
-    typescript: "npm:^5.6"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-  languageName: unknown
-  linkType: soft
-
-"@vramework/schema-ajv@workspace:packages/schema-ajv":
-  version: 0.0.0-use.local
-  resolution: "@vramework/schema-ajv@workspace:packages/schema-ajv"
-  dependencies:
-    ajv: "npm:^8.17.1"
-    ajv-formats: "npm:^3.0.1"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-  languageName: unknown
-  linkType: soft
-
-"@vramework/uws-handler@npm:^0.6.4, @vramework/uws-handler@workspace:packages/runtimes/uws-handler":
-  version: 0.0.0-use.local
-  resolution: "@vramework/uws-handler@workspace:packages/runtimes/uws-handler"
-  dependencies:
-    "@types/qs": "npm:^6"
-    qs: "npm:^6.13.0"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-    uWebSockets.js: "*"
-  languageName: unknown
-  linkType: soft
-
-"@vramework/uws@workspace:packages/runtimes/uws-server":
-  version: 0.0.0-use.local
-  resolution: "@vramework/uws@workspace:packages/runtimes/uws-server"
-  dependencies:
-    "@types/qs": "npm:^6"
-    "@vramework/core": "npm:^0.6.7"
-    "@vramework/uws-handler": "npm:^0.6.4"
-    qs: "npm:^6.13.0"
-    typescript: "npm:^5.6.3"
-    uWebSockets.js: "uNetworking/uWebSockets.js#v20.49.0"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-  languageName: unknown
-  linkType: soft
-
-"@vramework/websocket@workspace:packages/client-websocket":
-  version: 0.0.0-use.local
-  resolution: "@vramework/websocket@workspace:packages/client-websocket"
-  dependencies:
-    typescript: "npm:^5.6"
-    ws: "npm:^8.18.0"
-  dependenciesMeta:
-    ws:
-      optional: true
-  languageName: unknown
-  linkType: soft
-
-"@vramework/ws@workspace:packages/runtimes/ws":
-  version: 0.0.0-use.local
-  resolution: "@vramework/ws@workspace:packages/runtimes/ws"
-  dependencies:
-    "@types/ws": "npm:^8"
-    cookie: "npm:^1.0.1"
-    typescript: "npm:^5.6.3"
-  peerDependencies:
-    "@vramework/core": ^0.6.7
-    ws: ^8.18.0
-  languageName: unknown
-  linkType: soft
 
 "abbrev@npm:^2.0.0":
   version: 2.0.0

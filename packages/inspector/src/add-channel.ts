@@ -1,10 +1,10 @@
 import * as ts from 'typescript'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
-import { APIDocs } from '@vramework/core'
+import { APIDocs } from '@pikku/core'
 import { getInputTypes } from './add-route.js'
 import { getPropertyAssignment, getFunctionTypes } from './utils.js'
-import { ChannelMeta } from '@vramework/core/channel'
+import { ChannelMeta } from '@pikku/core/channel'
 import { TypesMap } from './types-map.js'
 import { InspectorState } from './types.js'
 

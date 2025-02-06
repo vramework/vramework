@@ -1,7 +1,7 @@
 {
-  "name": "@vramework/fastify-plugin",
+  "name": "@pikku/fastify-plugin",
   "version": "0.6.3",
-  "description": "The vramework fastify plugin",
+  "description": "The pikku fastify plugin",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",
@@ -18,7 +18,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.7"
+    "@pikku/core": "^0.6.7"
   },
   "dependencies": {
     "fastify": "^5.0.0",

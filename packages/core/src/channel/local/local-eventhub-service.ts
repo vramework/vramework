@@ -1,4 +1,4 @@
-import { VrameworkChannelHandler } from "../channel.types.js"
+import { PikkuChannelHandler } from "../channel.types.js"
 import { EventHubService } from "../eventhub-service.js"
 
 /**
@@ -8,7 +8,7 @@ import { EventHubService } from "../eventhub-service.js"
 export class LocalEventHubService<Data = unknown>
   implements EventHubService<Data> {
 
-  private channels = new Map<string, VrameworkChannelHandler>()
+  private channels = new Map<string, PikkuChannelHandler>()
     
   /**
    * A map storing topics and their associated connection IDs.
@@ -73,7 +73,7 @@ export class LocalEventHubService<Data = unknown>
   /**
    * Registers a channel on open
    */
-  public onChannelOpened(channelHandler: VrameworkChannelHandler): void {
+  public onChannelOpened(channelHandler: PikkuChannelHandler): void {
     this.channels.set(channelHandler.getChannel().channelId, channelHandler)
   }
 

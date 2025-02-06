@@ -25,10 +25,10 @@
     "noUncheckedIndexedAccess": true, // Ensures index access is checked
     "forceConsistentCasingInFileNames": true, // Ensures case-sensitive imports
     "paths": {
-      "@vramework/core": ["./packages/core"],
-      "@vramework/core/*": ["./packages/core/*"],
-      "@vramework/inspector": ["./packages/inspector"],
-      "@vramework/inspector/*": ["./packages/inspector/*"]
+      "@pikku/core": ["./packages/core"],
+      "@pikku/core/*": ["./packages/core/*"],
+      "@pikku/inspector": ["./packages/inspector"],
+      "@pikku/inspector/*": ["./packages/inspector/*"]
     }
   },
   "exclude": ["node_modules", ".typedocs"]

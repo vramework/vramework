@@ -1,4 +1,4 @@
-# @vramework/uws
+# @pikku/uws
 
 ## 0.6.1
 
@@ -6,8 +6,8 @@
 
 - 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
 - Updated dependencies [0a92fa7]
-  - @vramework/uws-handler@0.6.4
-  - @vramework/core@0.6.7
+  - @pikku/uws-handler@0.6.4
+  - @pikku/core@0.6.7
 
 ## 0.6
 
@@ -21,8 +21,8 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [a768bad]
 - Updated dependencies [886a2fb]
 - Updated dependencies [886a2fb]
-  - @vramework/core@0.5.28
-  - @vramework/uws-handler@0.5.13
+  - @pikku/core@0.5.28
+  - @pikku/uws-handler@0.5.13
 
 ## 0.5.8
 
@@ -34,8 +34,8 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [0f96787]
 - Updated dependencies [64e4a1e]
 - Updated dependencies [c23524a]
-  - @vramework/core@0.5.25
-  - @vramework/uws-handler@0.5.10
+  - @pikku/core@0.5.25
+  - @pikku/uws-handler@0.5.10
 
 ## 0.5.7
 
@@ -45,8 +45,8 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [bba25cc]
 - Updated dependencies [9deb482]
 - Updated dependencies [ee0c6ea]
-  - @vramework/core@0.5.24
-  - @vramework/uws-handler@0.5.9
+  - @pikku/core@0.5.24
+  - @pikku/uws-handler@0.5.9
 
 ## 0.5.6
 
@@ -56,8 +56,8 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [cbcc75b]
 - Updated dependencies [d58c440]
 - Updated dependencies [11c50d4]
-  - @vramework/core@0.5.19
-  - @vramework/uws-handler@0.5.6
+  - @pikku/core@0.5.19
+  - @pikku/uws-handler@0.5.6
 
 ## 0.5.5
 
@@ -65,8 +65,8 @@ Marking a major release to include channels and scheduled tasks
 
 - effbb4c: doc: adding readme to all packages
 - Updated dependencies [effbb4c]
-  - @vramework/uws-handler@0.5.5
-  - @vramework/core@0.5.10
+  - @pikku/uws-handler@0.5.5
+  - @pikku/core@0.5.10
 
 ## 0.5.4
 
@@ -75,8 +75,8 @@ Marking a major release to include channels and scheduled tasks
 - 725723d: docs: adding typedocs
 - Updated dependencies [3541ab7]
 - Updated dependencies [725723d]
-  - @vramework/core@0.5.9
-  - @vramework/uws-handler@0.5.4
+  - @pikku/core@0.5.9
+  - @pikku/uws-handler@0.5.4
 
 ## 0.5.3
 
@@ -94,11 +94,11 @@ Marking a major release to include channels and scheduled tasks
 
 ### Patch Changes
 
-- 45e07de: refactor: renaming packages and vramework structure
+- 45e07de: refactor: renaming packages and pikku structure
 - Updated dependencies [97900d2]
 - Updated dependencies [d939d46]
 - Updated dependencies [45e07de]
-  - @vramework/core@0.5.1
+  - @pikku/core@0.5.1
 
 ## 0.4.8
 
@@ -106,7 +106,7 @@ Marking a major release to include channels and scheduled tasks
 
 - ddaf58f: feat: adding hostname to servers
 - Updated dependencies [ddaf58f]
-  - @vramework/core@0.4.7
+  - @pikku/core@0.4.7
 
 ## 0.4.7
 
@@ -120,18 +120,18 @@ Marking a major release to include channels and scheduled tasks
 
 - 2a2402b: republish since something went wrong
 - Updated dependencies [2a2402b]
-  - @vramework/core@0.4.6
+  - @pikku/core@0.4.6
 
 ## 0.4.5
 
 ### Patch Changes
 
-- 1a708a7: refactor: renaming VrameworkCLIConfig back to VrameworkConfig
-  feat: adding .end() to vramework response for servers that need it
+- 1a708a7: refactor: renaming PikkuCLIConfig back to PikkuConfig
+  feat: adding .end() to pikku response for servers that need it
 - Updated dependencies [0650348]
 - Updated dependencies [1a708a7]
 - Updated dependencies [642d370]
-  - @vramework/core@0.4.4
+  - @pikku/core@0.4.4
 
 ## 0.4.4
 
@@ -139,7 +139,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 94f8a74: fix: finalizing cjs and esm packages
 - Updated dependencies [94f8a74]
-  - @vramework/core@0.4.3
+  - @pikku/core@0.4.3
 
 ## 0.4.3
 
@@ -149,7 +149,7 @@ Marking a major release to include channels and scheduled tasks
 - 14783ee: fix: including all types as dependencies to avoid users needing to install them
 - Updated dependencies [28f62ea]
 - Updated dependencies [14783ee]
-  - @vramework/core@0.4.2
+  - @pikku/core@0.4.2
 
 ## 0.4.2
 

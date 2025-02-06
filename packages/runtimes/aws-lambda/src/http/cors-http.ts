@@ -1,11 +1,11 @@
-import type { CoreSingletonServices, CoreServices, CreateSessionServices, CoreUserSession } from "@vramework/core"
+import type { CoreSingletonServices, CoreServices, CreateSessionServices, CoreUserSession } from "@pikku/core"
 import type { APIGatewayProxyEvent } from "aws-lambda"
-import type { Logger } from "@vramework/core/services"
+import type { Logger } from "@pikku/core/services"
 
 import { generalHTTPHandler } from "./general-http-handler.js"
-import { InvalidOriginError } from "@vramework/core/errors"
-import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
-import { VrameworkAPIGatewayLambdaRequest } from "../vramework-api-gateway-lambda-request.js"
+import { InvalidOriginError } from "@pikku/core/errors"
+import { PikkuAPIGatewayLambdaResponse } from "../pikku-api-gateway-lambda-response.js"
+import { PikkuAPIGatewayLambdaRequest } from "../pikku-api-gateway-lambda-request.js"
 
 const validateOrigin = (
     allowsOrigins: string[],
@@ -38,8 +38,8 @@ export const corsHTTP = async <SingletonServices extends CoreSingletonServices, 
         UserSession
     >
 ) => {
-    const request = new VrameworkAPIGatewayLambdaRequest(event)
-    const response = new VrameworkAPIGatewayLambdaResponse()
+    const request = new PikkuAPIGatewayLambdaRequest(event)
+    const response = new PikkuAPIGatewayLambdaResponse()
 
     let origin: string | false = false
     try {

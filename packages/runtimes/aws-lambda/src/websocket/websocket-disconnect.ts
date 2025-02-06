@@ -1,5 +1,5 @@
-import { CoreSingletonServices, CoreServices, CoreUserSession } from "@vramework/core"
-import { runChannelDisconnect } from "@vramework/core/channel/serverless"
+import { CoreSingletonServices, CoreServices, CoreUserSession } from "@pikku/core"
+import { runChannelDisconnect } from "@pikku/core/channel/serverless"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 
 import { getServerlessDependencies } from "./utils.js"

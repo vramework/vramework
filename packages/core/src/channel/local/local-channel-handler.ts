@@ -1,11 +1,11 @@
 import { CoreUserSession } from "../../types/core.types.js"
-import { VrameworkAbstractChannelHandler } from "../vramework-abstract-channel-handler.js"
+import { PikkuAbstractChannelHandler } from "../pikku-abstract-channel-handler.js"
 
-export class VrameworkLocalChannelHandler<
+export class PikkuLocalChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
   OpeningData = unknown,
   Out = unknown,
-> extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
+> extends PikkuAbstractChannelHandler<UserSession, OpeningData, Out> {
   private onMessageCallback?: (message: unknown) => void
   private openCallBack?: () => void
   private closeCallback?: () => void

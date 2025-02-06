@@ -1,5 +1,5 @@
 {
-  "name": "@vramework/schedule",
+  "name": "@pikku/schedule",
   "version": "0.6.1",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.7"
+    "@pikku/core": "^0.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.7.8",

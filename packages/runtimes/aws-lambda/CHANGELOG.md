@@ -6,7 +6,7 @@
 
 - 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
 - Updated dependencies [0a92fa7]
-  - @vramework/core@0.6.7
+  - @pikku/core@0.6.7
 
 ## 0.6.2
 
@@ -17,7 +17,7 @@
 - adecb52: feat: changes required to get cloudflare functions to work
 - Updated dependencies [09fc52c]
 - Updated dependencies [adecb52]
-  - @vramework/core@0.6.3
+  - @pikku/core@0.6.3
 
 ### Patch Changes
 
@@ -25,7 +25,7 @@
 - adeb392: feat: more channel improvements, and adding bubble option to runners to avoid all the empty try catches
 - Updated dependencies [ed45ca9]
 - Updated dependencies [adeb392]
-  - @vramework/core@0.6.2
+  - @pikku/core@0.6.2
 
 ## 0.0.2 - 28.07.2021
 
@@ -39,4 +39,4 @@ Chore: Bumping deps
 
 ### Initial Release
 
-A package that allows users to call Vramework functions from lambda
+A package that allows users to call Pikku functions from lambda

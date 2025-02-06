@@ -1,10 +1,10 @@
 import * as assert from 'assert';
 import { test } from 'node:test';
-import { VrameworkChannelHandler } from '../channel.types.js';
+import { PikkuChannelHandler } from '../channel.types.js';
 import { CoreUserSession } from '../../types/core.types.js';
 import { LocalEventHubService } from './local-eventhub-service.js';
 
-class MockChannelHandler implements VrameworkChannelHandler {
+class MockChannelHandler implements PikkuChannelHandler {
   private channelId: string;
 
   constructor(channelId: string) {

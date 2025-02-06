@@ -1,3 +1,3 @@
-# @vramework/express-middleware
+# @pikku/express-middleware
 
-This package is part of @vramework/mono and is responsible for providing the express-middleware to enable vramework routes
+This package is part of @pikku/mono and is responsible for providing the express-middleware to enable pikku routes

@@ -11,10 +11,10 @@ import {
   CoreAPIFunctionSessionless,
   CoreAPIPermission,
 } from '../types/functions.types.js'
-import { VrameworkRequest } from '../vramework-request.js'
-import { VrameworkResponse } from '../vramework-response.js'
-import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
-import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
+import { PikkuRequest } from '../pikku-request.js'
+import { PikkuResponse } from '../pikku-response.js'
+import { PikkuHTTPAbstractRequest } from './pikku-http-abstract-request.js'
+import { PikkuHTTPAbstractResponse } from './pikku-http-abstract-response.js'
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
@@ -38,8 +38,8 @@ export type RunRouteOptions = Partial<{
 
 export type RunRouteParams<In> = {
   singletonServices: CoreSingletonServices
-  request: VrameworkRequest<In> | VrameworkHTTPAbstractRequest<In>
-  response?: VrameworkResponse | VrameworkHTTPAbstractResponse | undefined
+  request: PikkuRequest<In> | PikkuHTTPAbstractRequest<In>
+  response?: PikkuResponse | PikkuHTTPAbstractResponse | undefined
   createSessionServices: CreateSessionServices<CoreSingletonServices, CoreServices<CoreSingletonServices>, CoreUserSession>
 }
 
@@ -65,11 +65,11 @@ export type CoreHTTPFunction = {
   }>
 }
 /**
- * Represents a http interaction within Vramework, including a request and response.
+ * Represents a http interaction within Pikku, including a request and response.
  */
-export interface VrameworkHTTP {
-  request?: VrameworkHTTPAbstractRequest
-  response?: VrameworkHTTPAbstractResponse
+export interface PikkuHTTP {
+  request?: PikkuHTTPAbstractRequest
+  response?: PikkuHTTPAbstractResponse
 }
 
 /**
@@ -80,9 +80,9 @@ export type RequestHeaders =
   | ((headerName: string) => string | string[] | undefined)
 
 /**
-* Represents a query object for Vramework, where each key can be a string, a value, or an array of values.
+* Represents a query object for Pikku, where each key can be a string, a value, or an array of values.
 */
-export type VrameworkQuery<T = Record<string, string | undefined>> = Record<
+export type PikkuQuery<T = Record<string, string | undefined>> = Record<
   string,
   string | T | null | Array<T | null>
 >

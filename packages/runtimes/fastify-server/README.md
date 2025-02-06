@@ -1,3 +1,3 @@
-# @vramework/fastify
+# @pikku/fastify
 
-This package is part of @vramework/mono and is responsible for providing the fastify server to serve vramework routes
+This package is part of @pikku/mono and is responsible for providing the fastify server to serve pikku routes

@@ -1,4 +1,4 @@
-import { TypesMap } from '@vramework/inspector'
+import { TypesMap } from '@pikku/inspector'
 import { getFileImportRelativePath } from '../utils.js'
 
 export const serializeImportMap = (

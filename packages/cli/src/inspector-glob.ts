@@ -1,6 +1,6 @@
 import * as path from 'path'
 import { glob } from 'glob'
-import { InspectorState, inspect } from '@vramework/inspector'
+import { InspectorState, inspect } from '@pikku/inspector'
 import { logCommandInfoAndTime } from './utils.js'
 
 export const inspectorGlob = async (

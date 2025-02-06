@@ -9,10 +9,10 @@ export const serializeNextJsWrapper = (
   return `'server-only'
 
 /**
- * This file provides a wrapper around the VrameworkNextJS class to allow for methods to be type checked against your routes.
- * This ensures type safety for route handling methods when integrating with the \`@vramework/core\` framework.
+ * This file provides a wrapper around the PikkuNextJS class to allow for methods to be type checked against your routes.
+ * This ensures type safety for route handling methods when integrating with the \`@pikku/core\` framework.
  */
-import { VrameworkNextJS } from '@vramework/next'
+import { PikkuNextJS } from '@pikku/next'
 import type { RoutesMap, RouteHandlerOf, RoutesWithMethod } from '${routesMapPath}'
 
 ${configImport}
@@ -22,16 +22,16 @@ ${sessionServicesImport}
 import '${routesPath}'
 import '${schemasPath}'
 
-let _vramework: VrameworkNextJS | undefined
+let _pikku: PikkuNextJS | undefined
 
 /**
- * Initializes and returns an instance of VrameworkNextJS with helper methods for handling route requests.
+ * Initializes and returns an instance of PikkuNextJS with helper methods for handling route requests.
  *
  * @returns An object containing methods for making dynamic and static action requests.
  */
-export const vramework = () => {
-  if (!_vramework) {
-    _vramework = new VrameworkNextJS(
+export const pikku = () => {
+  if (!_pikku) {
+    _pikku = new PikkuNextJS(
       createConfig as any,
       createSingletonServices as any,
       createSessionServices
@@ -57,7 +57,7 @@ export const vramework = () => {
     method: Method,
     data: RouteHandlerOf<Route, Method>['input'] = null
   ): Promise<RouteHandlerOf<Route, Method>['output']> => {
-    return _vramework!.actionRequest(route, method, data as any)
+    return _pikku!.actionRequest(route, method, data as any)
   }
 
   /**
@@ -79,7 +79,7 @@ export const vramework = () => {
     method: Method,
     data: RouteHandlerOf<Route, Method>['input'] = null
   ): Promise<RouteHandlerOf<Route, Method>['output']> => {
-    return _vramework!.staticActionRequest(route, method, data as any)
+    return _pikku!.staticActionRequest(route, method, data as any)
   }
 
   /**

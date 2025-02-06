@@ -4,7 +4,7 @@ import {
   CoreUserSession,
   JSONValue,
 } from '../types/core.types.js'
-import { CoreAPIChannel, VrameworkChannelHandler } from './channel.types.js'
+import { CoreAPIChannel, PikkuChannelHandler } from './channel.types.js'
 import { verifyPermissions } from '../permissions.js'
 import { getChannels } from './channel-runner.js'
 
@@ -35,7 +35,7 @@ const validateSchema = (
 
 const validateAuth = (
   requiresSession: boolean,
-  channelHandler: VrameworkChannelHandler,
+  channelHandler: PikkuChannelHandler,
   onMessage: any
 ) => {
   const auth =
@@ -53,7 +53,7 @@ const validateAuth = (
 
 const validatePermissions = async (
   services: CoreServices,
-  channelHandler: VrameworkChannelHandler,
+  channelHandler: PikkuChannelHandler,
   onMessage: any,
   data: unknown
 ) => {
@@ -69,7 +69,7 @@ const validatePermissions = async (
 
 const runFunction = async (
   services: CoreServices,
-  channelHandler: VrameworkChannelHandler,
+  channelHandler: PikkuChannelHandler,
   onMessage: any,
   data: unknown
 ) => {
@@ -80,7 +80,7 @@ const runFunction = async (
 export const processMessageHandlers = (
   services: CoreServices,
   channelConfig: CoreAPIChannel<any, any>,
-  channelHandler: VrameworkChannelHandler<CoreUserSession, unknown>,
+  channelHandler: PikkuChannelHandler<CoreUserSession, unknown>,
 ) => {
   const logger = services.logger
   const requiresSession = channelConfig.auth !== false

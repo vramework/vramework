@@ -1,9 +1,9 @@
 import { createGenerator, RootlessError } from 'ts-json-schema-generator'
 import { writeFileInDir } from '../utils.js'
 import { mkdir, writeFile } from 'fs/promises'
-import { JSONValue } from '@vramework/core'
-import { HTTPRoutesMeta } from '@vramework/core/http'
-import { TypesMap } from '@vramework/inspector'
+import { JSONValue } from '@pikku/core'
+import { HTTPRoutesMeta } from '@pikku/core/http'
+import { TypesMap } from '@pikku/inspector'
 
 export async function generateSchemas(
   tsconfig: string,
@@ -106,7 +106,7 @@ addSchema('${schema}', ${schema})
 
   await writeFileInDir(
     `${schemaParentDir}/register.gen.ts`,
-    `import { addSchema } from '@vramework/core/schema'
+    `import { addSchema } from '@pikku/core/schema'
 // import { createRequire } from "module"
 // const require = createRequire(import.meta.url)
 ${schemaImports}`

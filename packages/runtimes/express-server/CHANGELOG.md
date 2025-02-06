@@ -1,4 +1,4 @@
-# @vramework/express
+# @pikku/express
 
 ## 0.6.2
 
@@ -6,7 +6,7 @@
 
 - a40a508: fix: Fixing some generation bugs and other minors
 - Updated dependencies [a40a508]
-  - @vramework/core@0.6.5
+  - @pikku/core@0.6.5
 
 ## 0.6.1
 
@@ -14,7 +14,7 @@
 
 - c459ef5: fix: provide the express-middleware as part of server dependencies
 - Updated dependencies [dee2e9f]
-  - @vramework/core@0.6.1
+  - @pikku/core@0.6.1
 
 ## 0.6
 
@@ -29,8 +29,8 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [a768bad]
 - Updated dependencies [886a2fb]
 - Updated dependencies [886a2fb]
-  - @vramework/core@0.5.28
-  - @vramework/express-middleware@0.5.12
+  - @pikku/core@0.5.28
+  - @pikku/express-middleware@0.5.12
 
 ## 0.5.8
 
@@ -42,8 +42,8 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [0f96787]
 - Updated dependencies [64e4a1e]
 - Updated dependencies [c23524a]
-  - @vramework/core@0.5.25
-  - @vramework/express-middleware@0.5.10
+  - @pikku/core@0.5.25
+  - @pikku/express-middleware@0.5.10
 
 ## 0.5.7
 
@@ -53,8 +53,8 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [bba25cc]
 - Updated dependencies [9deb482]
 - Updated dependencies [ee0c6ea]
-  - @vramework/core@0.5.24
-  - @vramework/express-middleware@0.5.9
+  - @pikku/core@0.5.24
+  - @pikku/express-middleware@0.5.9
 
 ## 0.5.6
 
@@ -62,8 +62,8 @@ Marking a major release to include channels and scheduled tasks
 
 - effbb4c: doc: adding readme to all packages
 - Updated dependencies [effbb4c]
-  - @vramework/express-middleware@0.5.6
-  - @vramework/core@0.5.10
+  - @pikku/express-middleware@0.5.6
+  - @pikku/core@0.5.10
 
 ## 0.5.5
 
@@ -72,8 +72,8 @@ Marking a major release to include channels and scheduled tasks
 - 725723d: docs: adding typedocs
 - Updated dependencies [3541ab7]
 - Updated dependencies [725723d]
-  - @vramework/core@0.5.9
-  - @vramework/express-middleware@0.5.5
+  - @pikku/core@0.5.9
+  - @pikku/express-middleware@0.5.5
 
 ## 0.5.4
 
@@ -82,8 +82,8 @@ Marking a major release to include channels and scheduled tasks
 - 8d85f7e: feat: load all schemas on start optionally instead of validating they were loaded
 - Updated dependencies [1876d7a]
 - Updated dependencies [8d85f7e]
-  - @vramework/core@0.5.8
-  - @vramework/express-middleware@0.5.4
+  - @pikku/core@0.5.8
+  - @pikku/express-middleware@0.5.4
 
 ## 0.5.3
 
@@ -91,7 +91,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 3b51762: refactor: not using initialize call to core
 - Updated dependencies [3b51762]
-  - @vramework/express-middleware@0.5.3
+  - @pikku/express-middleware@0.5.3
 
 ## 0.5.2
 
@@ -105,9 +105,9 @@ Marking a major release to include channels and scheduled tasks
 
 - 97900d2: fix: exporting plugins from default barrel files
 - d939d46: refactor: extracting nextjs and fastify to plugins
-- 45e07de: refactor: renaming packages and vramework structure
+- 45e07de: refactor: renaming packages and pikku structure
 - Updated dependencies [97900d2]
 - Updated dependencies [d939d46]
 - Updated dependencies [45e07de]
-  - @vramework/core@0.5.1
-  - @vramework/express-middleware@0.5.1
+  - @pikku/core@0.5.1
+  - @pikku/express-middleware@0.5.1

@@ -1,5 +1,5 @@
-import { CoreSingletonServices, CoreServices, CoreUserSession, CreateSessionServices, MakeRequired } from "@vramework/core"
-import { ChannelStore } from "@vramework/core/channel"
+import { CoreSingletonServices, CoreServices, CoreUserSession, CreateSessionServices, MakeRequired } from "@pikku/core"
+import { ChannelStore } from "@pikku/core/channel"
 
 export type WebsocketParams<SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession> = {
     channelStore: ChannelStore,

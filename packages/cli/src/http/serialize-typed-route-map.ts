@@ -1,6 +1,6 @@
-import { HTTPRoutesMeta } from '@vramework/core/http'
+import { HTTPRoutesMeta } from '@pikku/core/http'
 import { serializeImportMap } from '../core/serialize-import-map.js'
-import { MetaInputTypes, TypesMap } from '@vramework/inspector'
+import { MetaInputTypes, TypesMap } from '@pikku/inspector'
 
 export const serializeTypedRoutesMap = (
   relativeToPath: string,

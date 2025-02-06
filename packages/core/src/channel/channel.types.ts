@@ -1,7 +1,7 @@
 import { EError } from '../errors/error-handler.js'
-import { HTTPFunctionMetaInputTypes, VrameworkHTTP } from '../http/http-routes.types.js'
-import { VrameworkHTTPAbstractRequest } from '../http/vramework-http-abstract-request.js'
-import { VrameworkHTTPAbstractResponse } from '../http/vramework-http-abstract-response.js'
+import { HTTPFunctionMetaInputTypes, PikkuHTTP } from '../http/http-routes.types.js'
+import { PikkuHTTPAbstractRequest } from '../http/pikku-http-abstract-request.js'
+import { PikkuHTTPAbstractResponse } from '../http/pikku-http-abstract-response.js'
 import {
   APIDocs,
   CoreServices,
@@ -11,8 +11,8 @@ import {
   MakeRequired,
 } from '../types/core.types.js'
 import { CoreAPIPermission } from '../types/functions.types.js'
-import { VrameworkRequest } from '../vramework-request.js'
-import { VrameworkResponse } from '../vramework-response.js'
+import { PikkuRequest } from '../pikku-request.js'
+import { PikkuResponse } from '../pikku-response.js'
 
 export type RunChannelOptions = Partial<{
   skipUserSession: boolean
@@ -26,10 +26,10 @@ export type RunChannelParams<ChannelData> = {
   channelId: string
   singletonServices: MakeRequired<CoreSingletonServices, 'eventHub'>
   request?:
-    | VrameworkRequest<ChannelData>
-    | VrameworkHTTPAbstractRequest<ChannelData>
-  response?: VrameworkResponse | VrameworkHTTPAbstractResponse
-  http?: VrameworkHTTP,
+    | PikkuRequest<ChannelData>
+    | PikkuHTTPAbstractRequest<ChannelData>
+  response?: PikkuResponse | PikkuHTTPAbstractResponse
+  http?: PikkuHTTP,
   createSessionServices?: CreateSessionServices
 }
 
@@ -67,7 +67,7 @@ export type CoreChannelConnection<
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: MakeRequired<Services, 'eventHub'>,
-  channel: VrameworkChannel<Session, ChannelData, Out>
+  channel: PikkuChannel<Session, ChannelData, Out>
 ) => Promise<void>
 
 export type CoreChannelDisconnection<
@@ -76,7 +76,7 @@ export type CoreChannelDisconnection<
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: MakeRequired<Services, 'eventHub'>,
-  channel: VrameworkChannel<Session, ChannelData, never>
+  channel: PikkuChannel<Session, ChannelData, never>
 ) => Promise<void>
 
 /**
@@ -94,7 +94,7 @@ export type CoreChannelMessage<
   Session extends CoreUserSession = CoreUserSession,
 > = (
   services: MakeRequired<Services, 'eventHub'>,
-  channel: VrameworkChannel<Session, ChannelData, Out>,
+  channel: PikkuChannel<Session, ChannelData, Out>,
   data: In
 ) => Promise<void | Out>
 
@@ -150,7 +150,7 @@ export type CoreAPIChannel<
 export type CoreAPIChannels = CoreAPIChannel<any, string>[]
 
 
-export interface VrameworkChannel<UserSession, OpeningData, Out> {
+export interface PikkuChannel<UserSession, OpeningData, Out> {
   // The channel identifier
   channelId: string
   // The user session, if available
@@ -169,21 +169,21 @@ export interface VrameworkChannel<UserSession, OpeningData, Out> {
   state: 'initial' | 'open' | 'closed'
 }
 
-export interface VrameworkChannelHandler<
+export interface PikkuChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
   OpeningData = unknown,
   Out = unknown,
 > {
   setUserSession(session: UserSession): Promise<void> | void
   send(message: Out, isBinary?: boolean): Promise<void> | void
-  getChannel(): VrameworkChannel<UserSession, OpeningData, Out>
+  getChannel(): PikkuChannel<UserSession, OpeningData, Out>
 }
 
-export type VrameworkChannelHandlerFactory<
+export type PikkuChannelHandlerFactory<
 OpeningData = unknown,
 UserSession extends CoreUserSession = CoreUserSession,
 Out = unknown,
-> = (channelId: string, channelName: string, openingData: OpeningData, userSession: UserSession | undefined) => VrameworkChannelHandler<UserSession, OpeningData, Out>
+> = (channelId: string, channelName: string, openingData: OpeningData, userSession: UserSession | undefined) => PikkuChannelHandler<UserSession, OpeningData, Out>
 
 /**
  * Enfore access to a channel.

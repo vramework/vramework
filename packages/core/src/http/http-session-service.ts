@@ -1,5 +1,5 @@
 import { CoreUserSession } from '../types/core.types.js'
-import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
+import { PikkuHTTPAbstractRequest } from './pikku-http-abstract-request.js'
 
 /**
  * Interface for handling user sessions.
@@ -9,11 +9,11 @@ export interface HTTPSessionService<UserSession = CoreUserSession> {
   /**
    * Retrieves the user session.
    * @param credentialsRequired - A flag indicating whether credentials are required.
-   * @param vrameworkRequest - The request object.
+   * @param pikkuRequest - The request object.
    * @returns A promise that resolves to the user session or undefined.
    */
   getUserSession: (
     credentialsRequired: boolean,
-    vrameworkRequest: VrameworkHTTPAbstractRequest
+    pikkuRequest: PikkuHTTPAbstractRequest
   ) => Promise<UserSession | undefined>
 }

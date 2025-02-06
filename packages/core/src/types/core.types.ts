@@ -4,7 +4,7 @@ import { VariablesService } from '../services/variables-service.js'
 import { EventHubService } from '../channel/eventhub-service.js'
 import { SchemaService } from '../services/schema-service.js'
 import { enforceChannelAccess } from '../channel/channel.types.js'
-import { enforceHTTPAccess, VrameworkHTTP } from '../http/http-routes.types.js'
+import { enforceHTTPAccess, PikkuHTTP } from '../http/http-routes.types.js'
 import { UserSessionService } from '../services/user-session-service.js'
 
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
@@ -43,7 +43,7 @@ export type RequireAtLeastOne<T> = {
 }[keyof T]
 
 /**
- * Interface for the core configuration settings of Vramework.
+ * Interface for the core configuration settings of Pikku.
  */
 export interface CoreConfig {
   /** The log level for the application. */
@@ -60,7 +60,7 @@ export interface CoreConfig {
 export interface CoreUserSession {}
 
 /**
- * Interface for core singleton services provided by Vramework.
+ * Interface for core singleton services provided by Pikku.
  */
 export interface CoreSingletonServices {
   /** The http permission service used for authorization (optional). */
@@ -82,19 +82,19 @@ export interface CoreSingletonServices {
 }
 
 /**
- * Represents different forms of interaction within Vramework and the outside world.
+ * Represents different forms of interaction within Pikku and the outside world.
  */
-export interface VrameworkInteractions {
-  http?: VrameworkHTTP
+export interface PikkuInteractions {
+  http?: PikkuHTTP
 }
 
 /**
- * Represents the core services used by Vramework, including singleton services and the request/response interaction.
+ * Represents the core services used by Pikku, including singleton services and the request/response interaction.
  */
 export type CoreServices<SingletonServices = CoreSingletonServices, UserSession extends CoreUserSession = CoreUserSession> =
-  SingletonServices & VrameworkInteractions & { userSession?: UserSessionService<UserSession> }
+  SingletonServices & PikkuInteractions & { userSession?: UserSessionService<UserSession> }
 
-export type SessionServices<SingletonServices extends CoreSingletonServices = CoreSingletonServices, Services = CoreServices<SingletonServices>> = Omit<Services, keyof SingletonServices | keyof VrameworkInteractions | 'session'>
+export type SessionServices<SingletonServices extends CoreSingletonServices = CoreSingletonServices, Services = CoreServices<SingletonServices>> = Omit<Services, keyof SingletonServices | keyof PikkuInteractions | 'session'>
 
 /**
  * Defines a function type for creating singleton services from the given configuration.
@@ -113,7 +113,7 @@ export type CreateSessionServices<
   UserSession extends CoreUserSession = CoreUserSession,
 > = (
   services: SingletonServices,
-  interaction: VrameworkInteractions,
+  interaction: PikkuInteractions,
   session: UserSession | undefined
 ) => Promise<SessionServices<Services, SingletonServices>>
 

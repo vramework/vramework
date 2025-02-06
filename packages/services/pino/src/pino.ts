@@ -1,6 +1,6 @@
 import * as pino from 'pino'
 
-import { Logger, LogLevel } from '@vramework/core/services'
+import { Logger, LogLevel } from '@pikku/core/services'
 
 export class PinoLogger implements Logger {
   public pino: pino.Logger

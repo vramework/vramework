@@ -2,7 +2,7 @@ import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from '@aws-sdk/client-secrets-manager'
-import { SecretService } from '@vramework/core/services'
+import { SecretService } from '@pikku/core/services'
 
 import { AWSConfig } from './aws-config.js'
 

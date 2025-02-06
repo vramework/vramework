@@ -1,8 +1,8 @@
-import { JSONValue } from '@vramework/core'
-import { VrameworkHTTPAbstractResponse } from '@vramework/core/http/vramework-http-abstract-response'
+import { JSONValue } from '@pikku/core'
+import { PikkuHTTPAbstractResponse } from '@pikku/core/http/pikku-http-abstract-response'
 import { WebSocket} from '@cloudflare/workers-types'
 
-export class CloudfrontHTTPResponse extends VrameworkHTTPAbstractResponse {
+export class CloudfrontHTTPResponse extends PikkuHTTPAbstractResponse {
   public headers: Record<string, string> = {}
   private status: number = 200
   private body: any

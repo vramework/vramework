@@ -1,8 +1,8 @@
 import { ApiGatewayManagementApiClient, PostToConnectionCommand } from "@aws-sdk/client-apigatewaymanagementapi";
-import { Logger } from "@vramework/core/services";
+import { Logger } from "@pikku/core/services";
 import { APIGatewayEvent } from "aws-lambda";
 import { createLambdaChannelHandlerFactory } from "./lambda-channel-handler.js";
-import { ChannelStore } from "@vramework/core/channel";
+import { ChannelStore } from "@pikku/core/channel";
 
 export const sendMessage = async (logger: Logger, callbackAPI: ApiGatewayManagementApiClient, ConnectionId: string, Data: string): Promise<boolean> => {
     try {

@@ -1,14 +1,14 @@
-import { CoreUserSession } from "@vramework/core";
-import { ChannelStore, VrameworkAbstractChannelHandler, VrameworkChannelHandlerFactory } from "@vramework/core/channel";
+import { CoreUserSession } from "@pikku/core";
+import { ChannelStore, PikkuAbstractChannelHandler, PikkuChannelHandlerFactory } from "@pikku/core/channel";
 import { sendMessage } from "./utils.js";
 import { ApiGatewayManagementApiClient } from "@aws-sdk/client-apigatewaymanagementapi";
-import { Logger } from "@vramework/core/services";
+import { Logger } from "@pikku/core/services";
 
 class LambdaChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
   OpeningData = unknown,
   Out = unknown,
-> extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
+> extends PikkuAbstractChannelHandler<UserSession, OpeningData, Out> {
   constructor(private logger: Logger, userSession: UserSession | undefined, private channelStore: ChannelStore, private callbackAPI: ApiGatewayManagementApiClient, channelId: string, channelName: string, openingData: OpeningData) {
     super(channelId, channelName, userSession, openingData)
   }
@@ -28,6 +28,6 @@ class LambdaChannelHandler<
 }
 
 export const createLambdaChannelHandlerFactory = (logger: Logger, channelStore: ChannelStore, callbackAPI: ApiGatewayManagementApiClient) => {
-  const factory: VrameworkChannelHandlerFactory = (channelId, channelName, openingData, userSession) => new LambdaChannelHandler(logger, userSession, channelStore, callbackAPI, channelId, channelName, openingData)
+  const factory: PikkuChannelHandlerFactory = (channelId, channelName, openingData, userSession) => new LambdaChannelHandler(logger, userSession, channelStore, callbackAPI, channelId, channelName, openingData)
   return factory
 }

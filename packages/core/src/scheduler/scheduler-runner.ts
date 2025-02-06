@@ -24,21 +24,21 @@ export type RunScheduledTasksParams = {
   >
 }
 
-if (!global.vramework?.scheduledTasks) {
-  global.vramework = global.vramework || {}
-  global.vramework.scheduledTasks = new Map<string, CoreScheduledTask>()
-  global.vramework.scheduledTasksMeta = []
+if (!global.pikku?.scheduledTasks) {
+  global.pikku = global.pikku || {}
+  global.pikku.scheduledTasks = new Map<string, CoreScheduledTask>()
+  global.pikku.scheduledTasksMeta = []
 }
 
 const scheduledTasks = (): Map<string, CoreScheduledTask> => {
-  return global.vramework.scheduledTasks
+  return global.pikku.scheduledTasks
 }
 
 const scheduledTasksMeta = (data?: ScheduledTasksMeta) => {
   if (data) {
-    global.vramework.scheduledTasksMeta = data
+    global.pikku.scheduledTasksMeta = data
   }
-  return global.vramework.scheduledTasksMeta
+  return global.pikku.scheduledTasksMeta
 }
 
 export const addScheduledTask = <

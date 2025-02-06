@@ -1,3 +1,3 @@
-# @vramework/fetch
+# @pikku/fetch
 
-This package is part of @vramework/mono and is responsible making HTTP calls that are correctly typed and vramework compatible.
+This package is part of @pikku/mono and is responsible making HTTP calls that are correctly typed and pikku compatible.

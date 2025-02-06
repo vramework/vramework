@@ -1,6 +1,6 @@
 /**
- * @module @vramework/uws-handler
+ * @module @pikku/uws-handler
  */
 
-export * from './vramework-uws-http-handler.js'
-export * from './vramework-uws-websocket-handler.js'
+export * from './pikku-uws-http-handler.js'
+export * from './pikku-uws-websocket-handler.js'

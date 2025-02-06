@@ -1,8 +1,8 @@
 import { test, beforeEach, afterEach } from 'node:test'
 import * as assert from 'node:assert/strict'
 import { JSONValue } from '../../types/core.types.js'
-import { VrameworkHTTPAbstractRequest } from '../../http/vramework-http-abstract-request.js'
-import { VrameworkHTTPAbstractResponse } from '../../http/vramework-http-abstract-response.js'
+import { PikkuHTTPAbstractRequest } from '../../http/pikku-http-abstract-request.js'
+import { PikkuHTTPAbstractResponse } from '../../http/pikku-http-abstract-response.js'
 import { runLocalChannel } from './local-channel-runner.js'
 
 /**
@@ -25,7 +25,7 @@ const mockSingletonServices = {
 } as any
 
 // Mock request and response objects
-class MockRequest extends VrameworkHTTPAbstractRequest {
+class MockRequest extends PikkuHTTPAbstractRequest {
   public getBody(): Promise<unknown> {
     throw new Error('Method not implemented.')
   }
@@ -37,7 +37,7 @@ class MockRequest extends VrameworkHTTPAbstractRequest {
   }
 }
 
-class MockResponse extends VrameworkHTTPAbstractResponse {
+class MockResponse extends PikkuHTTPAbstractResponse {
   public statusSet: boolean | undefined
   public ended: boolean | undefined
 
@@ -55,13 +55,13 @@ class MockResponse extends VrameworkHTTPAbstractResponse {
 
 const mockCreateSessionServices = async () => ({ sessionServiceMock: true })
 function resetGlobalChannels(channels: any[] = [], channelsMeta: any[] = []) {
-  // If necessary, reinitialize globalThis.vramework
-  if (!globalThis.vramework) {
-    globalThis.vramework = {}
+  // If necessary, reinitialize globalThis.pikku
+  if (!globalThis.pikku) {
+    globalThis.pikku = {}
   }
-  globalThis.vramework.channels = channels
-  globalThis.vramework.channelsMeta = channelsMeta
-  globalThis.vramework.openChannels = new Map()
+  globalThis.pikku.channels = channels
+  globalThis.pikku.channelsMeta = channelsMeta
+  globalThis.pikku.openChannels = new Map()
 }
 
 beforeEach(() => {
@@ -121,7 +121,7 @@ test('runChannel should return a channel handler if channel matches and no auth 
     createSessionServices: mockCreateSessionServices
   })
 
-  assert.ok(result, 'Should return a VrameworkChannelHandler instance')
+  assert.ok(result, 'Should return a PikkuChannelHandler instance')
 
   // Simulate opening the channel
   result.open()

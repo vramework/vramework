@@ -1,4 +1,4 @@
-# @vramework/schedule
+# @pikku/schedule
 
 ## 0.6.1
 
@@ -6,7 +6,7 @@
 
 - 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
 - Updated dependencies [0a92fa7]
-  - @vramework/core@0.6.7
+  - @pikku/core@0.6.7
 
 ## 0.6
 
@@ -20,7 +20,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [662a6cf]
 - Updated dependencies [c8578ea]
 - Updated dependencies [d2f8edf]
-  - @vramework/core@0.5.29
+  - @pikku/core@0.5.29
 
 ## 0.5.4
 
@@ -30,7 +30,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [a768bad]
 - Updated dependencies [886a2fb]
 - Updated dependencies [886a2fb]
-  - @vramework/core@0.5.28
+  - @pikku/core@0.5.28
 
 ## 0.5.3
 
@@ -41,7 +41,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [0f96787]
 - Updated dependencies [64e4a1e]
 - Updated dependencies [c23524a]
-  - @vramework/core@0.5.25
+  - @pikku/core@0.5.25
 
 ## 0.5.2
 
@@ -51,7 +51,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [bba25cc]
 - Updated dependencies [9deb482]
 - Updated dependencies [ee0c6ea]
-  - @vramework/core@0.5.24
+  - @pikku/core@0.5.24
 
 ## 0.5.1
 
@@ -62,4 +62,4 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [7fa64a0]
 - Updated dependencies [539937e]
 - Updated dependencies [e9a9968]
-  - @vramework/core@0.5.23
+  - @pikku/core@0.5.23

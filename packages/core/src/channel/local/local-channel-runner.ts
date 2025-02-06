@@ -3,7 +3,7 @@ import { createHTTPInteraction, handleError } from "../../http/http-route-runner
 import { closeSessionServices } from "../../utils.js"
 import { processMessageHandlers } from "../channel-handler.js"
 import { CoreAPIChannel, RunChannelOptions, RunChannelParams } from "../channel.types.js"
-import { VrameworkLocalChannelHandler } from "./local-channel-handler.js"
+import { PikkuLocalChannelHandler } from "./local-channel-handler.js"
 import { SessionServices } from "../../types/core.types.js"
 
 export const runLocalChannel = async ({
@@ -20,7 +20,7 @@ export const runLocalChannel = async ({
     bubbleErrors = false,
 }: Pick<CoreAPIChannel<unknown, any>, 'route'> &
     RunChannelOptions &
-    RunChannelParams<unknown>): Promise<VrameworkLocalChannelHandler | void> => {
+    RunChannelParams<unknown>): Promise<PikkuLocalChannelHandler | void> => {
     let sessionServices: SessionServices<typeof singletonServices> | undefined
 
     const http = createHTTPInteraction(request, response)
@@ -36,7 +36,7 @@ export const runLocalChannel = async ({
             coerceToArray,
         })
 
-        const channelHandler = new VrameworkLocalChannelHandler(
+        const channelHandler = new PikkuLocalChannelHandler(
             channelId,
             channelConfig.name,
             userSession,

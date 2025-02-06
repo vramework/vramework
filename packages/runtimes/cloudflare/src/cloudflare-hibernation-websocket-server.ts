@@ -1,11 +1,11 @@
 import { DurableObjectState, DurableObject, Request, WebSocket } from "@cloudflare/workers-types";
-import { runChannelConnect, runChannelDisconnect, runChannelMessage } from "@vramework/core/channel/serverless";
+import { runChannelConnect, runChannelDisconnect, runChannelMessage } from "@pikku/core/channel/serverless";
 import { CloudflareHTTPRequest } from "./cloudflare-http-request.js";
 import { CloudfrontHTTPResponse } from "./cloudflare-http-response.js";
 import { CloudflareWebsocketStore } from "./cloudflare-channel-store.js";
 import { createCloudflareChannelHandlerFactory } from "./cloudflare-channel-handler-factory.js";
 import { CloudflareEventHubService } from "./cloudflare-eventhub-service.js";
-import { CoreSingletonServices } from "@vramework/core";
+import { CoreSingletonServices } from "@pikku/core";
 
 export abstract class CloudflareWebSocketHibernationServer<SingletonServices extends CoreSingletonServices = CoreSingletonServices> implements DurableObject {
   private eventHub: CloudflareEventHubService<unknown> | undefined

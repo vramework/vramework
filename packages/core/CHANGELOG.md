@@ -250,7 +250,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 97900d2: fix: exporting plugins from default barrel files
 - d939d46: refactor: extracting nextjs and fastify to plugins
-- 45e07de: refactor: renaming packages and vramework structure
+- 45e07de: refactor: renaming packages and pikku structure
 
 ## 0.4.7
 
@@ -275,8 +275,8 @@ Marking a major release to include channels and scheduled tasks
 ### Patch Changes
 
 - 0650348: fix: export schemas using \*
-- 1a708a7: refactor: renaming VrameworkCLIConfig back to VrameworkConfig
-  feat: adding .end() to vramework response for servers that need it
+- 1a708a7: refactor: renaming PikkuCLIConfig back to PikkuConfig
+  feat: adding .end() to pikku response for servers that need it
 - 642d370: fix: adding schema error logs on fail
 
 ## 0.4.3
@@ -336,4 +336,4 @@ Fix: Using global space for schemas as it appears to not always return the same 
 
 ### Initial Release
 
-A package that contains vramework types
+A package that contains pikku types

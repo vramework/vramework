@@ -1,3 +1,3 @@
-# @vramework/uws-handler
+# @pikku/uws-handler
 
-This package is part of @vramework/mono and is responsible for providing the uws-handler to enable vramework routes
+This package is part of @pikku/mono and is responsible for providing the uws-handler to enable pikku routes

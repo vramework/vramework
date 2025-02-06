@@ -1,5 +1,5 @@
 /**
- * Provides the JoseJWTService class, which implements the JWTService from the `@vramework/core` module.
- * @module @vramework/jose
+ * Provides the JoseJWTService class, which implements the JWTService from the `@pikku/core` module.
+ * @module @pikku/jose
  */
 export * from './jose-jwt-service.js'

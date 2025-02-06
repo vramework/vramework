@@ -1,7 +1,7 @@
 import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagementapi'
-import { ChannelStore, EventHubService, EventHubStore } from "@vramework/core/channel";
+import { ChannelStore, EventHubService, EventHubStore } from "@pikku/core/channel";
 import { getApiGatewayManagementApiClient, sendMessages } from './utils.js';
-import { Logger } from '@vramework/core/services';
+import { Logger } from '@pikku/core/services';
 import { APIGatewayEvent } from 'aws-lambda';
 
 export class LambdaEventHubService<Out = unknown> implements EventHubService<Out> {

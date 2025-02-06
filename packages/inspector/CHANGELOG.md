@@ -1,4 +1,4 @@
-# @vramework/inspector
+# @pikku/inspector
 
 ## 0.6.2
 
@@ -6,7 +6,7 @@
 
 - a40a508: fix: Fixing some generation bugs and other minors
 - Updated dependencies [a40a508]
-  - @vramework/core@0.6.5
+  - @pikku/core@0.6.5
 
 ## 0.6.1
 
@@ -14,4 +14,4 @@
 
 - f26880f: feat: extracting inspector and adding unique type references
 - Updated dependencies [f26880f]
-  - @vramework/core@0.6.4
+  - @pikku/core@0.6.4

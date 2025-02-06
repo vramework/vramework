@@ -1,4 +1,4 @@
-import { ScheduledTasksMeta } from '@vramework/core/scheduler'
+import { ScheduledTasksMeta } from '@pikku/core/scheduler'
 import { getFileImportRelativePath } from '../utils.js'
 
 export const serializeSchedulers = (
@@ -29,7 +29,7 @@ export const serializeSchedulerMeta = (
 ) => {
   const serializedOutput: string[] = []
   serializedOutput.push(
-    "import { setScheduledTasksMeta } from '@vramework/core/scheduler'"
+    "import { setScheduledTasksMeta } from '@pikku/core/scheduler'"
   )
   serializedOutput.push(
     `setScheduledTasksMeta(${JSON.stringify(scheduledTasksMeta, null, 2)})`

@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 import { getPropertyValue } from './get-property-value.js'
-import { APIDocs } from '@vramework/core'
+import { APIDocs } from '@pikku/core'
 import { InspectorState } from './types.js'
 
 export const addSchedule = (

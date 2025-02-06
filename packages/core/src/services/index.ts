@@ -1,5 +1,5 @@
 /**
- * @module @vramework/core
+ * @module @pikku/core
  */
 
 // Interfaces

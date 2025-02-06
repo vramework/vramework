@@ -1,5 +1,5 @@
 {
-  "name": "@vramework/next",
+  "name": "@pikku/next",
   "version": "0.6.4",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
@@ -18,10 +18,10 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./vramework-next-request": "./dist/vramework-next-request.js"
+    "./pikku-next-request": "./dist/pikku-next-request.js"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.7",
+    "@pikku/core": "^0.6.7",
     "next": "^15",
     "react-dom": "*"
   },

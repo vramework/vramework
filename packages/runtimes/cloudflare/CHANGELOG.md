@@ -1,4 +1,4 @@
-# @vramework/cloudflare
+# @pikku/cloudflare
 
 ## 0.6.2
 
@@ -6,7 +6,7 @@
 
 - 2bc64fd: feat: adding methods to fetch wrapper (and small fixes)
 - Updated dependencies [a40a508]
-  - @vramework/core@0.6.5
+  - @pikku/core@0.6.5
 
 ## 0.6.1
 
@@ -17,4 +17,4 @@
 - adecb52: feat: changes required to get cloudflare functions to work
 - Updated dependencies [09fc52c]
 - Updated dependencies [adecb52]
-  - @vramework/core@0.6.3
+  - @pikku/core@0.6.3

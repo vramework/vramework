@@ -1,4 +1,4 @@
-# @vramework/uws-handler
+# @pikku/uws-handler
 
 ## 0.6.4
 
@@ -6,7 +6,7 @@
 
 - 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
 - Updated dependencies [0a92fa7]
-  - @vramework/core@0.6.7
+  - @pikku/core@0.6.7
 
 ## 0.6.3
 
@@ -17,7 +17,7 @@
 - adecb52: feat: changes required to get cloudflare functions to work
 - Updated dependencies [09fc52c]
 - Updated dependencies [adecb52]
-  - @vramework/core@0.6.3
+  - @pikku/core@0.6.3
 
 ## 0.6.2
 
@@ -26,7 +26,7 @@
 - adeb392: feat: more channel improvements, and adding bubble option to runners to avoid all the empty try catches
 - Updated dependencies [ed45ca9]
 - Updated dependencies [adeb392]
-  - @vramework/core@0.6.2
+  - @pikku/core@0.6.2
 
 ## 0.6.1
 
@@ -34,7 +34,7 @@
 
 - dee2e9f: feat: adding a subscription service change handler
 - Updated dependencies [dee2e9f]
-  - @vramework/core@0.6.1
+  - @pikku/core@0.6.1
 
 ## 0.6
 
@@ -48,7 +48,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [662a6cf]
 - Updated dependencies [c8578ea]
 - Updated dependencies [d2f8edf]
-  - @vramework/core@0.5.29
+  - @pikku/core@0.5.29
 
 ## 0.5.13
 
@@ -58,7 +58,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [a768bad]
 - Updated dependencies [886a2fb]
 - Updated dependencies [886a2fb]
-  - @vramework/core@0.5.28
+  - @pikku/core@0.5.28
 
 ## 0.5.12
 
@@ -66,7 +66,7 @@ Marking a major release to include channels and scheduled tasks
 
 - aa8435c: fix: fixing up channel apis and implementations
 - Updated dependencies [aa8435c]
-  - @vramework/core@0.5.27
+  - @pikku/core@0.5.27
 
 ## 0.5.11
 
@@ -74,7 +74,7 @@ Marking a major release to include channels and scheduled tasks
 
 - ab42f18: chore: upgrading to next15 and dropping pages support
 - Updated dependencies [ab42f18]
-  - @vramework/core@0.5.26
+  - @pikku/core@0.5.26
 
 ## 0.5.10
 
@@ -86,7 +86,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [0f96787]
 - Updated dependencies [64e4a1e]
 - Updated dependencies [c23524a]
-  - @vramework/core@0.5.25
+  - @pikku/core@0.5.25
 
 ## 0.5.9
 
@@ -97,7 +97,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [bba25cc]
 - Updated dependencies [9deb482]
 - Updated dependencies [ee0c6ea]
-  - @vramework/core@0.5.24
+  - @pikku/core@0.5.24
 
 ## 0.5.8
 
@@ -107,7 +107,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [7fa64a0]
 - Updated dependencies [539937e]
 - Updated dependencies [e9a9968]
-  - @vramework/core@0.5.23
+  - @pikku/core@0.5.23
 
 ## 0.5.7
 
@@ -115,7 +115,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 5be6da1: feat: adding streams to uws (and associated refactors)
 - Updated dependencies [5be6da1]
-  - @vramework/core@0.5.20
+  - @pikku/core@0.5.20
 
 ## 0.5.6
 
@@ -126,7 +126,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [cbcc75b]
 - Updated dependencies [d58c440]
 - Updated dependencies [11c50d4]
-  - @vramework/core@0.5.19
+  - @pikku/core@0.5.19
 
 ## 0.5.5
 
@@ -134,7 +134,7 @@ Marking a major release to include channels and scheduled tasks
 
 - effbb4c: doc: adding readme to all packages
 - Updated dependencies [effbb4c]
-  - @vramework/core@0.5.10
+  - @pikku/core@0.5.10
 
 ## 0.5.4
 
@@ -143,7 +143,7 @@ Marking a major release to include channels and scheduled tasks
 - 725723d: docs: adding typedocs
 - Updated dependencies [3541ab7]
 - Updated dependencies [725723d]
-  - @vramework/core@0.5.9
+  - @pikku/core@0.5.9
 
 ## 0.5.3
 
@@ -152,4 +152,4 @@ Marking a major release to include channels and scheduled tasks
 - 8d85f7e: feat: load all schemas on start optionally instead of validating they were loaded
 - Updated dependencies [1876d7a]
 - Updated dependencies [8d85f7e]
-  - @vramework/core@0.5.8
+  - @pikku/core@0.5.8

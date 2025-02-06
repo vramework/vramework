@@ -1,10 +1,9 @@
 /**
- * This module provides a wrapper around the Websocket API that integrates with the Vramework framework.
+ * This module provides a wrapper around the Websocket API that integrates with the Pikku framework.
  * It includes types for Channels.
  *
- * @module @vramework/ws
+ * @module @pikku/ws
  */
 
-export { CoreVrameworkWebsocket } from './core-vramework-websocket.js'
-
-export { CoreVrameworkRouteHandler } from './core-vramework-route-handler.js'
+export { AbstractPikkuWebsocket } from './abstract-pikku-websocket.js'
+export { AbstractPikkuRouteHandler } from './abstract-pikku-route-handler.js'

@@ -1,10 +1,10 @@
 /**
- * @module @vramework/core
+ * @module @pikku/core
  */
 export * from './types/core.types.js'
 export * from './types/functions.types.js'
-export * from './vramework-request.js'
-export * from './vramework-response.js'
+export * from './pikku-request.js'
+export * from './pikku-response.js'
 export * from './services/index.js'
 
 export { addRoute } from './http/http-route-runner.js'

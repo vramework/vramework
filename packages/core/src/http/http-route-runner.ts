@@ -5,15 +5,15 @@ import {
   HTTPRoutesMeta,
   RunRouteOptions,
   RunRouteParams,
-  VrameworkHTTP,
+  PikkuHTTP,
 } from './http-routes.types.js'
 import {
   CoreUserSession,
   SessionServices,
 } from '../types/core.types.js'
 import { match } from 'path-to-regexp'
-import { VrameworkHTTPAbstractRequest } from './vramework-http-abstract-request.js'
-import { VrameworkHTTPAbstractResponse } from './vramework-http-abstract-response.js'
+import { PikkuHTTPAbstractRequest } from './pikku-http-abstract-request.js'
+import { PikkuHTTPAbstractResponse } from './pikku-http-abstract-response.js'
 import { Logger, SchemaService } from '../services/index.js'
 import {
   ForbiddenError,
@@ -23,31 +23,31 @@ import {
 import crypto from 'crypto'
 import { closeSessionServices } from '../utils.js'
 import { CoreAPIChannel } from '../channel/channel.types.js'
-import { VrameworkRequest } from '../vramework-request.js'
-import { VrameworkResponse } from '../vramework-response.js'
+import { PikkuRequest } from '../pikku-request.js'
+import { PikkuResponse } from '../pikku-response.js'
 import { HTTPSessionService } from './http-session-service.js'
 import { getSchema, validateAndCoerce } from '../schema.js'
 
-if (!globalThis.vramework?.httpRoutes) {
-  globalThis.vramework = globalThis.vramework || {}
-  globalThis.vramework.httpRoutes = []
-  globalThis.vramework.httpRoutesMeta = []
+if (!globalThis.pikku?.httpRoutes) {
+  globalThis.pikku = globalThis.pikku || {}
+  globalThis.pikku.httpRoutes = []
+  globalThis.pikku.httpRoutesMeta = []
 }
 
 const httpRoutes = (
   data?: CoreHTTPFunctionRoute<any, any, any>[]
 ): CoreHTTPFunctionRoute<any, any, any>[] => {
   if (data) {
-    globalThis.vramework.httpRoutes = data
+    globalThis.pikku.httpRoutes = data
   }
-  return globalThis.vramework.httpRoutes
+  return globalThis.pikku.httpRoutes
 }
 
 const httpRoutesMeta = (data?: HTTPRoutesMeta): HTTPRoutesMeta => {
   if (data) {
-    globalThis.vramework.httpRoutesMeta = data
+    globalThis.pikku.httpRoutesMeta = data
   }
-  return globalThis.vramework.httpRoutesMeta
+  return globalThis.pikku.httpRoutesMeta
 }
 
 export const addRoute = <
@@ -128,7 +128,7 @@ const getMatchingRoute = (
 export const getUserSession = async <UserSession extends CoreUserSession>(
   httpSessionService: HTTPSessionService<UserSession> | undefined,
   auth: boolean,
-  request: VrameworkHTTPAbstractRequest
+  request: PikkuHTTPAbstractRequest
 ): Promise<CoreUserSession | undefined> => {
   if (httpSessionService) {
     return (await httpSessionService.getUserSession(
@@ -144,7 +144,7 @@ export const getUserSession = async <UserSession extends CoreUserSession>(
 export const loadUserSession = async (
   skipUserSession: boolean,
   requiresSession: boolean,
-  http: VrameworkHTTP | undefined,
+  http: PikkuHTTP | undefined,
   matchedPath: any,
   route:
     | CoreHTTPFunctionRoute<unknown, unknown, any>
@@ -187,19 +187,19 @@ export const loadUserSession = async (
 }
 
 export const createHTTPInteraction = (
-  request: VrameworkRequest | undefined,
-  response: VrameworkResponse | undefined
+  request: PikkuRequest | undefined,
+  response: PikkuResponse | undefined
 ) => {
-  let http: VrameworkHTTP | undefined = undefined
+  let http: PikkuHTTP | undefined = undefined
   if (
-    request instanceof VrameworkHTTPAbstractRequest ||
-    response instanceof VrameworkHTTPAbstractResponse
+    request instanceof PikkuHTTPAbstractRequest ||
+    response instanceof PikkuHTTPAbstractResponse
   ) {
     http = {}
-    if (request instanceof VrameworkHTTPAbstractRequest) {
+    if (request instanceof PikkuHTTPAbstractRequest) {
       http.request = request
     }
-    if (response instanceof VrameworkHTTPAbstractResponse) {
+    if (response instanceof PikkuHTTPAbstractResponse) {
       http.response = response
     }
   }
@@ -208,7 +208,7 @@ export const createHTTPInteraction = (
 
 export const handleError = (
   e: any,
-  http: VrameworkHTTP | undefined,
+  http: PikkuHTTP | undefined,
   trackerId: string,
   logger: Logger,
   logWarningsForStatusCodes: number[],

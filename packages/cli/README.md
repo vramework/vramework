@@ -1,3 +1,3 @@
-# Vramework CLI
+# Pikku CLI
 
-This package is part of @vramework/mono and is responsible for all the intropsection and file generations.
+This package is part of @pikku/mono and is responsible for all the intropsection and file generations.

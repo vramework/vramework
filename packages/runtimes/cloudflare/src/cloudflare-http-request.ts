@@ -1,8 +1,8 @@
-import type { HTTPMethod, VrameworkQuery } from '@vramework/core/http'
-import { VrameworkHTTPAbstractRequest } from '@vramework/core/http/vramework-http-abstract-request'
+import type { HTTPMethod, PikkuQuery } from '@pikku/core/http'
+import { PikkuHTTPAbstractRequest } from '@pikku/core/http/pikku-http-abstract-request'
 import type { Request, IncomingRequestCfProperties } from '@cloudflare/workers-types'
 
-export class CloudflareHTTPRequest extends VrameworkHTTPAbstractRequest {
+export class CloudflareHTTPRequest extends PikkuHTTPAbstractRequest {
   private url: URL
 
   constructor(private request: Request<unknown, IncomingRequestCfProperties<unknown>>) {
@@ -27,6 +27,6 @@ export class CloudflareHTTPRequest extends VrameworkHTTPAbstractRequest {
   }
 
   public getQuery () {
-    return Object.fromEntries(this.url.searchParams.entries()) as VrameworkQuery
+    return Object.fromEntries(this.url.searchParams.entries()) as PikkuQuery
   }
 }

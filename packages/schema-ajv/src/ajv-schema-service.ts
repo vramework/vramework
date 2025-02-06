@@ -1,8 +1,8 @@
-import { Logger, SchemaService } from '@vramework/core'
+import { Logger, SchemaService } from '@pikku/core'
 import { Ajv } from 'ajv'
 import addFormats from 'ajv-formats'
 import { ValidateFunction } from 'ajv'
-import { BadRequestError } from '@vramework/core/errors'
+import { BadRequestError } from '@pikku/core/errors'
 
 const ajv = new Ajv({
     removeAdditional: false,

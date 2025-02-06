@@ -1,1 +1,1 @@
-export { VrameworkTaskScheduler } from './vramework-task-scheduler.js'
+export { PikkuTaskScheduler } from './pikku-task-scheduler.js'

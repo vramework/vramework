@@ -1,5 +1,5 @@
 /**
- * @module @vramework/uws
+ * @module @pikku/uws
  */
 
-export * from './vramework-uws-server.js'
+export * from './pikku-uws-server.js'

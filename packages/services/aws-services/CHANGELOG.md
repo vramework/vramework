@@ -6,7 +6,7 @@
 
 - b19aa86: refactor: switching aws to using @aws-sdk/cloudfront-signer
 - Updated dependencies [b19aa86]
-  - @vramework/core@0.6.8
+  - @pikku/core@0.6.8
 
 ## 0.6.2
 
@@ -15,7 +15,7 @@
 - 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
 - 780d7c2: revert: using import for json
 - Updated dependencies [0a92fa7]
-  - @vramework/core@0.6.7
+  - @pikku/core@0.6.7
 
 ## 0.6.1
 
@@ -24,7 +24,7 @@
 - ecc3660: fix: exporting files in index.ts for aws-services
 - Updated dependencies [09fc52c]
 - Updated dependencies [adecb52]
-  - @vramework/core@0.6.3
+  - @pikku/core@0.6.3
 
 Marking a major release to include channels and scheduled tasks
 
@@ -36,7 +36,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [a768bad]
 - Updated dependencies [886a2fb]
 - Updated dependencies [886a2fb]
-  - @vramework/core@0.5.28
+  - @pikku/core@0.5.28
 
 ## 0.5.4
 
@@ -48,7 +48,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [0f96787]
 - Updated dependencies [64e4a1e]
 - Updated dependencies [c23524a]
-  - @vramework/core@0.5.25
+  - @pikku/core@0.5.25
 
 ## 0.5.3
 
@@ -58,7 +58,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [bba25cc]
 - Updated dependencies [9deb482]
 - Updated dependencies [ee0c6ea]
-  - @vramework/core@0.5.24
+  - @pikku/core@0.5.24
 
 ## 0.5.2
 
@@ -66,17 +66,17 @@ Marking a major release to include channels and scheduled tasks
 
 - effbb4c: doc: adding readme to all packages
 - Updated dependencies [effbb4c]
-  - @vramework/core@0.5.10
+  - @pikku/core@0.5.10
 
 ## 0.5.1
 
 ### Patch Changes
 
-- 45e07de: refactor: renaming packages and vramework structure
+- 45e07de: refactor: renaming packages and pikku structure
 - Updated dependencies [97900d2]
 - Updated dependencies [d939d46]
 - Updated dependencies [45e07de]
-  - @vramework/core@0.5.1
+  - @pikku/core@0.5.1
 
 ## 0.4.3
 
@@ -84,7 +84,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 94f8a74: fix: finalizing cjs and esm packages
 - Updated dependencies [94f8a74]
-  - @vramework/core@0.4.3
+  - @pikku/core@0.4.3
 
 ## 0.4.2
 
@@ -94,7 +94,7 @@ Marking a major release to include channels and scheduled tasks
 - 14783ee: fix: including all types as dependencies to avoid users needing to install them
 - Updated dependencies [28f62ea]
 - Updated dependencies [14783ee]
-  - @vramework/core@0.4.2
+  - @pikku/core@0.4.2
 
 ## 0.0.8 - 26.06.2022
 

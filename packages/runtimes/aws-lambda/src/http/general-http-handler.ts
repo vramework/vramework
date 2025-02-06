@@ -1,8 +1,8 @@
-import { CoreSingletonServices, CoreServices, CreateSessionServices, CoreUserSession } from "@vramework/core"
-import { runHTTPRoute } from "@vramework/core/http"
+import { CoreSingletonServices, CoreServices, CreateSessionServices, CoreUserSession } from "@pikku/core"
+import { runHTTPRoute } from "@pikku/core/http"
 import { APIGatewayProxyResult } from "aws-lambda"
-import { VrameworkAPIGatewayLambdaRequest } from "../vramework-api-gateway-lambda-request.js"
-import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
+import { PikkuAPIGatewayLambdaRequest } from "../pikku-api-gateway-lambda-request.js"
+import { PikkuAPIGatewayLambdaResponse } from "../pikku-api-gateway-lambda-response.js"
 
 export const generalHTTPHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
   singletonServices: SingletonServices,
@@ -11,8 +11,8 @@ export const generalHTTPHandler = async <SingletonServices extends CoreSingleton
     Services,
     UserSession
   >,
-  request: VrameworkAPIGatewayLambdaRequest,
-  response: VrameworkAPIGatewayLambdaResponse
+  request: PikkuAPIGatewayLambdaRequest,
+  response: PikkuAPIGatewayLambdaResponse
 ): Promise<APIGatewayProxyResult> => {
   if (request.getMethod() === 'options') {
     response.setHeader(

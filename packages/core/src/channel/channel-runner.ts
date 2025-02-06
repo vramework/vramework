@@ -11,24 +11,24 @@ import {
 } from './channel.types.js'
 import { match } from 'path-to-regexp'
 
-if (!globalThis.vramework?.channels) {
-    globalThis.vramework = globalThis.vramework || {}
-    globalThis.vramework.channels = []
-    globalThis.vramework.channelsMeta = []
+if (!globalThis.pikku?.channels) {
+    globalThis.pikku = globalThis.pikku || {}
+    globalThis.pikku.channels = []
+    globalThis.pikku.channelsMeta = []
 }
 
 const channels = (data?: any): CoreAPIChannels => {
     if (data) {
-        globalThis.vramework.channels = data
+        globalThis.pikku.channels = data
     }
-    return globalThis.vramework.channels
+    return globalThis.pikku.channels
 }
 
 const channelsMeta = (data?: any): ChannelsMeta => {
     if (data) {
-        globalThis.vramework.channelsMeta = data
+        globalThis.pikku.channelsMeta = data
     }
-    return globalThis.vramework.channelsMeta
+    return globalThis.pikku.channelsMeta
 }
 
 /**

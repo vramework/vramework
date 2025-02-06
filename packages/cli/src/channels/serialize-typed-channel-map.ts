@@ -1,6 +1,6 @@
-import { ChannelsMeta } from '@vramework/core/channel'
+import { ChannelsMeta } from '@pikku/core/channel'
 import { serializeImportMap } from '../core/serialize-import-map.js'
-import { TypesMap } from '@vramework/inspector'
+import { TypesMap } from '@pikku/inspector'
 
 export const serializeTypedChannelsMap = (
   relativeToPath: string,

@@ -1,4 +1,4 @@
-# @vramework/express-middleware
+# @pikku/express-middleware
 
 ## 0.6.3
 
@@ -6,7 +6,7 @@
 
 - 0a92fa7: refactor: pulling schema into seperate package since ajv doesnt work on cloudflare (also keeps bundle size small!)
 - Updated dependencies [0a92fa7]
-  - @vramework/core@0.6.7
+  - @pikku/core@0.6.7
 
 ## 0.6.2
 
@@ -15,7 +15,7 @@
 - adecb52: feat: changes required to get cloudflare functions to work
 - Updated dependencies [09fc52c]
 - Updated dependencies [adecb52]
-  - @vramework/core@0.6.3
+  - @pikku/core@0.6.3
 
 ## 0.6.1
 
@@ -24,7 +24,7 @@
 - adeb392: feat: more channel improvements, and adding bubble option to runners to avoid all the empty try catches
 - Updated dependencies [ed45ca9]
 - Updated dependencies [adeb392]
-  - @vramework/core@0.6.2
+  - @pikku/core@0.6.2
 
 ## 0.6
 
@@ -38,7 +38,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [a768bad]
 - Updated dependencies [886a2fb]
 - Updated dependencies [886a2fb]
-  - @vramework/core@0.5.28
+  - @pikku/core@0.5.28
 
 ## 0.5.11
 
@@ -46,7 +46,7 @@ Marking a major release to include channels and scheduled tasks
 
 - ab42f18: chore: upgrading to next15 and dropping pages support
 - Updated dependencies [ab42f18]
-  - @vramework/core@0.5.26
+  - @pikku/core@0.5.26
 
 ## 0.5.10
 
@@ -58,7 +58,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [0f96787]
 - Updated dependencies [64e4a1e]
 - Updated dependencies [c23524a]
-  - @vramework/core@0.5.25
+  - @pikku/core@0.5.25
 
 ## 0.5.9
 
@@ -68,7 +68,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [bba25cc]
 - Updated dependencies [9deb482]
 - Updated dependencies [ee0c6ea]
-  - @vramework/core@0.5.24
+  - @pikku/core@0.5.24
 
 ## 0.5.8
 
@@ -79,7 +79,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [cbcc75b]
 - Updated dependencies [d58c440]
 - Updated dependencies [11c50d4]
-  - @vramework/core@0.5.19
+  - @pikku/core@0.5.19
 
 ## 0.5.7
 
@@ -89,7 +89,7 @@ Marking a major release to include channels and scheduled tasks
 - d4dd093: feat: coerce top level strings to arrays
 - Updated dependencies [bed9ab4]
 - Updated dependencies [d4dd093]
-  - @vramework/core@0.5.18
+  - @pikku/core@0.5.18
 
 ## 0.5.6
 
@@ -97,7 +97,7 @@ Marking a major release to include channels and scheduled tasks
 
 - effbb4c: doc: adding readme to all packages
 - Updated dependencies [effbb4c]
-  - @vramework/core@0.5.10
+  - @pikku/core@0.5.10
 
 ## 0.5.5
 
@@ -106,7 +106,7 @@ Marking a major release to include channels and scheduled tasks
 - 725723d: docs: adding typedocs
 - Updated dependencies [3541ab7]
 - Updated dependencies [725723d]
-  - @vramework/core@0.5.9
+  - @pikku/core@0.5.9
 
 ## 0.5.4
 
@@ -115,7 +115,7 @@ Marking a major release to include channels and scheduled tasks
 - 8d85f7e: feat: load all schemas on start optionally instead of validating they were loaded
 - Updated dependencies [1876d7a]
 - Updated dependencies [8d85f7e]
-  - @vramework/core@0.5.8
+  - @pikku/core@0.5.8
 
 ## 0.5.3
 
@@ -133,8 +133,8 @@ Marking a major release to include channels and scheduled tasks
 
 ### Patch Changes
 
-- 45e07de: refactor: renaming packages and vramework structure
+- 45e07de: refactor: renaming packages and pikku structure
 - Updated dependencies [97900d2]
 - Updated dependencies [d939d46]
 - Updated dependencies [45e07de]
-  - @vramework/core@0.5.1
+  - @pikku/core@0.5.1

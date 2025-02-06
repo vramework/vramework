@@ -1,8 +1,8 @@
 import * as ts from 'typescript'
 import { getPropertyValue } from './get-property-value.js'
 import { pathToRegexp } from 'path-to-regexp'
-import { HTTPMethod } from '@vramework/core/http'
-import { APIDocs } from '@vramework/core'
+import { HTTPMethod } from '@pikku/core/http'
+import { APIDocs } from '@pikku/core'
 import { extractTypeKeys, getFunctionTypes } from './utils.js'
 import { MetaInputTypes, InspectorState } from './types.js'
 

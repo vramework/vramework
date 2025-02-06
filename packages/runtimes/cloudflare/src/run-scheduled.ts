@@ -1,6 +1,6 @@
 import { ScheduledController } from "@cloudflare/workers-types"
-import { CoreSingletonServices, CreateSessionServices } from "@vramework/core"
-import { getScheduledTasks, runScheduledTask } from "@vramework/core/scheduler"
+import { CoreSingletonServices, CreateSessionServices } from "@pikku/core"
+import { getScheduledTasks, runScheduledTask } from "@pikku/core/scheduler"
 
 export const runScheduled = async (controller: ScheduledController, singletonServices: CoreSingletonServices, createSessionServices?: CreateSessionServices) => {
     const { scheduledTasks } = getScheduledTasks()

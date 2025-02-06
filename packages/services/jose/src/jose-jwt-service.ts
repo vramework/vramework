@@ -1,12 +1,12 @@
 /**
  * The `JoseJWTService` class provides functionality for handling JSON Web Tokens (JWTs) using the `jose` library.
- * It implements the `JWTService` interface from the `@vramework/core` module, allowing for secure encoding, decoding, and verification of JWTs.
+ * It implements the `JWTService` interface from the `@pikku/core` module, allowing for secure encoding, decoding, and verification of JWTs.
  *
  * @module JoseJWTService
  */
-import { CoreUserSession } from '@vramework/core'
-import { MissingSessionError } from '@vramework/core/errors'
-import { JWTService, Logger } from '@vramework/core/services'
+import { CoreUserSession } from '@pikku/core'
+import { MissingSessionError } from '@pikku/core/errors'
+import { JWTService, Logger } from '@pikku/core/services'
 import * as jose from 'jose'
 
 /**

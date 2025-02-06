@@ -1,6 +1,6 @@
-import { CoreUserSession } from "@vramework/core";
-import { ChannelStore, VrameworkAbstractChannelHandler, VrameworkChannelHandlerFactory } from "@vramework/core/channel";
-import { Logger } from "@vramework/core/services";
+import { CoreUserSession } from "@pikku/core";
+import { ChannelStore, PikkuAbstractChannelHandler, PikkuChannelHandlerFactory } from "@pikku/core/channel";
+import { Logger } from "@pikku/core/services";
 import { WebSocket } from "@cloudflare/workers-types";
 
 const isSerializable = (data: any): boolean => {
@@ -22,7 +22,7 @@ class CloudflareChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
   OpeningData = unknown,
   Out = unknown,
-> extends VrameworkAbstractChannelHandler<UserSession, OpeningData, Out> {
+> extends PikkuAbstractChannelHandler<UserSession, OpeningData, Out> {
   constructor(
     channelId: string, 
     channelName: string,
@@ -53,6 +53,6 @@ class CloudflareChannelHandler<
 }
 
 export const createCloudflareChannelHandlerFactory = (logger: Logger, channelStore: ChannelStore, websocket: WebSocket) => {
-  const factory: VrameworkChannelHandlerFactory = (channelId, channelName, openingData, userSession) => new CloudflareChannelHandler(channelId, channelName, openingData, userSession, websocket, logger, channelStore)
+  const factory: PikkuChannelHandlerFactory = (channelId, channelName, openingData, userSession) => new CloudflareChannelHandler(channelId, channelName, openingData, userSession, websocket, logger, channelStore)
   return factory
 }

@@ -1,4 +1,4 @@
-# @vramework/cli
+# @pikku/cli
 
 ## 0.6.6
 
@@ -6,7 +6,7 @@
 
 - 780d7c2: revert: using import for json
 - Updated dependencies [0a92fa7]
-  - @vramework/core@0.6.7
+  - @pikku/core@0.6.7
 
 ## 0.6.5
 
@@ -14,7 +14,7 @@
 
 - 4357bca: feat: fixing up nextjs apis
 - Updated dependencies [4357bca]
-  - @vramework/core@0.6.6
+  - @pikku/core@0.6.6
 
 ## 0.6.4
 
@@ -24,8 +24,8 @@
 - a40a508: fix: Fixing some generation bugs and other minors
 - 4855e68: refactor: changing all generated files to have a .gen in the default name suffix
 - Updated dependencies [a40a508]
-  - @vramework/inspector@0.6.2
-  - @vramework/core@0.6.5
+  - @pikku/inspector@0.6.2
+  - @pikku/core@0.6.5
 
 ## 0.6.3
 
@@ -33,8 +33,8 @@
 
 - f26880f: feat: extracting inspector and adding unique type references
 - Updated dependencies [f26880f]
-  - @vramework/inspector@0.6.1
-  - @vramework/core@0.6.4
+  - @pikku/inspector@0.6.1
+  - @pikku/core@0.6.4
 
 ## 0.6.2
 
@@ -44,7 +44,7 @@
   breaking change: moved subscription from channel to services and renamed to event hub
 - Updated dependencies [09fc52c]
 - Updated dependencies [adecb52]
-  - @vramework/core@0.6.3
+  - @pikku/core@0.6.3
 
 ## 0.6.1
 
@@ -53,7 +53,7 @@
 - adeb392: feat: more channel improvements, and adding bubble option to runners to avoid all the empty try catches
 - Updated dependencies [ed45ca9]
 - Updated dependencies [adeb392]
-  - @vramework/core@0.6.2
+  - @pikku/core@0.6.2
 
 ## 0.6
 
@@ -69,7 +69,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [662a6cf]
 - Updated dependencies [c8578ea]
 - Updated dependencies [d2f8edf]
-  - @vramework/core@0.5.29
+  - @pikku/core@0.5.29
 
 ## 0.5.42
 
@@ -80,7 +80,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [a768bad]
 - Updated dependencies [886a2fb]
 - Updated dependencies [886a2fb]
-  - @vramework/core@0.5.28
+  - @pikku/core@0.5.28
 
 ## 0.5.41
 
@@ -118,7 +118,7 @@ Marking a major release to include channels and scheduled tasks
 
 - aa8435c: fix: fixing up channel apis and implementations
 - Updated dependencies [aa8435c]
-  - @vramework/core@0.5.27
+  - @pikku/core@0.5.27
 
 ## 0.5.35
 
@@ -127,7 +127,7 @@ Marking a major release to include channels and scheduled tasks
 - 2160039: fix: fixing alias issue with generated types
 - ab42f18: chore: upgrading to next15 and dropping pages support
 - Updated dependencies [ab42f18]
-  - @vramework/core@0.5.26
+  - @pikku/core@0.5.26
 
 ## 0.5.34
 
@@ -139,7 +139,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [0f96787]
 - Updated dependencies [64e4a1e]
 - Updated dependencies [c23524a]
-  - @vramework/core@0.5.25
+  - @pikku/core@0.5.25
 
 ## 0.5.33
 
@@ -153,7 +153,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [bba25cc]
 - Updated dependencies [9deb482]
 - Updated dependencies [ee0c6ea]
-  - @vramework/core@0.5.24
+  - @pikku/core@0.5.24
 
 ## 0.5.32
 
@@ -163,7 +163,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [7fa64a0]
 - Updated dependencies [539937e]
 - Updated dependencies [e9a9968]
-  - @vramework/core@0.5.23
+  - @pikku/core@0.5.23
 
 ## 0.5.31
 
@@ -171,7 +171,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 73973ec: fix: data type for methods is optional
 - Updated dependencies [73973ec]
-  - @vramework/core@0.5.22
+  - @pikku/core@0.5.22
 
 ## 0.5.30
 
@@ -179,7 +179,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 179b9c2: fix: fixing stream types
 - Updated dependencies [179b9c2]
-  - @vramework/core@0.5.21
+  - @pikku/core@0.5.21
 
 ## 0.5.29
 
@@ -193,7 +193,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 5be6da1: feat: adding streams to uws (and associated refactors)
 - Updated dependencies [5be6da1]
-  - @vramework/core@0.5.20
+  - @pikku/core@0.5.20
 
 ## 0.5.27
 
@@ -204,7 +204,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [cbcc75b]
 - Updated dependencies [d58c440]
 - Updated dependencies [11c50d4]
-  - @vramework/core@0.5.19
+  - @pikku/core@0.5.19
 
 ## 0.5.26
 
@@ -230,15 +230,15 @@ Marking a major release to include channels and scheduled tasks
 
 - 30b46aa: fix: looks like using patch lowercase breaks the node fetch client sometimes
 - Updated dependencies [30b46aa]
-  - @vramework/core@0.5.13
+  - @pikku/core@0.5.13
 
 ## 0.5.22
 
 ### Patch Changes
 
-- f8aa99f: feat: export vrameworkFetch instance to avoid needing a singleton class
+- f8aa99f: feat: export pikkuFetch instance to avoid needing a singleton class
 - Updated dependencies [ff8a563]
-  - @vramework/core@0.5.12
+  - @pikku/core@0.5.12
 
 ## 0.5.21
 
@@ -249,7 +249,7 @@ Marking a major release to include channels and scheduled tasks
 - Updated dependencies [be68efb]
 - Updated dependencies [5295380]
 - Updated dependencies [f24a653]
-  - @vramework/core@0.5.11
+  - @pikku/core@0.5.11
 
 ## 0.5.20
 
@@ -257,7 +257,7 @@ Marking a major release to include channels and scheduled tasks
 
 - effbb4c: doc: adding readme to all packages
 - Updated dependencies [effbb4c]
-  - @vramework/core@0.5.10
+  - @pikku/core@0.5.10
 
 ## 0.5.19
 
@@ -267,7 +267,7 @@ Marking a major release to include channels and scheduled tasks
 - 725723d: docs: adding typedocs
 - Updated dependencies [3541ab7]
 - Updated dependencies [725723d]
-  - @vramework/core@0.5.9
+  - @pikku/core@0.5.9
 
 ## 0.5.18
 
@@ -278,7 +278,7 @@ Marking a major release to include channels and scheduled tasks
 - fda3869: fix: dont ignore decleration files when looking for types
 - Updated dependencies [1876d7a]
 - Updated dependencies [8d85f7e]
-  - @vramework/core@0.5.8
+  - @pikku/core@0.5.8
 
 ## 0.5.17
 
@@ -304,7 +304,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 0883f00: fix: schema generation error
 - Updated dependencies [0883f00]
-  - @vramework/core@0.5.6
+  - @pikku/core@0.5.6
 
 ## 0.5.13
 
@@ -312,7 +312,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 93b80a3: feat: adding a beta openapi standard
 - Updated dependencies [93b80a3]
-  - @vramework/core@0.5.5
+  - @pikku/core@0.5.5
 
 ## 0.5.12
 
@@ -363,7 +363,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 6cac8ab: feat: adding a do not edit to cli generated files
 - Updated dependencies [6cac8ab]
-  - @vramework/core@0.5.4
+  - @pikku/core@0.5.4
 
 ## 0.5.4
 
@@ -371,7 +371,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 8065e48: refactor: large cli refactor for a better dev experience
 - Updated dependencies [8065e48]
-  - @vramework/core@0.5.3
+  - @pikku/core@0.5.3
 
 ## 0.5.3
 
@@ -379,7 +379,7 @@ Marking a major release to include channels and scheduled tasks
 
 - 5e0f033: feat: adding a routes map output file to support frontend sdks in the future
 - Updated dependencies [5e0f033]
-  - @vramework/core@0.5.2
+  - @pikku/core@0.5.2
 
 ## 0.5.2
 
@@ -391,11 +391,11 @@ Marking a major release to include channels and scheduled tasks
 
 ### Patch Changes
 
-- 45e07de: refactor: renaming packages and vramework structure
+- 45e07de: refactor: renaming packages and pikku structure
 - Updated dependencies [97900d2]
 - Updated dependencies [d939d46]
 - Updated dependencies [45e07de]
-  - @vramework/core@0.5.1
+  - @pikku/core@0.5.1
 
 ## 0.4.7
 
@@ -409,21 +409,21 @@ Marking a major release to include channels and scheduled tasks
 
 - 2a2402b: republish since something went wrong
 - Updated dependencies [2a2402b]
-  - @vramework/core@0.4.6
+  - @pikku/core@0.4.6
 
 ## 0.4.5
 
 ### Patch Changes
 
 - 0650348: fix: export schemas using \*
-- 1a708a7: refactor: renaming VrameworkCLIConfig back to VrameworkConfig
-  feat: adding .end() to vramework response for servers that need it
+- 1a708a7: refactor: renaming PikkuCLIConfig back to PikkuConfig
+  feat: adding .end() to pikku response for servers that need it
 - 3019265: fix: ensuring node 18 compatability
 - 642d370: fix: adding schema error logs on fail
 - Updated dependencies [0650348]
 - Updated dependencies [1a708a7]
 - Updated dependencies [642d370]
-  - @vramework/core@0.4.4
+  - @pikku/core@0.4.4
 
 ## 0.4.4
 

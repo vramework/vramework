@@ -2,13 +2,13 @@ import { CoreUserSession, SessionServices } from "../../types/core.types.js"
 import { closeSessionServices } from "../../utils.js"
 import { processMessageHandlers } from "../channel-handler.js"
 import { getChannels, openChannel } from "../channel-runner.js"
-import type { CoreAPIChannel, RunChannelOptions, RunChannelParams, VrameworkChannelHandlerFactory } from "../channel.types.js"
+import type { CoreAPIChannel, RunChannelOptions, RunChannelParams, PikkuChannelHandlerFactory } from "../channel.types.js"
 import { createHTTPInteraction, handleError } from "../../http/http-route-runner.js"
 import { ChannelStore } from "../channel-store.js"
 
 export interface RunServerlessChannelParams<ChannelData> extends RunChannelParams<ChannelData> {
     channelStore: ChannelStore
-    channelHandlerFactory: VrameworkChannelHandlerFactory
+    channelHandlerFactory: PikkuChannelHandlerFactory
     channelObject?: unknown
 }
 
@@ -16,7 +16,7 @@ const getVariablesForChannel = ({ channelId, userSession, channelName, channelHa
     channelId: string,
     channelName: string,
     userSession?: CoreUserSession,
-    channelHandlerFactory: VrameworkChannelHandlerFactory,
+    channelHandlerFactory: PikkuChannelHandlerFactory,
     openingData?: unknown
 }) => {
     const { channels } = getChannels()

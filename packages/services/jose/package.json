@@ -1,5 +1,5 @@
 {
-  "name": "@vramework/jose",
+  "name": "@pikku/jose",
   "version": "0.6.1",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "release": "npm run build && npm test"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.7"
+    "@pikku/core": "^0.6.7"
   },
   "dependencies": {
     "jose": "^5.9.6"

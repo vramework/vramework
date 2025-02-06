@@ -1,7 +1,7 @@
 {
-  "name": "@vramework/fastify",
+  "name": "@pikku/fastify",
   "version": "0.6.1",
-  "description": "The vramework fastify server",
+  "description": "The pikku fastify server",
   "license": "MIT",
   "author": "yasser.fadl@gmail.com",
   "module": "dist/index.js",
@@ -18,14 +18,14 @@
     "test:coverage": "bash run-tests.sh --coverage"
   },
   "peerDependencies": {
-    "@vramework/core": "^0.6.7"
+    "@pikku/core": "^0.6.7"
   },
   "dependencies": {
-    "@vramework/fastify-plugin": "^0.6.3",
+    "@pikku/fastify-plugin": "^0.6.3",
     "fastify": "^5.0.0"
   },
   "devDependencies": {
-    "@vramework/core": "^0.6.7",
+    "@pikku/core": "^0.6.7",
     "typescript": "^5.6.3"
   },
   "engines": {

@@ -3,10 +3,10 @@ import {
   CoreSingletonServices,
   CoreUserSession,
   CreateSessionServices,
-} from '@vramework/core'
+} from '@pikku/core'
 import { CloudflareHTTPRequest } from './cloudflare-http-request.js'
 import { CloudfrontHTTPResponse } from './cloudflare-http-response.js'
-import { runHTTPRoute } from '@vramework/core/http'
+import { runHTTPRoute } from '@pikku/core/http'
 import type { Request, IncomingRequestCfProperties } from '@cloudflare/workers-types'
 import { CloudflareWebSocketHibernationServer } from './cloudflare-hibernation-websocket-server.js'
 

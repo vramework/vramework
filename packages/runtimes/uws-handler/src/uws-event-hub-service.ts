@@ -1,4 +1,4 @@
-import { EventHubForwarder, EventHubService } from '@vramework/core/channel'
+import { EventHubForwarder, EventHubService } from '@pikku/core/channel'
 import * as uWS from 'uWebSockets.js'
 
 export class UWSEventHubService<Mappings = unknown> implements EventHubService<Mappings> {

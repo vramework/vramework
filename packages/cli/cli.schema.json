@@ -1,5 +1,5 @@
 {
-  "$ref": "#/definitions/VrameworkCLIConfig",
+  "$ref": "#/definitions/PikkuCLIConfig",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "OpenAPISpecInfo": {
@@ -114,7 +114,7 @@
       "required": ["info", "servers"],
       "type": "object"
     },
-    "VrameworkCLIConfig": {
+    "PikkuCLIConfig": {
       "additionalProperties": false,
       "properties": {
         "$schema": {

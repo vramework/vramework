@@ -1,5 +1,5 @@
-# @vramework/core
+# @pikku/core
 
-This package is part of @vramework/mono and is responsible for the runtime in vramework.
+This package is part of @pikku/mono and is responsible for the runtime in pikku.
 
 It is used by most other packages, contains all the core types and minimal requirements.

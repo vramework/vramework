@@ -1,3 +1,3 @@
-# @vramework/pino
+# @pikku/pino
 
-This package is part of @vramework/mono and is responsible for providing the Pino Logger
+This package is part of @pikku/mono and is responsible for providing the Pino Logger

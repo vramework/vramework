@@ -1,6 +1,6 @@
-import { ChannelsMeta } from "@vramework/core/channel";
-import { HTTPRoutesMeta } from "@vramework/core/http";
-import { ScheduledTasksMeta } from "@vramework/core/scheduler";
+import { ChannelsMeta } from "@pikku/core/channel";
+import { HTTPRoutesMeta } from "@pikku/core/http";
+import { ScheduledTasksMeta } from "@pikku/core/scheduler";
 import { TypesMap } from "./types-map.js";
 
 export type PathToNameAndType = Map<

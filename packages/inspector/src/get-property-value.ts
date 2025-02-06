@@ -1,4 +1,4 @@
-import { APIDocs } from '@vramework/core'
+import { APIDocs } from '@pikku/core'
 import * as ts from 'typescript'
 
 export const getPropertyValue = (

@@ -1,5 +1,5 @@
 /**
- * @module @vramework/express
+ * @module @pikku/express
  */
 
-export * from './vramework-express-server.js'
+export * from './pikku-express-server.js'

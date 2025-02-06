@@ -1,7 +1,7 @@
-import { CoreSingletonServices, CoreServices, CoreUserSession } from "@vramework/core"
-import { runChannelMessage } from "@vramework/core/channel/serverless"
+import { CoreSingletonServices, CoreServices, CoreUserSession } from "@pikku/core"
+import { runChannelMessage } from "@pikku/core/channel/serverless"
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
-import { VrameworkAPIGatewayLambdaResponse } from "../vramework-api-gateway-lambda-response.js"
+import { PikkuAPIGatewayLambdaResponse } from "../pikku-api-gateway-lambda-response.js"
 import { getServerlessDependencies } from "./utils.js"
 import { WebsocketParams } from "./websocket-types.js"
 
@@ -11,7 +11,7 @@ export const processWebsocketMessage = async <SingletonServices extends CoreSing
   channelStore,
 }: WebsocketParams<SingletonServices, Services, UserSession>): Promise<APIGatewayProxyResult> => {
   const runnerParams = getServerlessDependencies(singletonServices.logger, channelStore, event)
-  const response = new VrameworkAPIGatewayLambdaResponse()
+  const response = new PikkuAPIGatewayLambdaResponse()
   try {
     const result = await runChannelMessage({
       ...runnerParams,

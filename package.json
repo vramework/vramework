@@ -1,8 +1,8 @@
 {
-  "name": "@vramework/mono",
+  "name": "@pikku/mono",
   "version": "0.6.0",
-  "description": "The vramework monorepo",
-  "repository": "git@github.com:vlandor/vramework.git",
+  "description": "The pikku monorepo",
+  "repository": "git@github.com:vlandor/pikku.git",
   "author": "yasser.fadl@gmail.com",
   "license": "MIT",
   "private": true,

@@ -1,4 +1,4 @@
-# @vramework/websocket
+# @pikku/websocket
 
 ## 0.6.1
 

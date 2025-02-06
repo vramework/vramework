@@ -1,3 +1,3 @@
-# @vramework/fastify-plugin
+# @pikku/fastify-plugin
 
-This package is part of @vramework/mono and is responsible for providing the fastify-plugin to enable vramework routes
+This package is part of @pikku/mono and is responsible for providing the fastify-plugin to enable pikku routes
