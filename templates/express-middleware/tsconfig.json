@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "declaration": false,
+    "sourceMap": true,
+    "allowJs": false,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "resolveJsonModule": true,
+    "lib": ["es2018"],
+    "types": ["node"]
+  },
+  "include": [".pikku/*.ts"]
+}

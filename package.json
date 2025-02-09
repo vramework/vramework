@@ -10,7 +10,8 @@
     "packages": [
       "packages/*",
       "packages/services/*",
-      "packages/runtimes/*"
+      "packages/runtimes/*",
+      "templates/*"
     ]
   },
   "scripts": {

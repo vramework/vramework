@@ -2338,7 +2338,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pikku/cli@workspace:packages/cli":
+"@pikku/cli@npm:^0.6.3, @pikku/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@pikku/cli@workspace:packages/cli"
   dependencies:
@@ -2371,7 +2371,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pikku/core@npm:^0.6.5, @pikku/core@npm:^0.6.7, @pikku/core@workspace:packages/core":
+"@pikku/core@npm:^0.6.4, @pikku/core@npm:^0.6.5, @pikku/core@npm:^0.6.7, @pikku/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@pikku/core@workspace:packages/core"
   dependencies:
@@ -2385,7 +2385,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pikku/express-middleware@npm:^0.6.0, @pikku/express-middleware@workspace:packages/runtimes/express-middleware":
+"@pikku/express-middleware@npm:^0.6.0, @pikku/express-middleware@npm:^0.6.2, @pikku/express-middleware@workspace:packages/runtimes/express-middleware":
   version: 0.0.0-use.local
   resolution: "@pikku/express-middleware@workspace:packages/runtimes/express-middleware"
   dependencies:
@@ -2466,7 +2466,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pikku/jose@workspace:packages/services/jose":
+"@pikku/jose@npm:^0.6.0, @pikku/jose@workspace:packages/services/jose":
   version: 0.0.0-use.local
   resolution: "@pikku/jose@workspace:packages/services/jose"
   dependencies:
@@ -2536,7 +2536,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pikku/schedule@workspace:packages/schedule":
+"@pikku/schedule@npm:^0.6.0, @pikku/schedule@workspace:packages/schedule":
   version: 0.0.0-use.local
   resolution: "@pikku/schedule@workspace:packages/schedule"
   dependencies:
@@ -2558,6 +2558,35 @@ __metadata:
     typescript: "npm:^5.6.3"
   peerDependencies:
     "@pikku/core": ^0.6.7
+  languageName: unknown
+  linkType: soft
+
+"@pikku/templates-express-middleware@workspace:templates/express-middleware":
+  version: 0.0.0-use.local
+  resolution: "@pikku/templates-express-middleware@workspace:templates/express-middleware"
+  dependencies:
+    "@pikku/cli": "npm:^0.6.3"
+    "@pikku/core": "npm:^0.6.4"
+    "@pikku/express-middleware": "npm:^0.6.2"
+    "@pikku/jose": "npm:^0.6.0"
+    "@pikku/schedule": "npm:^0.6.0"
+    "@types/cookie-parser": "npm:^1.4.7"
+    "@pikku/cli": "npm:^0.6.3"
+    cookie-parser: "npm:^1.4.7"
+    express: "npm:^5"
+    tsx: "npm:^4.19.2"
+    typescript: "npm:^5.6"
+  languageName: unknown
+  linkType: soft
+
+"@pikku/templates-functions@workspace:templates/functions":
+  version: 0.0.0-use.local
+  resolution: "@pikku/templates-functions@workspace:templates/functions"
+  dependencies:
+    "@pikku/cli": "npm:^0.6.3"
+    "@pikku/core": "npm:^0.6.4"
+    "@pikku/jose": "npm:^0.6.0"
+    typescript: "npm:^5.6"
   languageName: unknown
   linkType: soft
 
@@ -3973,6 +4002,50 @@ __metadata:
   version: 1.2.0
   resolution: "@ungap/structured-clone@npm:1.2.0"
   checksum: 10/c6fe89a505e513a7592e1438280db1c075764793a2397877ff1351721fe8792a966a5359769e30242b3cd023f2efb9e63ca2ca88019d73b564488cc20e3eab12
+  languageName: node
+  linkType: hard
+
+"@pikku/cli@npm:^0.6.3":
+  version: 0.6.6
+  resolution: "@pikku/cli@npm:0.6.6"
+  dependencies:
+    "@openapi-contrib/json-schema-to-openapi-schema": "npm:^3.0.2"
+    "@types/cookie": "npm:^0.6.0"
+    "@types/uuid": "npm:^10.0.0"
+    "@pikku/core": "npm:^0.6.7"
+    "@pikku/inspector": "npm:^0.6.2"
+    commander: "npm:^12"
+    glob: "npm:^10"
+    path-to-regexp: "npm:^8.2.0"
+    ts-json-schema-generator: "npm:^2.3.0"
+    typescript: "npm:^5.6"
+    yaml: "npm:^2.6.0"
+  bin:
+    pikku: dist/bin/pikku.js
+  checksum: 10/547804d0848f37f37aa92d02fe6d134f5dffe4a35a1687b0ec941046eaaa393109c1ec3a6952071d1774838cacb86b9f4dcfea85c8edbdb57054ef59f35e1c9d
+  languageName: node
+  linkType: hard
+
+"@pikku/core@npm:^0.6.5, @pikku/core@npm:^0.6.7":
+  version: 0.6.9
+  resolution: "@pikku/core@npm:0.6.9"
+  dependencies:
+    "@types/cookie": "npm:^0.6.0"
+    "@types/uuid": "npm:^10.0.0"
+    cookie: "npm:^1.0.1"
+    path-to-regexp: "npm:^8.2.0"
+  checksum: 10/01cfe495ca040ba300dd4676a52cfd1113c47cb9992ded06e491ae8a0d0873a0069bfaf8228051b34139b73bed7ef4261dc358b0d9f79dcb395050df6b229ddb
+  languageName: node
+  linkType: hard
+
+"@pikku/inspector@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "@pikku/inspector@npm:0.6.2"
+  dependencies:
+    "@pikku/core": "npm:^0.6.5"
+    path-to-regexp: "npm:^8.2.0"
+    typescript: "npm:^5.6"
+  checksum: 10/1fc2d13969cbe6bf284b0ff0a61eb1a35d2d6e1d1d1d2ac32b25e06bdf23a0bc07f05990ae12e04adfebd43ea75ecc11ad3b5197cbe40907b722a53a4d942fac
   languageName: node
   linkType: hard
 

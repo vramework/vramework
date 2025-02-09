@@ -113,9 +113,10 @@ export class PikkuExpressServer {
     process.removeAllListeners('SIGINT').on('SIGINT', async () => {
       this.singletonServices.logger.info('Stopping server...')
       for (const [name, service] of Object.entries(this.singletonServices)) {
-        if (service.stop) {
+        const stop = (service as any).stop
+        if (stop) {
           this.singletonServices.logger.info(`Stopping singleton service ${name}`)
-          await service.stop()
+          await stop()
         }
       }
       await this.stop()

@@ -6,6 +6,7 @@ import { SchemaService } from '../services/schema-service.js'
 import { enforceChannelAccess } from '../channel/channel.types.js'
 import { enforceHTTPAccess, PikkuHTTP } from '../http/http-routes.types.js'
 import { UserSessionService } from '../services/user-session-service.js'
+import { JWTService } from '../services/jwt-service.js'
 
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -45,41 +46,43 @@ export type RequireAtLeastOne<T> = {
 /**
  * Interface for the core configuration settings of Pikku.
  */
-export interface CoreConfig {
+export type CoreConfig<Config extends Record<string, unknown> = {}> = {
   /** The log level for the application. */
   logLevel?: LogLevel
   /** The maximum compute time allowed, in milliseconds (optional). */
   maximumComputeTime?: number
   /** Secrets used by the application (optional). */
   secrets?: {}
-}
+} & Config
 
 /**
  * Represents a core user session, which can be extended for more specific session information.
  */
-export interface CoreUserSession {}
+export type CoreUserSession<UserSession = unknown> = UserSession
 
 /**
  * Interface for core singleton services provided by Pikku.
  */
-export interface CoreSingletonServices {
+export type CoreSingletonServices<Config extends CoreConfig = CoreConfig, UserSession extends CoreUserSession = CoreUserSession, UserServices extends Record<string, unknown> = {}> = {
   /** The http permission service used for authorization (optional). */
-  enforceHTTPAccess?: enforceHTTPAccess
+  enforceHTTPAccess?: enforceHTTPAccess;
   /** The channel permission service used by the application (optional). */
-  enforceChannelAccess?: enforceChannelAccess
+  enforceChannelAccess?: enforceChannelAccess;
+  /** JWT Service */
+  jwt?: JWTService<UserSession>;
   /** The session service used by the application (optional). */
-  httpSessionService?: HTTPSessionService
+  httpSessionService?: HTTPSessionService;
   /** The schema library used to validate data */
   schemaService?: SchemaService;
   /** The core configuration for the application. */
-  config: CoreConfig
+  config: Config;
   /** The logger used by the application. */
-  logger: Logger
+  logger: Logger;
   /** The variable service to be used */
-  variablesService: VariablesService
+  variablesService: VariablesService;
   /** The subscription service that is passed to streams */
-  eventHub?: EventHubService<unknown>
-}
+  eventHub?: EventHubService<unknown>;
+} & UserServices
 
 /**
  * Represents different forms of interaction within Pikku and the outside world.
@@ -91,8 +94,8 @@ export interface PikkuInteractions {
 /**
  * Represents the core services used by Pikku, including singleton services and the request/response interaction.
  */
-export type CoreServices<SingletonServices = CoreSingletonServices, UserSession extends CoreUserSession = CoreUserSession> =
-  SingletonServices & PikkuInteractions & { userSession?: UserSessionService<UserSession> }
+export type CoreServices<SingletonServices = CoreSingletonServices, UserSession extends CoreUserSession = CoreUserSession, CoreServices extends Record<string, unknown> = {}> =
+  SingletonServices & PikkuInteractions & { userSession?: UserSessionService<UserSession> } & CoreServices
 
 export type SessionServices<SingletonServices extends CoreSingletonServices = CoreSingletonServices, Services = CoreServices<SingletonServices>> = Omit<Services, keyof SingletonServices | keyof PikkuInteractions | 'session'>
 
