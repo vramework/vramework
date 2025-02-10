@@ -1,0 +1,42 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: yasserf
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: lambda
+
+service: pikku-serverless-ws-example
+provider:
+  name: aws
+  runtime: nodejs20.x
+  websocketsApiName: custom-websockets-api-name
+  websocketsApiRouteSelectionExpression: $request.body.action
+  websocketsDescription: Pikku Serverless Websockets Example
+  iam:
+    role:
+      managedPolicies:
+        - 'arn:aws:iam::014498637088:policy/PikkuServerlessDB'
+  environment:
+    NODE_OPTIONS: --enable-source-maps
+    NODE_ENV: production
+
+plugins:
+  - serverless-offline
+
+functions:
+  connectHandler:
+    handler: dist/websocket.connectHandler
+    events:
+      - websocket:
+          route: $connect
+
+  disconnectHandler:
+    handler: dist/websocket.disconnectHandler
+    events:
+      - websocket:
+          route: $disconnect
+
+  defaultHandler:
+    handler: dist/websocket.defaultHandler
+    events:
+      - websocket:
+          route: $default
+          routeResponseSelectionExpression: $default

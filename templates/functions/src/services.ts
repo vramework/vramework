@@ -4,11 +4,15 @@ import type {
   SingletonServices,
   UserSession,
 } from '../types/application-types.js'
-import { CreateSessionServices, CreateSingletonServices } from '@pikku/core'
+import { CreateConfig, CreateSessionServices, CreateSingletonServices } from '@pikku/core'
 import { ConsoleLogger, LocalVariablesService } from '@pikku/core/services'
 import { PikkuHTTPSessionService } from '@pikku/core/http'
 import { JoseJWTService } from '@pikku/jose'
 import { AjvSchemaService } from '@pikku/schema-ajv'
+
+export const createConfig: CreateConfig<Config> = async () => {
+  return {}
+}
 
 /**
  * This function creates the singleton services used by the application and is created once on start.

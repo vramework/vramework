@@ -1,0 +1,27 @@
+{
+  "name": "@pikku/templates-serverless-websocket",
+  "type": "module",
+  "main": "dist/index.mjs",
+  "scripts": {
+    "tsc": "tsc",
+    "build:offline": "rm -rf dist && esbuild ./src/websocket.ts --format=esm --bundle --keep-names --sourcemap --platform=node --target=node20 --outdir=dist --out-extension:.js=.mjs --metafile=meta.json --inject:./src/cjs-shim.ts",
+    "build": "yarn build:offline --minify --external:\"@aws-sdk/*\""
+  },
+  "dependencies": {
+    "@pikku/aws-services": "^0.6.3",
+    "@pikku/core": "^0.6.8",
+    "@pikku/lambda": "^0.6.3",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.714.0",
+    "@aws-sdk/client-secrets-manager": "^3.714.0",
+    "@types/aws-lambda": "^8.10.146",
+    "@types/node": "^22",
+    "esbuild": "^0.24.0",
+    "serverless-esbuild": "^1.54.6",
+    "serverless-offline": "^14.4.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7"
+  }
+}

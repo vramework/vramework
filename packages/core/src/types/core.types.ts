@@ -7,6 +7,7 @@ import { enforceChannelAccess } from '../channel/channel.types.js'
 import { enforceHTTPAccess, PikkuHTTP } from '../http/http-routes.types.js'
 import { UserSessionService } from '../services/user-session-service.js'
 import { JWTService } from '../services/jwt-service.js'
+import { SecretService } from '../services/secret-service.js'
 
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -82,6 +83,8 @@ export type CoreSingletonServices<Config extends CoreConfig = CoreConfig, UserSe
   variablesService: VariablesService;
   /** The subscription service that is passed to streams */
   eventHub?: EventHubService<unknown>;
+  /** SecretServce  */
+  secretService?: SecretService
 } & UserServices
 
 /**

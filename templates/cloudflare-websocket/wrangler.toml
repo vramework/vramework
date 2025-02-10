@@ -1,0 +1,22 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "pikku-workspace-starter-websockets"
+main = "src/index.ts"
+compatibility_date = "2024-12-18"
+compatibility_flags = ["nodejs_compat_v2"]
+
+[observability]
+enabled = true
+
+[vars]
+NODE_ENV = "production"
+
+[triggers]
+crons = ["* * * * 1"]
+
+[[durable_objects.bindings]]
+name = "WEBSOCKET_HIBERNATION_SERVER"
+class_name = "WebSocketHibernationServer"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["WebSocketHibernationServer"]

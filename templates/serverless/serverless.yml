@@ -1,0 +1,37 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: yasserf
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: lambda
+
+# serverless.yml
+service: pikku-serverless-example
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: production
+  region: us-east-1
+  lambdaHashingVersion: 20201221
+  iam:
+    role:
+      managedPolicies:
+        - 'arn:aws:iam::014498637088:policy/PikkuServerlessDB'
+  environment:
+    NODE_OPTIONS: --enable-source-maps
+    NODE_ENV: production
+
+functions:
+  http:
+    handler: dist/http.corslessHandler
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+
+  cron:
+    handler: dist/cron.expireTodos
+    events:
+      - schedule: rate(1 day)
