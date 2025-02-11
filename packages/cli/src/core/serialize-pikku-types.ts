@@ -33,6 +33,10 @@ type APIChannel<ChannelData, Channel extends string, In extends unknown, Out ext
 type ScheduledTask = CoreScheduledTask<APIFunctionSessionless<void, void>, ${userSessionTypeName}>
 
 declare module "@pikku/core" {
+  // type APIPermission<In = unknown, RequiredServices = ${servicesTypeName}> = CoreAPIPermission<In, RequiredServices, ${userSessionTypeName}>
+  // type APIFunction = <In = unknown, Out = never, RequiredServices = ${servicesTypeName}> = CoreAPIFunction<In, Out, RequiredServices, ${userSessionTypeName}>
+  // type APIFunctionSessionless = <In = unknown, Out = never, RequiredServices = ${servicesTypeName}> = CoreAPIFunctionSessionless<In, Out, RequiredServices, ${userSessionTypeName}>
+
   function addChannel<ChannelData, Channel extends string>(
     channel: APIChannel<ChannelData, Channel> & AssertRouteParams<ChannelData, Channel>
   ): void;

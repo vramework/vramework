@@ -5,11 +5,11 @@ lcov.info
 .DS_Store
 
 *.js
-
 .yarn
 .dist
 dist
 
+my-app
 .pikku
 
 # Logs

@@ -1,5 +1,5 @@
 {
-	"name": "@pikku/templates-cloudflare",
+	"name": "@pikku/templates-cloudflare-workers",
 	"type": "module",
 	"scripts": {
 		"deploy": "wrangler deploy",

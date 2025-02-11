@@ -1,0 +1,23 @@
+{
+  "name": "create-pikku",
+  "version": "1.0.0",
+  "description": "Scaffold a new Pikku project",
+  "main": "dist/index.js",
+  "bin": "dist/index.js",
+  "scripts": {
+    "build": "tsx src/get-templates.ts && yarn tsc"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "giget": "^1.2.4",
+    "inquirer": "^12.4.1",
+    "nanospinner": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^22.13.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "type": "module"
+}

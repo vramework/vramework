@@ -1,0 +1,13 @@
+[
+  "cloudflare-websocket",
+  "cloudflare-workers",
+  "express",
+  "express-middleware",
+  "fastify",
+  "functions",
+  "nextjs",
+  "serverless",
+  "serverless-websocket",
+  "uws",
+  "ws"
+]
