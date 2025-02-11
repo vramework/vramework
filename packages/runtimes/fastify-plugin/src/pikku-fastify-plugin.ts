@@ -36,9 +36,10 @@ export type PikkuFastifyPluginOptions = {
  * @param {FastifyPluginAsync<PikkuFastifyPluginOptions>} fastify - The Fastify instance.
  * @param {PikkuFastifyPluginOptions} options - The configuration options for the plugin.
  */
-const pikkuPlugin: FastifyPluginAsync<
-  PikkuFastifyPluginOptions
-> = async (fastify, { pikku }) => {
+const pikkuPlugin: FastifyPluginAsync<PikkuFastifyPluginOptions> = async (
+  fastify,
+  { pikku }
+) => {
   if (pikku.logRoutes) {
     logRoutes(pikku.singletonServices.logger)
   }
@@ -46,7 +47,10 @@ const pikkuPlugin: FastifyPluginAsync<
     if (!pikku.singletonServices.schemaService) {
       throw new Error('SchemaService needs to be defined to load schemas')
     }
-    compileAllSchemas(pikku.singletonServices.logger, pikku.singletonServices.schemaService)
+    compileAllSchemas(
+      pikku.singletonServices.logger,
+      pikku.singletonServices.schemaService
+    )
   }
   fastify.all('/*', async (req, res) => {
     await runHTTPRoute({

@@ -32,12 +32,7 @@ type PikkuMiddlewareArgs = RunRouteOptions & {
 export const pikkuMiddleware = (
   singletonServices: CoreSingletonServices,
   createSessionServices: CreateSessionServices<any, any, any>,
-  {
-    respondWith404,
-    logRoutes,
-    loadSchemas,
-    coerceToArray,
-  }: PikkuMiddlewareArgs
+  { respondWith404, logRoutes, loadSchemas, coerceToArray }: PikkuMiddlewareArgs
 ): RequestHandler => {
   if (logRoutes) {
     logRegisterRoutes(singletonServices.logger)

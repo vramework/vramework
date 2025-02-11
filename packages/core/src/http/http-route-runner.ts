@@ -7,10 +7,7 @@ import {
   RunRouteParams,
   PikkuHTTP,
 } from './http-routes.types.js'
-import {
-  CoreUserSession,
-  SessionServices,
-} from '../types/core.types.js'
+import { CoreUserSession, SessionServices } from '../types/core.types.js'
 import { match } from 'path-to-regexp'
 import { PikkuHTTPAbstractRequest } from './pikku-http-abstract-request.js'
 import { PikkuHTTPAbstractResponse } from './pikku-http-abstract-response.js'
@@ -262,7 +259,7 @@ export const runHTTPRoute = async <In, Out>({
   respondWith404 = true,
   logWarningsForStatusCodes = [],
   coerceToArray = false,
-  bubbleErrors = false
+  bubbleErrors = false,
 }: Pick<CoreHTTPFunctionRoute<unknown, unknown, any>, 'route' | 'method'> &
   RunRouteOptions &
   RunRouteParams<In>): Promise<Out | void> => {
@@ -307,10 +304,10 @@ export const runHTTPRoute = async <In, Out>({
     const data = await request.getData()
 
     validateAndCoerce(
-      singletonServices.logger, 
-      singletonServices.schemaService, 
-      schemaName, 
-      data, 
+      singletonServices.logger,
+      singletonServices.schemaService,
+      schemaName,
+      data,
       coerceToArray
     )
 
@@ -322,10 +319,7 @@ export const runHTTPRoute = async <In, Out>({
     const allServices = { ...singletonServices, ...sessionServices, http }
 
     if (singletonServices.enforceHTTPAccess) {
-      await singletonServices.enforceHTTPAccess(
-        route,
-        session
-      )
+      await singletonServices.enforceHTTPAccess(route, session)
     }
 
     const permissioned = await verifyPermissions(

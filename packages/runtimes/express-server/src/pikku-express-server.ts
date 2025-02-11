@@ -115,7 +115,9 @@ export class PikkuExpressServer {
       for (const [name, service] of Object.entries(this.singletonServices)) {
         const stop = (service as any).stop
         if (stop) {
-          this.singletonServices.logger.info(`Stopping singleton service ${name}`)
+          this.singletonServices.logger.info(
+            `Stopping singleton service ${name}`
+          )
           await stop()
         }
       }

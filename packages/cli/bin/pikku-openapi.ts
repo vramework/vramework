@@ -7,10 +7,7 @@ import {
 } from '../src/utils.js'
 import { generateSchemas } from '../src/schema/schema-generator.js'
 import { generateOpenAPISpec } from '../src/openapi/openapi-spec-generator.js'
-import {
-  getPikkuCLIConfig,
-  PikkuCLIConfig,
-} from '../src/pikku-cli-config.js'
+import { getPikkuCLIConfig, PikkuCLIConfig } from '../src/pikku-cli-config.js'
 import { InspectorState } from '@pikku/inspector'
 import { stringify } from 'yaml'
 import { inspectorGlob } from '../src/inspector-glob.js'
@@ -27,11 +24,7 @@ export const pikkuOpenAPI = async (
       if (!openAPI?.outputFile) {
         throw new Error('openAPI is required')
       }
-      const schemas = await generateSchemas(
-        tsconfig,
-        http.typesMap,
-        http.meta,
-      )
+      const schemas = await generateSchemas(tsconfig, http.typesMap, http.meta)
       const openAPISpec = await generateOpenAPISpec(
         http.meta,
         schemas,

@@ -8,7 +8,6 @@ type FunctionTypes = {
   outputs: null | string[]
 }
 
-
 export const extractTypeKeys = (type: ts.Type): string[] => {
   return type.getProperties().map((symbol) => symbol.getName())
 }
@@ -30,13 +29,19 @@ const isValidVariableName = (name: string) => {
   return regex.test(name)
 }
 
-export const getNamesAndTypes = (checker: ts.TypeChecker, typesMap: TypesMap, direction: 'Input' | 'Output', funcName: string, type: ts.Type) => {
+export const getNamesAndTypes = (
+  checker: ts.TypeChecker,
+  typesMap: TypesMap,
+  direction: 'Input' | 'Output',
+  funcName: string,
+  type: ts.Type
+) => {
   const result: {
     names: Set<string>
     types: ts.Type[]
   } = {
     names: new Set(),
-    types: []
+    types: [],
   }
 
   const { names, types } = resolveUnionTypes(checker, type)
@@ -48,26 +53,30 @@ export const getNamesAndTypes = (checker: ts.TypeChecker, typesMap: TypesMap, di
     result.names = new Set([aliasName])
     result.types = types
 
-    const references = types.map((t) => resolveTypeImports(t, typesMap, true)).flat()
+    const references = types
+      .map((t) => resolveTypeImports(t, typesMap, true))
+      .flat()
     typesMap.addCustomType(aliasName, aliasType, references)
   } else {
-    const uniqueNames = names.map((name, i) => {
-      const type = types[i]
-      if (!type) {
-        throw new Error('TODO: Expected a type here to match name')
-      }
-      if (isPrimitiveType(type)) {
-        return name
-      }
-      return resolveTypeImports(type, typesMap, false)
-    }).flat()
+    const uniqueNames = names
+      .map((name, i) => {
+        const type = types[i]
+        if (!type) {
+          throw new Error('TODO: Expected a type here to match name')
+        }
+        if (isPrimitiveType(type)) {
+          return name
+        }
+        return resolveTypeImports(type, typesMap, false)
+      })
+      .flat()
     result.names = new Set(uniqueNames)
     result.types = types
   }
 
   return {
     names: Array.from(result.names),
-    types: result.types
+    types: result.types,
   }
 }
 
@@ -82,10 +91,10 @@ export const isPrimitiveType = (type: ts.Type): boolean => {
     ts.TypeFlags.Undefined |
     ts.TypeFlags.Null |
     ts.TypeFlags.Any |
-    ts.TypeFlags.Unknown;
+    ts.TypeFlags.Unknown
 
-  return (type.flags & primitiveFlags) !== 0;
-};
+  return (type.flags & primitiveFlags) !== 0
+}
 
 export const resolveUnionTypes = (
   checker: ts.TypeChecker,
@@ -122,29 +131,33 @@ export const resolveTypeImports = (
   const types: string[] = []
 
   const visitType = (currentType: ts.Type) => {
-    const symbol = currentType.aliasSymbol || currentType.getSymbol();
+    const symbol = currentType.aliasSymbol || currentType.getSymbol()
 
     if (symbol) {
-      const declarations = symbol.getDeclarations();
+      const declarations = symbol.getDeclarations()
       const declaration = declarations?.[0]
       if (declaration) {
-        const sourceFile = declaration.getSourceFile();
-        const path = sourceFile.fileName;
+        const sourceFile = declaration.getSourceFile()
+        const path = sourceFile.fileName
 
         // Skip built-in utility types or TypeScript lib types
-        if (!path.includes('node_modules/typescript') && symbol.getName() !== '__type' && !isPrimitiveType(currentType)) {
-            const originalName = symbol.getName()
-            // Check if the type is already in the map
-            let uniqueName = resolvedTypes.exists(originalName, path)
-            if (!uniqueName) {
-              if (isCustom) {
-                uniqueName = resolvedTypes.addUniqueType(originalName, path)
-              } else {
-                resolvedTypes.addType(originalName, path)
-                uniqueName = originalName
-              }
+        if (
+          !path.includes('node_modules/typescript') &&
+          symbol.getName() !== '__type' &&
+          !isPrimitiveType(currentType)
+        ) {
+          const originalName = symbol.getName()
+          // Check if the type is already in the map
+          let uniqueName = resolvedTypes.exists(originalName, path)
+          if (!uniqueName) {
+            if (isCustom) {
+              uniqueName = resolvedTypes.addUniqueType(originalName, path)
+            } else {
+              resolvedTypes.addType(originalName, path)
+              uniqueName = originalName
             }
-            types.push(uniqueName)
+          }
+          types.push(uniqueName)
         }
       }
     }
@@ -152,12 +165,12 @@ export const resolveTypeImports = (
     if (isCustom) {
       // Handle nested utility types like Partial, Pick, etc.
       if (currentType.aliasTypeArguments) {
-        currentType.aliasTypeArguments.forEach(visitType);
+        currentType.aliasTypeArguments.forEach(visitType)
       }
 
       // Handle intersections and unions
       if (currentType.isUnionOrIntersection()) {
-        currentType.types.forEach(visitType);
+        currentType.types.forEach(visitType)
       }
 
       // Handle object types with type arguments
@@ -165,15 +178,15 @@ export const resolveTypeImports = (
         currentType.flags & ts.TypeFlags.Object &&
         (currentType as ts.ObjectType).objectFlags & ts.ObjectFlags.Reference
       ) {
-        const typeRef = currentType as ts.TypeReference;
-        typeRef.typeArguments?.forEach(visitType);
+        const typeRef = currentType as ts.TypeReference
+        typeRef.typeArguments?.forEach(visitType)
       }
     }
-  };
+  }
 
-  visitType(type);
+  visitType(type)
   return types
-};
+}
 
 export const getPropertyAssignment = (
   obj: ts.ObjectLiteralExpression,
@@ -305,7 +318,13 @@ export const getFunctionTypes = (
   }
 
   if (inputIndex !== undefined && inputIndex < typeArguments.length) {
-    const { names, types } = getNamesAndTypes(checker, typesMap, 'Input', funcName, typeArguments[inputIndex]!)
+    const { names, types } = getNamesAndTypes(
+      checker,
+      typesMap,
+      'Input',
+      funcName,
+      typeArguments[inputIndex]!
+    )
     result.inputs = names
     result.inputTypes = types
   } else {
@@ -313,7 +332,13 @@ export const getFunctionTypes = (
   }
 
   if (outputIndex !== undefined && outputIndex < typeArguments.length) {
-    const { names, types } = getNamesAndTypes(checker, typesMap, 'Output', funcName, typeArguments[outputIndex]!)
+    const { names, types } = getNamesAndTypes(
+      checker,
+      typesMap,
+      'Output',
+      funcName,
+      typeArguments[outputIndex]!
+    )
     result.outputs = names
     result.outputTypes = types
   } else {

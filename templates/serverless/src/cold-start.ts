@@ -1,4 +1,3 @@
-
 import { createConfig } from '@pikku-workspace-starter/functions/src/config'
 import { createSingletonServices } from '@pikku-workspace-starter/functions/src/services'
 import {
@@ -16,12 +15,9 @@ export const coldStart = async () => {
     config = await createConfig()
   }
   if (!singletonServices) {
-    singletonServices = await createSingletonServices(
-      config,
-      {
-        secretServce: new AWSSecrets(config),
-      }
-    )
+    singletonServices = await createSingletonServices(config, {
+      secretServce: new AWSSecrets(config),
+    })
   }
   return singletonServices
 }

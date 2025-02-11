@@ -1,7 +1,11 @@
 import { PikkuFastifyServer } from '@pikku/fastify'
 
 import '../../functions/.pikku/pikku-bootstrap.gen'
-import { createConfig, createSingletonServices, createSessionServices } from '../../functions/src/services.js'
+import {
+  createConfig,
+  createSingletonServices,
+  createSessionServices,
+} from '../../functions/src/services.js'
 
 async function main(): Promise<void> {
   try {

@@ -1,15 +1,19 @@
 import { EventHubForwarder, EventHubService } from '@pikku/core/channel'
 import * as uWS from 'uWebSockets.js'
 
-export class UWSEventHubService<Mappings = unknown> implements EventHubService<Mappings> {
-  private sockets: Map<
-    string,
-    uWS.WebSocket<unknown>
-  > = new Map()
+export class UWSEventHubService<Mappings = unknown>
+  implements EventHubService<Mappings>
+{
+  private sockets: Map<string, uWS.WebSocket<unknown>> = new Map()
 
-  constructor(uws?: uWS.TemplatedApp, private forwarder?: EventHubForwarder) {
+  constructor(
+    uws?: uWS.TemplatedApp,
+    private forwarder?: EventHubForwarder
+  ) {
     if (uws) {
-      forwarder?.onForwardedPublishMessage(this.forwardPublishMessage.bind(this, uws))
+      forwarder?.onForwardedPublishMessage(
+        this.forwardPublishMessage.bind(this, uws)
+      )
     }
   }
 
@@ -36,7 +40,10 @@ export class UWSEventHubService<Mappings = unknown> implements EventHubService<M
     this.forwarder?.forwardPublish(topic, message, isBinary)
   }
 
-  public async onChannelOpened(channelId: string, socket: uWS.WebSocket<unknown>): Promise<void> {
+  public async onChannelOpened(
+    channelId: string,
+    socket: uWS.WebSocket<unknown>
+  ): Promise<void> {
     this.sockets.set(channelId, socket)
   }
 
@@ -44,12 +51,16 @@ export class UWSEventHubService<Mappings = unknown> implements EventHubService<M
     this.sockets.delete(channelId)
   }
 
-  private forwardPublishMessage(source: uWS.TemplatedApp | uWS.WebSocket<unknown>, topic: string, message: any, isBinary?: boolean): void {
+  private forwardPublishMessage(
+    source: uWS.TemplatedApp | uWS.WebSocket<unknown>,
+    topic: string,
+    message: any,
+    isBinary?: boolean
+  ): void {
     if (isBinary) {
       source?.publish(topic, message, true)
     } else {
       source?.publish(topic, JSON.stringify(message), false)
     }
   }
-
 }

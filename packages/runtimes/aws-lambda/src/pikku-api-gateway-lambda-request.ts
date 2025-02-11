@@ -24,8 +24,8 @@ export class PikkuAPIGatewayLambdaRequest extends PikkuHTTPAbstractRequest {
     return this.event.headers[headerName]
   }
 
-  public getQuery () {
+  public getQuery() {
     // TODO: If query isn't defined, it should be an empty object
-    return this.event.queryStringParameters as PikkuQuery || {}
+    return (this.event.queryStringParameters as PikkuQuery) || {}
   }
 }

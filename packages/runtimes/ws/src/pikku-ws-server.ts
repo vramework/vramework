@@ -80,7 +80,7 @@ export const pikkuWebsocketHandler = ({
   const eventHub = new LocalEventHubService()
   const singletonServicesWithEventHub = {
     ...singletonServices,
-    eventHub 
+    eventHub,
   }
 
   wss.on(
@@ -104,7 +104,7 @@ export const pikkuWebsocketHandler = ({
           result = await channelHandler.message(message.toString())
         }
         if (result) {
-          // TODO: We don't support binary results as returns just yet 
+          // TODO: We don't support binary results as returns just yet
           channelHandler.send(JSON.stringify(result))
         }
       })

@@ -2,7 +2,11 @@ import { pikkuWebsocketHandler } from '@pikku/ws'
 
 import { Server } from 'http'
 import { WebSocketServer } from 'ws'
-import { createConfig, createSessionServices, createSingletonServices } from '../../functions/src/services'
+import {
+  createConfig,
+  createSessionServices,
+  createSingletonServices,
+} from '../../functions/src/services'
 
 async function main(): Promise<void> {
   try {

@@ -41,10 +41,8 @@ class MockResponse extends PikkuHTTPAbstractResponse {
   public statusSet: boolean | undefined
   public ended: boolean | undefined
 
-  public setJson(body: JSONValue): void {
-  }
-  public setResponse(response: string | Buffer): void {
-  }
+  public setJson(body: JSONValue): void {}
+  public setResponse(response: string | Buffer): void {}
   public setStatus(code) {
     this.statusSet = code
   }
@@ -84,7 +82,7 @@ test('runChannel should return undefined and 404 if no matching channel is found
     request: new MockRequest(),
     response: mockResponse,
     route: '/non-existent-channel',
-    createSessionServices: mockCreateSessionServices
+    createSessionServices: mockCreateSessionServices,
   })
 
   assert.equal(
@@ -118,7 +116,7 @@ test('runChannel should return a channel handler if channel matches and no auth 
     request: new MockRequest(),
     response: new MockResponse(),
     route: '/test-channel',
-    createSessionServices: mockCreateSessionServices
+    createSessionServices: mockCreateSessionServices,
   })
 
   assert.ok(result, 'Should return a PikkuChannelHandler instance')

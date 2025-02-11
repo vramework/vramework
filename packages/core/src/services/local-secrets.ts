@@ -9,9 +9,9 @@ export class LocalSecretService implements SecretService {
   /**
    * Creates an instance of LocalSecretService.
    */
-  constructor(private variablesService: VariablesService = new LocalVariablesService()) { 
-
-  }
+  constructor(
+    private variablesService: VariablesService = new LocalVariablesService()
+  ) {}
 
   /**
    * Retrieves a secret by key.

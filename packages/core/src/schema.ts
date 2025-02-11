@@ -41,7 +41,10 @@ export const addSchema = (name: string, value: any) => {
  * Loads a schema and compiles it into a validator.
  * @param logger - A logger for logging information.
  */
-export const compileAllSchemas = (logger: Logger, schemaService?: SchemaService) => {
+export const compileAllSchemas = (
+  logger: Logger,
+  schemaService?: SchemaService
+) => {
   if (!schemaService) {
     throw new Error('SchemaService needs to be defined to load schemas')
   }
@@ -51,7 +54,10 @@ export const compileAllSchemas = (logger: Logger, schemaService?: SchemaService)
   validateAllSchemasLoaded(logger, schemaService)
 }
 
-const validateAllSchemasLoaded = (logger: Logger, schemaService: SchemaService) => {
+const validateAllSchemasLoaded = (
+  logger: Logger,
+  schemaService: SchemaService
+) => {
   const { routesMeta } = getRoutes()
   const validators = schemaService.getSchemaNames()
 

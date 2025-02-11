@@ -47,7 +47,11 @@ export default async function middleware(req: NextRequest) {
   }
 
   // 6. Redirect to / if the user is authenticated
-  if (isPublicRoute && userSession && req.nextUrl.pathname.startsWith('/auth')) {
+  if (
+    isPublicRoute &&
+    userSession &&
+    req.nextUrl.pathname.startsWith('/auth')
+  ) {
     return NextResponse.redirect(new URL('/', req.nextUrl))
   }
 

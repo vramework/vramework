@@ -5,9 +5,7 @@ import { cookies, headers } from 'next/headers.js'
  * The `PikkuActionNextRequest` class is an extension of the `PikkuHTTPAbstractRequest` class,
  * specifically designed for handling action requests in a Next.js environment.
  */
-export class PikkuActionNextRequest<
-  In,
-> extends PikkuHTTPAbstractRequest<In> {
+export class PikkuActionNextRequest<In> extends PikkuHTTPAbstractRequest<In> {
   private body: any
   private cookies: Record<string, string> | undefined
   private headers: Map<string, string> | undefined

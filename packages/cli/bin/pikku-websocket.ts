@@ -6,10 +6,7 @@ import {
   PikkuCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import {
-  getPikkuCLIConfig,
-  PikkuCLIConfig,
-} from '../src/pikku-cli-config.js'
+import { getPikkuCLIConfig, PikkuCLIConfig } from '../src/pikku-cli-config.js'
 import { serializeWebsocketWrapper } from '../src/channels/serialize-websocket-wrapper.js'
 
 export const pikkuWebSocket = async ({
@@ -20,10 +17,7 @@ export const pikkuWebSocket = async ({
   await logCommandInfoAndTime(
     'Generating websocket wrapper',
     'Generated websocket wrapper',
-    [
-      websocketFile === undefined,
-      'websocketFile is required in pikku config',
-    ],
+    [websocketFile === undefined, 'websocketFile is required in pikku config'],
     async () => {
       if (!websocketFile) {
         throw new Error('fetchFile is required in pikku config')

@@ -1,10 +1,8 @@
 import * as uWS from 'uWebSockets.js'
-import {
-  logChannels,
-} from '@pikku/core/channel'
+import { logChannels } from '@pikku/core/channel'
 import {
   runLocalChannel,
-  PikkuLocalChannelHandler
+  PikkuLocalChannelHandler,
 } from '@pikku/core/channel/local'
 import { compileAllSchemas } from '@pikku/core/schema'
 
@@ -50,9 +48,9 @@ export const pikkuWebsocketHandler = ({
   const eventHub = new UWSEventHubService()
   const singletonServicesWithEventHub = {
     ...singletonServices,
-    eventHub
+    eventHub,
   }
-  
+
   const decoder = new TextDecoder('utf-8')
 
   return {

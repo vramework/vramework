@@ -7,7 +7,7 @@ export interface EventHubForwarder {
    * @param topic - The topic to send data to.
    * @param data - The data to send to the subscribers.
    */
-  forwardPublish (
+  forwardPublish(
     topic: string,
     channelId: string,
     data: unknown,
@@ -19,7 +19,7 @@ export interface EventHubForwarder {
    * @param topic - The topic to send data to.
    * @param data - The data to send to the subscribers.
    */
-  onForwardedPublishMessage (
+  onForwardedPublishMessage(
     callback: (topic: string, data: unknown, isBinary?: boolean) => void
   ): void
 }

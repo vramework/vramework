@@ -18,21 +18,21 @@ import { PikkuHTTPAbstractResponse } from './pikku-http-abstract-response.js'
 
 type ExtractRouteParams<S extends string> =
   S extends `${string}:${infer Param}/${infer Rest}`
-  ? Param | ExtractRouteParams<`/${Rest}`>
-  : S extends `${string}:${infer Param}`
-  ? Param
-  : never
+    ? Param | ExtractRouteParams<`/${Rest}`>
+    : S extends `${string}:${infer Param}`
+      ? Param
+      : never
 
 export type AssertRouteParams<In, Route extends string> =
   ExtractRouteParams<Route> extends keyof In
-  ? unknown
-  : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
+    ? unknown
+    : ['Error: Route parameters', ExtractRouteParams<Route>, 'not in', keyof In]
 
 export type RunRouteOptions = Partial<{
   skipUserSession: boolean
   respondWith404: boolean
   logWarningsForStatusCodes: number[]
-  coerceToArray: boolean,
+  coerceToArray: boolean
   bubbleErrors: boolean
 }>
 
@@ -40,13 +40,24 @@ export type RunRouteParams<In> = {
   singletonServices: CoreSingletonServices
   request: PikkuRequest<In> | PikkuHTTPAbstractRequest<In>
   response?: PikkuResponse | PikkuHTTPAbstractResponse | undefined
-  createSessionServices: CreateSessionServices<CoreSingletonServices, CoreServices<CoreSingletonServices>, CoreUserSession>
+  createSessionServices: CreateSessionServices<
+    CoreSingletonServices,
+    CoreServices<CoreSingletonServices>,
+    CoreUserSession
+  >
 }
 
 /**
  * Represents the HTTP methods supported for API routes.
  */
-export type HTTPMethod = 'post' | 'get' | 'delete' | 'patch' | 'head' | 'put' | 'options'
+export type HTTPMethod =
+  | 'post'
+  | 'get'
+  | 'delete'
+  | 'patch'
+  | 'head'
+  | 'put'
+  | 'options'
 
 /**
  * Represents an API route without a function, including metadata such as content type, route, and timeout settings.
@@ -80,8 +91,8 @@ export type RequestHeaders =
   | ((headerName: string) => string | string[] | undefined)
 
 /**
-* Represents a query object for Pikku, where each key can be a string, a value, or an array of values.
-*/
+ * Represents a query object for Pikku, where each key can be a string, a value, or an array of values.
+ */
 export type PikkuQuery<T = Record<string, string | undefined>> = Record<
   string,
   string | T | null | Array<T | null>
@@ -106,35 +117,35 @@ export type CoreHTTPFunctionRoute<
   APIPermission = CoreAPIPermission<In>,
 > =
   | (CoreHTTPFunction & {
-    route: R
-    method: HTTPMethod
-    func: APIFunction
-    permissions?: Record<string, APIPermission[] | APIPermission>
-    auth?: true
-  })
+      route: R
+      method: HTTPMethod
+      func: APIFunction
+      permissions?: Record<string, APIPermission[] | APIPermission>
+      auth?: true
+    })
   | (CoreHTTPFunction & {
-    route: R
-    method: HTTPMethod
-    func: APIFunctionSessionless
-    permissions?: undefined
-    auth?: false
-  })
+      route: R
+      method: HTTPMethod
+      func: APIFunctionSessionless
+      permissions?: undefined
+      auth?: false
+    })
   | (CoreHTTPFunction & {
-    route: R
-    method: 'post'
-    func: APIFunction
-    permissions?: Record<string, APIPermission[] | APIPermission>
-    auth?: true
-    query?: Array<keyof In>
-  })
+      route: R
+      method: 'post'
+      func: APIFunction
+      permissions?: Record<string, APIPermission[] | APIPermission>
+      auth?: true
+      query?: Array<keyof In>
+    })
   | (CoreHTTPFunction & {
-    route: R
-    method: 'post'
-    func: APIFunctionSessionless
-    permissions?: undefined
-    auth?: false
-    query?: Array<keyof In>
-  })
+      route: R
+      method: 'post'
+      func: APIFunctionSessionless
+      permissions?: undefined
+      auth?: false
+      query?: Array<keyof In>
+    })
 
 /**
  * Represents an array of core API routes.

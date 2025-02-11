@@ -9,7 +9,8 @@ import { UserSessionService } from '../services/user-session-service.js'
 import { JWTService } from '../services/jwt-service.js'
 import { SecretService } from '../services/secret-service.js'
 
-export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+export type MakeRequired<T, K extends keyof T> = Omit<T, K> &
+  Required<Pick<T, K>>
 
 /**
  * Represents a JSON primitive type which can be a string, number, boolean, null, or undefined.
@@ -64,25 +65,29 @@ export type CoreUserSession<UserSession = unknown> = UserSession
 /**
  * Interface for core singleton services provided by Pikku.
  */
-export type CoreSingletonServices<Config extends CoreConfig = CoreConfig, UserSession extends CoreUserSession = CoreUserSession, UserServices extends Record<string, unknown> = {}> = {
+export type CoreSingletonServices<
+  Config extends CoreConfig = CoreConfig,
+  UserSession extends CoreUserSession = CoreUserSession,
+  UserServices extends Record<string, unknown> = {},
+> = {
   /** The http permission service used for authorization (optional). */
-  enforceHTTPAccess?: enforceHTTPAccess;
+  enforceHTTPAccess?: enforceHTTPAccess
   /** The channel permission service used by the application (optional). */
-  enforceChannelAccess?: enforceChannelAccess;
+  enforceChannelAccess?: enforceChannelAccess
   /** JWT Service */
-  jwt?: JWTService<UserSession>;
+  jwt?: JWTService<UserSession>
   /** The session service used by the application (optional). */
-  httpSessionService?: HTTPSessionService;
+  httpSessionService?: HTTPSessionService
   /** The schema library used to validate data */
-  schemaService?: SchemaService;
+  schemaService?: SchemaService
   /** The core configuration for the application. */
-  config: Config;
+  config: Config
   /** The logger used by the application. */
-  logger: Logger;
+  logger: Logger
   /** The variable service to be used */
-  variablesService: VariablesService;
+  variablesService: VariablesService
   /** The subscription service that is passed to streams */
-  eventHub?: EventHubService<unknown>;
+  eventHub?: EventHubService<unknown>
   /** SecretServce  */
   secretService?: SecretService
 } & UserServices
@@ -97,10 +102,22 @@ export interface PikkuInteractions {
 /**
  * Represents the core services used by Pikku, including singleton services and the request/response interaction.
  */
-export type CoreServices<SingletonServices = CoreSingletonServices, UserSession extends CoreUserSession = CoreUserSession, CoreServices extends Record<string, unknown> = {}> =
-  SingletonServices & PikkuInteractions & { userSession?: UserSessionService<UserSession> } & CoreServices
+export type CoreServices<
+  SingletonServices = CoreSingletonServices,
+  UserSession extends CoreUserSession = CoreUserSession,
+  CoreServices extends Record<string, unknown> = {},
+> = SingletonServices &
+  PikkuInteractions & {
+    userSession?: UserSessionService<UserSession>
+  } & CoreServices
 
-export type SessionServices<SingletonServices extends CoreSingletonServices = CoreSingletonServices, Services = CoreServices<SingletonServices>> = Omit<Services, keyof SingletonServices | keyof PikkuInteractions | 'session'>
+export type SessionServices<
+  SingletonServices extends CoreSingletonServices = CoreSingletonServices,
+  Services = CoreServices<SingletonServices>,
+> = Omit<
+  Services,
+  keyof SingletonServices | keyof PikkuInteractions | 'session'
+>
 
 /**
  * Defines a function type for creating singleton services from the given configuration.
@@ -108,14 +125,18 @@ export type SessionServices<SingletonServices extends CoreSingletonServices = Co
 export type CreateSingletonServices<
   Config extends CoreConfig,
   SingletonServices extends CoreSingletonServices,
-> = (config: Config, existingServices?: Partial<SingletonServices>) => Promise<SingletonServices>
+> = (
+  config: Config,
+  existingServices?: Partial<SingletonServices>
+) => Promise<SingletonServices>
 
 /**
  * Defines a function type for creating session-specific services.
  */
 export type CreateSessionServices<
   SingletonServices extends CoreSingletonServices = CoreSingletonServices,
-  Services extends CoreServices<SingletonServices> = CoreServices<SingletonServices>,
+  Services extends
+    CoreServices<SingletonServices> = CoreServices<SingletonServices>,
   UserSession extends CoreUserSession = CoreUserSession,
 > = (
   services: SingletonServices,
@@ -126,7 +147,9 @@ export type CreateSessionServices<
 /**
  * Defines a function type for creating config.
  */
-export type CreateConfig<Config extends CoreConfig> = (variablesService?: VariablesService) => Promise<Config>
+export type CreateConfig<Config extends CoreConfig> = (
+  variablesService?: VariablesService
+) => Promise<Config>
 
 /**
  * Represents the documentation for a route, including summary, description, tags, and errors.

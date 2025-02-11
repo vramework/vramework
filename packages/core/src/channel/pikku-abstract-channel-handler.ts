@@ -5,7 +5,8 @@ export abstract class PikkuAbstractChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,
   OpeningData = unknown,
   Out = unknown,
-> implements PikkuChannelHandler<UserSession, OpeningData, Out> {
+> implements PikkuChannelHandler<UserSession, OpeningData, Out>
+{
   protected channel?: PikkuChannel<UserSession, OpeningData, Out>
 
   constructor(
@@ -13,8 +14,7 @@ export abstract class PikkuAbstractChannelHandler<
     public channelName: string,
     protected userSession: UserSession | undefined,
     protected openingData: OpeningData
-  ) {
-  }
+  ) {}
 
   public abstract setUserSession(userSession: UserSession): Promise<void> | void
   public abstract send(message: Out, isBinary?: boolean): Promise<void> | void
@@ -28,7 +28,7 @@ export abstract class PikkuAbstractChannelHandler<
         setUserSession: this.setUserSession.bind(this),
         send: this.send.bind(this),
         close: this.close.bind(this),
-        state: 'initial'
+        state: 'initial',
       }
     }
     return this.channel

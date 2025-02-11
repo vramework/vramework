@@ -1,5 +1,5 @@
-import { CoreUserSession } from "../../types/core.types.js"
-import { PikkuAbstractChannelHandler } from "../pikku-abstract-channel-handler.js"
+import { CoreUserSession } from '../../types/core.types.js'
+import { PikkuAbstractChannelHandler } from '../pikku-abstract-channel-handler.js'
 
 export class PikkuLocalChannelHandler<
   UserSession extends CoreUserSession = CoreUserSession,

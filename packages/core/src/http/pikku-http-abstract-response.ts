@@ -59,10 +59,7 @@ export abstract class PikkuHTTPAbstractResponse extends PikkuResponse {
    * @param name - The name of the cookie to clear.
    */
   public clearCookie(name: string): void {
-    this.setHeader(
-      'set-cookie',
-      serialize(name, '', { expires: new Date(0) })
-    )
+    this.setHeader('set-cookie', serialize(name, '', { expires: new Date(0) }))
   }
 
   /**
@@ -78,5 +75,5 @@ export abstract class PikkuHTTPAbstractResponse extends PikkuResponse {
    * Informs the response that it has ended, useful for when setting
    * a status without a body or response.
    */
-  public end() { }
+  public end() {}
 }

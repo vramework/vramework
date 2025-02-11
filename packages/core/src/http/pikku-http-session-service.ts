@@ -28,7 +28,9 @@ export class PikkuHTTPSessionService<UserSession>
         cookieValue: string,
         cookieName: string
       ) => Promise<UserSession>
-      getSessionForQueryValue?: (queryValue: PikkuQuery) => Promise<UserSession> | undefined
+      getSessionForQueryValue?: (
+        queryValue: PikkuQuery
+      ) => Promise<UserSession> | undefined
       getSessionForAPIKey?: (apiKey: string) => Promise<UserSession> | undefined
       transformSession?: (session: any) => Promise<UserSession>
     }

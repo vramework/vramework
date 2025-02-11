@@ -3,7 +3,9 @@ import { visit } from './visit.js'
 import { TypesMap } from './types-map.js'
 import { InspectorState, InspectorHTTPState } from './types.js'
 
-export const normalizeHTTPTypes = (httpState: InspectorHTTPState): InspectorHTTPState => {
+export const normalizeHTTPTypes = (
+  httpState: InspectorHTTPState
+): InspectorHTTPState => {
   return httpState
 }
 

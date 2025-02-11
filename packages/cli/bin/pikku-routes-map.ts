@@ -1,8 +1,5 @@
 import { Command } from 'commander'
-import {
-  getPikkuCLIConfig,
-  PikkuCLIConfig,
-} from '../src/pikku-cli-config.js'
+import { getPikkuCLIConfig, PikkuCLIConfig } from '../src/pikku-cli-config.js'
 import { InspectorState } from '@pikku/inspector'
 import {
   logCommandInfoAndTime,
@@ -27,7 +24,7 @@ export const pikkuHTTPMap = async (
         packageMappings,
         http.typesMap,
         http.meta,
-        http.metaInputTypes,
+        http.metaInputTypes
       )
       await writeFileInDir(routesMapDeclarationFile, content)
     }

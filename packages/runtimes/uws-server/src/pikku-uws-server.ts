@@ -6,10 +6,7 @@ import type {
   CreateSessionServices,
 } from '@pikku/core'
 
-import {
-  pikkuHTTPHandler,
-  pikkuWebsocketHandler,
-} from '@pikku/uws-handler'
+import { pikkuHTTPHandler, pikkuWebsocketHandler } from '@pikku/uws-handler'
 
 export type UWSCoreConfig = CoreConfig & {
   /** The port on which the server should listen. */

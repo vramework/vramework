@@ -8,7 +8,7 @@ import { TypesMap } from '@pikku/inspector'
 export async function generateSchemas(
   tsconfig: string,
   typesMap: TypesMap,
-  routesMeta: HTTPRoutesMeta,
+  routesMeta: HTTPRoutesMeta
 ): Promise<Record<string, JSONValue>> {
   const schemasSet = new Set(typesMap.customTypes.keys())
   for (const { input, output, inputTypes } of routesMeta) {
@@ -66,7 +66,10 @@ export async function saveSchemas(
 
   const desiredSchemas = new Set([
     ...routesMeta
-      .map(({ input, output }) => [input ? typesMap.getUniqueName(input) : undefined, output ? typesMap.getUniqueName(output) : undefined])
+      .map(({ input, output }) => [
+        input ? typesMap.getUniqueName(input) : undefined,
+        output ? typesMap.getUniqueName(output) : undefined,
+      ])
       .flat()
       .filter(
         (s) =>

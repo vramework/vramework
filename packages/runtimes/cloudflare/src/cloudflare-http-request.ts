@@ -1,11 +1,16 @@
 import type { HTTPMethod, PikkuQuery } from '@pikku/core/http'
 import { PikkuHTTPAbstractRequest } from '@pikku/core/http/pikku-http-abstract-request'
-import type { Request, IncomingRequestCfProperties } from '@cloudflare/workers-types'
+import type {
+  Request,
+  IncomingRequestCfProperties,
+} from '@cloudflare/workers-types'
 
 export class CloudflareHTTPRequest extends PikkuHTTPAbstractRequest {
   private url: URL
 
-  constructor(private request: Request<unknown, IncomingRequestCfProperties<unknown>>) {
+  constructor(
+    private request: Request<unknown, IncomingRequestCfProperties<unknown>>
+  ) {
     super()
     this.url = new URL(request.url)
   }
@@ -26,7 +31,7 @@ export class CloudflareHTTPRequest extends PikkuHTTPAbstractRequest {
     return this.request.headers.get(headerName) || undefined
   }
 
-  public getQuery () {
+  public getQuery() {
     return Object.fromEntries(this.url.searchParams.entries()) as PikkuQuery
   }
 }

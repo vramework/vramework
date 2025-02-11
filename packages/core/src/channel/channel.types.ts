@@ -1,5 +1,8 @@
 import { EError } from '../errors/error-handler.js'
-import { HTTPFunctionMetaInputTypes, PikkuHTTP } from '../http/http-routes.types.js'
+import {
+  HTTPFunctionMetaInputTypes,
+  PikkuHTTP,
+} from '../http/http-routes.types.js'
 import { PikkuHTTPAbstractRequest } from '../http/pikku-http-abstract-request.js'
 import { PikkuHTTPAbstractResponse } from '../http/pikku-http-abstract-response.js'
 import {
@@ -25,11 +28,9 @@ export type RunChannelOptions = Partial<{
 export type RunChannelParams<ChannelData> = {
   channelId: string
   singletonServices: MakeRequired<CoreSingletonServices, 'eventHub'>
-  request?:
-    | PikkuRequest<ChannelData>
-    | PikkuHTTPAbstractRequest<ChannelData>
+  request?: PikkuRequest<ChannelData> | PikkuHTTPAbstractRequest<ChannelData>
   response?: PikkuResponse | PikkuHTTPAbstractResponse
-  http?: PikkuHTTP,
+  http?: PikkuHTTP
   createSessionServices?: CreateSessionServices
 }
 
@@ -149,7 +150,6 @@ export type CoreAPIChannel<
 
 export type CoreAPIChannels = CoreAPIChannel<any, string>[]
 
-
 export interface PikkuChannel<UserSession, OpeningData, Out> {
   // The channel identifier
   channelId: string
@@ -180,10 +180,15 @@ export interface PikkuChannelHandler<
 }
 
 export type PikkuChannelHandlerFactory<
-OpeningData = unknown,
-UserSession extends CoreUserSession = CoreUserSession,
-Out = unknown,
-> = (channelId: string, channelName: string, openingData: OpeningData, userSession: UserSession | undefined) => PikkuChannelHandler<UserSession, OpeningData, Out>
+  OpeningData = unknown,
+  UserSession extends CoreUserSession = CoreUserSession,
+  Out = unknown,
+> = (
+  channelId: string,
+  channelName: string,
+  openingData: OpeningData,
+  userSession: UserSession | undefined
+) => PikkuChannelHandler<UserSession, OpeningData, Out>
 
 /**
  * Enfore access to a channel.
@@ -191,4 +196,7 @@ Out = unknown,
  * @param session - The user session.
  * @returns A promise that resolves if access is granted.
  */
-export type enforceChannelAccess = (channel: CoreAPIChannel<unknown, any>, session?: CoreUserSession) => Promise<void> | void
+export type enforceChannelAccess = (
+  channel: CoreAPIChannel<unknown, any>,
+  session?: CoreUserSession
+) => Promise<void> | void

@@ -26,5 +26,4 @@ export class PikkuFastifyResponse extends PikkuHTTPAbstractResponse {
   public setHeader(name: string, value: string | boolean | string[]): void {
     this.response.header(name, value.toString())
   }
-
 }

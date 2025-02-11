@@ -52,7 +52,7 @@ const addMessagesRoutes = (
               funcName: route,
               inputIndex: 0,
               outputIndex: 1,
-              typesMap
+              typesMap,
             })
             const inputs = result?.inputs || null
             const outputs = result?.outputs || null
@@ -109,7 +109,7 @@ export const addChannel = (
 
     name = getPropertyValue(obj, 'name') as string | null
     route = getPropertyValue(obj, 'route') as string | null
-  
+
     if (!name) {
       console.error('Channel name is required')
       return
@@ -136,13 +136,13 @@ export const addChannel = (
       funcName: 'onMessage',
       inputIndex: 0,
       outputIndex: 1,
-      typesMap: state.channels.typesMap
+      typesMap: state.channels.typesMap,
     })
     const message = { inputs, outputs }
     const messageRoutes = addMessagesRoutes(
       obj,
       checker,
-      state.channels.typesMap,
+      state.channels.typesMap
     )
 
     state.channels.meta.push({

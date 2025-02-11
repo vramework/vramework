@@ -1,7 +1,7 @@
 import { Logger } from './services/logger.js'
 
 // TODO: SessionServices probably needs it's own type
-// but is an issue for the future and will be tackled 
+// but is an issue for the future and will be tackled
 // with dependency injection
 export const closeSessionServices = async (
   logger: Logger,
@@ -19,4 +19,3 @@ export const closeSessionServices = async (
     })
   )
 }
-

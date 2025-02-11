@@ -6,10 +6,7 @@ import {
   PikkuCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import {
-  getPikkuCLIConfig,
-  PikkuCLIConfig,
-} from '../src/pikku-cli-config.js'
+import { getPikkuCLIConfig, PikkuCLIConfig } from '../src/pikku-cli-config.js'
 import { serializeFetchWrapper } from '../src/http/serialize-fetch-wrapper.js'
 
 export const pikkuFetch = async ({

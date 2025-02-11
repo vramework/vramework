@@ -8,10 +8,7 @@ import {
   PikkuCLIOptions,
   writeFileInDir,
 } from '../src/utils.js'
-import {
-  getPikkuCLIConfig,
-  PikkuCLIConfig,
-} from '../src/pikku-cli-config.js'
+import { getPikkuCLIConfig, PikkuCLIConfig } from '../src/pikku-cli-config.js'
 import { InspectorState } from '@pikku/inspector'
 import { inspectorGlob } from '../src/inspector-glob.js'
 
@@ -102,10 +99,7 @@ export const nextjs = (program: Command): void => {
   program
     .command('nextjs')
     .description('generate nextjs wrapper')
-    .option(
-      '-ct | --pikku-config-type',
-      'The type of your pikku config object'
-    )
+    .option('-ct | --pikku-config-type', 'The type of your pikku config object')
     .option(
       '-ss | --singleton-services-factory-type',
       'The type of your singleton services factory'

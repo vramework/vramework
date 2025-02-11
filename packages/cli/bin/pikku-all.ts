@@ -96,10 +96,7 @@ export const all = (program: Command): void => {
   program
     .command('all', { isDefault: true })
     .description('Generate all the files used by pikku')
-    .option(
-      '-ct | --pikku-config-type',
-      'The type of your pikku config object'
-    )
+    .option('-ct | --pikku-config-type', 'The type of your pikku config object')
     .option(
       '-ss | --singleton-services-factory-type',
       'The type of your singleton services factory'

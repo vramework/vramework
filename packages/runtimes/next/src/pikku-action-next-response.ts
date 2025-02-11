@@ -23,7 +23,7 @@ export class PikkuActionNextResponse extends PikkuHTTPAbstractResponse {
   }
 
   /**
-   * 
+   *
    * Sets the response header.
    *
    * @remarks

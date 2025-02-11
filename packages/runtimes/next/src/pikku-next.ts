@@ -58,15 +58,15 @@ export class PikkuNextJS {
     await request.init()
     const response = new PikkuActionNextResponse(true)
     await response.init()
-    return await runHTTPRoute<In, Out>({
+    return (await runHTTPRoute<In, Out>({
       request,
       response,
       singletonServices,
       createSessionServices: this.createSessionServices,
       route: injectIntoUrl(route as string, data),
       method: method as HTTPMethod,
-      bubbleErrors: true
-    }) as Out
+      bubbleErrors: true,
+    })) as Out
   }
 
   /**
@@ -83,7 +83,7 @@ export class PikkuNextJS {
     data: In
   ): Promise<Out> {
     const singletonServices = await this.getSingletonServices()
-    return await runHTTPRoute<In, Out>({
+    return (await runHTTPRoute<In, Out>({
       request: new PikkuActionNextRequest(data, false),
       response: new PikkuActionNextResponse(false),
       singletonServices,
@@ -91,8 +91,8 @@ export class PikkuNextJS {
       route: injectIntoUrl(route as string, data),
       method: method as HTTPMethod,
       skipUserSession: true,
-      bubbleErrors: true
-    }) as Out
+      bubbleErrors: true,
+    })) as Out
   }
 
   /**

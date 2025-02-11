@@ -79,7 +79,12 @@ class ScheduledTaskNotFoundError extends Error {
   }
 }
 
-export async function runScheduledTask<SingletonServices extends CoreSingletonServices = CoreSingletonServices, UserSession extends CoreUserSession = CoreUserSession, Services extends CoreServices<SingletonServices> = CoreServices<SingletonServices>>({
+export async function runScheduledTask<
+  SingletonServices extends CoreSingletonServices = CoreSingletonServices,
+  UserSession extends CoreUserSession = CoreUserSession,
+  Services extends
+    CoreServices<SingletonServices> = CoreServices<SingletonServices>,
+>({
   name,
   session,
   singletonServices,
@@ -121,7 +126,7 @@ export async function runScheduledTask<SingletonServices extends CoreSingletonSe
     throw e
   } finally {
     if (sessionServices) {
-      await closeSessionServices(singletonServices.logger, sessionServices)      
+      await closeSessionServices(singletonServices.logger, sessionServices)
     }
   }
 }

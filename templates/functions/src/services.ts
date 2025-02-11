@@ -4,7 +4,11 @@ import type {
   SingletonServices,
   UserSession,
 } from '../types/application-types.js'
-import { CreateConfig, CreateSessionServices, CreateSingletonServices } from '@pikku/core'
+import {
+  CreateConfig,
+  CreateSessionServices,
+  CreateSingletonServices,
+} from '@pikku/core'
 import { ConsoleLogger, LocalVariablesService } from '@pikku/core/services'
 import { PikkuHTTPSessionService } from '@pikku/core/http'
 import { JoseJWTService } from '@pikku/jose'
@@ -24,7 +28,7 @@ export const createSingletonServices: CreateSingletonServices<
 > = async (config: Config): Promise<SingletonServices> => {
   const variablesService = new LocalVariablesService()
   const logger = new ConsoleLogger()
-  
+
   const jwt = new JoseJWTService<UserSession>(
     async () => [
       {
@@ -44,7 +48,7 @@ export const createSingletonServices: CreateSingletonServices<
     variablesService,
     jwt,
     httpSessionService,
-    schemaService
+    schemaService,
   }
 }
 

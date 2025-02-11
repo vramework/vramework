@@ -1,14 +1,21 @@
-import { ChannelsMeta } from "@pikku/core/channel";
-import { HTTPRoutesMeta } from "@pikku/core/http";
-import { ScheduledTasksMeta } from "@pikku/core/scheduler";
-import { TypesMap } from "./types-map.js";
+import { ChannelsMeta } from '@pikku/core/channel'
+import { HTTPRoutesMeta } from '@pikku/core/http'
+import { ScheduledTasksMeta } from '@pikku/core/scheduler'
+import { TypesMap } from './types-map.js'
 
 export type PathToNameAndType = Map<
   string,
   { variable: string; type: string | null; typePath: string | null }[]
 >
 
-export type MetaInputTypes = Map<string, { query: string[] | undefined, params: string[] | undefined, body: string[] | undefined }>
+export type MetaInputTypes = Map<
+  string,
+  {
+    query: string[] | undefined
+    params: string[] | undefined
+    body: string[] | undefined
+  }
+>
 
 export type APIFunctionMeta = Array<{
   name: string
@@ -18,7 +25,7 @@ export type APIFunctionMeta = Array<{
 }>
 
 export type InspectorAPIFunction = {
-  typesMap: TypesMap,
+  typesMap: TypesMap
   meta: APIFunctionMeta
 }
 

@@ -9,7 +9,8 @@ export const serializeImportMap = (
 ) => {
   const paths = new Map<string, string[]>()
   Array.from(requiredTypes).forEach((requiredType) => {
-    const { originalName, uniqueName, path } = typesMap.getTypeMeta(requiredType)
+    const { originalName, uniqueName, path } =
+      typesMap.getTypeMeta(requiredType)
     if (!path) {
       return
     }

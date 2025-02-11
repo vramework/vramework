@@ -1,6 +1,10 @@
 import { PikkuExpressServer } from '@pikku/express'
 import { PikkuTaskScheduler } from '@pikku/schedule'
-import { createConfig, createSingletonServices, createSessionServices } from '../../functions/src/services.js'
+import {
+  createConfig,
+  createSingletonServices,
+  createSessionServices,
+} from '../../functions/src/services.js'
 import { ScheduledTaskNames } from '../../functions/.pikku/pikku-schedules.gen.js'
 
 async function main(): Promise<void> {

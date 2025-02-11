@@ -1,10 +1,7 @@
 import { Command } from 'commander'
 import { saveSchemas, generateSchemas } from '../src/schema/schema-generator.js'
 
-import {
-  getPikkuCLIConfig,
-  PikkuCLIConfig,
-} from '../src/pikku-cli-config.js'
+import { getPikkuCLIConfig, PikkuCLIConfig } from '../src/pikku-cli-config.js'
 import { InspectorState } from '@pikku/inspector'
 import { logCommandInfoAndTime, logPikkuLogo } from '../src/utils.js'
 import { inspectorGlob } from '../src/inspector-glob.js'
@@ -18,11 +15,7 @@ export const pikkuSchemas = async (
     'Created schemas',
     [false],
     async () => {
-      const schemas = await generateSchemas(
-        tsconfig,
-        http.typesMap,
-        http.meta,
-      )
+      const schemas = await generateSchemas(tsconfig, http.typesMap, http.meta)
       await saveSchemas(
         schemaDirectory,
         schemas,

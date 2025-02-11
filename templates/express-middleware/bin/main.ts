@@ -1,6 +1,10 @@
 import cookieParser from 'cookie-parser'
 import { ScheduledTaskNames } from '../../functions/.pikku/pikku-schedules.gen.js'
-import { createSessionServices, createSingletonServices, createConfig } from '../../functions/src/services.js'
+import {
+  createSessionServices,
+  createSingletonServices,
+  createConfig,
+} from '../../functions/src/services.js'
 import { PikkuTaskScheduler } from '@pikku/schedule'
 import express from 'express'
 import { pikkuMiddleware } from '@pikku/express-middleware'
@@ -19,9 +23,13 @@ async function main(): Promise<void> {
     })
   )
 
-  app.listen(4002, 'localhost', () => singletonServices.logger.info(`server started`))
+  app.listen(4002, 'localhost', () =>
+    singletonServices.logger.info(`server started`)
+  )
 
-  const scheduler = new PikkuTaskScheduler<ScheduledTaskNames>(singletonServices)
+  const scheduler = new PikkuTaskScheduler<ScheduledTaskNames>(
+    singletonServices
+  )
   scheduler.startAll()
 }
 

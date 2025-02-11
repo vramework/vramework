@@ -80,7 +80,7 @@ const runFunction = async (
 export const processMessageHandlers = (
   services: CoreServices,
   channelConfig: CoreAPIChannel<any, any>,
-  channelHandler: PikkuChannelHandler<CoreUserSession, unknown>,
+  channelHandler: PikkuChannelHandler<CoreUserSession, unknown>
 ) => {
   const logger = services.logger
   const requiresSession = channelConfig.auth !== false

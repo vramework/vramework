@@ -4,7 +4,12 @@ import inquirer from 'inquirer'
 import path from 'path'
 import { downloadTemplate } from 'giget'
 import { createSpinner } from 'nanospinner'
-import { lazymkdir, mergeDirectories, mergeJsonFiles, replaceFunctionReferences } from './utils.js'
+import {
+  lazymkdir,
+  mergeDirectories,
+  mergeJsonFiles,
+  replaceFunctionReferences,
+} from './utils.js'
 import { program } from 'commander'
 import { tmpdir } from 'os'
 import { spawnSync } from 'child_process'
@@ -13,22 +18,20 @@ import { readFileSync, writeFileSync } from 'fs'
 const BASE_URL = 'gh:pikkujs/pikku/templates'
 
 const templates = [
-    "cloudflare-websocket",
-    "cloudflare-workers",
-    "express",
-    "express-middleware",
-    "fastify",
-    "functions",
-    "nextjs",
-    "serverless",
-    "serverless-websocket",
-    "uws",
-    "ws"
-  ] as const
-
-const packageManagers = [
-    'npm', 'yarn', 'pnpm'
+  'cloudflare-websocket',
+  'cloudflare-workers',
+  'express',
+  'express-middleware',
+  'fastify',
+  'functions',
+  'nextjs',
+  'serverless',
+  'serverless-websocket',
+  'uws',
+  'ws',
 ] as const
+
+const packageManagers = ['npm', 'yarn', 'pnpm'] as const
 
 type Template = (typeof templates)[number]
 type PackageManager = (typeof packageManagers)[number]
@@ -94,7 +97,13 @@ async function run() {
     },
   ])
 
-  const { projectName, template, version, installDependencies, packageManager } = {
+  const {
+    projectName,
+    template,
+    version,
+    installDependencies,
+    packageManager,
+  } = {
     ...cliOptions,
     ...answers,
   }
@@ -117,7 +126,7 @@ async function run() {
     await downloadTemplate(templateUrl, { dir: templatePath, force: true })
 
     spinner.success()
-    
+
     // Merge and process files
     lazymkdir(targetPath)
     mergeDirectories(functionsPath, targetPath)
@@ -126,21 +135,34 @@ async function run() {
     mergeJsonFiles(targetPath, 'pikku.config.json')
     replaceFunctionReferences(targetPath)
 
-    const packageContent = JSON.parse(readFileSync(`${targetPath}/package.json`, 'utf-8'))
-    packageContent.scripts.postinstall = "npx @vramework/cli"
-    writeFileSync(`${targetPath}/package.json`, JSON.stringify(packageContent, null, 2))
+    const packageContent = JSON.parse(
+      readFileSync(`${targetPath}/package.json`, 'utf-8')
+    )
+    packageContent.scripts.postinstall = 'npx @vramework/cli'
+    writeFileSync(
+      `${targetPath}/package.json`,
+      JSON.stringify(packageContent, null, 2)
+    )
   } catch (e) {
     spinner.error()
-    console.log(chalk.red(`Failed to download templates: ${(e as Error).message}`))
+    console.log(
+      chalk.red(`Failed to download templates: ${(e as Error).message}`)
+    )
     process.exit(1)
   }
 
   if (installDependencies) {
     console.log(chalk.blue('📦 Installing dependencies...'))
-    spawnSync(packageManager, ['install'], { cwd: targetPath, stdio: 'inherit' })
+    spawnSync(packageManager, ['install'], {
+      cwd: targetPath,
+      stdio: 'inherit',
+    })
 
     console.log(chalk.blue('🦎 Running pikku...'))
-    spawnSync(packageManager, ['run', 'pikku'], { cwd: targetPath, stdio: 'inherit' })
+    spawnSync(packageManager, ['run', 'pikku'], {
+      cwd: targetPath,
+      stdio: 'inherit',
+    })
   }
 
   console.log(chalk.green('\n✅ Project setup complete!'))

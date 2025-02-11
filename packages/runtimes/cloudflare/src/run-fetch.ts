@@ -7,10 +7,17 @@ import {
 import { CloudflareHTTPRequest } from './cloudflare-http-request.js'
 import { CloudfrontHTTPResponse } from './cloudflare-http-response.js'
 import { runHTTPRoute } from '@pikku/core/http'
-import type { Request, IncomingRequestCfProperties } from '@cloudflare/workers-types'
+import type {
+  Request,
+  IncomingRequestCfProperties,
+} from '@cloudflare/workers-types'
 import { CloudflareWebSocketHibernationServer } from './cloudflare-hibernation-websocket-server.js'
 
-export const runFetch = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
+export const runFetch = async <
+  SingletonServices extends CoreSingletonServices,
+  Services extends CoreServices<SingletonServices>,
+  UserSession extends CoreUserSession,
+>(
   cloudflareRequest: Request<unknown, IncomingRequestCfProperties<unknown>>,
   singletonServices: SingletonServices,
   createSessionServices: CreateSessionServices<
@@ -22,16 +29,18 @@ export const runFetch = async <SingletonServices extends CoreSingletonServices, 
 ) => {
   const request = new CloudflareHTTPRequest(cloudflareRequest)
 
-  const isWebsocketUpgradeRequest = cloudflareRequest.method === "GET" && cloudflareRequest.headers.get("Upgrade") === 'websocket'
+  const isWebsocketUpgradeRequest =
+    cloudflareRequest.method === 'GET' &&
+    cloudflareRequest.headers.get('Upgrade') === 'websocket'
   if (isWebsocketUpgradeRequest) {
     if (!websocketHibernationServer) {
       return new Response(null, {
         status: 426,
-        statusText: "Durable Object expected WebSocket server",
+        statusText: 'Durable Object expected WebSocket server',
         headers: {
-          "Content-Type": "text/plain",
+          'Content-Type': 'text/plain',
         },
-      });
+      })
     }
     return websocketHibernationServer.fetch(cloudflareRequest)
   }

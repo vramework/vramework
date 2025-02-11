@@ -21,7 +21,9 @@ export const getInputTypes = (
     metaTypes.set(inputType, {
       query: queryValues,
       params: paramsValues,
-      body: ['post', 'put', 'patch'].includes(methodType) ? [...new Set([...queryValues, ...paramsValues])] : []
+      body: ['post', 'put', 'patch'].includes(methodType)
+        ? [...new Set([...queryValues, ...paramsValues])]
+        : [],
     })
   }
 

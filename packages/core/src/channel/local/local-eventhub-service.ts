@@ -1,15 +1,15 @@
-import { PikkuChannelHandler } from "../channel.types.js"
-import { EventHubService } from "../eventhub-service.js"
+import { PikkuChannelHandler } from '../channel.types.js'
+import { EventHubService } from '../eventhub-service.js'
 
 /**
  * Implementation of the SubscriptionService interface.
  * Manages subscriptions and publishes messages to subscribers.
  */
 export class LocalEventHubService<Data = unknown>
-  implements EventHubService<Data> {
-
+  implements EventHubService<Data>
+{
   private channels = new Map<string, PikkuChannelHandler>()
-    
+
   /**
    * A map storing topics and their associated connection IDs.
    */

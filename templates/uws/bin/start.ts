@@ -1,7 +1,11 @@
 import { PikkuUWSServer } from '@pikku/uws'
 
-import 'import '../../functions/.pikku/pikku-bootstrap.gen''
-import { createConfig, createSessionServices, createSingletonServices } from '../../functions/src/services'
+import '../../functions/.pikku/pikku-bootstrap.gen'
+import {
+  createConfig,
+  createSessionServices,
+  createSingletonServices,
+} from '../../functions/src/services.js'
 
 async function main(): Promise<void> {
   try {

@@ -1,8 +1,5 @@
 import { Command } from 'commander'
-import {
-  getPikkuCLIConfig,
-  PikkuCLIConfig,
-} from '../src/pikku-cli-config.js'
+import { getPikkuCLIConfig, PikkuCLIConfig } from '../src/pikku-cli-config.js'
 import { InspectorState } from '@pikku/inspector'
 import {
   getFileImportRelativePath,
@@ -65,10 +62,7 @@ export const functionTypes = (program: Command): void => {
   program
     .command('types')
     .description('Generate the core API')
-    .option(
-      '-ct | --pikku-config-type',
-      'The type of your pikku config object'
-    )
+    .option('-ct | --pikku-config-type', 'The type of your pikku config object')
     .option(
       '-ss | --singleton-services-factory-type',
       'The type of your singleton services factory'

@@ -77,7 +77,7 @@ describe('runHTTPRoute', () => {
           createSessionServices,
           route: apiRoute,
           method: apiType,
-          bubbleErrors: true
+          bubbleErrors: true,
         }),
       NotFoundError
     )
@@ -152,7 +152,7 @@ describe('runHTTPRoute', () => {
           createSessionServices,
           route: apiRoute,
           method: apiType,
-          bubbleErrors: true
+          bubbleErrors: true,
         }),
       error
     )

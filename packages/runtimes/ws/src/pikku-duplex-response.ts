@@ -32,7 +32,11 @@ export class PikkuDuplexResponse extends PikkuHTTPAbstractResponse {
     }
   }
 
-  public setCookie(name: string, value: string, options: SerializeOptions): void {
+  public setCookie(
+    name: string,
+    value: string,
+    options: SerializeOptions
+  ): void {
     throw new Error(`We don't cookies from a websocket response`)
   }
 

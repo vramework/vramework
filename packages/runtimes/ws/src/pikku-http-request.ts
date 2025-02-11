@@ -13,7 +13,7 @@ export class PikkuHTTPRequest extends PikkuHTTPAbstractRequest {
     this.url = new URL(request.url || '/', 'http://ignore-this.com')
   }
 
-  public getPath () {
+  public getPath() {
     return this.url.pathname
   }
 

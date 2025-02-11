@@ -98,35 +98,19 @@ export class CorePikkuFetch {
     }
   }
 
-  public async post(
-    uri: string,
-    data: any,
-    options?: RequestInit
-  ) {
+  public async post(uri: string, data: any, options?: RequestInit) {
     return await this.api(uri, 'POST', data, options)
   }
 
-  public async get(
-    uri: string,
-    data: any,
-    options?: RequestInit
-  ) {
+  public async get(uri: string, data: any, options?: RequestInit) {
     return await this.api(uri, 'GET', data, options)
   }
 
-  public async patch(
-    uri: string,
-    data: any,
-    options?: RequestInit
-  ) {
+  public async patch(uri: string, data: any, options?: RequestInit) {
     return await this.api(uri, 'PATCH', data, options)
   }
 
-  public async head(
-    uri: string,
-    data: any,
-    options?: RequestInit
-  ) {
+  public async head(uri: string, data: any, options?: RequestInit) {
     return await this.api(uri, 'HEAD', data, options)
   }
 

@@ -6,15 +6,20 @@ export const serializeTypedChannelsMap = (
   relativeToPath: string,
   packageMappings: Record<string, string>,
   typesMap: TypesMap,
-  channelsMeta: ChannelsMeta,
+  channelsMeta: ChannelsMeta
 ): string => {
-    const { channels, requiredTypes } = generateChannels(channelsMeta) 
-    typesMap.customTypes.forEach(({ references }) => {
-      for (const reference of references) {
-        requiredTypes.add(reference)
-      }
-    })
-    const imports = serializeImportMap(relativeToPath, packageMappings, typesMap, requiredTypes)
+  const { channels, requiredTypes } = generateChannels(channelsMeta)
+  typesMap.customTypes.forEach(({ references }) => {
+    for (const reference of references) {
+      requiredTypes.add(reference)
+    }
+  })
+  const imports = serializeImportMap(
+    relativeToPath,
+    packageMappings,
+    typesMap,
+    requiredTypes
+  )
   return `/**
  * This provides the structure needed for TypeScript to be aware of channels
  */

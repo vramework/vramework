@@ -8,7 +8,7 @@ export interface SchemaService {
    * @param {any} value - The schema definition or configuration to be compiled.
    * @returns {Promise<void> | void} A promise if asynchronous, or void if synchronous.
    */
-  compileSchema: (name: string, value: any) => Promise<void> | void;
+  compileSchema: (name: string, value: any) => Promise<void> | void
 
   /**
    * Validates data against a specified schema.
@@ -16,11 +16,11 @@ export interface SchemaService {
    * @param {any} data - The data to validate against the schema.
    * @returns {Promise<void> | void} A promise if asynchronous, or void if synchronous.
    */
-  validateSchema: (schema: string, data: any) => Promise<void> | void;
+  validateSchema: (schema: string, data: any) => Promise<void> | void
 
   /**
    * Retrieves a set of all registered schema names.
    * @returns {Set<string>} A set containing the names of all available schemas.
    */
-  getSchemaNames: () => Set<string>;
+  getSchemaNames: () => Set<string>
 }

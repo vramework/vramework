@@ -1,10 +1,19 @@
-import { CoreSingletonServices, CoreServices, CreateSessionServices, CoreUserSession } from "@pikku/core"
-import { runHTTPRoute } from "@pikku/core/http"
-import { APIGatewayProxyResult } from "aws-lambda"
-import { PikkuAPIGatewayLambdaRequest } from "../pikku-api-gateway-lambda-request.js"
-import { PikkuAPIGatewayLambdaResponse } from "../pikku-api-gateway-lambda-response.js"
+import {
+  CoreSingletonServices,
+  CoreServices,
+  CreateSessionServices,
+  CoreUserSession,
+} from '@pikku/core'
+import { runHTTPRoute } from '@pikku/core/http'
+import { APIGatewayProxyResult } from 'aws-lambda'
+import { PikkuAPIGatewayLambdaRequest } from '../pikku-api-gateway-lambda-request.js'
+import { PikkuAPIGatewayLambdaResponse } from '../pikku-api-gateway-lambda-response.js'
 
-export const generalHTTPHandler = async <SingletonServices extends CoreSingletonServices, Services extends CoreServices<SingletonServices>, UserSession extends CoreUserSession>(
+export const generalHTTPHandler = async <
+  SingletonServices extends CoreSingletonServices,
+  Services extends CoreServices<SingletonServices>,
+  UserSession extends CoreUserSession,
+>(
   singletonServices: SingletonServices,
   createSessionServices: CreateSessionServices<
     SingletonServices,

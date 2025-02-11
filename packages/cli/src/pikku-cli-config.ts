@@ -60,9 +60,7 @@ const _getPikkuCLIConfig = async (
   if (!configFile) {
     let execDirectory = process.cwd()
     const files = await readdir(execDirectory)
-    const file = files.find((file) =>
-      /pikku\.config\.(ts|js|json)$/.test(file)
-    )
+    const file = files.find((file) => /pikku\.config\.(ts|js|json)$/.test(file))
     if (!file) {
       const errorMessage =
         '\nConfig file pikku.config.json not found\nExiting...'

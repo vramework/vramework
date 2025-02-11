@@ -7,7 +7,7 @@ import {
 import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
 import { ContentService, Logger } from '@pikku/core/services'
 import { readFile } from 'fs/promises'
-import { getSignedUrl } from "@aws-sdk/cloudfront-signer"
+import { getSignedUrl } from '@aws-sdk/cloudfront-signer'
 
 export interface S3ContentConfig {
   bucketName: string
@@ -31,7 +31,11 @@ export class S3Content implements ContentService {
     ])
   }
 
-  public async signURL(url: string, dateLessThan: Date, dateGreaterThan?: Date) {
+  public async signURL(
+    url: string,
+    dateLessThan: Date,
+    dateGreaterThan?: Date
+  ) {
     try {
       return getSignedUrl({
         ...this.signConfig,
@@ -45,8 +49,16 @@ export class S3Content implements ContentService {
     }
   }
 
-  public async signContentKey(key: string, dateLessThan: Date, dateGreaterThan?: Date) {
-    return this.signURL(`https://${this.config.bucketName}/${key}`, dateLessThan, dateGreaterThan)
+  public async signContentKey(
+    key: string,
+    dateLessThan: Date,
+    dateGreaterThan?: Date
+  ) {
+    return this.signURL(
+      `https://${this.config.bucketName}/${key}`,
+      dateLessThan,
+      dateGreaterThan
+    )
   }
 
   public async getUploadURL(Key: string, ContentType: string) {

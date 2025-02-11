@@ -1,6 +1,6 @@
 import { JSONValue } from '@pikku/core'
 import { PikkuHTTPAbstractResponse } from '@pikku/core/http/pikku-http-abstract-response'
-import { WebSocket} from '@cloudflare/workers-types'
+import { WebSocket } from '@cloudflare/workers-types'
 
 export class CloudfrontHTTPResponse extends PikkuHTTPAbstractResponse {
   public headers: Record<string, string> = {}
@@ -11,11 +11,11 @@ export class CloudfrontHTTPResponse extends PikkuHTTPAbstractResponse {
     super()
   }
 
-  public getCloudflareResponse (): Response {
+  public getCloudflareResponse(): Response {
     return new Response(this.body, {
-        status: this.status,
-        headers: this.headers,
-        webSocket: this.status === 101 ? this.websocket : undefined
+      status: this.status,
+      headers: this.headers,
+      webSocket: this.status === 101 ? this.websocket : undefined,
     } as any)
   }
 
@@ -39,7 +39,7 @@ export class CloudfrontHTTPResponse extends PikkuHTTPAbstractResponse {
     throw new Error('Method not implemented.')
   }
 
-  public setWebsocket (websocket: WebSocket) {
-    this.websocket = websocket 
+  public setWebsocket(websocket: WebSocket) {
+    this.websocket = websocket
   }
 }
