@@ -1,6 +1,7 @@
 {
   "name": "@pikku/nextjs-app-starter",
   "type": "module",
+  "private": true,
   "scripts": {
     "tsc": "tsc",
     "dev": "next dev",

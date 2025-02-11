@@ -1,6 +1,7 @@
 {
   "name": "@pikku/templates-functions",
   "type": "module",
+  "private": true,
   "dependencies": {
     "@pikku/core": "^0.6.4",
     "@pikku/jose": "^0.6.0"

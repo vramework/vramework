@@ -2,6 +2,7 @@
   "name": "@pikku/templates-ws-server",
   "type": "module",
   "main": "bin/start.ts",
+  "private": true,
   "scripts": {
     "tsc": "tsc",
     "start": "tsx bin/start.ts",

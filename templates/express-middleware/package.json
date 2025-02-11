@@ -2,6 +2,7 @@
   "name": "@pikku/templates-express-middleware",
   "main": "bin/main.ts",
   "type": "module",
+  "private": true,
   "dependencies": {
     "@pikku/core": "^0.6.4",
     "@pikku/express-middleware": "^0.6.2",

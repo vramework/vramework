@@ -1,6 +1,7 @@
 {
 	"name": "@pikku/templates-cloudflare-workers",
 	"type": "module",
+	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",

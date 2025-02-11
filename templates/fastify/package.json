@@ -2,6 +2,7 @@
   "name": "@pikku/templates-fastify-server",
   "main": "bin/start.ts",
   "type": "module",
+  "private": true,
   "scripts": {
     "tsc": "tsc",
     "start": "tsx bin/start.ts",
